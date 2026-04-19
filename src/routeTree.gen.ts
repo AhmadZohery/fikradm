@@ -16,7 +16,10 @@ import { Route as LocaleContactRouteImport } from './routes/$locale.contact'
 import { Route as LocaleAboutRouteImport } from './routes/$locale.about'
 import { Route as LocaleServicesIndexRouteImport } from './routes/$locale.services.index'
 import { Route as LocaleIndustriesIndexRouteImport } from './routes/$locale.industries.index'
+import { Route as LocaleCaseStudiesIndexRouteImport } from './routes/$locale.case-studies.index'
+import { Route as LocaleBlogIndexRouteImport } from './routes/$locale.blog.index'
 import { Route as LocaleServicesSlugRouteImport } from './routes/$locale.services.$slug'
+import { Route as LocaleLocationsSlugRouteImport } from './routes/$locale.locations.$slug'
 import { Route as LocaleIndustriesSlugRouteImport } from './routes/$locale.industries.$slug'
 
 const LocaleRoute = LocaleRouteImport.update({
@@ -54,9 +57,24 @@ const LocaleIndustriesIndexRoute = LocaleIndustriesIndexRouteImport.update({
   path: '/industries/',
   getParentRoute: () => LocaleRoute,
 } as any)
+const LocaleCaseStudiesIndexRoute = LocaleCaseStudiesIndexRouteImport.update({
+  id: '/case-studies/',
+  path: '/case-studies/',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleBlogIndexRoute = LocaleBlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => LocaleRoute,
+} as any)
 const LocaleServicesSlugRoute = LocaleServicesSlugRouteImport.update({
   id: '/services/$slug',
   path: '/services/$slug',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleLocationsSlugRoute = LocaleLocationsSlugRouteImport.update({
+  id: '/locations/$slug',
+  path: '/locations/$slug',
   getParentRoute: () => LocaleRoute,
 } as any)
 const LocaleIndustriesSlugRoute = LocaleIndustriesSlugRouteImport.update({
@@ -72,7 +90,10 @@ export interface FileRoutesByFullPath {
   '/$locale/contact': typeof LocaleContactRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRoute
+  '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
   '/$locale/services/$slug': typeof LocaleServicesSlugRoute
+  '/$locale/blog/': typeof LocaleBlogIndexRoute
+  '/$locale/case-studies/': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries/': typeof LocaleIndustriesIndexRoute
   '/$locale/services/': typeof LocaleServicesIndexRoute
 }
@@ -82,7 +103,10 @@ export interface FileRoutesByTo {
   '/$locale/contact': typeof LocaleContactRoute
   '/$locale': typeof LocaleIndexRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRoute
+  '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
   '/$locale/services/$slug': typeof LocaleServicesSlugRoute
+  '/$locale/blog': typeof LocaleBlogIndexRoute
+  '/$locale/case-studies': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries': typeof LocaleIndustriesIndexRoute
   '/$locale/services': typeof LocaleServicesIndexRoute
 }
@@ -94,7 +118,10 @@ export interface FileRoutesById {
   '/$locale/contact': typeof LocaleContactRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRoute
+  '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
   '/$locale/services/$slug': typeof LocaleServicesSlugRoute
+  '/$locale/blog/': typeof LocaleBlogIndexRoute
+  '/$locale/case-studies/': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries/': typeof LocaleIndustriesIndexRoute
   '/$locale/services/': typeof LocaleServicesIndexRoute
 }
@@ -107,7 +134,10 @@ export interface FileRouteTypes {
     | '/$locale/contact'
     | '/$locale/'
     | '/$locale/industries/$slug'
+    | '/$locale/locations/$slug'
     | '/$locale/services/$slug'
+    | '/$locale/blog/'
+    | '/$locale/case-studies/'
     | '/$locale/industries/'
     | '/$locale/services/'
   fileRoutesByTo: FileRoutesByTo
@@ -117,7 +147,10 @@ export interface FileRouteTypes {
     | '/$locale/contact'
     | '/$locale'
     | '/$locale/industries/$slug'
+    | '/$locale/locations/$slug'
     | '/$locale/services/$slug'
+    | '/$locale/blog'
+    | '/$locale/case-studies'
     | '/$locale/industries'
     | '/$locale/services'
   id:
@@ -128,7 +161,10 @@ export interface FileRouteTypes {
     | '/$locale/contact'
     | '/$locale/'
     | '/$locale/industries/$slug'
+    | '/$locale/locations/$slug'
     | '/$locale/services/$slug'
+    | '/$locale/blog/'
+    | '/$locale/case-studies/'
     | '/$locale/industries/'
     | '/$locale/services/'
   fileRoutesById: FileRoutesById
@@ -189,11 +225,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleIndustriesIndexRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/$locale/case-studies/': {
+      id: '/$locale/case-studies/'
+      path: '/case-studies'
+      fullPath: '/$locale/case-studies/'
+      preLoaderRoute: typeof LocaleCaseStudiesIndexRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/blog/': {
+      id: '/$locale/blog/'
+      path: '/blog'
+      fullPath: '/$locale/blog/'
+      preLoaderRoute: typeof LocaleBlogIndexRouteImport
+      parentRoute: typeof LocaleRoute
+    }
     '/$locale/services/$slug': {
       id: '/$locale/services/$slug'
       path: '/services/$slug'
       fullPath: '/$locale/services/$slug'
       preLoaderRoute: typeof LocaleServicesSlugRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/locations/$slug': {
+      id: '/$locale/locations/$slug'
+      path: '/locations/$slug'
+      fullPath: '/$locale/locations/$slug'
+      preLoaderRoute: typeof LocaleLocationsSlugRouteImport
       parentRoute: typeof LocaleRoute
     }
     '/$locale/industries/$slug': {
@@ -211,7 +268,10 @@ interface LocaleRouteChildren {
   LocaleContactRoute: typeof LocaleContactRoute
   LocaleIndexRoute: typeof LocaleIndexRoute
   LocaleIndustriesSlugRoute: typeof LocaleIndustriesSlugRoute
+  LocaleLocationsSlugRoute: typeof LocaleLocationsSlugRoute
   LocaleServicesSlugRoute: typeof LocaleServicesSlugRoute
+  LocaleBlogIndexRoute: typeof LocaleBlogIndexRoute
+  LocaleCaseStudiesIndexRoute: typeof LocaleCaseStudiesIndexRoute
   LocaleIndustriesIndexRoute: typeof LocaleIndustriesIndexRoute
   LocaleServicesIndexRoute: typeof LocaleServicesIndexRoute
 }
@@ -221,7 +281,10 @@ const LocaleRouteChildren: LocaleRouteChildren = {
   LocaleContactRoute: LocaleContactRoute,
   LocaleIndexRoute: LocaleIndexRoute,
   LocaleIndustriesSlugRoute: LocaleIndustriesSlugRoute,
+  LocaleLocationsSlugRoute: LocaleLocationsSlugRoute,
   LocaleServicesSlugRoute: LocaleServicesSlugRoute,
+  LocaleBlogIndexRoute: LocaleBlogIndexRoute,
+  LocaleCaseStudiesIndexRoute: LocaleCaseStudiesIndexRoute,
   LocaleIndustriesIndexRoute: LocaleIndustriesIndexRoute,
   LocaleServicesIndexRoute: LocaleServicesIndexRoute,
 }
