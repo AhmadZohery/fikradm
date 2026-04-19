@@ -513,8 +513,17 @@
     line-height: 1.08;
   }
   html[dir="rtl"] .display-1 {
-    line-height: 1.25;
+    line-height: 1.35;
     letter-spacing: 0;
+    word-spacing: 0.05em;
+  }
+  html[dir="rtl"] .text-gradient,
+  html[dir="rtl"] .text-gradient-svc {
+    padding-bottom: 0.15em;
+    line-height: 1.4;
+  }
+  html[dir="rtl"] .marker-line {
+    padding-bottom: 0.1em;
   }
 
   /* Hover lift utility */
