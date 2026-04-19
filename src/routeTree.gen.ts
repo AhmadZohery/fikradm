@@ -9,38 +9,144 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LocaleRouteImport } from './routes/$locale'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LocaleIndexRouteImport } from './routes/$locale.index'
+import { Route as LocaleContactRouteImport } from './routes/$locale.contact'
+import { Route as LocaleAboutRouteImport } from './routes/$locale.about'
+import { Route as LocaleServicesIndexRouteImport } from './routes/$locale.services.index'
+import { Route as LocaleIndustriesIndexRouteImport } from './routes/$locale.industries.index'
+import { Route as LocaleServicesSlugRouteImport } from './routes/$locale.services.$slug'
+import { Route as LocaleIndustriesSlugRouteImport } from './routes/$locale.industries.$slug'
 
+const LocaleRoute = LocaleRouteImport.update({
+  id: '/$locale',
+  path: '/$locale',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LocaleIndexRoute = LocaleIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleContactRoute = LocaleContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleAboutRoute = LocaleAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleServicesIndexRoute = LocaleServicesIndexRouteImport.update({
+  id: '/services/',
+  path: '/services/',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleIndustriesIndexRoute = LocaleIndustriesIndexRouteImport.update({
+  id: '/industries/',
+  path: '/industries/',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleServicesSlugRoute = LocaleServicesSlugRouteImport.update({
+  id: '/services/$slug',
+  path: '/services/$slug',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleIndustriesSlugRoute = LocaleIndustriesSlugRouteImport.update({
+  id: '/industries/$slug',
+  path: '/industries/$slug',
+  getParentRoute: () => LocaleRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$locale': typeof LocaleRouteWithChildren
+  '/$locale/about': typeof LocaleAboutRoute
+  '/$locale/contact': typeof LocaleContactRoute
+  '/$locale/': typeof LocaleIndexRoute
+  '/$locale/industries/$slug': typeof LocaleIndustriesSlugRoute
+  '/$locale/services/$slug': typeof LocaleServicesSlugRoute
+  '/$locale/industries/': typeof LocaleIndustriesIndexRoute
+  '/$locale/services/': typeof LocaleServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$locale/about': typeof LocaleAboutRoute
+  '/$locale/contact': typeof LocaleContactRoute
+  '/$locale': typeof LocaleIndexRoute
+  '/$locale/industries/$slug': typeof LocaleIndustriesSlugRoute
+  '/$locale/services/$slug': typeof LocaleServicesSlugRoute
+  '/$locale/industries': typeof LocaleIndustriesIndexRoute
+  '/$locale/services': typeof LocaleServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$locale': typeof LocaleRouteWithChildren
+  '/$locale/about': typeof LocaleAboutRoute
+  '/$locale/contact': typeof LocaleContactRoute
+  '/$locale/': typeof LocaleIndexRoute
+  '/$locale/industries/$slug': typeof LocaleIndustriesSlugRoute
+  '/$locale/services/$slug': typeof LocaleServicesSlugRoute
+  '/$locale/industries/': typeof LocaleIndustriesIndexRoute
+  '/$locale/services/': typeof LocaleServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/$locale'
+    | '/$locale/about'
+    | '/$locale/contact'
+    | '/$locale/'
+    | '/$locale/industries/$slug'
+    | '/$locale/services/$slug'
+    | '/$locale/industries/'
+    | '/$locale/services/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/$locale/about'
+    | '/$locale/contact'
+    | '/$locale'
+    | '/$locale/industries/$slug'
+    | '/$locale/services/$slug'
+    | '/$locale/industries'
+    | '/$locale/services'
+  id:
+    | '__root__'
+    | '/'
+    | '/$locale'
+    | '/$locale/about'
+    | '/$locale/contact'
+    | '/$locale/'
+    | '/$locale/industries/$slug'
+    | '/$locale/services/$slug'
+    | '/$locale/industries/'
+    | '/$locale/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LocaleRoute: typeof LocaleRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/$locale': {
+      id: '/$locale'
+      path: '/$locale'
+      fullPath: '/$locale'
+      preLoaderRoute: typeof LocaleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +154,94 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$locale/': {
+      id: '/$locale/'
+      path: '/'
+      fullPath: '/$locale/'
+      preLoaderRoute: typeof LocaleIndexRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/contact': {
+      id: '/$locale/contact'
+      path: '/contact'
+      fullPath: '/$locale/contact'
+      preLoaderRoute: typeof LocaleContactRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/about': {
+      id: '/$locale/about'
+      path: '/about'
+      fullPath: '/$locale/about'
+      preLoaderRoute: typeof LocaleAboutRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/services/': {
+      id: '/$locale/services/'
+      path: '/services'
+      fullPath: '/$locale/services/'
+      preLoaderRoute: typeof LocaleServicesIndexRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/industries/': {
+      id: '/$locale/industries/'
+      path: '/industries'
+      fullPath: '/$locale/industries/'
+      preLoaderRoute: typeof LocaleIndustriesIndexRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/services/$slug': {
+      id: '/$locale/services/$slug'
+      path: '/services/$slug'
+      fullPath: '/$locale/services/$slug'
+      preLoaderRoute: typeof LocaleServicesSlugRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/industries/$slug': {
+      id: '/$locale/industries/$slug'
+      path: '/industries/$slug'
+      fullPath: '/$locale/industries/$slug'
+      preLoaderRoute: typeof LocaleIndustriesSlugRouteImport
+      parentRoute: typeof LocaleRoute
+    }
   }
 }
 
+interface LocaleRouteChildren {
+  LocaleAboutRoute: typeof LocaleAboutRoute
+  LocaleContactRoute: typeof LocaleContactRoute
+  LocaleIndexRoute: typeof LocaleIndexRoute
+  LocaleIndustriesSlugRoute: typeof LocaleIndustriesSlugRoute
+  LocaleServicesSlugRoute: typeof LocaleServicesSlugRoute
+  LocaleIndustriesIndexRoute: typeof LocaleIndustriesIndexRoute
+  LocaleServicesIndexRoute: typeof LocaleServicesIndexRoute
+}
+
+const LocaleRouteChildren: LocaleRouteChildren = {
+  LocaleAboutRoute: LocaleAboutRoute,
+  LocaleContactRoute: LocaleContactRoute,
+  LocaleIndexRoute: LocaleIndexRoute,
+  LocaleIndustriesSlugRoute: LocaleIndustriesSlugRoute,
+  LocaleServicesSlugRoute: LocaleServicesSlugRoute,
+  LocaleIndustriesIndexRoute: LocaleIndustriesIndexRoute,
+  LocaleServicesIndexRoute: LocaleServicesIndexRoute,
+}
+
+const LocaleRouteWithChildren =
+  LocaleRoute._addFileChildren(LocaleRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LocaleRoute: LocaleRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
