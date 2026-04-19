@@ -242,7 +242,15 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
-  html[dir="rtl"] body { letter-spacing: 0; }
+  html[dir="rtl"] body {
+    font-family: "Tajawal", "IBM Plex Sans Arabic", "Plus Jakarta Sans", system-ui, sans-serif;
+    letter-spacing: 0;
+  }
+  html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3,
+  html[dir="rtl"] h4, html[dir="rtl"] h5, html[dir="rtl"] h6 {
+    font-family: "Tajawal", "IBM Plex Sans Arabic", system-ui, sans-serif;
+    font-weight: 800;
+  }
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
@@ -433,8 +441,44 @@
   .animate-mega-in { animation: megaIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; transform-origin: top center; }
 
   @keyframes megaIn {
-    from { opacity: 0; transform: translateY(-8px) scale(0.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    from { opacity: 0; transform: translateY(-10px) scale(0.96); filter: blur(4px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  }
+
+  /* Nav link shimmer underline */
+  .nav-link-fx {
+    position: relative;
+    overflow: hidden;
+  }
+  .nav-link-fx::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 14%, transparent), transparent);
+    border-radius: 999px;
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: -1;
+  }
+  .nav-link-fx:hover::before,
+  .nav-link-fx[data-active="true"]::before {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Mega menu item slide-in stagger */
+  @keyframes megaItemIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-mega-item { animation: megaItemIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  /* Header glass effect */
+  .header-glass {
+    background: color-mix(in oklab, var(--background) 78%, transparent);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
   }
 
   @keyframes fadeUp {
