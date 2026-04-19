@@ -33,18 +33,23 @@ export function SiteHeader() {
     })),
   }));
 
-  const industries = [
-    { key: "ecom", label: t("menu.industries.ecom"), href: "/industries/ecommerce" },
-    { key: "logistics", label: t("menu.industries.logistics"), href: "/industries/logistics" },
-    { key: "healthcare", label: t("menu.industries.healthcare"), href: "/industries/healthcare" },
-    { key: "realestate", label: t("menu.industries.realestate"), href: "/industries/real-estate" },
-  ];
+  const industriesMega = allIndustries.map((ind) => ({
+    groupKey: ind.slug,
+    groupLabel: ind.title[loc],
+    href: `/industries/${ind.slug}`,
+    items: getSubIndustriesFor(ind.slug).map((sub) => ({
+      key: sub.slug,
+      label: sub.shortLabel[loc],
+      href: `/industries/${ind.slug}/${sub.slug}`,
+      desc: sub.intro[loc],
+    })),
+  }));
 
   const navItems: NavItem[] = [
     { key: "home", href: "/" },
     { key: "about", href: "/about" },
     { key: "services", href: "/services", mega: servicesMega },
-    { key: "industries", href: "/industries", children: industries.map((i) => ({ ...i, desc: undefined })) },
+    { key: "industries", href: "/industries", mega: industriesMega },
     { key: "cases", href: "/case-studies" },
     { key: "blog", href: "/blog" },
     { key: "contact", href: "/contact" },
