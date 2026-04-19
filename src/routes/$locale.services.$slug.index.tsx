@@ -6,7 +6,10 @@ import { FaqSection } from "@/components/site/FaqSection";
 import { CtaBand } from "@/components/site/CtaBand";
 import { SubServicesGrid } from "@/components/site/SubServicesGrid";
 import { findService } from "@/content/data";
-import { Check } from "lucide-react";
+import { ServiceVariantHero } from "@/components/site/services/ServiceVariantHero";
+import { getServiceVariant } from "@/components/site/services/serviceVariants";
+import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
+import { Check, ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/$locale/services/$slug/")({
   beforeLoad: ({ params }) => {
@@ -38,6 +41,8 @@ function ServicePage() {
   const { slug, locale } = Route.useParams();
   const s = findService(slug)!;
   const loc = locale === "en" ? "en" : "ar";
+  const variant = getServiceVariant(slug);
+  const isAr = loc === "ar";
 
   const ld = {
     "@context": "https://schema.org",
@@ -45,95 +50,106 @@ function ServicePage() {
     name: s.title[loc],
     description: s.metaDescription[loc],
     provider: { "@type": "Organization", name: "Fikra Digital Marketing" },
-    offers: s.plans.map((p) => ({
-      "@type": "Offer",
-      name: p.name[loc],
-      price: p.priceSar,
-      priceCurrency: "SAR",
-    })),
+    offers: s.plans.map((p) => ({ "@type": "Offer", name: p.name[loc], price: p.priceSar, priceCurrency: "SAR" })),
   };
 
   return (
     <SiteLayout>
-      <Breadcrumbs trail={[
-        { label: loc === "ar" ? "خدماتنا" : "Services", href: "/services" },
-        { label: s.title[loc] },
-      ]} />
+      <div data-accent={variant.accent}>
+        <Breadcrumbs trail={[{ label: isAr ? "خدماتنا" : "Services", href: "/services" }, { label: s.title[loc] }]} />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-hero">
-        <div className="container-app grid items-center gap-10 py-16 md:py-24 lg:grid-cols-2">
-          <div>
-            <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-              {loc === "ar" ? "خدمة احترافية" : "Pro service"}
-            </span>
-            <h1 className="mt-4 text-4xl font-extrabold leading-tight md:text-5xl">{s.title[loc]}</h1>
-            <p className="mt-4 text-base leading-8 text-muted-foreground md:text-lg">{s.intro[loc]}</p>
-            <ul className="mt-6 grid gap-2 sm:grid-cols-2">
-              {s.highlights[loc].map((h, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-foreground/85">
-                  <Check className="mt-0.5 h-4 w-4 text-primary" />{h}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="overflow-hidden rounded-3xl border border-border shadow-elegant">
-            <img src={s.image} alt={s.title[loc]} className="aspect-[4/3] w-full object-cover" loading="eager" />
-          </div>
-        </div>
-      </section>
+        <ServiceVariantHero service={s} />
 
-      {/* Process */}
-      <section className="section">
-        <div className="container-app">
-          <h2 className="text-3xl font-extrabold md:text-4xl">{loc === "ar" ? "منهجية عملنا" : "Our process"}</h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {s.process.map((p, i) => (
-              <div key={i} className="rounded-2xl border border-border bg-card p-6 shadow-soft">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary text-sm font-bold text-primary-foreground">
-                  {String(i + 1).padStart(2, "0")}
+        {/* Process */}
+        <section className="section">
+          <div className="container-app">
+            <div className="mb-10 max-w-2xl">
+              <SectionEyebrow>{isAr ? "منهجية العمل" : "Our methodology"}</SectionEyebrow>
+              <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">
+                {isAr ? "كيف ننفذ هذه الخدمة" : "How we deliver this service"}
+              </h2>
+            </div>
+            <div className="relative grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {s.process.map((p, i) => (
+                <div key={i} className="card-elevated rounded-3xl p-7">
+                  <div className="relative mb-4">
+                    <span className="text-6xl font-black opacity-10" style={{ color: "var(--svc)" }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span
+                      className="absolute end-0 top-0 grid h-10 w-10 place-items-center rounded-full text-sm font-bold text-white shadow-soft"
+                      style={{ background: "var(--svc)" }}
+                    >
+                      {i + 1}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-extrabold text-ink">{p.step[loc]}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{p.detail[loc]}</p>
                 </div>
-                <h3 className="mt-4 text-base font-bold">{p.step[loc]}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{p.detail[loc]}</p>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Deliverables + Audience side by side */}
+        <section className="section bg-surface-soft">
+          <div className="container-app grid gap-8 lg:grid-cols-2">
+            <div className="rounded-3xl border border-border bg-card p-8 shadow-card">
+              <SectionEyebrow>{isAr ? "ماذا تستلم" : "Deliverables"}</SectionEyebrow>
+              <h3 className="mt-3 text-2xl font-extrabold text-ink">
+                {isAr ? "كل ما تحصل عليه" : "Everything you receive"}
+              </h3>
+              <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                {s.deliverables[loc].map((d, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm">
+                    <span
+                      className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full"
+                      style={{ background: "var(--svc-soft)", color: "var(--svc-deep)" }}
+                    >
+                      <Check className="h-3 w-3" />
+                    </span>
+                    {d}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div
+              className="relative overflow-hidden rounded-3xl p-8 text-white shadow-elegant"
+              style={{ background: "var(--gradient-svc)" }}
+            >
+              <div className="pointer-events-none absolute inset-0 bg-grid opacity-15" aria-hidden />
+              <div className="relative">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest">
+                  {isAr ? "لمن تناسب" : "Who it's for"}
+                </span>
+                <h3 className="mt-3 text-2xl font-extrabold">{isAr ? "هل هذه الخدمة لك؟" : "Is this service for you?"}</h3>
+                <ul className="mt-5 space-y-3">
+                  {s.audience[loc].map((d, i) => (
+                    <li key={i} className="flex items-start gap-2.5 text-sm">
+                      <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 rtl:rotate-90" />
+                      {d}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            ))}
+            </div>
           </div>
+        </section>
+
+        {s.subServices && s.subServices.length > 0 && (
+          <SubServicesGrid parentSlug={s.slug} items={s.subServices} />
+        )}
+
+        <div id="pricing">
+          <PricingPlans plans={s.plans} />
         </div>
-      </section>
 
-      {/* Deliverables + Audience */}
-      <section className="section bg-surface">
-        <div className="container-app grid gap-10 lg:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-card p-7">
-            <h3 className="text-xl font-bold">{loc === "ar" ? "ماذا تستلم؟" : "What you get"}</h3>
-            <ul className="mt-4 space-y-2.5">
-              {s.deliverables[loc].map((d, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm"><Check className="mt-0.5 h-4 w-4 text-primary" />{d}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-2xl border border-border bg-card p-7">
-            <h3 className="text-xl font-bold">{loc === "ar" ? "لمن تناسب هذه الخدمة؟" : "Who it's for"}</h3>
-            <ul className="mt-4 space-y-2.5">
-              {s.audience[loc].map((d, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm"><Check className="mt-0.5 h-4 w-4 text-primary" />{d}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
+        <FaqSection items={s.faqs} />
 
-      {s.subServices && s.subServices.length > 0 && (
-        <SubServicesGrid parentSlug={s.slug} items={s.subServices} />
-      )}
+        <CtaBand />
 
-      <PricingPlans plans={s.plans} />
-
-      <FaqSection items={s.faqs} />
-
-      <CtaBand />
-
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+      </div>
     </SiteLayout>
   );
 }
