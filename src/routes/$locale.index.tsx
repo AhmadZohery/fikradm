@@ -1,12 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { HeroSlider } from "@/components/site/HeroSlider";
+import { TrustStrip } from "@/components/site/cinematic/TrustStrip";
 import { StatsBand } from "@/components/site/StatsBand";
 import { LogosStrip } from "@/components/site/LogosStrip";
 import { ServicesGrid } from "@/components/site/ServicesGrid";
 import { ProcessSection } from "@/components/site/ProcessSection";
 import { HomePackages } from "@/components/site/HomePackages";
 import { PackageBuilder } from "@/components/site/PackageBuilder";
+import { HomeBeforeAfter } from "@/components/site/HomeBeforeAfter";
+import { HomeGuarantees } from "@/components/site/HomeGuarantees";
+import { HomeVideoTestimonials } from "@/components/site/HomeVideoTestimonials";
 import { IndustriesShowcase } from "@/components/site/IndustriesShowcase";
 import { Testimonials } from "@/components/site/Testimonials";
 import { CtaBand } from "@/components/site/CtaBand";
@@ -41,14 +45,18 @@ function HomePage() {
   return (
     <SiteLayout>
       <HeroSlider />
+      <TrustStrip />
       <StatsBand />
-      <LogosStrip />
       <ServicesGrid />
+      <HomeBeforeAfter />
       <HomePackages />
       <PackageBuilder />
+      <HomeGuarantees />
       <ProcessSection />
-      <IndustriesShowcase />
+      <HomeVideoTestimonials />
       <Testimonials />
+      <IndustriesShowcase />
+      <LogosStrip />
       <CtaBand />
     </SiteLayout>
   );
