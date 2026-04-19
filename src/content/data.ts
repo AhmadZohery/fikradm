@@ -1,4 +1,4 @@
-import type { ServiceMeta, IndustryMeta, PricingPlan, LocalizedString, SubServiceMeta } from "./types";
+import type { ServiceMeta, IndustryMeta, PricingPlan, LocalizedString, SubServiceMeta, SubIndustryMeta } from "./types";
 
 const ls = (ar: string, en: string): LocalizedString => ({ ar, en });
 const ll = (ar: string[], en: string[]) => ({ ar, en });
@@ -1113,12 +1113,135 @@ export const subServices: SubServiceMeta[] = [
   },
 ];
 
+// ------------- Sub-Industries (niche landing pages) -------------
+
+export const subIndustries: SubIndustryMeta[] = [
+  {
+    slug: "fashion-eyewear",
+    parentSlug: "ecommerce",
+    title: ls("تسويق متاجر الأزياء والنظارات", "Fashion & Eyewear Stores Marketing"),
+    shortLabel: ls("الأزياء والنظارات", "Fashion & Eyewear"),
+    metaTitle: ls(
+      "تسويق متاجر الأزياء والنظارات في السعودية والخليج | فكرة",
+      "Fashion & Eyewear Store Marketing in KSA & Gulf | Fikra",
+    ),
+    metaDescription: ls(
+      "نُسوّق متاجر الأزياء والنظارات بحملات بصرية، Influencers، وكتالوج إعلاني محسّن لرفع المبيعات.",
+      "We market fashion & eyewear stores with visual campaigns, influencers, and optimized catalog ads.",
+    ),
+    intro: ls(
+      "متاجر الأزياء والنظارات تنافس بالصورة قبل السعر. نبني لك حضوراً بصرياً قوياً، حملات Catalog وCollection ذكية، وتعاون مؤثرين مدروس لرفع المبيعات وتقليل الاسترجاع.",
+      "Fashion & eyewear stores compete on visuals before price. We build a strong visual presence, smart catalog & collection campaigns, and curated influencer partnerships to lift sales and cut returns.",
+    ),
+    pains: ll(
+      ["نسبة استرجاع عالية", "صعوبة التميز في سوق مزدحم", "ضعف عائد إعلانات الكتالوج"],
+      ["High return rates", "Hard to stand out in a crowded market", "Weak catalog ad ROAS"],
+    ),
+    solutions: ll(
+      ["تصوير منتجات وموديلز احترافي", "حملات Advantage+ Shopping محسّنة", "تعاون مؤثرين مدروس", "Reels و TikTok للمنتجات", "تقليل الاسترجاع بمحتوى مقاسات صحيح"],
+      ["Pro product & model photography", "Optimized Advantage+ Shopping campaigns", "Curated influencer partnerships", "Reels & TikTok for products", "Returns reduction via accurate sizing content"],
+    ),
+    outcomes: [
+      { value: "+260%", label: ls("نمو مبيعات الموسم", "Seasonal sales growth") },
+      { value: "x5", label: ls("ROAS الكتالوج", "Catalog ROAS") },
+      { value: "-22%", label: ls("نسبة الاسترجاع", "Return rate") },
+    ],
+    faqs: [
+      { q: ls("هل تتعاملون مع متاجر سلة وZid؟", "Do you support Salla & Zid?"), a: ls("نعم، خبرة قوية مع سلة وZid وShopify وWooCommerce.", "Yes — strong experience with Salla, Zid, Shopify and WooCommerce.") },
+      { q: ls("هل تساعدون بالتصوير؟", "Do you help with photography?"), a: ls("نعم، نقدم جلسات تصوير منتجات وموديلز ضمن باقاتنا الإبداعية.", "Yes — product & model shoots are included in our creative plans.") },
+    ],
+    plans: industryPlans("بداية الأزياء", "نمو الأزياء", "إمبراطورية الأزياء", "Fashion Starter", "Fashion Growth", "Fashion Empire"),
+    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    slug: "smart-home",
+    parentSlug: "ecommerce",
+    title: ls("تسويق متاجر الأجهزة الذكية", "Smart Home Devices Marketing"),
+    shortLabel: ls("الأجهزة الذكية", "Smart Home"),
+    metaTitle: ls(
+      "تسويق متاجر الأجهزة الذكية والمنزل الذكي | فكرة",
+      "Smart Home Devices Store Marketing | Fikra",
+    ),
+    metaDescription: ls(
+      "نسوّق منتجات المنزل الذكي بمحتوى تعليمي وفيديوهات استخدام وحملات استهداف دقيقة لرفع التحويل.",
+      "We market smart-home products with educational content, demo videos, and precise targeting to lift conversion.",
+    ),
+    intro: ls(
+      "منتجات المنزل الذكي تحتاج تعليم العميل قبل بيعه. ننتج فيديوهات استخدام وUGC، صفحات هبوط بمقاطع شرح، وحملات استهداف دقيقة على Meta وTikTok وYouTube.",
+      "Smart-home products need to educate before they sell. We produce demo videos & UGC, landing pages with how-to content, and precise targeting on Meta, TikTok and YouTube.",
+    ),
+    pains: ll(
+      ["العميل لا يفهم المنتج بسهولة", "مقاومة شراء التقنية الجديدة", "تكلفة اكتساب مرتفعة"],
+      ["Customers don't immediately get the product", "Resistance to buying new tech", "High customer acquisition cost"],
+    ),
+    solutions: ll(
+      ["فيديوهات شرح وUGC", "صفحات هبوط تعليمية", "حملات YouTube مستهدفة", "Comparison و Bundle offers", "Email/WhatsApp Nurturing"],
+      ["Demo videos & UGC", "Educational landing pages", "Targeted YouTube campaigns", "Comparisons & bundle offers", "Email/WhatsApp nurturing"],
+    ),
+    outcomes: [
+      { value: "+190%", label: ls("نمو الطلبات", "Orders growth") },
+      { value: "-34%", label: ls("تكلفة الاكتساب", "Acquisition cost") },
+      { value: "x3.8", label: ls("ROAS", "ROAS") },
+    ],
+    faqs: [
+      { q: ls("هل تنتجون فيديوهات شرح المنتجات؟", "Do you produce demo videos?"), a: ls("نعم، ضمن باقاتنا الإبداعية والإعلانية.", "Yes — included in our creative & ads plans.") },
+    ],
+    plans: industryPlans("بداية الذكية", "نمو الذكية", "هيمنة الذكية", "Smart Starter", "Smart Growth", "Smart Dominance"),
+    image: "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    slug: "shipping-customs",
+    parentSlug: "logistics",
+    title: ls("تسويق شركات الشحن والتخليص الجمركي", "Shipping & Customs Clearance Marketing"),
+    shortLabel: ls("الشحن والتخليص", "Shipping & Customs"),
+    metaTitle: ls(
+      "تسويق B2B لشركات الشحن والتخليص الجمركي | فكرة",
+      "B2B Marketing for Shipping & Customs Clearance | Fikra",
+    ),
+    metaDescription: ls(
+      "ليدز B2B عالية الجودة لشركات الشحن البحري والجوي والتخليص الجمركي في السعودية والخليج.",
+      "High-quality B2B leads for sea, air freight and customs clearance companies in KSA & Gulf.",
+    ),
+    intro: ls(
+      "نولّد لشركات الشحن والتخليص ليدز B2B حقيقية من شركات لها شحنات منتظمة، عبر LinkedIn Ads، Google Search لكلمات شراء عالية النية، وصفحات هبوط متخصصة لكل خدمة (بحري/جوي/بري/تخليص).",
+      "We deliver real B2B leads from shipping-active businesses via LinkedIn Ads, high-intent Google Search, and service-specific landing pages (sea, air, road, customs).",
+    ),
+    pains: ll(
+      ["ليدز رديئة من المنصات العامة", "صعوبة الوصول لمدراء العمليات والمشتريات", "موقع B2B غير مقنع"],
+      ["Low-quality leads from generic platforms", "Hard to reach ops & procurement managers", "Unconvincing B2B website"],
+    ),
+    solutions: ll(
+      ["LinkedIn Ads مستهدفة لقطاع المستوردين", "Google Search لكلمات شراء (تخليص، شحن من الصين...)", "صفحة هبوط لكل خدمة شحن", "محتوى دراسات حالة B2B", "نظام CRM لمتابعة الفرص"],
+      ["Targeted LinkedIn Ads for importers", "Google Search on buying keywords (customs, shipping from China...)", "Landing page per shipping service", "B2B case study content", "CRM for opportunity tracking"],
+    ),
+    outcomes: [
+      { value: "+210%", label: ls("ليدز مؤهلة", "Qualified leads") },
+      { value: "-45%", label: ls("تكلفة الليد", "Cost per lead") },
+      { value: "15+", label: ls("عقود B2B/شهر", "B2B contracts/month") },
+    ],
+    faqs: [
+      { q: ls("هل تخدمون كل أنواع الشحن؟", "Do you cover all shipping types?"), a: ls("نعم، بحري وجوي وبري وتخليص جمركي ومستودعات.", "Yes — sea, air, road, customs and warehousing.") },
+    ],
+    plans: industryPlans("انطلاقة شحن", "نمو شحن", "قائد شحن", "Freight Launch", "Freight Growth", "Freight Leader"),
+    image: "https://images.unsplash.com/photo-1577416412292-747c6607f055?auto=format&fit=crop&w=1600&q=80",
+  },
+];
+
 // Attach sub-services to their parent service
 for (const sub of subServices) {
   const parent = services.find((s) => s.slug === sub.parentSlug);
   if (parent) {
     if (!parent.subServices) parent.subServices = [];
     parent.subServices.push(sub);
+  }
+}
+
+// Attach sub-industries to their parent industry
+for (const sub of subIndustries) {
+  const parent = industries.find((s) => s.slug === sub.parentSlug);
+  if (parent) {
+    if (!parent.subIndustries) parent.subIndustries = [];
+    parent.subIndustries.push(sub);
   }
 }
 
@@ -1133,4 +1256,10 @@ export function findSubService(parentSlug: string, slug: string) {
 }
 export function getSubServicesFor(parentSlug: string) {
   return subServices.filter((s) => s.parentSlug === parentSlug);
+}
+export function findSubIndustry(parentSlug: string, slug: string) {
+  return subIndustries.find((s) => s.parentSlug === parentSlug && s.slug === slug);
+}
+export function getSubIndustriesFor(parentSlug: string) {
+  return subIndustries.filter((s) => s.parentSlug === parentSlug);
 }
