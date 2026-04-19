@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { LOCALE_LABELS, type Locale } from "@/i18n/types";
-import { services as allServices, getSubServicesFor } from "@/content/data";
+import { services as allServices, industries as allIndustries, getSubServicesFor, getSubIndustriesFor } from "@/content/data";
 import logo from "@/assets/fikra-logo.jpg";
 import { cn } from "@/lib/utils";
 
