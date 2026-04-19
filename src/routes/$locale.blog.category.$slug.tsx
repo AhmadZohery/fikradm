@@ -49,7 +49,7 @@ export const Route = createFileRoute("/$locale/blog/category/$slug")({
 });
 
 function CategoryPage() {
-  const { categorySlug } = Route.useLoaderData();
+  const { slug: categorySlug } = Route.useParams();
   const { locale } = useLocale();
   const loc = locale === "en" ? "en" : "ar";
   const cat = getCategoryBySlug(categorySlug)!;
