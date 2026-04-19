@@ -25,24 +25,30 @@ export function IndustriesShowcase() {
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {industries.map((ind) => (
-            <Link
-              key={ind.slug}
-              to={buildHref(locale, `/industries/${ind.slug}`)}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant"
-            >
-              <div className="aspect-[4/3] overflow-hidden">
-                <img src={ind.image} alt={ind.title[locale]} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-              </div>
-              <div className="p-5">
-                <h3 className="text-base font-bold text-foreground">{ind.title[locale]}</h3>
-                <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">{ind.intro[locale]}</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-                  {locale === "ar" ? "اكتشف الحل" : "See solution"}
-                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
-                </span>
-              </div>
-            </Link>
+          {industries.map((ind, i) => (
+            <Reveal key={ind.slug} delay={i * 80}>
+              <Link
+                to={buildHref(locale, `/industries/${ind.slug}`)}
+                className="group relative block h-full overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant"
+              >
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img src={ind.image} alt={ind.title[locale]} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                </div>
+                <div className="p-5">
+                  <h3 className="text-base font-bold text-foreground">{ind.title[locale]}</h3>
+                  <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">{ind.intro[locale]}</p>
+                  {ind.subIndustries && ind.subIndustries.length > 0 && (
+                    <div className="mt-2 text-[11px] text-muted-foreground/80">
+                      {ind.subIndustries.map((s) => s.shortLabel[locale]).join(" • ")}
+                    </div>
+                  )}
+                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+                    {locale === "ar" ? "اكتشف الحل" : "See solution"}
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
+                  </span>
+                </div>
+              </Link>
+            </Reveal>
           ))}
         </div>
       </div>
