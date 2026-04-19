@@ -46,13 +46,20 @@ export function SiteHeader() {
     })),
   }));
 
+  const blogChildren: SubLink[] = blogCategories.map((c) => ({
+    key: c.slug,
+    label: c.name[loc],
+    href: `/blog/category/${c.slug}`,
+    desc: c.description[loc],
+  }));
+
   const navItems: NavItem[] = [
     { key: "home", href: "/" },
     { key: "about", href: "/about" },
     { key: "services", href: "/services", mega: servicesMega },
     { key: "industries", href: "/industries", mega: industriesMega },
     { key: "cases", href: "/case-studies" },
-    { key: "blog", href: "/blog" },
+    { key: "blog", href: "/blog", children: blogChildren },
     { key: "contact", href: "/contact" },
   ];
 
