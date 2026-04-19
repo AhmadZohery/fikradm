@@ -20,7 +20,7 @@ const ar: Dict = {
   "nav.menu": "القائمة",
 
   // Mega menu groups
-  "menu.services.seo": "السيو والنمو العضوي",
+  "menu.services.seo": "تحسين محركات البحث (SEO)",
   "menu.services.performance": "الأداء والإعلانات",
   "menu.services.creative": "الإنتاج الإبداعي",
   "menu.services.web": "الحلول البرمجية",
@@ -73,7 +73,7 @@ const en: Dict = {
   "nav.cta": "Book Consultation",
   "nav.menu": "Menu",
 
-  "menu.services.seo": "SEO & Organic Growth",
+  "menu.services.seo": "Search Engine Optimization",
   "menu.services.performance": "Performance Marketing",
   "menu.services.creative": "Creative Production",
   "menu.services.web": "Web Solutions",

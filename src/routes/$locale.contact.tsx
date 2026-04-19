@@ -39,7 +39,7 @@ function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const services = [
-    { id: "seo", label: isAr ? "السيو والنمو العضوي" : "SEO & Organic" },
+    { id: "seo", label: isAr ? "تحسين محركات البحث (SEO)" : "Search Engine Optimization" },
     { id: "performance", label: isAr ? "إعلانات ممولة" : "Paid Ads" },
     { id: "creative", label: isAr ? "إنتاج إبداعي" : "Creative" },
     { id: "web", label: isAr ? "تطوير موقع/متجر" : "Web/Store" },

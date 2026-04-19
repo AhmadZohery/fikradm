@@ -28,7 +28,7 @@ export type BlogPost = {
 export const blogCategories: BlogCategory[] = [
   {
     slug: "seo",
-    name: ls("السيو والنمو العضوي", "SEO & Organic Growth"),
+    name: ls("تحسين محركات البحث (SEO)", "Search Engine Optimization"),
     description: ls(
       "أدلة عملية لتصدّر نتائج جوجل ومضاعفة الزيارات المجانية.",
       "Practical guides to dominate Google and multiply organic traffic.",
