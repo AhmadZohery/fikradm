@@ -34,6 +34,22 @@ export function SiteHeader() {
     setOpenMenu(null);
   }, [pathWithoutLocale]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
+  // Close menus on Escape
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { setOpenMenu(null); setMobileOpen(false); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   const servicesMega = allServices.map((svc) => ({
     groupKey: svc.slug,
     groupLabel: svc.title[loc],
