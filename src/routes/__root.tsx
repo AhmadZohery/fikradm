@@ -100,8 +100,14 @@ export const Route = createRootRoute({
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const segments = (location.pathname || "/").split("/").filter(Boolean);
+  const first = segments[0];
+  const locale = isLocale(first) ? first : DEFAULT_LOCALE;
+  const dir = locale === "ar" ? "rtl" : "ltr";
+
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
+    <html lang={locale} dir={dir} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -116,7 +122,6 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const location = useLocation();
 
-  // Sync html lang/dir with URL locale (client-side)
   const localeInfo = useMemo(() => {
     const segments = (location.pathname || "/").split("/").filter(Boolean);
     const first = segments[0];
