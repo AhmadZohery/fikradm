@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { industries } from "@/content/data";
+import { Reveal } from "./Reveal";
 
 export function IndustriesShowcase() {
   const { locale, buildHref, t } = useLocale();
