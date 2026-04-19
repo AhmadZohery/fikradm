@@ -75,21 +75,32 @@ export function SiteHeader() {
       {/* Mega menu backdrop */}
       <div
         className={cn(
-          "pointer-events-none fixed inset-0 z-30 bg-ink/20 backdrop-blur-[2px] transition-opacity duration-300",
+          "pointer-events-none fixed inset-0 z-30 bg-ink/30 backdrop-blur-[3px] transition-opacity duration-500",
           openMenu ? "opacity-100" : "opacity-0",
         )}
         aria-hidden
       />
 
       <header
+        style={{ ["--header-h" as string]: scrolled ? "4rem" : "5rem" }}
         className={cn(
-          "sticky top-0 z-40 w-full transition-all duration-500",
-          scrolled
-            ? "header-glass border-b border-border/60 shadow-soft"
-            : "border-b border-transparent bg-background/40 backdrop-blur-sm",
+          "fixed inset-x-0 top-0 z-40 w-full transition-all duration-500 ease-out",
+          scrolled ? "py-2" : "py-3 md:py-4",
         )}
       >
-        <div className={cn("container-app flex items-center justify-between gap-4 transition-all duration-500", scrolled ? "h-16" : "h-16 md:h-20")}>
+        <div
+          className={cn(
+            "container-app transition-all duration-500 ease-out",
+          )}
+        >
+          <div
+            className={cn(
+              "flex items-center justify-between gap-4 rounded-full border transition-all duration-500 ease-out",
+              scrolled
+                ? "header-glass border-border/60 px-3 py-2 shadow-elegant md:px-4"
+                : "border-white/40 bg-white/55 px-4 py-2.5 shadow-soft backdrop-blur-xl md:px-5",
+            )}
+          >
           {/* Logo */}
           <Link to={buildHref(locale, "/")} className="group flex items-center gap-3" aria-label={t("brand.full")}>
             <div className="relative">
