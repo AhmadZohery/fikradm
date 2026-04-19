@@ -70,4 +70,21 @@ export type IndustryMeta = {
   faqs: FaqItem[];
   plans: PricingPlan[];
   image: string;
+  subIndustries?: SubIndustryMeta[];
+};
+
+export type SubIndustryMeta = {
+  slug: string;
+  parentSlug: string;
+  title: LocalizedString;
+  shortLabel: LocalizedString;
+  metaTitle: LocalizedString;
+  metaDescription: LocalizedString;
+  intro: LocalizedString;
+  pains: LocalizedList;
+  solutions: LocalizedList;
+  outcomes: { value: string; label: LocalizedString }[];
+  faqs: FaqItem[];
+  plans: PricingPlan[];
+  image: string;
 };
