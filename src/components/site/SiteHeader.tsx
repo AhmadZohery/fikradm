@@ -258,9 +258,8 @@ export function SiteHeader() {
               aria-label={t("nav.menu")}
               aria-expanded={mobileOpen}
             >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
-          </div>
           </div>
 
           {/* Mobile menu */}
