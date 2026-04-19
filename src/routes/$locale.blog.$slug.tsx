@@ -56,7 +56,7 @@ export const Route = createFileRoute("/$locale/blog/$slug")({
 });
 
 function PostPage() {
-  const { slug } = Route.useLoaderData();
+  const { slug } = Route.useParams();
   const { locale, buildHref } = useLocale();
   const loc = locale === "en" ? "en" : "ar";
   const post = getPostBySlug(slug)!;

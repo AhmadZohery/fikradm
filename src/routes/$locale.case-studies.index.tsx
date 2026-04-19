@@ -241,7 +241,7 @@ function CaseStudiesIndex() {
         <div className="container-app">
           <Reveal>
             <Link
-              to="/$locale/case-studies/"
+              to="/$locale/case-studies"
               params={{ locale }}
               className="group relative grid overflow-hidden rounded-[2.5rem] border border-border bg-card shadow-elegant lg:grid-cols-[1.2fr_1fr]"
             >
@@ -313,7 +313,7 @@ function CaseStudiesIndex() {
               return (
                 <Reveal key={c.slug} delay={i * 60}>
                   <Link
-                    to="/$locale/case-studies/"
+                    to="/$locale/case-studies"
                     params={{ locale }}
                     className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-card transition duration-500 hover:-translate-y-2 hover:border-primary/30 hover:shadow-elegant"
                   >
