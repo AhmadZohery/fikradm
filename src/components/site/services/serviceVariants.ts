@@ -40,18 +40,6 @@ export const SERVICE_VARIANTS: Record<string, ServiceVariant> = {
     hugeWord: { ar: "تطوير", en: "WEB" },
     decoration: "terminal",
   },
-  social: {
-    accent: "violet",
-    hero: "grid",
-    hugeWord: { ar: "سوشيال", en: "SOCIAL" },
-    decoration: "phone",
-  },
-  content: {
-    accent: "violet",
-    hero: "magazine",
-    hugeWord: { ar: "محتوى", en: "CONTENT" },
-    decoration: "spread",
-  },
 };
 
 export function getServiceVariant(slug: string): ServiceVariant {
