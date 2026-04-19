@@ -125,7 +125,7 @@ export function SiteHeader() {
                   </Link>
                   {isOpen && (
                     <div className="absolute start-1/2 top-full z-50 -translate-x-1/2 pt-3">
-                      <div className="grid w-[860px] grid-cols-2 gap-1 rounded-3xl border border-border bg-popover/95 p-3 shadow-elegant backdrop-blur-xl animate-fade-in">
+                      <div className="grid w-[860px] grid-cols-2 gap-1 rounded-3xl border border-border bg-popover/95 p-3 shadow-elegant backdrop-blur-xl animate-mega-in">
                         {item.mega.map((g) => (
                           <div key={g.groupKey} className="rounded-2xl p-2">
                             <Link
@@ -189,7 +189,7 @@ export function SiteHeader() {
                   </Link>
                   {isOpen && (
                     <div className="absolute start-0 top-full z-50 min-w-[320px] pt-3">
-                      <div className="rounded-2xl border border-border bg-popover/95 p-2 shadow-elegant backdrop-blur-xl animate-fade-in">
+                      <div className="rounded-2xl border border-border bg-popover/95 p-2 shadow-elegant backdrop-blur-xl animate-mega-in">
                         {item.children.map((c) => (
                           <Link
                             key={c.key}
@@ -261,7 +261,7 @@ export function SiteHeader() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-border bg-background/95 backdrop-blur-xl lg:hidden animate-fade-in">
+        <div className="border-t border-border bg-background/95 backdrop-blur-xl lg:hidden animate-mega-in">
           <nav className="container-app flex max-h-[80vh] flex-col gap-1 overflow-y-auto py-4" aria-label="Mobile">
             {navItems.map((item) => (
               <div key={item.key} className="animate-fade-up" style={{ animationDelay: `${navItems.indexOf(item) * 40}ms` }}>
