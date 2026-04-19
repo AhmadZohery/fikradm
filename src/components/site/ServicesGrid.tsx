@@ -13,7 +13,7 @@ const accentForSlug: Record<string, string> = {
   content: "ocher",
 };
 
-const iconForSlug: Record<string, React.ComponentType<{ className?: string }>> = {
+const iconForSlug: Record<string, typeof Search> = {
   seo: Search,
   performance: Megaphone,
   creative: Palette,

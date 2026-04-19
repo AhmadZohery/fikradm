@@ -4,7 +4,7 @@ import { industries } from "@/content/data";
 import { ArrowUpRight, ShoppingBag, Truck, Stethoscope, Building2 } from "lucide-react";
 import { SectionEyebrow } from "./cinematic/SectionEyebrow";
 
-const iconFor: Record<string, React.ComponentType<{ className?: string }>> = {
+const iconFor: Record<string, typeof ShoppingBag> = {
   ecommerce: ShoppingBag,
   logistics: Truck,
   healthcare: Stethoscope,
