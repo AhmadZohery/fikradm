@@ -4,7 +4,7 @@ import { Menu, X, Globe, ChevronDown, ArrowUpRight } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { LOCALE_LABELS, type Locale } from "@/i18n/types";
 import { services as allServices, industries as allIndustries, getSubServicesFor, getSubIndustriesFor } from "@/content/data";
-import { blogCategories } from "@/content/blog";
+// blog dropdown removed by design — Blog is now a direct link
 import logo from "@/assets/fikra-logo.jpg";
 import { cn } from "@/lib/utils";
 
@@ -54,20 +54,13 @@ export function SiteHeader() {
     })),
   }));
 
-  const blogChildren: SubLink[] = blogCategories.map((c) => ({
-    key: c.slug,
-    label: c.name[loc],
-    href: `/blog/category/${c.slug}`,
-    desc: c.description[loc],
-  }));
-
   const navItems: NavItem[] = [
     { key: "home", href: "/" },
     { key: "about", href: "/about" },
     { key: "services", href: "/services", mega: servicesMega },
     { key: "industries", href: "/industries", mega: industriesMega },
     { key: "cases", href: "/case-studies" },
-    { key: "blog", href: "/blog", children: blogChildren },
+    { key: "blog", href: "/blog" },
     { key: "contact", href: "/contact" },
   ];
 
