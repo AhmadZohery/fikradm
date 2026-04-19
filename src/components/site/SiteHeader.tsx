@@ -3,26 +3,35 @@ import { useState } from "react";
 import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { LOCALE_LABELS, type Locale } from "@/i18n/types";
+import { services as allServices, getSubServicesFor } from "@/content/data";
 import logo from "@/assets/fikra-logo.jpg";
 import { cn } from "@/lib/utils";
 
+type SubLink = { key: string; label: string; href: string; desc?: string };
 type NavItem = {
   key: string;
   href: string;
-  children?: { key: string; label: string; href: string; desc?: string }[];
+  children?: SubLink[];
+  mega?: { groupKey: string; groupLabel: string; href: string; items: SubLink[] }[];
 };
 
 export function SiteHeader() {
   const { locale, t, buildHref, pathWithoutLocale } = useLocale();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const loc = locale === "en" ? "en" : "ar";
 
-  const services = [
-    { key: "seo", label: t("menu.services.seo"), href: "/services/seo", desc: locale === "ar" ? "ترتيب أعلى ونمو عضوي مستدام" : "Higher rankings, sustainable growth" },
-    { key: "perf", label: t("menu.services.performance"), href: "/services/performance", desc: locale === "ar" ? "إعلانات بعائد مدروس" : "Ads with measurable ROI" },
-    { key: "creative", label: t("menu.services.creative"), href: "/services/creative", desc: locale === "ar" ? "هوية، فيديو، ومحتوى يلفت" : "Brand, video & content that converts" },
-    { key: "web", label: t("menu.services.web"), href: "/services/web", desc: locale === "ar" ? "مواقع ومتاجر سريعة قابلة للتوسع" : "Fast scalable sites & stores" },
-  ];
+  const servicesMega = allServices.map((svc) => ({
+    groupKey: svc.slug,
+    groupLabel: svc.title[loc],
+    href: `/services/${svc.slug}`,
+    items: getSubServicesFor(svc.slug).map((sub) => ({
+      key: sub.slug,
+      label: sub.shortLabel[loc],
+      href: `/services/${svc.slug}/${sub.slug}`,
+      desc: sub.intro[loc],
+    })),
+  }));
 
   const industries = [
     { key: "ecom", label: t("menu.industries.ecom"), href: "/industries/ecommerce" },
@@ -34,7 +43,7 @@ export function SiteHeader() {
   const navItems: NavItem[] = [
     { key: "home", href: "/" },
     { key: "about", href: "/about" },
-    { key: "services", href: "/services", children: services },
+    { key: "services", href: "/services", mega: servicesMega },
     { key: "industries", href: "/industries", children: industries.map((i) => ({ ...i, desc: undefined })) },
     { key: "cases", href: "/case-studies" },
     { key: "blog", href: "/blog" },
