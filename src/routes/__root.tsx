@@ -1,26 +1,38 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import {
+  Outlet,
+  createRootRoute,
+  HeadContent,
+  Scripts,
+  useLocation,
+  Link,
+} from "@tanstack/react-router";
+import { useMemo } from "react";
 
 import appCss from "../styles.css?url";
+import { isLocale, DEFAULT_LOCALE } from "../i18n/types";
+import { SiteLayout } from "../components/site/SiteLayout";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <SiteLayout>
+      <div className="container-app section text-center">
+        <p className="text-sm font-semibold text-primary">404</p>
+        <h1 className="mt-2 text-4xl font-bold tracking-tight md:text-6xl">
+          الصفحة غير موجودة / Page not found
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+          الرابط الذي تبحث عنه غير متاح. عُد إلى الرئيسية لاكتشاف خدماتنا.
         </p>
-        <div className="mt-6">
+        <div className="mt-8">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition hover:bg-primary/90"
           >
-            Go home
+            الرئيسية / Home
           </Link>
         </div>
       </div>
-    </div>
+    </SiteLayout>
   );
 }
 
@@ -29,19 +41,56 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "فكرة للتسويق الرقمي | Fikra Digital Marketing" },
+      {
+        name: "description",
+        content:
+          "وكالة تسويق رقمي مرخّصة في السعودية. سيو، إعلانات، تصميم، تطوير مواقع وحلول نمو متكاملة لشركات الخليج.",
+      },
+      { name: "author", content: "Fikra Digital Marketing" },
+      { name: "theme-color", content: "#5b4fe0" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:site_name", content: "Fikra Digital Marketing" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@FikraDM" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Fikra Digital Marketing",
+          alternateName: "فكرة للتسويق الرقمي",
+          url: "https://fikra-dm.com",
+          logo: "https://fikra-dm.com/logo.png",
+          sameAs: [
+            "https://twitter.com/FikraDM",
+            "https://www.linkedin.com/company/fikra-dm",
+            "https://www.instagram.com/fikra.dm",
+          ],
+          address: {
+            "@type": "PostalAddress",
+            addressCountry: "SA",
+            addressLocality: "Riyadh",
+          },
+        }),
       },
     ],
   }),
@@ -52,7 +101,7 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -65,5 +114,20 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const location = useLocation();
+
+  // Sync html lang/dir with URL locale (client-side)
+  const localeInfo = useMemo(() => {
+    const segments = (location.pathname || "/").split("/").filter(Boolean);
+    const first = segments[0];
+    const locale = isLocale(first) ? first : DEFAULT_LOCALE;
+    return { locale, dir: locale === "ar" ? "rtl" : "ltr" } as const;
+  }, [location.pathname]);
+
+  if (typeof document !== "undefined") {
+    document.documentElement.lang = localeInfo.locale;
+    document.documentElement.dir = localeInfo.dir;
+  }
+
   return <Outlet />;
 }
