@@ -134,8 +134,8 @@ export function SiteHeader() {
                       <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-300", isOpen && "rotate-180")} />
                     </Link>
                     {isOpen && (
-                      <div className="absolute start-1/2 top-full z-50 -translate-x-1/2 pt-3">
-                        <div className="grid w-[920px] grid-cols-[1fr_2fr] gap-0 overflow-hidden rounded-3xl border border-border bg-popover/98 shadow-pop backdrop-blur-xl animate-mega-in">
+                      <div className="absolute end-0 top-full z-50 pt-3 lg:start-1/2 lg:end-auto lg:-translate-x-1/2 rtl:lg:translate-x-1/2">
+                        <div className="grid w-[min(92vw,860px)] grid-cols-1 gap-0 overflow-hidden rounded-3xl border border-border bg-popover/98 shadow-pop backdrop-blur-xl animate-mega-in lg:grid-cols-[1fr_2fr]">
                           {/* Sidebar promo */}
                           <div className="relative flex flex-col justify-between bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6">
                             <div>
