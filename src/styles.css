@@ -429,6 +429,12 @@
   .animate-orbit { animation: orbit 12s linear infinite; }
   .animate-blink { animation: blink 1.1s steps(2) infinite; }
   .animate-bar-grow { animation: barGrow 1.4s cubic-bezier(0.22, 1, 0.36, 1) both; transform-origin: bottom; }
+  .animate-mega-in { animation: megaIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; transform-origin: top center; }
+
+  @keyframes megaIn {
+    from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }

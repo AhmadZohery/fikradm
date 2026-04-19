@@ -10,9 +10,10 @@ import { HomePackages } from "@/components/site/HomePackages";
 import { PackageBuilder } from "@/components/site/PackageBuilder";
 import { HomeBeforeAfter } from "@/components/site/HomeBeforeAfter";
 import { HomeGuarantees } from "@/components/site/HomeGuarantees";
-import { HomeVideoTestimonials } from "@/components/site/HomeVideoTestimonials";
+import { HomeResultsShowcase } from "@/components/site/HomeResultsShowcase";
 import { IndustriesShowcase } from "@/components/site/IndustriesShowcase";
 import { Testimonials } from "@/components/site/Testimonials";
+import { HomeBlogTeaser } from "@/components/site/HomeBlogTeaser";
 import { CtaBand } from "@/components/site/CtaBand";
 
 export const Route = createFileRoute("/$locale/")({
@@ -48,15 +49,16 @@ function HomePage() {
       <TrustStrip />
       <StatsBand />
       <ServicesGrid />
-      <HomeBeforeAfter />
       <HomePackages />
+      <HomeBeforeAfter />
+      <HomeResultsShowcase />
       <PackageBuilder />
       <HomeGuarantees />
       <ProcessSection />
-      <HomeVideoTestimonials />
       <Testimonials />
       <IndustriesShowcase />
       <LogosStrip />
+      <HomeBlogTeaser />
       <CtaBand />
     </SiteLayout>
   );

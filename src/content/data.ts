@@ -212,7 +212,7 @@ export const services: ServiceMeta[] = [
   {
     slug: "seo",
     group: "seo",
-    title: ls("السيو والنمو العضوي", "SEO & Organic Growth"),
+    title: ls("تحسين محركات البحث (SEO)", "Search Engine Optimization"),
     metaTitle: ls(
       "خدمات السيو وتحسين محركات البحث للشركات | فكرة",
       "SEO Services for Brands & E-commerce | Fikra",

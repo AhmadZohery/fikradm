@@ -4,7 +4,7 @@ import { Menu, X, Globe, ChevronDown, ArrowUpRight } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { LOCALE_LABELS, type Locale } from "@/i18n/types";
 import { services as allServices, industries as allIndustries, getSubServicesFor, getSubIndustriesFor } from "@/content/data";
-import { blogCategories } from "@/content/blog";
+// blog dropdown removed by design — Blog is now a direct link
 import logo from "@/assets/fikra-logo.jpg";
 import { cn } from "@/lib/utils";
 
@@ -54,20 +54,13 @@ export function SiteHeader() {
     })),
   }));
 
-  const blogChildren: SubLink[] = blogCategories.map((c) => ({
-    key: c.slug,
-    label: c.name[loc],
-    href: `/blog/category/${c.slug}`,
-    desc: c.description[loc],
-  }));
-
   const navItems: NavItem[] = [
     { key: "home", href: "/" },
     { key: "about", href: "/about" },
     { key: "services", href: "/services", mega: servicesMega },
     { key: "industries", href: "/industries", mega: industriesMega },
     { key: "cases", href: "/case-studies" },
-    { key: "blog", href: "/blog", children: blogChildren },
+    { key: "blog", href: "/blog" },
     { key: "contact", href: "/contact" },
   ];
 
@@ -132,7 +125,7 @@ export function SiteHeader() {
                   </Link>
                   {isOpen && (
                     <div className="absolute start-1/2 top-full z-50 -translate-x-1/2 pt-3">
-                      <div className="grid w-[860px] grid-cols-2 gap-1 rounded-3xl border border-border bg-popover/95 p-3 shadow-elegant backdrop-blur-xl animate-fade-in">
+                      <div className="grid w-[860px] grid-cols-2 gap-1 rounded-3xl border border-border bg-popover/95 p-3 shadow-elegant backdrop-blur-xl animate-mega-in">
                         {item.mega.map((g) => (
                           <div key={g.groupKey} className="rounded-2xl p-2">
                             <Link
@@ -196,7 +189,7 @@ export function SiteHeader() {
                   </Link>
                   {isOpen && (
                     <div className="absolute start-0 top-full z-50 min-w-[320px] pt-3">
-                      <div className="rounded-2xl border border-border bg-popover/95 p-2 shadow-elegant backdrop-blur-xl animate-fade-in">
+                      <div className="rounded-2xl border border-border bg-popover/95 p-2 shadow-elegant backdrop-blur-xl animate-mega-in">
                         {item.children.map((c) => (
                           <Link
                             key={c.key}
