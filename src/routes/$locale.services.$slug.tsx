@@ -4,6 +4,7 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { PricingPlans } from "@/components/site/PricingPlans";
 import { FaqSection } from "@/components/site/FaqSection";
 import { CtaBand } from "@/components/site/CtaBand";
+import { SubServicesGrid } from "@/components/site/SubServicesGrid";
 import { findService } from "@/content/data";
 import { Check } from "lucide-react";
 
@@ -121,6 +122,10 @@ function ServicePage() {
           </div>
         </div>
       </section>
+
+      {s.subServices && s.subServices.length > 0 && (
+        <SubServicesGrid parentSlug={s.slug} items={s.subServices} />
+      )}
 
       <PricingPlans plans={s.plans} />
 
