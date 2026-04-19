@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Star, Phone } from "lucide-react";
+import { Star } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { GlowOrbs } from "./cinematic/GlowOrbs";
 import { HugeWordBackdrop } from "./cinematic/HugeWordBackdrop";
