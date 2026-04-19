@@ -10,39 +10,44 @@ export type ServiceVariant = {
   decoration: "metrics" | "phone" | "pulse" | "terminal" | "swatches" | "spread";
 };
 
+/**
+ * All services share the unified violet brand identity.
+ * Differences come from the LAYOUT (hero variant + huge word + content presentation),
+ * NOT from accent color. This keeps the brand consistent across the entire site.
+ */
 export const SERVICE_VARIANTS: Record<string, ServiceVariant> = {
   seo: {
-    accent: "emerald",
+    accent: "violet",
     hero: "data",
     hugeWord: { ar: "سيو", en: "SEO" },
     decoration: "metrics",
   },
   performance: {
-    accent: "orange",
+    accent: "violet",
     hero: "funnel",
     hugeWord: { ar: "أداء", en: "ADS" },
     decoration: "pulse",
   },
   creative: {
-    accent: "purple-hot",
+    accent: "violet",
     hero: "gallery",
     hugeWord: { ar: "إبداع", en: "CREATIVE" },
     decoration: "swatches",
   },
   web: {
-    accent: "cyan",
+    accent: "violet",
     hero: "code",
     hugeWord: { ar: "تطوير", en: "WEB" },
     decoration: "terminal",
   },
   social: {
-    accent: "magenta",
+    accent: "violet",
     hero: "grid",
     hugeWord: { ar: "سوشيال", en: "SOCIAL" },
     decoration: "phone",
   },
   content: {
-    accent: "ocher",
+    accent: "violet",
     hero: "magazine",
     hugeWord: { ar: "محتوى", en: "CONTENT" },
     decoration: "spread",
