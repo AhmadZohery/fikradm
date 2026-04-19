@@ -201,10 +201,12 @@ function PostPage() {
                 type="button"
                 className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-accent"
                 onClick={() => {
-                  if (typeof navigator !== "undefined" && "share" in navigator) {
-                    navigator.share?.({ title: post.title[loc], url: window.location.href }).catch(() => {});
-                  } else if (typeof navigator !== "undefined") {
-                    navigator.clipboard?.writeText(window.location.href);
+                  if (typeof window === "undefined") return;
+                  const nav = window.navigator as Navigator & { share?: (d: ShareData) => Promise<void> };
+                  if (nav.share) {
+                    nav.share({ title: post.title[loc], url: window.location.href }).catch(() => {});
+                  } else {
+                    nav.clipboard?.writeText(window.location.href);
                   }
                 }}
               >
