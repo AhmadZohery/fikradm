@@ -8,7 +8,7 @@ import { SubServicesGrid } from "@/components/site/SubServicesGrid";
 import { findService } from "@/content/data";
 import { Check } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/services/$slug")({
+export const Route = createFileRoute("/$locale/services/$slug/")({
   beforeLoad: ({ params }) => {
     if (!findService(params.slug)) throw notFound();
   },

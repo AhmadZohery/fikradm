@@ -18,9 +18,9 @@ import { Route as LocaleServicesIndexRouteImport } from './routes/$locale.servic
 import { Route as LocaleIndustriesIndexRouteImport } from './routes/$locale.industries.index'
 import { Route as LocaleCaseStudiesIndexRouteImport } from './routes/$locale.case-studies.index'
 import { Route as LocaleBlogIndexRouteImport } from './routes/$locale.blog.index'
-import { Route as LocaleServicesSlugRouteImport } from './routes/$locale.services.$slug'
 import { Route as LocaleLocationsSlugRouteImport } from './routes/$locale.locations.$slug'
 import { Route as LocaleIndustriesSlugRouteImport } from './routes/$locale.industries.$slug'
+import { Route as LocaleServicesSlugIndexRouteImport } from './routes/$locale.services.$slug.index'
 import { Route as LocaleServicesSlugSubRouteImport } from './routes/$locale.services.$slug.$sub'
 
 const LocaleRoute = LocaleRouteImport.update({
@@ -68,11 +68,6 @@ const LocaleBlogIndexRoute = LocaleBlogIndexRouteImport.update({
   path: '/blog/',
   getParentRoute: () => LocaleRoute,
 } as any)
-const LocaleServicesSlugRoute = LocaleServicesSlugRouteImport.update({
-  id: '/services/$slug',
-  path: '/services/$slug',
-  getParentRoute: () => LocaleRoute,
-} as any)
 const LocaleLocationsSlugRoute = LocaleLocationsSlugRouteImport.update({
   id: '/locations/$slug',
   path: '/locations/$slug',
@@ -83,10 +78,15 @@ const LocaleIndustriesSlugRoute = LocaleIndustriesSlugRouteImport.update({
   path: '/industries/$slug',
   getParentRoute: () => LocaleRoute,
 } as any)
+const LocaleServicesSlugIndexRoute = LocaleServicesSlugIndexRouteImport.update({
+  id: '/services/$slug/',
+  path: '/services/$slug/',
+  getParentRoute: () => LocaleRoute,
+} as any)
 const LocaleServicesSlugSubRoute = LocaleServicesSlugSubRouteImport.update({
-  id: '/$sub',
-  path: '/$sub',
-  getParentRoute: () => LocaleServicesSlugRoute,
+  id: '/services/$slug/$sub',
+  path: '/services/$slug/$sub',
+  getParentRoute: () => LocaleRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -97,12 +97,12 @@ export interface FileRoutesByFullPath {
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRoute
   '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
-  '/$locale/services/$slug': typeof LocaleServicesSlugRouteWithChildren
   '/$locale/blog/': typeof LocaleBlogIndexRoute
   '/$locale/case-studies/': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries/': typeof LocaleIndustriesIndexRoute
   '/$locale/services/': typeof LocaleServicesIndexRoute
   '/$locale/services/$slug/$sub': typeof LocaleServicesSlugSubRoute
+  '/$locale/services/$slug/': typeof LocaleServicesSlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -111,12 +111,12 @@ export interface FileRoutesByTo {
   '/$locale': typeof LocaleIndexRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRoute
   '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
-  '/$locale/services/$slug': typeof LocaleServicesSlugRouteWithChildren
   '/$locale/blog': typeof LocaleBlogIndexRoute
   '/$locale/case-studies': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries': typeof LocaleIndustriesIndexRoute
   '/$locale/services': typeof LocaleServicesIndexRoute
   '/$locale/services/$slug/$sub': typeof LocaleServicesSlugSubRoute
+  '/$locale/services/$slug': typeof LocaleServicesSlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -127,12 +127,12 @@ export interface FileRoutesById {
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRoute
   '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
-  '/$locale/services/$slug': typeof LocaleServicesSlugRouteWithChildren
   '/$locale/blog/': typeof LocaleBlogIndexRoute
   '/$locale/case-studies/': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries/': typeof LocaleIndustriesIndexRoute
   '/$locale/services/': typeof LocaleServicesIndexRoute
   '/$locale/services/$slug/$sub': typeof LocaleServicesSlugSubRoute
+  '/$locale/services/$slug/': typeof LocaleServicesSlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -144,12 +144,12 @@ export interface FileRouteTypes {
     | '/$locale/'
     | '/$locale/industries/$slug'
     | '/$locale/locations/$slug'
-    | '/$locale/services/$slug'
     | '/$locale/blog/'
     | '/$locale/case-studies/'
     | '/$locale/industries/'
     | '/$locale/services/'
     | '/$locale/services/$slug/$sub'
+    | '/$locale/services/$slug/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -158,12 +158,12 @@ export interface FileRouteTypes {
     | '/$locale'
     | '/$locale/industries/$slug'
     | '/$locale/locations/$slug'
-    | '/$locale/services/$slug'
     | '/$locale/blog'
     | '/$locale/case-studies'
     | '/$locale/industries'
     | '/$locale/services'
     | '/$locale/services/$slug/$sub'
+    | '/$locale/services/$slug'
   id:
     | '__root__'
     | '/'
@@ -173,12 +173,12 @@ export interface FileRouteTypes {
     | '/$locale/'
     | '/$locale/industries/$slug'
     | '/$locale/locations/$slug'
-    | '/$locale/services/$slug'
     | '/$locale/blog/'
     | '/$locale/case-studies/'
     | '/$locale/industries/'
     | '/$locale/services/'
     | '/$locale/services/$slug/$sub'
+    | '/$locale/services/$slug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -251,13 +251,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleBlogIndexRouteImport
       parentRoute: typeof LocaleRoute
     }
-    '/$locale/services/$slug': {
-      id: '/$locale/services/$slug'
-      path: '/services/$slug'
-      fullPath: '/$locale/services/$slug'
-      preLoaderRoute: typeof LocaleServicesSlugRouteImport
-      parentRoute: typeof LocaleRoute
-    }
     '/$locale/locations/$slug': {
       id: '/$locale/locations/$slug'
       path: '/locations/$slug'
@@ -272,26 +265,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleIndustriesSlugRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/$locale/services/$slug/': {
+      id: '/$locale/services/$slug/'
+      path: '/services/$slug'
+      fullPath: '/$locale/services/$slug/'
+      preLoaderRoute: typeof LocaleServicesSlugIndexRouteImport
+      parentRoute: typeof LocaleRoute
+    }
     '/$locale/services/$slug/$sub': {
       id: '/$locale/services/$slug/$sub'
-      path: '/$sub'
+      path: '/services/$slug/$sub'
       fullPath: '/$locale/services/$slug/$sub'
       preLoaderRoute: typeof LocaleServicesSlugSubRouteImport
-      parentRoute: typeof LocaleServicesSlugRoute
+      parentRoute: typeof LocaleRoute
     }
   }
 }
-
-interface LocaleServicesSlugRouteChildren {
-  LocaleServicesSlugSubRoute: typeof LocaleServicesSlugSubRoute
-}
-
-const LocaleServicesSlugRouteChildren: LocaleServicesSlugRouteChildren = {
-  LocaleServicesSlugSubRoute: LocaleServicesSlugSubRoute,
-}
-
-const LocaleServicesSlugRouteWithChildren =
-  LocaleServicesSlugRoute._addFileChildren(LocaleServicesSlugRouteChildren)
 
 interface LocaleRouteChildren {
   LocaleAboutRoute: typeof LocaleAboutRoute
@@ -299,11 +288,12 @@ interface LocaleRouteChildren {
   LocaleIndexRoute: typeof LocaleIndexRoute
   LocaleIndustriesSlugRoute: typeof LocaleIndustriesSlugRoute
   LocaleLocationsSlugRoute: typeof LocaleLocationsSlugRoute
-  LocaleServicesSlugRoute: typeof LocaleServicesSlugRouteWithChildren
   LocaleBlogIndexRoute: typeof LocaleBlogIndexRoute
   LocaleCaseStudiesIndexRoute: typeof LocaleCaseStudiesIndexRoute
   LocaleIndustriesIndexRoute: typeof LocaleIndustriesIndexRoute
   LocaleServicesIndexRoute: typeof LocaleServicesIndexRoute
+  LocaleServicesSlugSubRoute: typeof LocaleServicesSlugSubRoute
+  LocaleServicesSlugIndexRoute: typeof LocaleServicesSlugIndexRoute
 }
 
 const LocaleRouteChildren: LocaleRouteChildren = {
@@ -312,11 +302,12 @@ const LocaleRouteChildren: LocaleRouteChildren = {
   LocaleIndexRoute: LocaleIndexRoute,
   LocaleIndustriesSlugRoute: LocaleIndustriesSlugRoute,
   LocaleLocationsSlugRoute: LocaleLocationsSlugRoute,
-  LocaleServicesSlugRoute: LocaleServicesSlugRouteWithChildren,
   LocaleBlogIndexRoute: LocaleBlogIndexRoute,
   LocaleCaseStudiesIndexRoute: LocaleCaseStudiesIndexRoute,
   LocaleIndustriesIndexRoute: LocaleIndustriesIndexRoute,
   LocaleServicesIndexRoute: LocaleServicesIndexRoute,
+  LocaleServicesSlugSubRoute: LocaleServicesSlugSubRoute,
+  LocaleServicesSlugIndexRoute: LocaleServicesSlugIndexRoute,
 }
 
 const LocaleRouteWithChildren =
@@ -329,3 +320,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
