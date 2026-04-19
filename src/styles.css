@@ -234,7 +234,8 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { overflow-x: hidden; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -243,13 +244,14 @@
     text-rendering: optimizeLegibility;
   }
   html[dir="rtl"] body {
-    font-family: "Tajawal", "IBM Plex Sans Arabic", "Plus Jakarta Sans", system-ui, sans-serif;
+    font-family: "IBM Plex Sans Arabic", "Tajawal", "Plus Jakarta Sans", system-ui, sans-serif;
     letter-spacing: 0;
+    font-feature-settings: "kern" 1;
   }
   html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3,
   html[dir="rtl"] h4, html[dir="rtl"] h5, html[dir="rtl"] h6 {
-    font-family: "Tajawal", "IBM Plex Sans Arabic", system-ui, sans-serif;
-    font-weight: 800;
+    font-family: "IBM Plex Sans Arabic", "Tajawal", system-ui, sans-serif;
+    font-weight: 700;
   }
   :focus-visible {
     outline: 2px solid var(--ring);
@@ -513,8 +515,17 @@
     line-height: 1.08;
   }
   html[dir="rtl"] .display-1 {
-    line-height: 1.25;
+    line-height: 1.35;
     letter-spacing: 0;
+    word-spacing: 0.05em;
+  }
+  html[dir="rtl"] .text-gradient,
+  html[dir="rtl"] .text-gradient-svc {
+    padding-bottom: 0.15em;
+    line-height: 1.4;
+  }
+  html[dir="rtl"] .marker-line {
+    padding-bottom: 0.1em;
   }
 
   /* Hover lift utility */
