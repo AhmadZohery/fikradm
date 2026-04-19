@@ -8,9 +8,9 @@ import {
 } from "@tanstack/react-router";
 import { useMemo } from "react";
 
-import appCss from "../styles.css?url";
-import { isLocale, DEFAULT_LOCALE } from "../i18n/types";
-import { SiteLayout } from "../components/site/SiteLayout";
+import appCss from "@/styles.css?url";
+import { isLocale, DEFAULT_LOCALE } from "@/i18n/types";
+import { SiteLayout } from "@/components/site/SiteLayout";
 
 function NotFoundComponent() {
   return (
