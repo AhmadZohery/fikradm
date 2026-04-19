@@ -261,59 +261,59 @@ export function SiteHeader() {
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
-        </div>
 
-        {/* Mobile menu */}
-        {mobileOpen && (
-          <div className="border-t border-border bg-background/98 backdrop-blur-xl lg:hidden animate-fade-in">
-            <nav className="container-app flex max-h-[80vh] flex-col gap-1 overflow-y-auto py-4" aria-label="Mobile">
-              {navItems.map((item, idx) => (
-                <div key={item.key} className="animate-fade-up" style={{ animationDelay: `${idx * 40}ms` }}>
-                  <Link
-                    to={buildHref(locale, item.href)}
-                    className="block rounded-xl px-3 py-2.5 text-sm font-bold text-foreground transition hover:bg-accent hover:text-primary"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {t(`nav.${item.key}`)}
-                  </Link>
-                  {item.mega && (
-                    <div className="ms-3 border-s-2 border-primary/20 ps-3">
-                      {item.mega.map((g) => (
-                        <div key={g.groupKey} className="mt-1">
-                          <Link
-                            to={buildHref(locale, g.href)}
-                            className="block rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-primary"
-                            onClick={() => setMobileOpen(false)}
-                          >
-                            {g.groupLabel}
-                          </Link>
-                          {g.items.slice(0, 4).map((c) => (
+          {/* Mobile menu */}
+          {mobileOpen && (
+            <div className="mt-2 overflow-hidden rounded-3xl border border-border/60 bg-background/95 shadow-elegant backdrop-blur-xl lg:hidden animate-mega-in">
+              <nav className="flex max-h-[75vh] flex-col gap-1 overflow-y-auto p-4" aria-label="Mobile">
+                {navItems.map((item, idx) => (
+                  <div key={item.key} className="animate-fade-up" style={{ animationDelay: `${idx * 40}ms` }}>
+                    <Link
+                      to={buildHref(locale, item.href)}
+                      className="block rounded-xl px-3 py-2.5 text-sm font-bold text-foreground transition hover:bg-accent hover:text-primary"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {t(`nav.${item.key}`)}
+                    </Link>
+                    {item.mega && (
+                      <div className="ms-3 border-s-2 border-primary/20 ps-3">
+                        {item.mega.map((g) => (
+                          <div key={g.groupKey} className="mt-1">
                             <Link
-                              key={c.key}
-                              to={buildHref(locale, c.href)}
-                              className="block rounded-lg px-4 py-1.5 text-sm text-muted-foreground transition hover:text-primary"
+                              to={buildHref(locale, g.href)}
+                              className="block rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-primary"
                               onClick={() => setMobileOpen(false)}
                             >
-                              {c.label}
+                              {g.groupLabel}
                             </Link>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-              <Link
-                to={buildHref(locale, "/contact")}
-                className="mt-3 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-soft"
-                onClick={() => setMobileOpen(false)}
-              >
-                {t("nav.cta")}
-                <ArrowUpRight className="h-4 w-4 rtl:rotate-90" />
-              </Link>
-            </nav>
-          </div>
-        )}
+                            {g.items.slice(0, 4).map((c) => (
+                              <Link
+                                key={c.key}
+                                to={buildHref(locale, c.href)}
+                                className="block rounded-lg px-4 py-1.5 text-sm text-muted-foreground transition hover:text-primary"
+                                onClick={() => setMobileOpen(false)}
+                              >
+                                {c.label}
+                              </Link>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                <Link
+                  to={buildHref(locale, "/contact")}
+                  className="mt-3 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-soft"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {t("nav.cta")}
+                  <ArrowUpRight className="h-4 w-4 rtl:rotate-90" />
+                </Link>
+              </nav>
+            </div>
+          )}
+        </div>
       </header>
     </>
   );
