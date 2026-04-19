@@ -70,6 +70,60 @@ export function SiteHeader() {
             const label = t(`nav.${item.key}`);
             const href = buildHref(locale, item.href);
             const active = pathWithoutLocale === item.href || (item.href !== "/" && pathWithoutLocale.startsWith(item.href));
+            if (item.mega) {
+              const isOpen = openMenu === item.key;
+              return (
+                <div
+                  key={item.key}
+                  className="relative"
+                  onMouseEnter={() => setOpenMenu(item.key)}
+                  onMouseLeave={() => setOpenMenu(null)}
+                >
+                  <Link
+                    to={href}
+                    className={cn(
+                      "inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors",
+                      active ? "text-primary" : "text-foreground/80 hover:text-foreground",
+                    )}
+                  >
+                    {label}
+                    <ChevronDown className="h-4 w-4 opacity-70" />
+                  </Link>
+                  {isOpen && (
+                    <div className="absolute start-0 top-full z-50 pt-2">
+                      <div className="grid w-[860px] grid-cols-2 gap-1 rounded-2xl border border-border bg-popover p-3 shadow-elegant">
+                        {item.mega.map((g) => (
+                          <div key={g.groupKey} className="rounded-xl p-2">
+                            <Link
+                              to={buildHref(locale, g.href)}
+                              className="block rounded-lg px-2 py-1.5 text-xs font-bold uppercase tracking-wide text-primary hover:bg-accent"
+                            >
+                              {g.groupLabel}
+                            </Link>
+                            <div className="mt-1 grid gap-0.5">
+                              {g.items.map((c) => (
+                                <Link
+                                  key={c.key}
+                                  to={buildHref(locale, c.href)}
+                                  className="block rounded-lg px-2 py-1.5 transition hover:bg-accent"
+                                >
+                                  <div className="text-sm font-semibold text-foreground">{c.label}</div>
+                                  {c.desc && (
+                                    <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                                      {c.desc}
+                                    </div>
+                                  )}
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
             if (item.children) {
               const isOpen = openMenu === item.key;
               return (
