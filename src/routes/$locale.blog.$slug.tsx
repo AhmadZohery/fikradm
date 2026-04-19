@@ -1,0 +1,240 @@
+import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { SiteLayout } from "@/components/site/SiteLayout";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { CtaBand } from "@/components/site/CtaBand";
+import { BlogCard } from "@/components/site/BlogCard";
+import { Reveal } from "@/components/site/Reveal";
+import { useLocale } from "@/i18n/useLocale";
+import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blog";
+import { Calendar, Clock, User, Share2 } from "lucide-react";
+
+export const Route = createFileRoute("/$locale/blog/$slug")({
+  head: ({ params }) => {
+    const post = getPostBySlug(params.slug);
+    const ar = params.locale === "ar";
+    if (!post) {
+      return { meta: [{ title: ar ? "مقال غير موجود | فكرة" : "Article not found | Fikra" }] };
+    }
+    const loc = ar ? "ar" : "en";
+    return {
+      meta: [
+        { title: post.metaTitle[loc] },
+        { name: "description", content: post.metaDescription[loc] },
+        { name: "keywords", content: post.keywords[loc].join(", ") },
+        { property: "og:title", content: post.metaTitle[loc] },
+        { property: "og:description", content: post.metaDescription[loc] },
+        { property: "og:type", content: "article" },
+        { property: "og:image", content: post.image },
+        { property: "article:published_time", content: post.publishedAt },
+        { property: "article:author", content: post.author[loc] },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: post.image },
+      ],
+    };
+  },
+  loader: ({ params }) => {
+    const post = getPostBySlug(params.slug);
+    if (!post) throw notFound();
+    return { slug: params.slug };
+  },
+  notFoundComponent: () => {
+    const { locale, buildHref } = useLocale();
+    return (
+      <SiteLayout>
+        <section className="section">
+          <div className="container-app text-center">
+            <h1 className="text-3xl font-bold">{locale === "ar" ? "المقال غير موجود" : "Article not found"}</h1>
+            <Link to={buildHref(locale, "/blog")} className="mt-4 inline-block text-primary underline">
+              {locale === "ar" ? "العودة للمدونة" : "Back to Blog"}
+            </Link>
+          </div>
+        </section>
+      </SiteLayout>
+    );
+  },
+  component: PostPage,
+});
+
+function PostPage() {
+  const { slug } = Route.useLoaderData();
+  const { locale, buildHref } = useLocale();
+  const loc = locale === "en" ? "en" : "ar";
+  const post = getPostBySlug(slug)!;
+  const cat = getCategoryBySlug(post.categorySlug);
+  const related = getRelatedPosts(slug, 3);
+
+  const dateText = new Date(post.publishedAt).toLocaleDateString(locale === "ar" ? "ar-SA" : "en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title[loc],
+    description: post.metaDescription[loc],
+    image: [post.image],
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    inLanguage: locale,
+    author: { "@type": "Organization", name: post.author[loc] },
+    publisher: {
+      "@type": "Organization",
+      name: locale === "ar" ? "فكرة للتسويق الرقمي" : "Fikra Digital Marketing",
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `https://fikra.example/${locale}/blog/${slug}` },
+    articleSection: cat?.name[loc],
+    keywords: post.keywords[loc].join(", "),
+  };
+
+  const breadcrumbsJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: locale === "ar" ? "الرئيسية" : "Home", item: `/${locale}` },
+      { "@type": "ListItem", position: 2, name: locale === "ar" ? "المدونة" : "Blog", item: `/${locale}/blog` },
+      ...(cat
+        ? [{ "@type": "ListItem", position: 3, name: cat.name[loc], item: `/${locale}/blog/category/${cat.slug}` }]
+        : []),
+      { "@type": "ListItem", position: cat ? 4 : 3, name: post.title[loc] },
+    ],
+  };
+
+  return (
+    <SiteLayout>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }} />
+
+      <Breadcrumbs
+        trail={[
+          { label: locale === "ar" ? "المدونة" : "Blog", href: "/blog" },
+          ...(cat ? [{ label: cat.name[loc], href: `/blog/category/${cat.slug}` }] : []),
+          { label: post.title[loc] },
+        ]}
+      />
+
+      {/* Hero */}
+      <section className="section-tight">
+        <div className="container-app max-w-4xl">
+          <Reveal>
+            {cat && (
+              <Link
+                to={buildHref(locale, `/blog/category/${cat.slug}`)}
+                className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-primary hover:bg-primary/20"
+              >
+                {cat.name[loc]}
+              </Link>
+            )}
+            <h1 className="mt-4 text-3xl font-extrabold leading-tight md:text-5xl">{post.title[loc]}</h1>
+            <p className="mt-4 text-lg text-muted-foreground">{post.excerpt[loc]}</p>
+            <div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5">
+                <User className="h-4 w-4" /> {post.author[loc]}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Calendar className="h-4 w-4" /> {dateText}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Clock className="h-4 w-4" /> {post.readingMinutes} {locale === "ar" ? "دقيقة قراءة" : "min read"}
+              </span>
+            </div>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <div className="mt-8 overflow-hidden rounded-3xl border border-border shadow-elegant">
+              <img src={post.image} alt={post.title[loc]} className="aspect-[16/9] w-full object-cover" />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Body + TOC */}
+      <section className="pb-16">
+        <div className="container-app grid max-w-6xl gap-10 lg:grid-cols-[1fr_280px]">
+          <article className="prose-fikra">
+            {post.body.map((section, i) => (
+              <Reveal key={i} delay={i * 60}>
+                <section id={`section-${i}`} className="mb-10 scroll-mt-24">
+                  <h2 className="mb-4 text-2xl font-bold text-foreground md:text-3xl">{section.heading[loc]}</h2>
+                  {section.paragraphs[loc].map((p, j) => (
+                    <p key={j} className="mb-4 text-base leading-relaxed text-foreground/80">
+                      {p}
+                    </p>
+                  ))}
+                </section>
+              </Reveal>
+            ))}
+
+            {/* Tags */}
+            <div className="mt-10 flex flex-wrap items-center gap-2 border-t border-border pt-6">
+              <span className="text-sm font-semibold text-muted-foreground">
+                {locale === "ar" ? "الكلمات المفتاحية:" : "Keywords:"}
+              </span>
+              {post.keywords[loc].map((k) => (
+                <span key={k} className="rounded-full bg-muted px-3 py-1 text-xs text-foreground/80">
+                  #{k}
+                </span>
+              ))}
+            </div>
+          </article>
+
+          {/* Sidebar */}
+          <aside className="lg:sticky lg:top-24 lg:self-start">
+            <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+              <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-primary">
+                {locale === "ar" ? "محتويات المقال" : "Table of Contents"}
+              </h3>
+              <ol className="space-y-2 text-sm">
+                {post.tableOfContents[loc].map((item, i) => (
+                  <li key={i}>
+                    <a
+                      href={`#section-${i}`}
+                      className="block rounded-lg px-2 py-1.5 text-foreground/80 transition hover:bg-accent hover:text-primary"
+                    >
+                      {i + 1}. {item}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+              <button
+                type="button"
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-accent"
+                onClick={() => {
+                  if (typeof navigator !== "undefined" && "share" in navigator) {
+                    navigator.share?.({ title: post.title[loc], url: window.location.href }).catch(() => {});
+                  } else if (typeof navigator !== "undefined") {
+                    navigator.clipboard?.writeText(window.location.href);
+                  }
+                }}
+              >
+                <Share2 className="h-4 w-4" />
+                {locale === "ar" ? "مشاركة المقال" : "Share article"}
+              </button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      {/* Related */}
+      {related.length > 0 && (
+        <section className="border-t border-border bg-surface/40 py-16">
+          <div className="container-app">
+            <Reveal>
+              <h2 className="mb-8 text-2xl font-extrabold md:text-3xl">
+                {locale === "ar" ? "مقالات ذات صلة" : "Related articles"}
+              </h2>
+            </Reveal>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((p, i) => (
+                <BlogCard key={p.slug} post={p} index={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <CtaBand />
+    </SiteLayout>
+  );
+}

@@ -20,9 +20,11 @@ import { Route as LocaleCaseStudiesIndexRouteImport } from './routes/$locale.cas
 import { Route as LocaleBlogIndexRouteImport } from './routes/$locale.blog.index'
 import { Route as LocaleLocationsSlugRouteImport } from './routes/$locale.locations.$slug'
 import { Route as LocaleIndustriesSlugRouteImport } from './routes/$locale.industries.$slug'
+import { Route as LocaleBlogSlugRouteImport } from './routes/$locale.blog.$slug'
 import { Route as LocaleServicesSlugIndexRouteImport } from './routes/$locale.services.$slug.index'
 import { Route as LocaleServicesSlugSubRouteImport } from './routes/$locale.services.$slug.$sub'
 import { Route as LocaleIndustriesSlugSubRouteImport } from './routes/$locale.industries.$slug.$sub'
+import { Route as LocaleBlogCategorySlugRouteImport } from './routes/$locale.blog.category.$slug'
 
 const LocaleRoute = LocaleRouteImport.update({
   id: '/$locale',
@@ -79,6 +81,11 @@ const LocaleIndustriesSlugRoute = LocaleIndustriesSlugRouteImport.update({
   path: '/industries/$slug',
   getParentRoute: () => LocaleRoute,
 } as any)
+const LocaleBlogSlugRoute = LocaleBlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => LocaleRoute,
+} as any)
 const LocaleServicesSlugIndexRoute = LocaleServicesSlugIndexRouteImport.update({
   id: '/services/$slug/',
   path: '/services/$slug/',
@@ -94,6 +101,11 @@ const LocaleIndustriesSlugSubRoute = LocaleIndustriesSlugSubRouteImport.update({
   path: '/$sub',
   getParentRoute: () => LocaleIndustriesSlugRoute,
 } as any)
+const LocaleBlogCategorySlugRoute = LocaleBlogCategorySlugRouteImport.update({
+  id: '/blog/category/$slug',
+  path: '/blog/category/$slug',
+  getParentRoute: () => LocaleRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -101,12 +113,14 @@ export interface FileRoutesByFullPath {
   '/$locale/about': typeof LocaleAboutRoute
   '/$locale/contact': typeof LocaleContactRoute
   '/$locale/': typeof LocaleIndexRoute
+  '/$locale/blog/$slug': typeof LocaleBlogSlugRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRouteWithChildren
   '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
   '/$locale/blog/': typeof LocaleBlogIndexRoute
   '/$locale/case-studies/': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries/': typeof LocaleIndustriesIndexRoute
   '/$locale/services/': typeof LocaleServicesIndexRoute
+  '/$locale/blog/category/$slug': typeof LocaleBlogCategorySlugRoute
   '/$locale/industries/$slug/$sub': typeof LocaleIndustriesSlugSubRoute
   '/$locale/services/$slug/$sub': typeof LocaleServicesSlugSubRoute
   '/$locale/services/$slug/': typeof LocaleServicesSlugIndexRoute
@@ -116,12 +130,14 @@ export interface FileRoutesByTo {
   '/$locale/about': typeof LocaleAboutRoute
   '/$locale/contact': typeof LocaleContactRoute
   '/$locale': typeof LocaleIndexRoute
+  '/$locale/blog/$slug': typeof LocaleBlogSlugRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRouteWithChildren
   '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
   '/$locale/blog': typeof LocaleBlogIndexRoute
   '/$locale/case-studies': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries': typeof LocaleIndustriesIndexRoute
   '/$locale/services': typeof LocaleServicesIndexRoute
+  '/$locale/blog/category/$slug': typeof LocaleBlogCategorySlugRoute
   '/$locale/industries/$slug/$sub': typeof LocaleIndustriesSlugSubRoute
   '/$locale/services/$slug/$sub': typeof LocaleServicesSlugSubRoute
   '/$locale/services/$slug': typeof LocaleServicesSlugIndexRoute
@@ -133,12 +149,14 @@ export interface FileRoutesById {
   '/$locale/about': typeof LocaleAboutRoute
   '/$locale/contact': typeof LocaleContactRoute
   '/$locale/': typeof LocaleIndexRoute
+  '/$locale/blog/$slug': typeof LocaleBlogSlugRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRouteWithChildren
   '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
   '/$locale/blog/': typeof LocaleBlogIndexRoute
   '/$locale/case-studies/': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries/': typeof LocaleIndustriesIndexRoute
   '/$locale/services/': typeof LocaleServicesIndexRoute
+  '/$locale/blog/category/$slug': typeof LocaleBlogCategorySlugRoute
   '/$locale/industries/$slug/$sub': typeof LocaleIndustriesSlugSubRoute
   '/$locale/services/$slug/$sub': typeof LocaleServicesSlugSubRoute
   '/$locale/services/$slug/': typeof LocaleServicesSlugIndexRoute
@@ -151,12 +169,14 @@ export interface FileRouteTypes {
     | '/$locale/about'
     | '/$locale/contact'
     | '/$locale/'
+    | '/$locale/blog/$slug'
     | '/$locale/industries/$slug'
     | '/$locale/locations/$slug'
     | '/$locale/blog/'
     | '/$locale/case-studies/'
     | '/$locale/industries/'
     | '/$locale/services/'
+    | '/$locale/blog/category/$slug'
     | '/$locale/industries/$slug/$sub'
     | '/$locale/services/$slug/$sub'
     | '/$locale/services/$slug/'
@@ -166,12 +186,14 @@ export interface FileRouteTypes {
     | '/$locale/about'
     | '/$locale/contact'
     | '/$locale'
+    | '/$locale/blog/$slug'
     | '/$locale/industries/$slug'
     | '/$locale/locations/$slug'
     | '/$locale/blog'
     | '/$locale/case-studies'
     | '/$locale/industries'
     | '/$locale/services'
+    | '/$locale/blog/category/$slug'
     | '/$locale/industries/$slug/$sub'
     | '/$locale/services/$slug/$sub'
     | '/$locale/services/$slug'
@@ -182,12 +204,14 @@ export interface FileRouteTypes {
     | '/$locale/about'
     | '/$locale/contact'
     | '/$locale/'
+    | '/$locale/blog/$slug'
     | '/$locale/industries/$slug'
     | '/$locale/locations/$slug'
     | '/$locale/blog/'
     | '/$locale/case-studies/'
     | '/$locale/industries/'
     | '/$locale/services/'
+    | '/$locale/blog/category/$slug'
     | '/$locale/industries/$slug/$sub'
     | '/$locale/services/$slug/$sub'
     | '/$locale/services/$slug/'
@@ -277,6 +301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleIndustriesSlugRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/$locale/blog/$slug': {
+      id: '/$locale/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/$locale/blog/$slug'
+      preLoaderRoute: typeof LocaleBlogSlugRouteImport
+      parentRoute: typeof LocaleRoute
+    }
     '/$locale/services/$slug/': {
       id: '/$locale/services/$slug/'
       path: '/services/$slug'
@@ -298,6 +329,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleIndustriesSlugSubRouteImport
       parentRoute: typeof LocaleIndustriesSlugRoute
     }
+    '/$locale/blog/category/$slug': {
+      id: '/$locale/blog/category/$slug'
+      path: '/blog/category/$slug'
+      fullPath: '/$locale/blog/category/$slug'
+      preLoaderRoute: typeof LocaleBlogCategorySlugRouteImport
+      parentRoute: typeof LocaleRoute
+    }
   }
 }
 
@@ -316,12 +354,14 @@ interface LocaleRouteChildren {
   LocaleAboutRoute: typeof LocaleAboutRoute
   LocaleContactRoute: typeof LocaleContactRoute
   LocaleIndexRoute: typeof LocaleIndexRoute
+  LocaleBlogSlugRoute: typeof LocaleBlogSlugRoute
   LocaleIndustriesSlugRoute: typeof LocaleIndustriesSlugRouteWithChildren
   LocaleLocationsSlugRoute: typeof LocaleLocationsSlugRoute
   LocaleBlogIndexRoute: typeof LocaleBlogIndexRoute
   LocaleCaseStudiesIndexRoute: typeof LocaleCaseStudiesIndexRoute
   LocaleIndustriesIndexRoute: typeof LocaleIndustriesIndexRoute
   LocaleServicesIndexRoute: typeof LocaleServicesIndexRoute
+  LocaleBlogCategorySlugRoute: typeof LocaleBlogCategorySlugRoute
   LocaleServicesSlugSubRoute: typeof LocaleServicesSlugSubRoute
   LocaleServicesSlugIndexRoute: typeof LocaleServicesSlugIndexRoute
 }
@@ -330,12 +370,14 @@ const LocaleRouteChildren: LocaleRouteChildren = {
   LocaleAboutRoute: LocaleAboutRoute,
   LocaleContactRoute: LocaleContactRoute,
   LocaleIndexRoute: LocaleIndexRoute,
+  LocaleBlogSlugRoute: LocaleBlogSlugRoute,
   LocaleIndustriesSlugRoute: LocaleIndustriesSlugRouteWithChildren,
   LocaleLocationsSlugRoute: LocaleLocationsSlugRoute,
   LocaleBlogIndexRoute: LocaleBlogIndexRoute,
   LocaleCaseStudiesIndexRoute: LocaleCaseStudiesIndexRoute,
   LocaleIndustriesIndexRoute: LocaleIndustriesIndexRoute,
   LocaleServicesIndexRoute: LocaleServicesIndexRoute,
+  LocaleBlogCategorySlugRoute: LocaleBlogCategorySlugRoute,
   LocaleServicesSlugSubRoute: LocaleServicesSlugSubRoute,
   LocaleServicesSlugIndexRoute: LocaleServicesSlugIndexRoute,
 }
@@ -350,3 +392,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
