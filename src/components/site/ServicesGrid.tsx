@@ -4,15 +4,6 @@ import { useLocale } from "@/i18n/useLocale";
 import { services } from "@/content/data";
 import { SectionEyebrow } from "./cinematic/SectionEyebrow";
 
-const accentForSlug: Record<string, string> = {
-  seo: "emerald",
-  performance: "orange",
-  creative: "purple-hot",
-  web: "cyan",
-  social: "magenta",
-  content: "ocher",
-};
-
 const iconForSlug: Record<string, typeof Search> = {
   seo: Search,
   performance: Megaphone,
@@ -59,13 +50,11 @@ export function ServicesGrid() {
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => {
             const Icon = iconForSlug[s.slug] ?? Search;
-            const accent = accentForSlug[s.slug] ?? "violet";
             return (
               <Link
                 key={s.slug}
                 to="/$locale/services/$slug"
                 params={{ locale, slug: s.slug }}
-                data-accent={accent}
                 className="group relative isolate overflow-hidden rounded-3xl border border-border bg-card p-7 transition hover:-translate-y-1 hover:shadow-svc"
               >
                 <span

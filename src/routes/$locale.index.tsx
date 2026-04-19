@@ -5,6 +5,8 @@ import { StatsBand } from "@/components/site/StatsBand";
 import { LogosStrip } from "@/components/site/LogosStrip";
 import { ServicesGrid } from "@/components/site/ServicesGrid";
 import { ProcessSection } from "@/components/site/ProcessSection";
+import { HomePackages } from "@/components/site/HomePackages";
+import { PackageBuilder } from "@/components/site/PackageBuilder";
 import { IndustriesShowcase } from "@/components/site/IndustriesShowcase";
 import { Testimonials } from "@/components/site/Testimonials";
 import { CtaBand } from "@/components/site/CtaBand";
@@ -18,8 +20,8 @@ export const Route = createFileRoute("/$locale/")({
         {
           name: "description",
           content: isAr
-            ? "وكالة تسويق رقمي مرخّصة في السعودية. سيو، إعلانات، تصميم، وتطوير مواقع لشركات الخليج. احجز استشارتك المجانية اليوم."
-            : "Licensed digital marketing agency in KSA. SEO, ads, creative and web for Gulf brands. Book your free consultation today.",
+            ? "وكالة تسويق رقمي مرخّصة في السعودية. سيو، إعلانات، تصميم، وتطوير مواقع لشركات الخليج. باقات تسويق متكاملة. احجز استشارتك المجانية اليوم."
+            : "Licensed digital marketing agency in KSA. SEO, ads, creative and web for Gulf brands. Integrated marketing bundles. Book your free consultation today.",
         },
         { property: "og:title", content: isAr ? "فكرة | وكالة تسويق رقمي مرخّصة في السعودية" : "Fikra | Licensed Digital Marketing Agency in KSA" },
         { property: "og:description", content: isAr ? "حلول تسويق رقمي متكاملة للشركات في الخليج." : "Integrated digital marketing solutions for Gulf brands." },
@@ -42,6 +44,8 @@ function HomePage() {
       <StatsBand />
       <LogosStrip />
       <ServicesGrid />
+      <HomePackages />
+      <PackageBuilder />
       <ProcessSection />
       <IndustriesShowcase />
       <Testimonials />
