@@ -13,9 +13,68 @@ const iconForSlug: Record<string, typeof Search> = {
   content: FileText,
 };
 
+// Two virtual cards rendered alongside the 4 core services to fill a 6-card grid.
+// They link to existing sub-services so no extra routes are required.
+type ExtraCard = {
+  slug: string;
+  href: string;
+  title: { ar: string; en: string };
+  intro: { ar: string; en: string };
+  highlights: { ar: string[]; en: string[] };
+};
+
+const extraCards: ExtraCard[] = [
+  {
+    slug: "social",
+    href: "/services/performance/social-ads",
+    title: { ar: "إدارة السوشيال ميديا", en: "Social Media Management" },
+    intro: {
+      ar: "محتوى يومي يصنع مجتمعاً ولاءً وتحويلات حقيقية على إنستجرام وتيك توك وسناب.",
+      en: "Daily content that builds community, loyalty and real conversions on Instagram, TikTok and Snap.",
+    },
+    highlights: {
+      ar: ["تقويم محتوى شهري", "ريلز / تيك توك", "إدارة المجتمع"],
+      en: ["Monthly calendar", "Reels / TikTok", "Community mgmt"],
+    },
+  },
+  {
+    slug: "content",
+    href: "/services/creative/content-writing",
+    title: { ar: "كتابة المحتوى التسويقي", en: "Content & Copywriting" },
+    intro: {
+      ar: "نصوص تبيع وتقنع، من إعلانات قصيرة إلى مقالات سيو متعمقة بقلم متخصصين عرب.",
+      en: "Copy that sells, from short-form ads to in-depth SEO articles by native specialists.",
+    },
+    highlights: {
+      ar: ["نسخ إعلانية", "مقالات SEO", "نصوص لاندينج"],
+      en: ["Ad copy", "SEO articles", "Landing copy"],
+    },
+  },
+];
+
 export function ServicesGrid() {
   const { locale } = useLocale();
   const isAr = locale === "ar";
+
+  type Card = {
+    slug: string;
+    href: string;
+    title: { ar: string; en: string };
+    intro: { ar: string; en: string };
+    highlights: { ar: string[]; en: string[] };
+    isExtra?: boolean;
+  };
+
+  const cards: Card[] = [
+    ...services.map((s) => ({
+      slug: s.slug,
+      href: `/services/${s.slug}`,
+      title: s.title,
+      intro: s.intro,
+      highlights: s.highlights,
+    })),
+    ...extraCards.map((c) => ({ ...c, isExtra: true })),
+  ];
 
   return (
     <section className="section relative overflow-hidden">
@@ -26,50 +85,65 @@ export function ServicesGrid() {
             <h2 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">
               {isAr ? (
                 <>
-                  نقدم خدمات متفوقة بـ
+                  منظومة خدمات متكاملة بـ
                   <span className="marker-line px-2"> جودة مضمونة</span>
                 </>
               ) : (
                 <>
-                  Superior service with{" "}
+                  An integrated stack with{" "}
                   <span className="marker-line px-2">guaranteed quality</span>
                 </>
               )}
             </h2>
+            <p className="mt-4 max-w-xl text-base text-muted-foreground">
+              {isAr
+                ? "ست خدمات أساسية تتكامل مع بعضها لتغطّي كل ما تحتاجه علامتك تحت سقف وكالة واحدة."
+                : "Six core services that work together to cover everything your brand needs — under one agency roof."}
+            </p>
           </div>
           <Link
             to="/$locale/services"
             params={{ locale }}
-            className="group inline-flex items-center gap-2 text-sm font-semibold text-primary"
+            className="group inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-primary shadow-card transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-soft"
           >
             {isAr ? "كل الخدمات" : "View all services"}
             <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-0.5 rtl:rotate-90" />
           </Link>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((s) => {
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {cards.map((s, i) => {
             const Icon = iconForSlug[s.slug] ?? Search;
             return (
               <Link
                 key={s.slug}
-                to="/$locale/services/$slug"
-                params={{ locale, slug: s.slug }}
-                className="group relative isolate overflow-hidden rounded-3xl border border-border bg-card p-7 transition hover:-translate-y-1 hover:shadow-svc"
+                to={s.href}
+                className="group relative isolate overflow-hidden rounded-3xl border border-border bg-card p-7 transition duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-elegant"
+                style={{ animationDelay: `${i * 60}ms` }}
               >
+                {/* Hover gradient */}
                 <span
-                  className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
-                  style={{ background: "var(--svc)" }}
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-primary/0 via-primary/0 to-primary/0 opacity-0 transition duration-500 group-hover:from-primary/5 group-hover:to-primary/10 group-hover:opacity-100"
                 />
-                <div className="relative mb-6 inline-grid h-14 w-14 place-items-center rounded-2xl border border-border bg-surface-soft transition group-hover:scale-110">
-                  <Icon className="h-6 w-6" style={{ color: "var(--svc)" }} />
-                  <span
-                    className="absolute -inset-2 -z-10 rounded-3xl opacity-0 blur-xl transition group-hover:opacity-30"
-                    style={{ background: "var(--svc)" }}
-                  />
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-primary transition-transform duration-500 group-hover:scale-x-100"
+                />
+
+                <div className="flex items-start justify-between gap-3">
+                  <div className="relative inline-grid h-14 w-14 place-items-center rounded-2xl border border-primary/20 bg-primary-soft text-primary transition duration-500 group-hover:scale-110 group-hover:rotate-[-6deg]">
+                    <Icon className="h-6 w-6" />
+                    <span className="absolute -inset-2 -z-10 rounded-3xl bg-primary opacity-0 blur-2xl transition group-hover:opacity-25" />
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60">
+                    0{i + 1}
+                  </span>
                 </div>
 
-                <h3 className="text-xl font-extrabold text-ink">{s.title[locale]}</h3>
+                <h3 className="mt-6 text-xl font-extrabold text-ink transition group-hover:text-primary">
+                  {s.title[locale]}
+                </h3>
                 <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
                   {s.intro[locale]}
                 </p>
@@ -86,13 +160,10 @@ export function ServicesGrid() {
                 </div>
 
                 <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
-                  <span className="text-sm font-semibold" style={{ color: "var(--svc)" }}>
+                  <span className="text-sm font-semibold text-primary">
                     {isAr ? "اكتشف الخدمة" : "Explore service"}
                   </span>
-                  <span
-                    className="grid h-9 w-9 place-items-center rounded-full text-white transition group-hover:rotate-[-45deg]"
-                    style={{ background: "var(--svc)" }}
-                  >
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground transition group-hover:rotate-[-45deg] group-hover:scale-110">
                     <ArrowUpRight className="h-4 w-4 rtl:rotate-90" />
                   </span>
                 </div>
