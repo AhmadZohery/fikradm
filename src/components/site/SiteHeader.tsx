@@ -75,21 +75,32 @@ export function SiteHeader() {
       {/* Mega menu backdrop */}
       <div
         className={cn(
-          "pointer-events-none fixed inset-0 z-30 bg-ink/20 backdrop-blur-[2px] transition-opacity duration-300",
+          "pointer-events-none fixed inset-0 z-30 bg-ink/30 backdrop-blur-[3px] transition-opacity duration-500",
           openMenu ? "opacity-100" : "opacity-0",
         )}
         aria-hidden
       />
 
       <header
+        style={{ ["--header-h" as string]: scrolled ? "4rem" : "5rem" }}
         className={cn(
-          "sticky top-0 z-40 w-full transition-all duration-500",
-          scrolled
-            ? "header-glass border-b border-border/60 shadow-soft"
-            : "border-b border-transparent bg-background/40 backdrop-blur-sm",
+          "fixed inset-x-0 top-0 z-40 w-full transition-all duration-500 ease-out",
+          scrolled ? "py-2" : "py-3 md:py-4",
         )}
       >
-        <div className={cn("container-app flex items-center justify-between gap-4 transition-all duration-500", scrolled ? "h-16" : "h-16 md:h-20")}>
+        <div
+          className={cn(
+            "container-app transition-all duration-500 ease-out",
+          )}
+        >
+          <div
+            className={cn(
+              "flex items-center justify-between gap-4 rounded-full border transition-all duration-500 ease-out",
+              scrolled
+                ? "header-glass border-border/60 px-3 py-2 shadow-elegant md:px-4"
+                : "border-white/40 bg-white/55 px-4 py-2.5 shadow-soft backdrop-blur-xl md:px-5",
+            )}
+          >
           {/* Logo */}
           <Link to={buildHref(locale, "/")} className="group flex items-center gap-3" aria-label={t("brand.full")}>
             <div className="relative">
@@ -250,59 +261,60 @@ export function SiteHeader() {
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
-        </div>
+          </div>
 
-        {/* Mobile menu */}
-        {mobileOpen && (
-          <div className="border-t border-border bg-background/98 backdrop-blur-xl lg:hidden animate-fade-in">
-            <nav className="container-app flex max-h-[80vh] flex-col gap-1 overflow-y-auto py-4" aria-label="Mobile">
-              {navItems.map((item, idx) => (
-                <div key={item.key} className="animate-fade-up" style={{ animationDelay: `${idx * 40}ms` }}>
-                  <Link
-                    to={buildHref(locale, item.href)}
-                    className="block rounded-xl px-3 py-2.5 text-sm font-bold text-foreground transition hover:bg-accent hover:text-primary"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {t(`nav.${item.key}`)}
-                  </Link>
-                  {item.mega && (
-                    <div className="ms-3 border-s-2 border-primary/20 ps-3">
-                      {item.mega.map((g) => (
-                        <div key={g.groupKey} className="mt-1">
-                          <Link
-                            to={buildHref(locale, g.href)}
-                            className="block rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-primary"
-                            onClick={() => setMobileOpen(false)}
-                          >
-                            {g.groupLabel}
-                          </Link>
-                          {g.items.slice(0, 4).map((c) => (
+          {/* Mobile menu */}
+          {mobileOpen && (
+            <div className="mt-2 overflow-hidden rounded-3xl border border-border/60 bg-background/95 shadow-elegant backdrop-blur-xl lg:hidden animate-mega-in">
+              <nav className="flex max-h-[75vh] flex-col gap-1 overflow-y-auto p-4" aria-label="Mobile">
+                {navItems.map((item, idx) => (
+                  <div key={item.key} className="animate-fade-up" style={{ animationDelay: `${idx * 40}ms` }}>
+                    <Link
+                      to={buildHref(locale, item.href)}
+                      className="block rounded-xl px-3 py-2.5 text-sm font-bold text-foreground transition hover:bg-accent hover:text-primary"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {t(`nav.${item.key}`)}
+                    </Link>
+                    {item.mega && (
+                      <div className="ms-3 border-s-2 border-primary/20 ps-3">
+                        {item.mega.map((g) => (
+                          <div key={g.groupKey} className="mt-1">
                             <Link
-                              key={c.key}
-                              to={buildHref(locale, c.href)}
-                              className="block rounded-lg px-4 py-1.5 text-sm text-muted-foreground transition hover:text-primary"
+                              to={buildHref(locale, g.href)}
+                              className="block rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-primary"
                               onClick={() => setMobileOpen(false)}
                             >
-                              {c.label}
+                              {g.groupLabel}
                             </Link>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-              <Link
-                to={buildHref(locale, "/contact")}
-                className="mt-3 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-soft"
-                onClick={() => setMobileOpen(false)}
-              >
-                {t("nav.cta")}
-                <ArrowUpRight className="h-4 w-4 rtl:rotate-90" />
-              </Link>
-            </nav>
-          </div>
-        )}
+                            {g.items.slice(0, 4).map((c) => (
+                              <Link
+                                key={c.key}
+                                to={buildHref(locale, c.href)}
+                                className="block rounded-lg px-4 py-1.5 text-sm text-muted-foreground transition hover:text-primary"
+                                onClick={() => setMobileOpen(false)}
+                              >
+                                {c.label}
+                              </Link>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                <Link
+                  to={buildHref(locale, "/contact")}
+                  className="mt-3 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-soft"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {t("nav.cta")}
+                  <ArrowUpRight className="h-4 w-4 rtl:rotate-90" />
+                </Link>
+              </nav>
+            </div>
+          )}
+        </div>
       </header>
     </>
   );
