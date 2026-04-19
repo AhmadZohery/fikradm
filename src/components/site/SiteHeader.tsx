@@ -261,8 +261,8 @@ export function SiteHeader() {
              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
-          </div>
 
+          {/* Mobile menu */}
           {mobileOpen && (
             <div className="mt-2 overflow-hidden rounded-3xl border border-border/60 bg-background/95 shadow-elegant backdrop-blur-xl lg:hidden animate-mega-in">
               <nav className="flex max-h-[75vh] flex-col gap-1 overflow-y-auto p-4" aria-label="Mobile">
