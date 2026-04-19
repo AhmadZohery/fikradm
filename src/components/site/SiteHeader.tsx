@@ -4,6 +4,7 @@ import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { LOCALE_LABELS, type Locale } from "@/i18n/types";
 import { services as allServices, industries as allIndustries, getSubServicesFor, getSubIndustriesFor } from "@/content/data";
+import { blogCategories } from "@/content/blog";
 import logo from "@/assets/fikra-logo.jpg";
 import { cn } from "@/lib/utils";
 
