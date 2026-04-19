@@ -7,6 +7,9 @@ import { CtaBand } from "@/components/site/CtaBand";
 import { SubServicesGrid } from "@/components/site/SubServicesGrid";
 import { findService } from "@/content/data";
 import { ServiceVariantHero } from "@/components/site/services/ServiceVariantHero";
+import { ServiceMarketSignals } from "@/components/site/services/ServiceMarketSignals";
+import { ServiceApproach } from "@/components/site/services/ServiceApproach";
+import { ServiceResults } from "@/components/site/services/ServiceResults";
 import { getServiceVariant } from "@/components/site/services/serviceVariants";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
 import { Check, ArrowUpRight } from "lucide-react";
@@ -58,15 +61,22 @@ function ServicePage() {
       <div data-accent={variant.accent}>
         <Breadcrumbs trail={[{ label: isAr ? "خدماتنا" : "Services", href: "/services" }, { label: s.title[loc] }]} />
 
+        {/* 1. HERO — captures attention with service personality */}
         <ServiceVariantHero service={s} />
 
-        {/* Process */}
-        <section className="section">
+        {/* 2. WHY NOW — market signals create urgency */}
+        <ServiceMarketSignals slug={slug} />
+
+        {/* 3. WHAT WE DO DIFFERENTLY — pillars */}
+        <ServiceApproach slug={slug} />
+
+        {/* 4. PROCESS — methodology */}
+        <section className="section bg-surface-soft">
           <div className="container-app">
             <div className="mb-10 max-w-2xl">
               <SectionEyebrow>{isAr ? "منهجية العمل" : "Our methodology"}</SectionEyebrow>
               <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">
-                {isAr ? "كيف ننفذ هذه الخدمة" : "How we deliver this service"}
+                {isAr ? "كيف ننفذ هذه الخدمة خطوة بخطوة" : "How we deliver, step by step"}
               </h2>
             </div>
             <div className="relative grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -91,8 +101,11 @@ function ServicePage() {
           </div>
         </section>
 
-        {/* Deliverables + Audience side by side */}
-        <section className="section bg-surface-soft">
+        {/* 5. RESULTS — proof of work */}
+        <ServiceResults slug={slug} />
+
+        {/* 6. DELIVERABLES + AUDIENCE */}
+        <section className="section">
           <div className="container-app grid gap-8 lg:grid-cols-2">
             <div className="rounded-3xl border border-border bg-card p-8 shadow-card">
               <SectionEyebrow>{isAr ? "ماذا تستلم" : "Deliverables"}</SectionEyebrow>
@@ -136,17 +149,21 @@ function ServicePage() {
           </div>
         </section>
 
-        {s.subServices && s.subServices.length > 0 && (
-          <SubServicesGrid parentSlug={s.slug} items={s.subServices} />
-        )}
+        {/* 7. FAQ — handle objections before pricing */}
+        <FaqSection items={s.faqs} />
 
+        {/* 8. PRICING — moment of decision */}
         <div id="pricing">
           <PricingPlans plans={s.plans} />
         </div>
 
-        <FaqSection items={s.faqs} />
-
+        {/* 9. CTA — close the deal */}
         <CtaBand />
+
+        {/* 10. SUB-SERVICES — last (suggestion if not ready) */}
+        {s.subServices && s.subServices.length > 0 && (
+          <SubServicesGrid parentSlug={s.slug} items={s.subServices} />
+        )}
 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       </div>
