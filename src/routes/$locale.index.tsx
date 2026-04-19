@@ -4,6 +4,7 @@ import { HeroSlider } from "@/components/site/HeroSlider";
 import { StatsBand } from "@/components/site/StatsBand";
 import { LogosStrip } from "@/components/site/LogosStrip";
 import { ServicesGrid } from "@/components/site/ServicesGrid";
+import { ProcessSection } from "@/components/site/ProcessSection";
 import { IndustriesShowcase } from "@/components/site/IndustriesShowcase";
 import { Testimonials } from "@/components/site/Testimonials";
 import { CtaBand } from "@/components/site/CtaBand";
@@ -41,6 +42,7 @@ function HomePage() {
       <StatsBand />
       <LogosStrip />
       <ServicesGrid />
+      <ProcessSection />
       <IndustriesShowcase />
       <Testimonials />
       <CtaBand />
