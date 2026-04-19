@@ -1,4 +1,4 @@
-import type { ServiceMeta, IndustryMeta, PricingPlan, LocalizedString } from "./types";
+import type { ServiceMeta, IndustryMeta, PricingPlan, LocalizedString, SubServiceMeta } from "./types";
 
 const ls = (ar: string, en: string): LocalizedString => ({ ar, en });
 const ll = (ar: string[], en: string[]) => ({ ar, en });
@@ -507,9 +507,630 @@ export const industries: IndustryMeta[] = [
   },
 ];
 
+// ------------- Sub-services (landing pages per discipline) -------------
+
+const subPlan = (
+  id: string,
+  nameAr: string,
+  nameEn: string,
+  descAr: string,
+  descEn: string,
+  price: number,
+  original: number,
+  featuresAr: string[],
+  featuresEn: string[],
+  highlighted = false,
+): PricingPlan => ({
+  id,
+  name: ls(nameAr, nameEn),
+  description: ls(descAr, descEn),
+  priceSar: price,
+  originalPriceSar: original,
+  discountPct: Math.round(((original - price) / original) * 100),
+  highlighted,
+  features: ll(featuresAr, featuresEn),
+});
+
+export const subServices: SubServiceMeta[] = [
+  // ---------- SEO sub-services ----------
+  {
+    slug: "technical-audit",
+    parentSlug: "seo",
+    title: ls("مراجعة السيو التقني الشاملة", "Comprehensive Technical SEO Audit"),
+    shortLabel: ls("السيو التقني", "Technical Audit"),
+    metaTitle: ls(
+      "مراجعة سيو تقني احترافية لموقعك | فكرة",
+      "Pro Technical SEO Audit for Your Site | Fikra",
+    ),
+    metaDescription: ls(
+      "تدقيق سيو تقني شامل: السرعة، الزحف، الفهرسة، Core Web Vitals، Schema، وخارطة عمل واضحة لرفع ترتيبك.",
+      "Full technical SEO audit: speed, crawl, indexation, Core Web Vitals, schema, and a clear action plan.",
+    ),
+    intro: ls(
+      "نفحص موقعك بأكثر من 200 نقطة تقنية ونسلّمك تقريراً تنفيذياً بأولويات واضحة وخارطة طريق لتحسين السرعة والزحف والترتيب.",
+      "We audit your site against 200+ technical checks and deliver an executive report with prioritized fixes to boost speed, crawl and rankings.",
+    ),
+    highlights: ll(
+      ["تدقيق Core Web Vitals", "تحليل الزحف والفهرسة", "مراجعة Schema و Rich Results", "اكتشاف الصفحات اليتيمة", "خارطة طريق بالأولويات"],
+      ["Core Web Vitals audit", "Crawl & indexation analysis", "Schema & rich results review", "Orphan pages detection", "Prioritized roadmap"],
+    ),
+    process: [
+      { step: ls("جمع البيانات", "Data collection"), detail: ls("ربط Search Console و Analytics وتشغيل الزحف الكامل.", "Connect Search Console & Analytics, run full crawl.") },
+      { step: ls("التحليل", "Analysis"), detail: ls("فحص أكثر من 200 نقطة تقنية ومعمارية.", "Check 200+ technical and architectural points.") },
+      { step: ls("التقرير", "Report"), detail: ls("تقرير تنفيذي + قائمة إصلاحات بالأولويات.", "Executive report + prioritized fix list.") },
+      { step: ls("الجلسة التنفيذية", "Handover call"), detail: ls("جلسة شرح كاملة مع فريقك التقني.", "Full walkthrough call with your tech team.") },
+    ],
+    deliverables: ll(
+      ["تقرير PDF تفصيلي (40+ صفحة)", "ملف Excel بقائمة الإصلاحات", "فيديو شرح", "جلسة استشارية ساعة"],
+      ["Detailed PDF report (40+ pages)", "Excel fix list", "Walkthrough video", "1-hour consultation"],
+    ),
+    faqs: [
+      { q: ls("كم يستغرق التدقيق؟", "How long does the audit take?"), a: ls("من 7 إلى 14 يوم عمل حسب حجم الموقع.", "7 to 14 business days depending on site size.") },
+      { q: ls("هل تنفذون الإصلاحات؟", "Do you implement the fixes?"), a: ls("نعم، عبر باقات السيو الشهرية أو كمشروع تنفيذ منفصل.", "Yes, via our monthly SEO plans or as a separate implementation project.") },
+    ],
+    plans: [
+      subPlan("audit-essential", "تدقيق أساسي", "Essential Audit", "للمواقع حتى 50 صفحة", "For sites up to 50 pages", 1990, 2490,
+        ["زحف كامل للموقع", "تدقيق 100 نقطة", "تقرير PDF", "قائمة إصلاحات Excel"],
+        ["Full site crawl", "100-point audit", "PDF report", "Excel fix list"],
+      ),
+      subPlan("audit-pro", "تدقيق احترافي", "Pro Audit", "للمواقع المتوسطة والمتاجر", "For mid-size sites and stores", 3990, 4990,
+        ["زحف غير محدود", "تدقيق 200 نقطة", "تحليل المنافسين (3)", "تقرير + فيديو شرح", "جلسة 60 دقيقة"],
+        ["Unlimited crawl", "200-point audit", "Competitor analysis (3)", "Report + walkthrough video", "60-min strategy call"],
+        true,
+      ),
+      subPlan("audit-enterprise", "تدقيق المؤسسات", "Enterprise Audit", "للمواقع الكبيرة والمعقدة", "For large complex sites", 8990, 11990,
+        ["كل ما في الاحترافي", "تدقيق Schema متقدم", "تحليل log files", "تدقيق International SEO", "ورشة عمل ليوم كامل"],
+        ["Everything in Pro", "Advanced schema audit", "Log file analysis", "International SEO audit", "Full-day workshop"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    slug: "local-seo",
+    parentSlug: "seo",
+    title: ls("السيو المحلي وخرائط جوجل", "Local SEO & Google Maps"),
+    shortLabel: ls("السيو المحلي", "Local SEO"),
+    metaTitle: ls(
+      "خدمة السيو المحلي وتحسين Google Business | فكرة",
+      "Local SEO & Google Business Optimization | Fikra",
+    ),
+    metaDescription: ls(
+      "تصدّر نتائج البحث المحلي وخرائط جوجل في مدينتك. تحسين Google Business، مراجعات، واستهداف جغرافي دقيق.",
+      "Dominate local search and Google Maps in your city. GBP optimization, reviews, and precise geo targeting.",
+    ),
+    intro: ls(
+      "نضع نشاطك في أعلى نتائج البحث المحلي وخرائط جوجل، نزيد المكالمات والزيارات الفعلية للفرع من خلال تحسين كامل لـ Google Business واستراتيجية مراجعات قوية.",
+      "We put your business at the top of local search and Maps, increasing calls and visits through full GBP optimization and a strong reviews strategy.",
+    ),
+    highlights: ll(
+      ["تحسين Google Business Profile", "إدارة المراجعات والردود", "بناء Citations محلية", "صفحات هبوط لكل مدينة/فرع", "تتبع المكالمات والاتجاهات"],
+      ["GBP optimization", "Reviews management", "Local citations building", "Per-city/branch landing pages", "Call & directions tracking"],
+    ),
+    process: [
+      { step: ls("التدقيق المحلي", "Local audit"), detail: ls("فحص ملفك الحالي وحضورك المحلي والمنافسين.", "Audit your current profile, presence and competitors.") },
+      { step: ls("التحسين", "Optimization"), detail: ls("تحسين كامل لـ GBP وبيانات NAP والصور.", "Full GBP, NAP and media optimization.") },
+      { step: ls("بناء السلطة", "Authority"), detail: ls("بناء Citations ومراجعات وروابط محلية.", "Build citations, reviews and local links.") },
+      { step: ls("القياس", "Measurement"), detail: ls("تتبع المكالمات، الاتجاهات، والترتيب في الخريطة.", "Track calls, directions, and map rankings.") },
+    ],
+    deliverables: ll(
+      ["GBP محسّن بالكامل", "10 Citations محلية شهرياً", "صفحة هبوط لكل فرع", "تقرير شهري بترتيب الخريطة"],
+      ["Fully optimized GBP", "10 local citations / month", "Landing page per branch", "Monthly map ranking report"],
+    ),
+    faqs: [
+      { q: ls("كم يستغرق ظهوري في خرائط جوجل؟", "How long to rank on Google Maps?"), a: ls("النتائج الأولية خلال 30-60 يوم، نتائج قوية بعد 3-4 شهور.", "Initial results in 30-60 days, strong results after 3-4 months.") },
+      { q: ls("هل تشمل الخدمة عدة فروع؟", "Does it cover multiple branches?"), a: ls("نعم، باقاتنا تدعم من فرع واحد حتى سلاسل متعددة الفروع.", "Yes, our plans cover from one branch up to multi-branch chains.") },
+    ],
+    plans: [
+      subPlan("local-single", "فرع واحد", "Single Location", "نشاط بفرع واحد", "Single-branch business", 1490, 1890,
+        ["تحسين GBP كامل", "5 Citations شهرياً", "إدارة المراجعات", "تقرير شهري"],
+        ["Full GBP optimization", "5 citations / month", "Reviews management", "Monthly report"],
+      ),
+      subPlan("local-multi", "متعدد الفروع", "Multi-Location", "حتى 5 فروع", "Up to 5 branches", 3490, 4490,
+        ["كل ما سبق × 5 فروع", "10 Citations لكل فرع", "صفحة هبوط لكل فرع", "تتبع المكالمات", "مكالمة شهرية"],
+        ["Everything above × 5 branches", "10 citations per branch", "Landing page per branch", "Call tracking", "Monthly call"],
+        true,
+      ),
+      subPlan("local-chain", "سلسلة فروع", "Chain Network", "أكثر من 5 فروع", "More than 5 branches", 6990, 8990,
+        ["فروع غير محدودة", "Citations مكثّفة", "استراتيجية مراجعات متقدمة", "Dashboard موحّد", "مدير حساب مخصص"],
+        ["Unlimited branches", "Intensive citations", "Advanced reviews strategy", "Unified dashboard", "Dedicated manager"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    slug: "link-building",
+    parentSlug: "seo",
+    title: ls("بناء الروابط الآمن (Link Building)", "Safe Link Building"),
+    shortLabel: ls("بناء الروابط", "Link Building"),
+    metaTitle: ls(
+      "خدمة بناء روابط احترافية وآمنة لموقعك | فكرة",
+      "Safe & Authoritative Link Building Service | Fikra",
+    ),
+    metaDescription: ls(
+      "نبني لك روابط خلفية عالية الجودة من مواقع موثوقة باستخدام Outreach حقيقي ومحتوى ضيف احترافي.",
+      "We build high-quality backlinks from trusted sites via real outreach and pro guest content.",
+    ),
+    intro: ls(
+      "روابط خلفية حقيقية من مواقع ذات سلطة (DR 40+) عبر Outreach يدوي ومحتوى ضيف عربي وإنجليزي، بدون شبكات PBN أو روابط ضارة.",
+      "Real backlinks from authority sites (DR 40+) via manual outreach and quality guest content — no PBNs or risky tactics.",
+    ),
+    highlights: ll(
+      ["روابط من مواقع DR 40+", "Outreach يدوي حقيقي", "محتوى ضيف عربي/إنجليزي", "تقرير شهري بكل رابط", "تنويع طبيعي للمصادر"],
+      ["Links from DR 40+ sites", "Real manual outreach", "AR/EN guest content", "Monthly link report", "Natural source diversity"],
+    ),
+    process: [
+      { step: ls("تحليل البروفايل", "Profile analysis"), detail: ls("دراسة بروفايل الروابط الحالي والفجوات.", "Analyze current backlink profile and gaps.") },
+      { step: ls("الاستهداف", "Targeting"), detail: ls("بناء قائمة مواقع نوعية وكلمات Anchor متنوعة.", "Build a list of quality sites and varied anchors.") },
+      { step: ls("Outreach", "Outreach"), detail: ls("تواصل بشري مع المحررين وكتابة محتوى ضيف.", "Human outreach to editors and guest content writing.") },
+      { step: ls("التقرير", "Reporting"), detail: ls("تقرير شهري بكل رابط جديد ومقاييس السلطة.", "Monthly report with each new link and authority metrics.") },
+    ],
+    deliverables: ll(
+      ["روابط من مواقع DR 40+", "محتوى ضيف أصلي", "تقرير شهري شامل", "تنويع Anchors آمن"],
+      ["DR 40+ backlinks", "Original guest content", "Comprehensive monthly report", "Safe anchor diversity"],
+    ),
+    faqs: [
+      { q: ls("هل الروابط آمنة من عقوبات جوجل؟", "Are the links safe from Google penalties?"), a: ls("نعم، نلتزم بإرشادات جوجل ولا نستخدم PBN أو شراء روابط مشبوهة.", "Yes — we follow Google guidelines and don't use PBNs or sketchy paid links.") },
+      { q: ls("متى أرى تأثير الروابط؟", "When do I see link impact?"), a: ls("التأثير يبدأ بعد 60-90 يوم وينمو مع تراكم الروابط.", "Impact starts after 60-90 days and compounds over time.") },
+    ],
+    plans: [
+      subPlan("links-starter", "5 روابط/شهر", "5 Links/Month", "للمواقع الجديدة", "For new sites", 2490, 2990,
+        ["5 روابط DR 30+", "محتوى ضيف", "Outreach يدوي", "تقرير شهري"],
+        ["5 links DR 30+", "Guest content", "Manual outreach", "Monthly report"],
+      ),
+      subPlan("links-growth", "10 روابط/شهر", "10 Links/Month", "للنمو السريع", "For fast growth", 4490, 5490,
+        ["10 روابط DR 40+", "محتوى ضيف احترافي", "Skyscraper content", "تقرير شامل + استشارة"],
+        ["10 links DR 40+", "Pro guest content", "Skyscraper content", "Full report + consultation"],
+        true,
+      ),
+      subPlan("links-authority", "20 روابط/شهر", "20 Links/Month", "للمنافسة الشرسة", "For tough competition", 8490, 10490,
+        ["20 روابط DR 50+", "روابط Editorial", "PR Outreach", "إدارة سمعة وذكر العلامة"],
+        ["20 links DR 50+", "Editorial links", "PR outreach", "Brand mentions management"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1614064548237-096d7da10c44?auto=format&fit=crop&w=1600&q=80",
+  },
+
+  // ---------- Performance sub-services ----------
+  {
+    slug: "google-ads",
+    parentSlug: "performance",
+    title: ls("إدارة إعلانات جوجل (Search & Display)", "Google Ads Management (Search & Display)"),
+    shortLabel: ls("إعلانات جوجل", "Google Ads"),
+    metaTitle: ls(
+      "خدمة إدارة إعلانات جوجل احترافية | فكرة",
+      "Pro Google Ads Management Service | Fikra",
+    ),
+    metaDescription: ls(
+      "إدارة احترافية لحملات Google Search و Display و Performance Max بأعلى عائد ممكن لميزانيتك.",
+      "Pro management of Google Search, Display and Performance Max campaigns for maximum ROI.",
+    ),
+    intro: ls(
+      "كل ريال إعلاني يصل لعميل في لحظة قراره الشرائي. نبني حملات Search و Performance Max بمنهجية data-driven وكلمات مفتاحية مدروسة وصفحات هبوط محسّنة للتحويل.",
+      "Every dollar reaches a customer at their decision moment. We build Search and Performance Max campaigns with data-driven methodology, researched keywords and conversion-optimized landing pages.",
+    ),
+    highlights: ll(
+      ["إعداد Conversion Tracking كامل", "بحث كلمات مفتاحية متقدم", "كتابة إعلانات A/B", "Performance Max محسّن", "تقارير شفافة"],
+      ["Full conversion tracking setup", "Advanced keyword research", "A/B ad copy", "Optimized Performance Max", "Transparent reporting"],
+    ),
+    process: [
+      { step: ls("الإعداد", "Setup"), detail: ls("تثبيت GTM، Conversions API، وتنظيم الحساب.", "GTM, Conversions API, account structure.") },
+      { step: ls("البحث", "Research"), detail: ls("بحث كلمات مفتاحية وتحليل المنافسين.", "Keyword research and competitor analysis.") },
+      { step: ls("الإطلاق", "Launch"), detail: ls("بناء الحملات وكتابة الإعلانات وإطلاق منظم.", "Build campaigns, write ads, staged launch.") },
+      { step: ls("التحسين", "Optimization"), detail: ls("اختبارات يومية للكلمات والمزايدات والإعلانات.", "Daily tests on keywords, bids and ads.") },
+    ],
+    deliverables: ll(
+      ["إعداد كامل للحملات", "إدارة شهرية احترافية", "تقارير أسبوعية", "Dashboard أداء مباشر"],
+      ["Full campaign setup", "Pro monthly management", "Weekly reports", "Live performance dashboard"],
+    ),
+    faqs: [
+      { q: ls("ما الحد الأدنى للميزانية؟", "Minimum budget?"), a: ls("ننصح بـ 3000 ر.س شهرياً كحد أدنى.", "We recommend SAR 3,000/month minimum.") },
+      { q: ls("هل تنشئون صفحات هبوط؟", "Do you build landing pages?"), a: ls("نعم، ضمن باقاتنا المتقدمة أو كخدمة منفصلة.", "Yes, in advanced plans or as a separate service.") },
+    ],
+    plans: [
+      subPlan("gads-starter", "حملة تأسيسية", "Foundation", "حملة Search واحدة", "Single Search campaign", 1490, 1890,
+        ["إعداد كامل", "حملة Search واحدة", "تتبع التحويلات", "تقرير شهري"],
+        ["Full setup", "1 Search campaign", "Conversion tracking", "Monthly report"],
+      ),
+      subPlan("gads-growth", "حملات متعددة", "Multi-Campaign", "Search + Display + Pmax", "Search + Display + Pmax", 3490, 4290,
+        ["3-5 حملات", "Performance Max محسّن", "Remarketing", "تقارير أسبوعية", "مكالمة شهرية"],
+        ["3-5 campaigns", "Optimized Performance Max", "Remarketing", "Weekly reports", "Monthly call"],
+        true,
+      ),
+      subPlan("gads-pro", "إدارة مكثّفة", "Intensive", "حملات ميزانيات كبيرة", "Large-budget campaigns", 6990, 8990,
+        ["حملات غير محدودة", "Bid strategies متقدم", "تحسين Feed للمتاجر", "Dashboard مخصص", "مدير حساب مخصص"],
+        ["Unlimited campaigns", "Advanced bid strategies", "Shopping feed optimization", "Custom dashboard", "Dedicated manager"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    slug: "social-ads",
+    parentSlug: "performance",
+    title: ls("إعلانات السوشيال ميديا (Meta, TikTok, Snap)", "Social Media Ads (Meta, TikTok, Snap)"),
+    shortLabel: ls("إعلانات السوشيال", "Social Ads"),
+    metaTitle: ls(
+      "إدارة إعلانات Meta و TikTok و Snapchat | فكرة",
+      "Meta, TikTok & Snapchat Ads Management | Fikra",
+    ),
+    metaDescription: ls(
+      "حملات Meta و TikTok و Snapchat بكرييتيف يبيع وتتبع تحويلات متقدم وعائد مدروس.",
+      "Meta, TikTok and Snapchat campaigns with sales-driven creative and advanced conversion tracking.",
+    ),
+    intro: ls(
+      "نبيع لك على فيسبوك وإنستغرام وتيك توك وسناب بكرييتيف يلفت ويُحوّل، استهداف دقيق وتتبع متقدم عبر Conversions API لاستعادة بيانات الـ iOS.",
+      "We sell on Facebook, Instagram, TikTok and Snap with attention-grabbing creative, precise targeting and advanced tracking via Conversions API.",
+    ),
+    highlights: ll(
+      ["Meta + TikTok + Snap", "Conversions API للـ iOS", "كرييتيف شهري متجدد", "A/B testing مستمر", "Lookalikes وReengagement"],
+      ["Meta + TikTok + Snap", "Conversions API for iOS", "Monthly fresh creative", "Continuous A/B testing", "Lookalikes & re-engagement"],
+    ),
+    process: [
+      { step: ls("الاستراتيجية", "Strategy"), detail: ls("تحديد المنصات والجمهور والـ Funnel.", "Define platforms, audience and funnel.") },
+      { step: ls("الكرييتيف", "Creative"), detail: ls("إنتاج فيديو وتصاميم تناسب كل منصة.", "Produce videos and visuals per platform.") },
+      { step: ls("الإطلاق", "Launch"), detail: ls("اختبار حملات Cold + Retargeting بمراحل.", "Test cold + retargeting campaigns in stages.") },
+      { step: ls("التوسع", "Scaling"), detail: ls("توسيع الفائز وقتل الخاسر بشكل يومي.", "Scale winners, kill losers daily.") },
+    ],
+    deliverables: ll(
+      ["إعداد Pixels و Conversions API", "كرييتيف شهري", "تقارير أسبوعية", "Dashboard أداء"],
+      ["Pixels & Conversions API setup", "Monthly creative", "Weekly reports", "Performance dashboard"],
+    ),
+    faqs: [
+      { q: ls("كم كرييتيف شهرياً؟", "How many creatives per month?"), a: ls("يبدأ من 6 ويصل لـ 30 حسب الباقة.", "Starts at 6 and scales to 30 per plan.") },
+      { q: ls("هل تتعاملون مع متاجر سلة؟", "Do you support Salla stores?"), a: ls("نعم، نتكامل مع سلة وZid وShopify وWooCommerce.", "Yes — Salla, Zid, Shopify and WooCommerce integrations.") },
+    ],
+    plans: [
+      subPlan("social-launch", "إطلاق منصة واحدة", "Single Platform", "Meta أو TikTok فقط", "Meta or TikTok only", 1790, 2290,
+        ["منصة واحدة", "حتى 4 حملات", "6 كرييتيف شهرياً", "تقرير نصف شهري"],
+        ["1 platform", "Up to 4 campaigns", "6 creatives / month", "Bi-weekly report"],
+      ),
+      subPlan("social-multi", "متعدد المنصات", "Multi-Platform", "Meta + TikTok + Snap", "Meta + TikTok + Snap", 3990, 4990,
+        ["3 منصات", "حتى 8 حملات", "15 كرييتيف شهرياً", "Conversions API", "تقارير أسبوعية"],
+        ["3 platforms", "Up to 8 campaigns", "15 creatives / month", "Conversions API", "Weekly reports"],
+        true,
+      ),
+      subPlan("social-scale", "توسع تجاري", "Scale", "ميزانيات كبيرة", "Large budgets", 7990, 9990,
+        ["كل المنصات", "حملات غير محدودة", "30 كرييتيف شهرياً", "Funnel كامل", "مدير حملات مخصص"],
+        ["All platforms", "Unlimited campaigns", "30 creatives / month", "Full funnel", "Dedicated manager"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1600&q=80",
+  },
+
+  // ---------- Creative sub-services ----------
+  {
+    slug: "branding",
+    parentSlug: "creative",
+    title: ls("تصميم الهوية البصرية والشعار", "Brand Identity & Logo Design"),
+    shortLabel: ls("الهوية البصرية", "Brand Identity"),
+    metaTitle: ls(
+      "تصميم هوية بصرية احترافية وشعار مميز | فكرة",
+      "Pro Brand Identity & Logo Design | Fikra",
+    ),
+    metaDescription: ls(
+      "هوية بصرية كاملة: شعار، ألوان، خطوط، Brand book، وقوالب تطبيقية لكل قنوات علامتك.",
+      "Full brand identity: logo, colors, typography, brand book, and applied templates for every channel.",
+    ),
+    intro: ls(
+      "نصمم لك هوية بصرية تعبّر عن قيم علامتك وتميّزك في السوق. شعار احترافي، نظام ألوان وخطوط، وBrand book متكامل يضمن استخدام موحد عبر كل القنوات.",
+      "We design a brand identity that expresses your values and differentiates you. Pro logo, color and type system, and a comprehensive brand book for consistent application.",
+    ),
+    highlights: ll(
+      ["شعار + 5 إصدارات", "نظام ألوان وخطوط", "Brand book PDF", "قوالب سوشيال جاهزة", "ملفات Source كاملة"],
+      ["Logo + 5 variations", "Color & type system", "Brand book PDF", "Ready social templates", "Full source files"],
+    ),
+    process: [
+      { step: ls("الاكتشاف", "Discovery"), detail: ls("جلسة عميقة لفهم قيمك وجمهورك ومنافسيك.", "Deep session on values, audience, competitors.") },
+      { step: ls("الاتجاه", "Direction"), detail: ls("Mood boards واتجاهات بصرية للاختيار.", "Mood boards and visual directions to choose from.") },
+      { step: ls("التصميم", "Design"), detail: ls("3 اتجاهات شعار + جولتي مراجعة.", "3 logo concepts + 2 revision rounds.") },
+      { step: ls("التسليم", "Delivery"), detail: ls("Brand book + كل الملفات + جلسة استخدام.", "Brand book + all files + usage session.") },
+    ],
+    deliverables: ll(
+      ["شعار بكل الصيغ (AI/SVG/PNG)", "Brand book 30+ صفحة", "قوالب سوشيال", "نماذج تطبيقية"],
+      ["Logo in all formats (AI/SVG/PNG)", "Brand book 30+ pages", "Social templates", "Application mockups"],
+    ),
+    faqs: [
+      { q: ls("كم يستغرق المشروع؟", "How long does it take?"), a: ls("من 14 إلى 21 يوم عمل.", "14 to 21 business days.") },
+      { q: ls("هل أحصل على ملكية كاملة؟", "Do I own full rights?"), a: ls("نعم، تنتقل الملكية الكاملة بعد الاعتماد النهائي والدفع.", "Yes, full ownership transfers after final approval and payment.") },
+    ],
+    plans: [
+      subPlan("brand-mini", "هوية مصغّرة", "Mini Identity", "للمشاريع الناشئة", "For new ventures", 1990, 2490,
+        ["شعار + 3 إصدارات", "ألوان وخطوط أساسية", "Mini guide (8 صفحات)", "5 قوالب سوشيال"],
+        ["Logo + 3 variations", "Basic colors & type", "Mini guide (8 pages)", "5 social templates"],
+      ),
+      subPlan("brand-pro", "هوية احترافية", "Pro Identity", "للشركات النامية", "For growing companies", 4990, 6490,
+        ["شعار + 5 إصدارات", "نظام ألوان وخطوط كامل", "Brand book 30 صفحة", "15 قالب سوشيال", "نماذج تطبيقية"],
+        ["Logo + 5 variations", "Full color & type system", "30-page brand book", "15 social templates", "Application mockups"],
+        true,
+      ),
+      subPlan("brand-enterprise", "هوية مؤسسية", "Enterprise Identity", "للشركات الكبرى", "For large companies", 11990, 14990,
+        ["نظام هوية شامل", "Brand book 60+ صفحة", "هوية صوتية ولغوية", "قوالب لكل القنوات", "ورشة تدريب فريقك"],
+        ["Comprehensive identity system", "60+ page brand book", "Voice & verbal identity", "Templates for all channels", "Team training workshop"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    slug: "video-motion",
+    parentSlug: "creative",
+    title: ls("إنتاج الفيديو والموشن جرافيك", "Video Production & Motion Graphics"),
+    shortLabel: ls("الفيديو والموشن", "Video & Motion"),
+    metaTitle: ls(
+      "إنتاج فيديو احترافي وموشن جرافيك للشركات | فكرة",
+      "Pro Video Production & Motion Graphics | Fikra",
+    ),
+    metaDescription: ls(
+      "إنتاج فيديو تسويقي، ريلز، موشن جرافيك، وإعلانات بصرية تجذب الانتباه وتُحوّل المشاهد لعميل.",
+      "Marketing videos, reels, motion graphics, and visual ads that grab attention and convert viewers.",
+    ),
+    intro: ls(
+      "في زمن الـ Scroll السريع، الفيديو هو الذي يوقف العميل. ننتج فيديوهات قصيرة وطويلة، موشن جرافيك، وإعلانات بصرية مبنية على Storyboarding احترافي وأهداف تسويقية واضحة.",
+      "In the era of fast scrolling, video is what stops your customer. We produce short and long videos, motion graphics, and visual ads with pro storyboarding and clear goals.",
+    ),
+    highlights: ll(
+      ["ريلز و TikToks قصيرة", "موشن جرافيك", "فيديو شركاتي", "إعلانات Performance", "Storyboarding احترافي"],
+      ["Short reels & TikToks", "Motion graphics", "Corporate video", "Performance ads", "Pro storyboarding"],
+    ),
+    process: [
+      { step: ls("الاستراتيجية", "Strategy"), detail: ls("تحديد الهدف والجمهور والرسالة.", "Define goal, audience and message.") },
+      { step: ls("الـ Storyboard", "Storyboard"), detail: ls("سيناريو وStoryboard مفصّل.", "Script and detailed storyboard.") },
+      { step: ls("الإنتاج", "Production"), detail: ls("تصوير أو موشن أو خليط احترافي.", "Filming, motion or pro hybrid.") },
+      { step: ls("المونتاج", "Editing"), detail: ls("مونتاج، ألوان، صوت، Subtitles.", "Editing, color, sound, subtitles.") },
+    ],
+    deliverables: ll(
+      ["فيديوهات MP4 جاهزة", "نسخ مربعة وعمودية", "Subtitles عربي/إنجليزي", "ملفات Source"],
+      ["Ready MP4 videos", "Square & vertical versions", "AR/EN subtitles", "Source files"],
+    ),
+    faqs: [
+      { q: ls("كم فيديو شهرياً؟", "How many videos per month?"), a: ls("من 4 إلى 15 فيديو حسب الباقة.", "From 4 to 15 videos per plan.") },
+      { q: ls("هل تشمل التصوير؟", "Includes shooting?"), a: ls("نعم في الباقات الاحترافية والمؤسسية.", "Yes in Pro and Enterprise plans.") },
+    ],
+    plans: [
+      subPlan("video-reels", "ريلز شهرية", "Monthly Reels", "محتوى قصير منتظم", "Regular short content", 2490, 2990,
+        ["6 ريلز شهرياً", "موشن خفيف", "Subtitles", "نسخ مربعة وعمودية"],
+        ["6 reels / month", "Light motion", "Subtitles", "Square & vertical versions"],
+      ),
+      subPlan("video-pro", "إنتاج احترافي", "Pro Production", "تصوير + موشن", "Filming + motion", 5990, 7490,
+        ["10 فيديو شهرياً", "تصوير احترافي", "موشن جرافيك", "Storyboarding", "Subtitles AR/EN"],
+        ["10 videos / month", "Pro filming", "Motion graphics", "Storyboarding", "AR/EN subtitles"],
+        true,
+      ),
+      subPlan("video-cinema", "إنتاج سينمائي", "Cinematic", "حملات كبرى", "Major campaigns", 12990, 16490,
+        ["إنتاج كامل بفريق سينمائي", "ممثلين ومواقع", "موشن متقدم وVFX", "نسخ متعددة لكل منصة"],
+        ["Full production with cinematic team", "Talent & locations", "Advanced motion & VFX", "Multi-platform versions"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    slug: "content-writing",
+    parentSlug: "creative",
+    title: ls("كتابة المحتوى الإبداعي والتسويقي", "Creative & Marketing Copywriting"),
+    shortLabel: ls("كتابة المحتوى", "Copywriting"),
+    metaTitle: ls(
+      "خدمة كتابة المحتوى التسويقي والإبداعي | فكرة",
+      "Marketing & Creative Copywriting Service | Fikra",
+    ),
+    metaDescription: ls(
+      "كتابة محتوى تسويقي وإبداعي بالعربي والإنجليزي: مقالات سيو، Captions، صفحات هبوط، وإعلانات تبيع.",
+      "AR/EN marketing copywriting: SEO articles, captions, landing pages, and ads that sell.",
+    ),
+    intro: ls(
+      "الكلمة الصحيحة تبيع أكثر من أي إعلان مدفوع. نكتب لك محتوى يخاطب جمهورك بلسانه، يبني الثقة، ويحوّل القارئ لعميل — بالعربي والإنجليزي.",
+      "The right word sells more than any paid ad. We write content that speaks your audience's language, builds trust and converts — in Arabic and English.",
+    ),
+    highlights: ll(
+      ["مقالات سيو طويلة", "Captions سوشيال ميديا", "كتابة صفحات هبوط", "كتابة إعلانات", "بريد إلكتروني تسويقي"],
+      ["Long-form SEO articles", "Social media captions", "Landing page copy", "Ad copy", "Marketing emails"],
+    ),
+    process: [
+      { step: ls("Brief", "Brief"), detail: ls("جلسة تحديد الجمهور والأهداف ونبرة العلامة.", "Define audience, goals and brand voice.") },
+      { step: ls("البحث", "Research"), detail: ls("بحث كلمات مفتاحية ومنافسين وزوايا فريدة.", "Keyword, competitor and angle research.") },
+      { step: ls("الكتابة", "Writing"), detail: ls("مسودة + جولة مراجعة + تحرير نهائي.", "Draft + revision round + final edit.") },
+      { step: ls("التحسين", "Optimization"), detail: ls("تحسين سيو، CTAs، وتنسيق نهائي.", "SEO, CTAs and final formatting.") },
+    ],
+    deliverables: ll(
+      ["مقالات Word/Google Docs", "Captions جدول شهري", "صفحات هبوط جاهزة", "نسخ إعلانات A/B"],
+      ["Word/Google Docs articles", "Monthly captions calendar", "Ready landing pages", "A/B ad copy variants"],
+    ),
+    faqs: [
+      { q: ls("هل المحتوى مكتوب بالذكاء الاصطناعي؟", "Is content AI-written?"), a: ls("الكتابة بشرية بالكامل مع استخدام مساعد للأبحاث فقط.", "Fully human-written; AI used only for research support.") },
+      { q: ls("كم يستغرق المقال؟", "How long for one article?"), a: ls("من 3 إلى 7 أيام حسب الطول والبحث.", "3 to 7 days based on length and research.") },
+    ],
+    plans: [
+      subPlan("copy-social", "محتوى سوشيال", "Social Pack", "للحضور المنتظم", "Regular presence", 1490, 1890,
+        ["20 Caption شهرياً", "تقويم محتوى", "Hashtags وOptimization"],
+        ["20 captions / month", "Content calendar", "Hashtags & optimization"],
+      ),
+      subPlan("copy-blog", "مقالات سيو", "SEO Articles", "للنمو العضوي", "For organic growth", 3490, 4290,
+        ["6 مقالات شهرياً (1500+ كلمة)", "بحث كلمات مفتاحية", "تحسين سيو كامل", "صور توضيحية"],
+        ["6 articles / month (1500+ words)", "Keyword research", "Full SEO optimization", "Visual support"],
+        true,
+      ),
+      subPlan("copy-full", "محتوى متكامل", "Full Stack", "كل قنواتك", "All your channels", 6990, 8490,
+        ["مقالات + Captions + إعلانات", "كتابة صفحات هبوط", "بريد إلكتروني تسويقي", "نبرة موحدة عبر القنوات"],
+        ["Articles + captions + ads", "Landing page copy", "Marketing emails", "Unified voice across channels"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1600&q=80",
+  },
+
+  // ---------- Web sub-services ----------
+  {
+    slug: "wordpress",
+    parentSlug: "web",
+    title: ls("تصميم وتطوير مواقع وردبريس", "WordPress Design & Development"),
+    shortLabel: ls("مواقع وردبريس", "WordPress"),
+    metaTitle: ls(
+      "تصميم مواقع وردبريس احترافية وسريعة | فكرة",
+      "Pro & Fast WordPress Website Design | Fikra",
+    ),
+    metaDescription: ls(
+      "نصمم مواقع وردبريس مخصصة، سريعة، آمنة، ومحسّنة لمحركات البحث، مع لوحة إدارة سهلة ومرنة.",
+      "Custom WordPress sites: fast, secure, SEO-optimized with an easy admin panel.",
+    ),
+    intro: ls(
+      "موقع وردبريس مبني من الصفر بكود نظيف، تصميم مخصص يعكس علامتك، أداء عالٍ في Core Web Vitals، ولوحة إدارة سهلة تتيح لفريقك التحديث بدون مطورين.",
+      "WordPress site built from scratch with clean code, custom design, high Core Web Vitals scores, and an easy admin panel your team can manage.",
+    ),
+    highlights: ll(
+      ["تصميم مخصص 100%", "كود نظيف وسريع", "لوحة إدارة سهلة", "تحسين Core Web Vitals", "أمان متقدم وحماية"],
+      ["100% custom design", "Clean fast code", "Easy admin panel", "Core Web Vitals optimized", "Advanced security"],
+    ),
+    process: [
+      { step: ls("Discovery", "Discovery"), detail: ls("جلسة احتياجات وWireframes.", "Requirements and wireframes.") },
+      { step: ls("التصميم", "Design"), detail: ls("UI احترافي على نظام تصميم.", "Pro UI on a design system.") },
+      { step: ls("التطوير", "Development"), detail: ls("بناء بقالب مخصص أو Builder احترافي.", "Build with custom theme or pro builder.") },
+      { step: ls("الإطلاق", "Launch"), detail: ls("اختبار، تدريب، نقل آمن، ضمان.", "Testing, training, safe migration, warranty.") },
+    ],
+    deliverables: ll(
+      ["موقع جاهز للنشر", "تدريب فريقك", "وثائق فنية", "ضمان 60 يوم"],
+      ["Production-ready site", "Team training", "Tech documentation", "60-day warranty"],
+    ),
+    faqs: [
+      { q: ls("كم يستغرق المشروع؟", "How long does it take?"), a: ls("من 21 إلى 45 يوم حسب التعقيد.", "21 to 45 days depending on complexity.") },
+      { q: ls("هل تشمل الاستضافة؟", "Includes hosting?"), a: ls("نوصي بالاستضافة الأنسب ونساعد بإعدادها.", "We recommend the best hosting and help set it up.") },
+    ],
+    plans: [
+      subPlan("wp-starter", "موقع تأسيسي", "Starter Site", "حتى 5 صفحات", "Up to 5 pages", 3990, 4990,
+        ["تصميم مخصص (5 صفحات)", "ريسبونسف كامل", "نموذج تواصل", "تحسين سرعة أساسي"],
+        ["Custom design (5 pages)", "Fully responsive", "Contact form", "Basic speed optimization"],
+      ),
+      subPlan("wp-pro", "موقع احترافي", "Pro Site", "حتى 12 صفحة + مدونة", "Up to 12 pages + blog", 7990, 9990,
+        ["تصميم مخصص (12 صفحة)", "مدونة كاملة", "تحسين Core Web Vitals", "سيو On-page", "تدريب فريقك"],
+        ["Custom design (12 pages)", "Full blog", "Core Web Vitals optimization", "On-page SEO", "Team training"],
+        true,
+      ),
+      subPlan("wp-corporate", "موقع مؤسسي", "Corporate Site", "صفحات غير محدودة + متعدد اللغات", "Unlimited pages + multilingual", 14990, 18990,
+        ["صفحات غير محدودة", "متعدد اللغات", "تكاملات API", "أمان متقدم", "صيانة 6 شهور"],
+        ["Unlimited pages", "Multilingual", "API integrations", "Advanced security", "6-month maintenance"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    slug: "ecommerce-dev",
+    parentSlug: "web",
+    title: ls("تطوير المتاجر الإلكترونية", "E-commerce Store Development"),
+    shortLabel: ls("المتاجر الإلكترونية", "E-commerce Dev"),
+    metaTitle: ls(
+      "تطوير متاجر إلكترونية WooCommerce و Shopify | فكرة",
+      "WooCommerce & Shopify Store Development | Fikra",
+    ),
+    metaDescription: ls(
+      "متاجر إلكترونية متكاملة بدفع وشحن وتقارير، مبنية على WooCommerce أو Shopify أو سلة، جاهزة للبيع والنمو.",
+      "Complete e-commerce stores with payments, shipping and analytics on WooCommerce, Shopify or Salla.",
+    ),
+    intro: ls(
+      "متجر إلكتروني سريع وقابل للتوسع مع تكامل بوابات الدفع المحلية، شركات الشحن، التقارير، وتتبع التحويلات لـ Meta وGoogle — جاهز ليبدأ البيع من اليوم الأول.",
+      "Fast scalable store with local payment gateways, shipping integrations, analytics, and Meta/Google conversion tracking — ready to sell from day one.",
+    ),
+    highlights: ll(
+      ["WooCommerce / Shopify / سلة", "بوابات دفع محلية (Tap, HyperPay)", "تكامل شركات الشحن", "تتبع تحويلات Meta + Google", "تحسين CRO"],
+      ["WooCommerce / Shopify / Salla", "Local payment gateways (Tap, HyperPay)", "Shipping integrations", "Meta + Google conversion tracking", "CRO optimization"],
+    ),
+    process: [
+      { step: ls("الاختيار", "Platform"), detail: ls("اختيار المنصة الأنسب لحجمك ومتطلباتك.", "Pick the right platform for your size & needs.") },
+      { step: ls("التصميم", "Design"), detail: ls("UI متجر مُحسّن للتحويل.", "Conversion-optimized store UI.") },
+      { step: ls("التكاملات", "Integrations"), detail: ls("دفع، شحن، تتبع، CRM.", "Payments, shipping, tracking, CRM.") },
+      { step: ls("الإطلاق", "Launch"), detail: ls("اختبار شامل، تدريب، إطلاق آمن.", "Full testing, training, safe launch.") },
+    ],
+    deliverables: ll(
+      ["متجر جاهز للبيع", "تدريب الإدارة", "Conversion tracking", "وثائق وضمان"],
+      ["Sell-ready store", "Admin training", "Conversion tracking", "Documentation & warranty"],
+    ),
+    faqs: [
+      { q: ls("ما المنصة الأنسب لي؟", "Best platform for me?"), a: ls("نختار حسب احتياجك: Shopify للسرعة، WooCommerce للمرونة، سلة للسوق المحلي.", "Depends: Shopify for speed, WooCommerce for flexibility, Salla for local market.") },
+      { q: ls("كم يستغرق المتجر؟", "How long for the store?"), a: ls("من 30 إلى 60 يوم حسب التعقيد.", "30 to 60 days depending on complexity.") },
+    ],
+    plans: [
+      subPlan("ecom-starter", "متجر بداية", "Starter Store", "حتى 50 منتج", "Up to 50 products", 6990, 8490,
+        ["متجر مخصص", "بوابة دفع محلية", "تكامل شحن واحد", "تتبع أساسي"],
+        ["Custom store", "1 local gateway", "1 shipping integration", "Basic tracking"],
+      ),
+      subPlan("ecom-growth", "متجر النمو", "Growth Store", "حتى 500 منتج", "Up to 500 products", 12990, 15990,
+        ["متجر متكامل", "بوابات دفع متعددة", "شركات شحن متعددة", "تتبع متقدم Meta+Google", "تكامل مع CRM"],
+        ["Complete store", "Multiple gateways", "Multiple shipping", "Advanced Meta+Google tracking", "CRM integration"],
+        true,
+      ),
+      subPlan("ecom-enterprise", "متجر المؤسسات", "Enterprise Store", "منتجات غير محدودة + Headless", "Unlimited products + Headless", 24990, 32990,
+        ["Headless / SSR", "تكاملات ERP", "أداء عالٍ ومتعدد اللغات", "أمان مؤسسي", "SLA + دعم 24/7"],
+        ["Headless / SSR", "ERP integrations", "High performance multilingual", "Enterprise security", "SLA + 24/7 support"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    slug: "crm-erp",
+    parentSlug: "web",
+    title: ls("أنظمة CRM و ERP وتكاملات الأعمال", "CRM, ERP & Business Integrations"),
+    shortLabel: ls("CRM و ERP", "CRM & ERP"),
+    metaTitle: ls(
+      "تطوير أنظمة CRM و ERP وتكاملات الأعمال | فكرة",
+      "Custom CRM, ERP & Business Integrations | Fikra",
+    ),
+    metaDescription: ls(
+      "نطور وندمج أنظمة CRM و ERP مخصصة لتوحيد بيانات شركتك ورفع كفاءة فرق المبيعات والعمليات.",
+      "Custom CRM and ERP systems & integrations to unify your data and boost sales/ops efficiency.",
+    ),
+    intro: ls(
+      "نطوّر أنظمة CRM وERP مخصصة أو نُدمج الأنظمة الجاهزة (Zoho، Odoo، HubSpot) مع موقعك ومتجرك ومنصاتك الإعلانية لتوحيد بياناتك وأتمتة عملياتك.",
+      "We build custom CRM/ERP systems or integrate ready ones (Zoho, Odoo, HubSpot) with your site, store and ad platforms to unify data and automate operations.",
+    ),
+    highlights: ll(
+      ["CRM مخصص أو جاهز", "تكاملات API كاملة", "أتمتة المبيعات والعمليات", "Dashboards تنفيذية", "صلاحيات وأدوار"],
+      ["Custom or ready CRM", "Full API integrations", "Sales & ops automation", "Executive dashboards", "Roles & permissions"],
+    ),
+    process: [
+      { step: ls("التحليل", "Analysis"), detail: ls("تحليل عملياتك ومتطلباتك.", "Analyze your processes and requirements.") },
+      { step: ls("التصميم", "Design"), detail: ls("تصميم النظام والتكاملات.", "System and integration design.") },
+      { step: ls("التطوير", "Development"), detail: ls("بناء أو تخصيص + تكاملات.", "Build or customize + integrations.") },
+      { step: ls("التدريب والإطلاق", "Training & launch"), detail: ls("تدريب فرقك وإطلاق منظم بمراحل.", "Train your teams and staged launch.") },
+    ],
+    deliverables: ll(
+      ["نظام جاهز للاستخدام", "تدريب الفرق", "وثائق كاملة", "دعم ما بعد الإطلاق"],
+      ["Ready-to-use system", "Team training", "Full documentation", "Post-launch support"],
+    ),
+    faqs: [
+      { q: ls("هل تطورون من الصفر أم تستخدمون أنظمة جاهزة؟", "Custom build or ready system?"), a: ls("نوصي بما يناسب حجمك وميزانيتك: ربط جاهز للسريع، تطوير مخصص للمتطلبات الفريدة.", "We recommend what fits: ready integration for speed, custom for unique needs.") },
+      { q: ls("هل تربطون مع متاجر سلة وZid؟", "Integrate with Salla & Zid?"), a: ls("نعم، نربط مع كل المنصات الكبرى عبر API.", "Yes — we integrate with all major platforms via API.") },
+    ],
+    plans: [
+      subPlan("crm-ready", "تكامل جاهز", "Ready Integration", "Zoho / HubSpot / Pipedrive", "Zoho / HubSpot / Pipedrive", 4990, 6490,
+        ["إعداد النظام", "تكامل مع موقعك", "تخصيص أساسي", "تدريب فريق المبيعات"],
+        ["System setup", "Site integration", "Basic customization", "Sales team training"],
+      ),
+      subPlan("crm-custom", "تطوير مخصص", "Custom Build", "نظام مفصّل لاحتياجاتك", "System tailored to your needs", 14990, 18990,
+        ["تحليل وتصميم كامل", "تطوير مخصص", "تكاملات API متعددة", "Dashboards", "تدريب وتوثيق"],
+        ["Full analysis & design", "Custom development", "Multiple API integrations", "Dashboards", "Training & docs"],
+        true,
+      ),
+      subPlan("crm-enterprise", "حل مؤسسي", "Enterprise Solution", "ERP + CRM متكامل", "Integrated ERP + CRM", 34990, 44990,
+        ["ERP + CRM", "أتمتة عمليات شاملة", "تقارير تنفيذية متقدمة", "أمان مؤسسي", "SLA + دعم 24/7"],
+        ["ERP + CRM", "End-to-end automation", "Advanced exec reporting", "Enterprise security", "SLA + 24/7 support"],
+      ),
+    ],
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=80",
+  },
+];
+
+// Attach sub-services to their parent service
+for (const sub of subServices) {
+  const parent = services.find((s) => s.slug === sub.parentSlug);
+  if (parent) {
+    if (!parent.subServices) parent.subServices = [];
+    parent.subServices.push(sub);
+  }
+}
+
 export function findService(slug: string) {
   return services.find((s) => s.slug === slug);
 }
 export function findIndustry(slug: string) {
   return industries.find((s) => s.slug === slug);
+}
+export function findSubService(parentSlug: string, slug: string) {
+  return subServices.find((s) => s.parentSlug === parentSlug && s.slug === slug);
+}
+export function getSubServicesFor(parentSlug: string) {
+  return subServices.filter((s) => s.parentSlug === parentSlug);
 }

@@ -38,6 +38,24 @@ export type ServiceMeta = {
   plans: PricingPlan[];
   image: string;
   group?: string;
+  subServices?: SubServiceMeta[];
+};
+
+export type SubServiceMeta = {
+  slug: string;
+  parentSlug: string;
+  title: LocalizedString;
+  shortLabel: LocalizedString;
+  metaTitle: LocalizedString;
+  metaDescription: LocalizedString;
+  intro: LocalizedString;
+  highlights: LocalizedList;
+  process: { step: LocalizedString; detail: LocalizedString }[];
+  deliverables: LocalizedList;
+  faqs: FaqItem[];
+  plans: PricingPlan[];
+  image: string;
+  icon?: string;
 };
 
 export type IndustryMeta = {

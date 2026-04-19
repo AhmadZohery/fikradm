@@ -4,10 +4,11 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { PricingPlans } from "@/components/site/PricingPlans";
 import { FaqSection } from "@/components/site/FaqSection";
 import { CtaBand } from "@/components/site/CtaBand";
+import { SubServicesGrid } from "@/components/site/SubServicesGrid";
 import { findService } from "@/content/data";
 import { Check } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/services/$slug")({
+export const Route = createFileRoute("/$locale/services/$slug/")({
   beforeLoad: ({ params }) => {
     if (!findService(params.slug)) throw notFound();
   },
@@ -121,6 +122,10 @@ function ServicePage() {
           </div>
         </div>
       </section>
+
+      {s.subServices && s.subServices.length > 0 && (
+        <SubServicesGrid parentSlug={s.slug} items={s.subServices} />
+      )}
 
       <PricingPlans plans={s.plans} />
 
