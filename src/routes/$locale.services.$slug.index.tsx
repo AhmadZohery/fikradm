@@ -10,6 +10,7 @@ import { ServiceVariantHero } from "@/components/site/services/ServiceVariantHer
 import { ServiceMarketSignals } from "@/components/site/services/ServiceMarketSignals";
 import { ServiceApproach } from "@/components/site/services/ServiceApproach";
 import { ServiceResults } from "@/components/site/services/ServiceResults";
+import { ServiceShowcase } from "@/components/site/services/ServiceShowcase";
 import { getServiceVariant } from "@/components/site/services/serviceVariants";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
 import { Check, ArrowUpRight } from "lucide-react";
@@ -64,10 +65,13 @@ function ServicePage() {
         {/* 1. HERO — captures attention with service personality */}
         <ServiceVariantHero service={s} />
 
-        {/* 2. WHY NOW — market signals create urgency */}
+        {/* 2. SHOWCASE — service-specific visual storytelling (unique layout per service) */}
+        <ServiceShowcase slug={slug} />
+
+        {/* 3. WHY NOW — market signals create urgency */}
         <ServiceMarketSignals slug={slug} />
 
-        {/* 3. WHAT WE DO DIFFERENTLY — pillars */}
+        {/* 4. WHAT WE DO DIFFERENTLY — pillars */}
         <ServiceApproach slug={slug} />
 
         {/* 4. PROCESS — methodology */}

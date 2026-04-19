@@ -9,6 +9,7 @@ import { ServiceVariantHero } from "@/components/site/services/ServiceVariantHer
 import { ServiceMarketSignals } from "@/components/site/services/ServiceMarketSignals";
 import { ServiceApproach } from "@/components/site/services/ServiceApproach";
 import { ServiceResults } from "@/components/site/services/ServiceResults";
+import { ServiceShowcase } from "@/components/site/services/ServiceShowcase";
 import { getServiceVariant } from "@/components/site/services/serviceVariants";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
 import { Check, ArrowUpRight } from "lucide-react";
@@ -93,7 +94,10 @@ function SubServicePage() {
 
         <ServiceVariantHero service={s} parent={parent} variantOverride={slug} isSubService />
 
-        {/* 2. Why now — market signals */}
+        {/* 2. Showcase — service-specific visuals */}
+        <ServiceShowcase slug={slug} />
+
+        {/* 3. Why now — market signals */}
         <ServiceMarketSignals slug={slug} />
 
         {/* 3. Approach pillars */}
