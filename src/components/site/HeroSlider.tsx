@@ -20,22 +20,7 @@ export function HeroSlider() {
       {/* Soft grid */}
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]" aria-hidden />
 
-      {/* Header phone strip (Consultio-style) */}
-      <div className="container-app relative z-10 hidden items-center justify-end gap-4 pt-6 lg:flex">
-        <div className="flex items-center gap-3 rounded-full border border-border bg-white/80 px-4 py-2 text-sm shadow-soft backdrop-blur">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary">
-            <Phone className="h-4 w-4" />
-          </span>
-          <div className="leading-tight">
-            <div className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-              {isAr ? "اتصل بنا الآن" : "Call us now"}
-            </div>
-            <div className="font-bold tabular-nums text-ink">+966 55 555 0104</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container-app relative z-10 grid items-center gap-12 pb-12 pt-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24 lg:pt-16">
+      <div className="container-app relative z-10 grid items-center gap-12 pb-12 pt-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24 lg:pt-12">
         {/* LEFT */}
         <div className="relative animate-fade-up">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-white/90 px-4 py-1.5 text-xs font-semibold text-primary shadow-soft backdrop-blur">
