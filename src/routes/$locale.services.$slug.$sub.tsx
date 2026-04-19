@@ -93,8 +93,14 @@ function SubServicePage() {
 
         <ServiceVariantHero service={s} parent={parent} variantOverride={slug} isSubService />
 
-        {/* Process */}
-        <section className="section">
+        {/* 2. Why now — market signals */}
+        <ServiceMarketSignals slug={slug} />
+
+        {/* 3. Approach pillars */}
+        <ServiceApproach slug={slug} />
+
+        {/* 4. Process */}
+        <section className="section bg-surface-soft">
           <div className="container-app">
             <div className="mb-10 max-w-2xl">
               <SectionEyebrow>{isAr ? "خطوات العمل" : "Workflow"}</SectionEyebrow>
@@ -124,8 +130,11 @@ function SubServicePage() {
           </div>
         </section>
 
-        {/* Deliverables */}
-        <section className="section bg-surface-soft">
+        {/* 5. Results */}
+        <ServiceResults slug={slug} />
+
+        {/* 6. Deliverables */}
+        <section className="section">
           <div className="container-app">
             <div className="mx-auto max-w-3xl rounded-3xl border border-border bg-card p-8 shadow-card">
               <SectionEyebrow>{isAr ? "ماذا تستلم" : "Deliverables"}</SectionEyebrow>
@@ -147,14 +156,20 @@ function SubServicePage() {
           </div>
         </section>
 
+        {/* 7. FAQ */}
+        <FaqSection items={s.faqs} />
+
+        {/* 8. Pricing */}
         <div id="pricing">
           <PricingPlans plans={s.plans} />
         </div>
 
-        <FaqSection items={s.faqs} />
+        {/* 9. CTA */}
+        <CtaBand />
 
+        {/* 10. Related (last) */}
         {siblings.length > 0 && (
-          <section className="section">
+          <section className="section bg-surface-soft">
             <div className="container-app">
               <div className="flex items-end justify-between gap-4">
                 <div>
@@ -203,8 +218,6 @@ function SubServicePage() {
             </div>
           </section>
         )}
-
-        <CtaBand />
 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
