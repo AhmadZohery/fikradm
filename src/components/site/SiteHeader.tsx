@@ -218,6 +218,31 @@ export function SiteHeader() {
                 >
                   {t(`nav.${item.key}`)}
                 </Link>
+                {item.mega && (
+                  <div className="ms-3 border-s border-border ps-3">
+                    {item.mega.map((g) => (
+                      <div key={g.groupKey} className="mt-1">
+                        <Link
+                          to={buildHref(locale, g.href)}
+                          className="block rounded-lg px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-primary"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {g.groupLabel}
+                        </Link>
+                        {g.items.map((c) => (
+                          <Link
+                            key={c.key}
+                            to={buildHref(locale, c.href)}
+                            className="block rounded-lg px-4 py-1.5 text-sm text-muted-foreground hover:text-foreground"
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            {c.label}
+                          </Link>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
                 {item.children && (
                   <div className="ms-3 border-s border-border ps-3">
                     {item.children.map((c) => (
