@@ -1,8 +1,8 @@
+import type { ReactNode } from "react";
 import { useLocale } from "@/i18n/useLocale";
 
 // Fictional brand logos rendered as inline SVG so they look like real wordmarks.
-// Designed to feel premium and uniform — colors auto-adapt via currentColor.
-const LOGOS: { name: string; svg: JSX.Element }[] = [
+const LOGOS: { name: string; svg: ReactNode }[] = [
   {
     name: "Lumora",
     svg: (
