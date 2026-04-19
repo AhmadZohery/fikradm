@@ -1,40 +1,42 @@
 import { useLocale } from "@/i18n/useLocale";
-import { TrendingUp, Users, BarChart3, Award } from "lucide-react";
+import { CountUp } from "./cinematic/CountUp";
+import { SectionEyebrow } from "./cinematic/SectionEyebrow";
 
-const stats = [
-  { value: "150+", label: { ar: "عميل في الخليج", en: "Gulf clients" }, icon: Users },
-  { value: "220%", label: { ar: "نمو متوسط للمبيعات", en: "Avg sales growth" }, icon: TrendingUp },
-  { value: "4.5x", label: { ar: "عائد متوسط للإعلانات", en: "Avg ad ROAS" }, icon: BarChart3 },
-  { value: "9+", label: { ar: "سنوات خبرة جماعية", en: "Years of expertise" }, icon: Award },
+const items = [
+  { to: 220, suffix: "%", labelAr: "متوسط نمو الإيرادات", labelEn: "Avg revenue lift" },
+  { to: 5, suffix: "x", labelAr: "عائد الإعلان", labelEn: "Return on ad spend" },
+  { to: 150, suffix: "+", labelAr: "علامة تجارية", labelEn: "Brands served" },
+  { to: 12, suffix: "M+", labelAr: "ميزانيات مُدارة (ر.س)", labelEn: "Managed ad spend (SAR)" },
 ];
 
 export function StatsBand() {
   const { locale } = useLocale();
+  const isAr = locale === "ar";
+
   return (
-    <section className="relative -mt-8 md:-mt-12">
+    <section className="section-tight relative overflow-hidden">
       <div className="container-app">
-        <div className="relative overflow-hidden rounded-3xl border border-border/70 bg-card/95 shadow-elegant backdrop-blur">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-50" aria-hidden />
-          <div className="relative grid grid-cols-2 divide-y divide-border md:grid-cols-4 md:divide-x md:divide-y-0 rtl:divide-x-reverse">
-            {stats.map((s) => {
-              const Icon = s.icon;
-              return (
-                <div key={s.value} className="group flex items-center gap-4 px-6 py-7 md:px-7 md:py-8">
-                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary transition group-hover:bg-gradient-brand group-hover:text-primary-foreground md:h-14 md:w-14">
-                    <Icon className="h-5 w-5 md:h-6 md:w-6" />
-                  </div>
-                  <div>
-                    <div className="text-2xl font-extrabold tabular-nums tracking-tight text-foreground md:text-3xl lg:text-4xl">
-                      {s.value}
-                    </div>
-                    <div className="mt-0.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground md:text-xs">
-                      {s.label[locale]}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+        <div className="mb-10 text-center">
+          <SectionEyebrow>{isAr ? "أرقام تتحدث" : "Numbers that talk"}</SectionEyebrow>
+          <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">
+            {isAr ? "نتائج موثّقة لعملائنا" : "Documented client results"}
+          </h2>
+        </div>
+
+        <div className="grid gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
+          {items.map((s, i) => (
+            <div key={i} className="group relative bg-card p-8 transition hover:bg-primary-soft/40">
+              <div className="text-4xl font-black tabular-nums text-ink md:text-5xl">
+                <span className="text-gradient">
+                  <CountUp to={s.to} suffix={s.suffix} />
+                </span>
+              </div>
+              <p className="mt-3 text-sm font-medium text-muted-foreground">
+                {isAr ? s.labelAr : s.labelEn}
+              </p>
+              <span className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-gradient-brand transition-transform duration-500 group-hover:scale-x-100" />
+            </div>
+          ))}
         </div>
       </div>
     </section>

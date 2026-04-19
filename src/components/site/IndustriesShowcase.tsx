@@ -1,99 +1,66 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { industries } from "@/content/data";
-import { Reveal } from "./Reveal";
+import { ArrowUpRight, ShoppingBag, Truck, Stethoscope, Building2 } from "lucide-react";
+import { SectionEyebrow } from "./cinematic/SectionEyebrow";
+
+const iconFor: Record<string, typeof ShoppingBag> = {
+  ecommerce: ShoppingBag,
+  logistics: Truck,
+  healthcare: Stethoscope,
+  "real-estate": Building2,
+};
 
 export function IndustriesShowcase() {
-  const { locale, buildHref, t } = useLocale();
+  const { locale } = useLocale();
   const isAr = locale === "ar";
 
   return (
-    <section className="section bg-surface/60 relative overflow-hidden">
-      <div className="container-app relative">
-        <div className="grid items-end gap-6 md:grid-cols-[1fr_auto]">
+    <section className="section relative overflow-hidden">
+      <div className="container-app">
+        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary-soft/60 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-              {isAr ? "حلول حسب القطاع" : "Industry solutions"}
-            </span>
-            <h2 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight md:text-5xl">
+            <SectionEyebrow>{isAr ? "حلول حسب القطاع" : "Solutions by industry"}</SectionEyebrow>
+            <h2 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">
               {isAr ? (
-                <>
-                  نتحدث <span className="text-gradient">لغة قطاعك</span>
-                  <br /> وعملائك
-                </>
+                <>خبرة عميقة في <span className="text-gradient">قطاعك</span></>
               ) : (
-                <>
-                  We speak the <span className="text-gradient">language</span>
-                  <br /> of your industry
-                </>
+                <>Deep expertise in <span className="text-gradient">your industry</span></>
               )}
             </h2>
           </div>
-          <Link
-            to={buildHref(locale, "/industries")}
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-3 text-sm font-semibold text-foreground transition hover:border-primary hover:text-primary"
-          >
-            {t("common.viewall")}
-            <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+          <Link to="/$locale/industries" params={{ locale }} className="group inline-flex items-center gap-2 text-sm font-semibold text-primary">
+            {isAr ? "كل القطاعات" : "All industries"}
+            <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-0.5 rtl:rotate-90" />
           </Link>
         </div>
 
-        <div className="mt-14 grid gap-5 md:grid-cols-12 md:auto-rows-[280px]">
-          {industries.map((ind, i) => {
-            // Bento sizing
-            const sizes = ["md:col-span-7 md:row-span-2", "md:col-span-5", "md:col-span-5", "md:col-span-7"];
-            const isLarge = i === 0;
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {industries.map((ind) => {
+            const Icon = iconFor[ind.slug] ?? ShoppingBag;
             return (
-              <Reveal key={ind.slug} delay={i * 80} className={sizes[i % sizes.length]}>
-                <Link
-                  to={buildHref(locale, `/industries/${ind.slug}`)}
-                  className="group relative block h-full overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant"
-                >
-                  <img
-                    src={ind.image}
-                    alt={ind.title[locale]}
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110"
-                  />
-                  {/* Dark gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/10" aria-hidden />
-                  {/* Brand tint on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-primary/40 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" aria-hidden />
-
-                  <div className="relative flex h-full flex-col justify-end p-6 text-white md:p-8">
-                    <div className="flex items-start justify-between">
-                      <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white/90 backdrop-blur">
-                        0{i + 1}
-                      </span>
-                      <span className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-white/10 backdrop-blur transition group-hover:border-white/40 group-hover:bg-white">
-                        <ArrowUpRight className="h-4 w-4 text-white transition group-hover:rotate-45 group-hover:text-primary" />
-                      </span>
-                    </div>
-                    <div className="mt-auto">
-                      <h3 className={`font-extrabold leading-tight ${isLarge ? "text-3xl md:text-4xl" : "text-xl md:text-2xl"}`}>
-                        {ind.title[locale]}
-                      </h3>
-                      <p className={`mt-2 line-clamp-2 text-white/85 ${isLarge ? "text-base md:text-lg" : "text-sm"}`}>
-                        {ind.intro[locale]}
-                      </p>
-                      {ind.subIndustries && ind.subIndustries.length > 0 && (
-                        <div className="mt-4 flex flex-wrap gap-1.5">
-                          {ind.subIndustries.slice(0, 3).map((s) => (
-                            <span
-                              key={s.slug}
-                              className="rounded-full border border-white/15 bg-white/10 px-2.5 py-0.5 text-[11px] font-medium text-white/85 backdrop-blur"
-                            >
-                              {s.shortLabel[locale]}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-              </Reveal>
+              <Link
+                key={ind.slug}
+                to="/$locale/industries/$slug"
+                params={{ locale, slug: ind.slug }}
+                className="group relative overflow-hidden rounded-3xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img src={ind.image} alt={ind.title[locale]} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent" />
+                  <span className="absolute start-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-primary shadow-soft backdrop-blur">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                </div>
+                <div className="p-5">
+                  <h3 className="text-base font-extrabold text-ink">{ind.title[locale]}</h3>
+                  <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">{ind.intro[locale]}</p>
+                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                    {isAr ? "اكتشف الحلول" : "Explore"}
+                    <ArrowUpRight className="h-3 w-3 rtl:rotate-90" />
+                  </span>
+                </div>
+              </Link>
             );
           })}
         </div>
