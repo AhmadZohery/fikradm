@@ -261,7 +261,7 @@ export function SiteHeader() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-border bg-background/95 backdrop-blur-xl lg:hidden animate-mega-in">
+        <div className="border-t border-border bg-background/95 backdrop-blur-xl lg:hidden animate-fade-in">
           <nav className="container-app flex max-h-[80vh] flex-col gap-1 overflow-y-auto py-4" aria-label="Mobile">
             {navItems.map((item) => (
               <div key={item.key} className="animate-fade-up" style={{ animationDelay: `${navItems.indexOf(item) * 40}ms` }}>
