@@ -16,6 +16,7 @@ import { HomeBlogTeaser } from "@/components/site/HomeBlogTeaser";
 import { CtaBand } from "@/components/site/CtaBand";
 import { FaqSection } from "@/components/site/FaqSection";
 import { HomeVideoTestimonials } from "@/components/site/HomeVideoTestimonials";
+import { RichTextBlock } from "@/components/site/RichTextBlock";
 
 /**
  * BlockInstance — the unit stored inside `pages.blocks` JSONB array.
@@ -167,6 +168,13 @@ export const BLOCK_REGISTRY = {
     description: "نداء للعمل",
     icon: "Megaphone",
     category: "conversion",
+  },
+  rich_text: {
+    component: RichTextBlock,
+    label: "نص حر (Rich Text)",
+    description: "محرر نصوص متقدم بصور وروابط",
+    icon: "Type",
+    category: "content",
   },
 } as const satisfies Record<string, BlockEntry>;
 
