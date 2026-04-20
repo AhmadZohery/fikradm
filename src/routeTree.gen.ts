@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as Char123LocaleChar125RouteImport } from './routes/{-$locale}'
 import { Route as AdminRouteImport } from './routes/admin'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as Char123LocaleChar125IndexRouteImport } from './routes/{-$locale}.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as Char123LocaleChar125ContactRouteImport } from './routes/{-$locale}.contact'
@@ -43,11 +42,6 @@ const Char123LocaleChar125Route = Char123LocaleChar125RouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char123LocaleChar125IndexRoute =
@@ -176,7 +170,6 @@ const Char123LocaleChar125BlogCategorySlugRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
   '/admin/forms': typeof AdminFormsRoute
@@ -203,7 +196,6 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/services/$slug/': typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/admin/forms': typeof AdminFormsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/media': typeof AdminMediaRoute
@@ -229,7 +221,6 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
   '/admin/forms': typeof AdminFormsRoute
@@ -258,7 +249,6 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/admin'
     | '/{-$locale}'
     | '/admin/forms'
@@ -285,7 +275,6 @@ export interface FileRouteTypes {
     | '/{-$locale}/services/$slug/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/admin/forms'
     | '/admin/login'
     | '/admin/media'
@@ -310,7 +299,6 @@ export interface FileRouteTypes {
     | '/{-$locale}/services/$slug'
   id:
     | '__root__'
-    | '/'
     | '/admin'
     | '/{-$locale}'
     | '/admin/forms'
@@ -338,7 +326,6 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   Char123LocaleChar125Route: typeof Char123LocaleChar125RouteWithChildren
 }
@@ -357,13 +344,6 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/{-$locale}/': {
@@ -616,7 +596,6 @@ const Char123LocaleChar125RouteWithChildren =
   Char123LocaleChar125Route._addFileChildren(Char123LocaleChar125RouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   Char123LocaleChar125Route: Char123LocaleChar125RouteWithChildren,
 }
