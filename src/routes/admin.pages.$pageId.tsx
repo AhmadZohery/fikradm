@@ -13,6 +13,8 @@ import { BlockLibrary } from "@/cms/editor/BlockLibrary";
 import { BlockCanvas } from "@/cms/editor/BlockCanvas";
 import { BlockInspector } from "@/cms/editor/BlockInspector";
 import { EditorToolbar } from "@/cms/editor/EditorToolbar";
+import { SeoPanel, type SeoData } from "@/cms/editor/SeoPanel";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/admin/pages/$pageId")({
   component: EditPage,
@@ -25,9 +27,35 @@ type PageRow = {
   title: string;
   status: "draft" | "published" | "archived";
   blocks: BlockInstance[];
+  meta_title: string | null;
+  meta_description: string | null;
+  og_image_url: string | null;
+  canonical_url: string | null;
+  keywords: string[] | null;
+  no_index: boolean;
 };
 
 type Device = "desktop" | "tablet" | "mobile";
+
+type EditorState = {
+  blocks: BlockInstance[];
+  seo: SeoData;
+};
+
+const EMPTY_STATE: EditorState = {
+  blocks: [],
+  seo: {
+    meta_title: "",
+    meta_description: "",
+    slug: "",
+    locale: "ar",
+    focus_keyword: "",
+    og_image_url: "",
+    canonical_url: "",
+    keywords: [],
+    no_index: false,
+  },
+};
 
 function EditPage() {
   const { pageId } = Route.useParams();
@@ -37,13 +65,30 @@ function EditPage() {
   const [saving, setSaving] = useState(false);
   const [device, setDevice] = useState<Device>("desktop");
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [savedSnapshot, setSavedSnapshot] = useState<string>("[]");
+  const [savedSnapshot, setSavedSnapshot] = useState<string>(JSON.stringify(EMPTY_STATE));
   const [lastSavedAt, setLastSavedAt] = useState<number | null>(null);
 
-  const history = useUndoRedo<BlockInstance[]>([]);
-  const blocks = history.state;
-  const setBlocks = history.set;
-  const resetBlocks = history.reset;
+  const history = useUndoRedo<EditorState>(EMPTY_STATE);
+  const state = history.state;
+  const blocks = state.blocks;
+  const seo = state.seo;
+
+  const setBlocks = useCallback(
+    (next: BlockInstance[] | ((prev: BlockInstance[]) => BlockInstance[])) => {
+      history.set((prev) => ({
+        ...prev,
+        blocks: typeof next === "function" ? (next as (p: BlockInstance[]) => BlockInstance[])(prev.blocks) : next,
+      }));
+    },
+    [history],
+  );
+
+  const setSeo = useCallback(
+    (next: SeoData) => {
+      history.set((prev) => ({ ...prev, seo: next }));
+    },
+    [history],
+  );
 
   // Load
   useEffect(() => {
@@ -51,7 +96,9 @@ function EditPage() {
     (async () => {
       const { data, error } = await supabase
         .from("pages")
-        .select("id, slug, locale, title, status, blocks")
+        .select(
+          "id, slug, locale, title, status, blocks, meta_title, meta_description, og_image_url, canonical_url, keywords, no_index",
+        )
         .eq("id", pageId)
         .maybeSingle();
       if (cancelled) return;
@@ -61,20 +108,34 @@ function EditPage() {
         return;
       }
       const row = data as unknown as PageRow;
-      const initial = Array.isArray(row.blocks) ? row.blocks : [];
+      const initial: EditorState = {
+        blocks: Array.isArray(row.blocks) ? row.blocks : [],
+        seo: {
+          meta_title: row.meta_title ?? "",
+          meta_description: row.meta_description ?? "",
+          slug: row.slug,
+          locale: row.locale,
+          focus_keyword: "",
+          og_image_url: row.og_image_url ?? "",
+          canonical_url: row.canonical_url ?? "",
+          keywords: row.keywords ?? [],
+          no_index: row.no_index,
+        },
+      };
       setPage(row);
-      resetBlocks(initial);
+      history.reset(initial);
       setSavedSnapshot(JSON.stringify(initial));
       setLoading(false);
     })();
     return () => {
       cancelled = true;
     };
-  }, [pageId, navigate, resetBlocks]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageId, navigate]);
 
   const dirty = useMemo(
-    () => JSON.stringify(blocks) !== savedSnapshot,
-    [blocks, savedSnapshot],
+    () => JSON.stringify(state) !== savedSnapshot,
+    [state, savedSnapshot],
   );
 
   const selected = useMemo(
@@ -101,29 +162,40 @@ function EditPage() {
 
   const save = useCallback(async () => {
     if (!page) return;
-    const snapshot = JSON.stringify(blocks);
+    const snapshot = JSON.stringify(state);
     if (snapshot === savedSnapshot) return;
     setSaving(true);
     try {
-      // Snapshot previous state for revisions
+      const prevState = JSON.parse(savedSnapshot) as EditorState;
       await supabase.from("page_revisions").insert({
         page_id: page.id,
-        snapshot: { blocks: JSON.parse(savedSnapshot) } as never,
+        snapshot: { blocks: prevState.blocks, seo: prevState.seo } as never,
       });
       const { error } = await supabase
         .from("pages")
-        .update({ blocks: blocks as never })
+        .update({
+          blocks: state.blocks as never,
+          slug: state.seo.slug,
+          meta_title: state.seo.meta_title || null,
+          meta_description: state.seo.meta_description || null,
+          og_image_url: state.seo.og_image_url || null,
+          canonical_url: state.seo.canonical_url || null,
+          keywords: state.seo.keywords.length ? state.seo.keywords : null,
+          no_index: state.seo.no_index,
+        })
         .eq("id", page.id);
       if (error) throw error;
       setSavedSnapshot(snapshot);
       setLastSavedAt(Date.now());
+      // Sync local page slug for preview URL
+      setPage((p) => (p ? { ...p, slug: state.seo.slug } : p));
     } catch (e) {
       const msg = e instanceof Error ? e.message : "خطأ في الحفظ";
       toast.error(msg);
     } finally {
       setSaving(false);
     }
-  }, [page, blocks, savedSnapshot]);
+  }, [page, state, savedSnapshot]);
 
   // Auto-save every 30s if dirty
   const saveRef = useRef(save);
@@ -195,7 +267,7 @@ function EditPage() {
         lastSavedAt={lastSavedAt}
       />
 
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[260px_1fr_300px] min-h-0">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[260px_1fr_320px] min-h-0">
         <aside className="border-l bg-background hidden lg:block min-h-0">
           <BlockLibrary onAdd={addBlock} />
         </aside>
@@ -208,8 +280,19 @@ function EditPage() {
             device={device}
           />
         </main>
-        <aside className="border-r bg-background hidden lg:block min-h-0">
-          <BlockInspector block={selected} onChange={updateBlock} />
+        <aside className="border-r bg-background hidden lg:flex flex-col min-h-0">
+          <Tabs defaultValue="block" className="flex-1 flex flex-col min-h-0">
+            <TabsList className="m-2 mb-0 grid grid-cols-2">
+              <TabsTrigger value="block" className="text-xs">البلوك</TabsTrigger>
+              <TabsTrigger value="seo" className="text-xs">SEO</TabsTrigger>
+            </TabsList>
+            <TabsContent value="block" className="flex-1 min-h-0 mt-0">
+              <BlockInspector block={selected} onChange={updateBlock} />
+            </TabsContent>
+            <TabsContent value="seo" className="flex-1 min-h-0 mt-0">
+              <SeoPanel data={seo} onChange={setSeo} />
+            </TabsContent>
+          </Tabs>
         </aside>
       </div>
 
