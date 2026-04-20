@@ -119,9 +119,7 @@ export function RichTextEditor({
 }
 function Toolbar({ editor }: { editor: Editor }) {
   const [pickerOpen, setPickerOpen] = useState(false);
-  const [pickerOpen, setPickerOpen] = useState(false);
 
-function Toolbar({ editor }: { editor: Editor }) {
   const Btn = ({
     onClick,
     active,
