@@ -26,6 +26,7 @@ import { Route as LocaleServicesIndexRouteImport } from './routes/$locale.servic
 import { Route as LocaleIndustriesIndexRouteImport } from './routes/$locale.industries.index'
 import { Route as LocaleCaseStudiesIndexRouteImport } from './routes/$locale.case-studies.index'
 import { Route as LocaleBlogIndexRouteImport } from './routes/$locale.blog.index'
+import { Route as AdminPagesPageIdRouteImport } from './routes/admin.pages.$pageId'
 import { Route as LocaleLocationsSlugRouteImport } from './routes/$locale.locations.$slug'
 import { Route as LocaleIndustriesSlugRouteImport } from './routes/$locale.industries.$slug'
 import { Route as LocaleBlogSlugRouteImport } from './routes/$locale.blog.$slug'
@@ -119,6 +120,11 @@ const LocaleBlogIndexRoute = LocaleBlogIndexRouteImport.update({
   path: '/blog/',
   getParentRoute: () => LocaleRoute,
 } as any)
+const AdminPagesPageIdRoute = AdminPagesPageIdRouteImport.update({
+  id: '/$pageId',
+  path: '/$pageId',
+  getParentRoute: () => AdminPagesRoute,
+} as any)
 const LocaleLocationsSlugRoute = LocaleLocationsSlugRouteImport.update({
   id: '/locations/$slug',
   path: '/locations/$slug',
@@ -164,7 +170,7 @@ export interface FileRoutesByFullPath {
   '/admin/forms': typeof AdminFormsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/media': typeof AdminMediaRoute
-  '/admin/pages': typeof AdminPagesRoute
+  '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/$locale/': typeof LocaleIndexRoute
@@ -172,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/$locale/blog/$slug': typeof LocaleBlogSlugRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRouteWithChildren
   '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
+  '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
   '/$locale/blog/': typeof LocaleBlogIndexRoute
   '/$locale/case-studies/': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries/': typeof LocaleIndustriesIndexRoute
@@ -188,7 +195,7 @@ export interface FileRoutesByTo {
   '/admin/forms': typeof AdminFormsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/media': typeof AdminMediaRoute
-  '/admin/pages': typeof AdminPagesRoute
+  '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/$locale': typeof LocaleIndexRoute
@@ -196,6 +203,7 @@ export interface FileRoutesByTo {
   '/$locale/blog/$slug': typeof LocaleBlogSlugRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRouteWithChildren
   '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
+  '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
   '/$locale/blog': typeof LocaleBlogIndexRoute
   '/$locale/case-studies': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries': typeof LocaleIndustriesIndexRoute
@@ -215,7 +223,7 @@ export interface FileRoutesById {
   '/admin/forms': typeof AdminFormsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/media': typeof AdminMediaRoute
-  '/admin/pages': typeof AdminPagesRoute
+  '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/$locale/': typeof LocaleIndexRoute
@@ -223,6 +231,7 @@ export interface FileRoutesById {
   '/$locale/blog/$slug': typeof LocaleBlogSlugRoute
   '/$locale/industries/$slug': typeof LocaleIndustriesSlugRouteWithChildren
   '/$locale/locations/$slug': typeof LocaleLocationsSlugRoute
+  '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
   '/$locale/blog/': typeof LocaleBlogIndexRoute
   '/$locale/case-studies/': typeof LocaleCaseStudiesIndexRoute
   '/$locale/industries/': typeof LocaleIndustriesIndexRoute
@@ -251,6 +260,7 @@ export interface FileRouteTypes {
     | '/$locale/blog/$slug'
     | '/$locale/industries/$slug'
     | '/$locale/locations/$slug'
+    | '/admin/pages/$pageId'
     | '/$locale/blog/'
     | '/$locale/case-studies/'
     | '/$locale/industries/'
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
     | '/$locale/blog/$slug'
     | '/$locale/industries/$slug'
     | '/$locale/locations/$slug'
+    | '/admin/pages/$pageId'
     | '/$locale/blog'
     | '/$locale/case-studies'
     | '/$locale/industries'
@@ -301,6 +312,7 @@ export interface FileRouteTypes {
     | '/$locale/blog/$slug'
     | '/$locale/industries/$slug'
     | '/$locale/locations/$slug'
+    | '/admin/pages/$pageId'
     | '/$locale/blog/'
     | '/$locale/case-studies/'
     | '/$locale/industries/'
@@ -438,6 +450,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleBlogIndexRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/admin/pages/$pageId': {
+      id: '/admin/pages/$pageId'
+      path: '/$pageId'
+      fullPath: '/admin/pages/$pageId'
+      preLoaderRoute: typeof AdminPagesPageIdRouteImport
+      parentRoute: typeof AdminPagesRoute
+    }
     '/$locale/locations/$slug': {
       id: '/$locale/locations/$slug'
       path: '/locations/$slug'
@@ -536,11 +555,23 @@ const LocaleRouteChildren: LocaleRouteChildren = {
 const LocaleRouteWithChildren =
   LocaleRoute._addFileChildren(LocaleRouteChildren)
 
+interface AdminPagesRouteChildren {
+  AdminPagesPageIdRoute: typeof AdminPagesPageIdRoute
+}
+
+const AdminPagesRouteChildren: AdminPagesRouteChildren = {
+  AdminPagesPageIdRoute: AdminPagesPageIdRoute,
+}
+
+const AdminPagesRouteWithChildren = AdminPagesRoute._addFileChildren(
+  AdminPagesRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminFormsRoute: typeof AdminFormsRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminMediaRoute: typeof AdminMediaRoute
-  AdminPagesRoute: typeof AdminPagesRoute
+  AdminPagesRoute: typeof AdminPagesRouteWithChildren
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -550,7 +581,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFormsRoute: AdminFormsRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminMediaRoute: AdminMediaRoute,
-  AdminPagesRoute: AdminPagesRoute,
+  AdminPagesRoute: AdminPagesRouteWithChildren,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
