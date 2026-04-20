@@ -14,7 +14,12 @@ import { Route as LocaleRouteImport } from './routes/$locale'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as LocaleIndexRouteImport } from './routes/$locale.index'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminPagesRouteImport } from './routes/admin.pages'
+import { Route as AdminMediaRouteImport } from './routes/admin.media'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminFormsRouteImport } from './routes/admin.forms'
 import { Route as LocaleContactRouteImport } from './routes/$locale.contact'
 import { Route as LocaleAboutRouteImport } from './routes/$locale.about'
 import { Route as LocaleServicesIndexRouteImport } from './routes/$locale.services.index'
@@ -54,9 +59,34 @@ const LocaleIndexRoute = LocaleIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LocaleRoute,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPagesRoute = AdminPagesRouteImport.update({
+  id: '/pages',
+  path: '/pages',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMediaRoute = AdminMediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFormsRoute = AdminFormsRouteImport.update({
+  id: '/forms',
+  path: '/forms',
   getParentRoute: () => AdminRoute,
 } as any)
 const LocaleContactRoute = LocaleContactRouteImport.update({
@@ -131,7 +161,12 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/$locale/about': typeof LocaleAboutRoute
   '/$locale/contact': typeof LocaleContactRoute
+  '/admin/forms': typeof AdminFormsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/pages': typeof AdminPagesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/$locale/': typeof LocaleIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/$locale/blog/$slug': typeof LocaleBlogSlugRoute
@@ -150,7 +185,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$locale/about': typeof LocaleAboutRoute
   '/$locale/contact': typeof LocaleContactRoute
+  '/admin/forms': typeof AdminFormsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/pages': typeof AdminPagesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/$locale': typeof LocaleIndexRoute
   '/admin': typeof AdminIndexRoute
   '/$locale/blog/$slug': typeof LocaleBlogSlugRoute
@@ -172,7 +212,12 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/$locale/about': typeof LocaleAboutRoute
   '/$locale/contact': typeof LocaleContactRoute
+  '/admin/forms': typeof AdminFormsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/pages': typeof AdminPagesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/$locale/': typeof LocaleIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/$locale/blog/$slug': typeof LocaleBlogSlugRoute
@@ -195,7 +240,12 @@ export interface FileRouteTypes {
     | '/admin'
     | '/$locale/about'
     | '/$locale/contact'
+    | '/admin/forms'
     | '/admin/login'
+    | '/admin/media'
+    | '/admin/pages'
+    | '/admin/settings'
+    | '/admin/users'
     | '/$locale/'
     | '/admin/'
     | '/$locale/blog/$slug'
@@ -214,7 +264,12 @@ export interface FileRouteTypes {
     | '/'
     | '/$locale/about'
     | '/$locale/contact'
+    | '/admin/forms'
     | '/admin/login'
+    | '/admin/media'
+    | '/admin/pages'
+    | '/admin/settings'
+    | '/admin/users'
     | '/$locale'
     | '/admin'
     | '/$locale/blog/$slug'
@@ -235,7 +290,12 @@ export interface FileRouteTypes {
     | '/admin'
     | '/$locale/about'
     | '/$locale/contact'
+    | '/admin/forms'
     | '/admin/login'
+    | '/admin/media'
+    | '/admin/pages'
+    | '/admin/settings'
+    | '/admin/users'
     | '/$locale/'
     | '/admin/'
     | '/$locale/blog/$slug'
@@ -294,11 +354,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleIndexRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pages': {
+      id: '/admin/pages'
+      path: '/pages'
+      fullPath: '/admin/pages'
+      preLoaderRoute: typeof AdminPagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/media': {
+      id: '/admin/media'
+      path: '/media'
+      fullPath: '/admin/media'
+      preLoaderRoute: typeof AdminMediaRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/forms': {
+      id: '/admin/forms'
+      path: '/forms'
+      fullPath: '/admin/forms'
+      preLoaderRoute: typeof AdminFormsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/$locale/contact': {
@@ -442,12 +537,22 @@ const LocaleRouteWithChildren =
   LocaleRoute._addFileChildren(LocaleRouteChildren)
 
 interface AdminRouteChildren {
+  AdminFormsRoute: typeof AdminFormsRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminMediaRoute: typeof AdminMediaRoute
+  AdminPagesRoute: typeof AdminPagesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminFormsRoute: AdminFormsRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminMediaRoute: AdminMediaRoute,
+  AdminPagesRoute: AdminPagesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
