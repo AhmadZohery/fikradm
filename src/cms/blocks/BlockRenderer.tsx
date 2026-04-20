@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, type ComponentType } from "react";
 import { BLOCK_REGISTRY, isKnownBlock, type BlockInstance } from "./registry";
 
 type Props = {
@@ -27,7 +27,7 @@ export function BlockRenderer({ blocks }: Props) {
         const Entry = BLOCK_REGISTRY[block.type];
         // Components have heterogeneous prop signatures; the registry guarantees
         // the type is valid. Cast to a permissive component to allow optional data injection.
-        const Component = Entry.component as React.ComponentType<Record<string, unknown>>;
+        const Component = Entry.component as ComponentType<Record<string, unknown>>;
         const props: Record<string, unknown> = block.data ? { data: block.data } : {};
         return (
           <Fragment key={block.id}>
