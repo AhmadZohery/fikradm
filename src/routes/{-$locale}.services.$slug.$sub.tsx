@@ -43,7 +43,7 @@ export const Route = createFileRoute("/{-$locale}/services/$slug/$sub")({
     <SiteLayout>
       <div className="container-app section text-center">
         <h1 className="text-3xl font-bold">Not found</h1>
-        <Link to="/$locale/services" params={{ locale: "ar" }} className="mt-4 inline-block text-primary">
+        <Link to="/{-$locale}/services" params={{ locale: "ar" }} className="mt-4 inline-block text-primary">
           العودة للخدمات
         </Link>
       </div>
@@ -183,7 +183,7 @@ function SubServicePage() {
                   </h2>
                 </div>
                 <Link
-                  to="/$locale/services/$slug"
+                  to="/{-$locale}/services/$slug"
                   params={{ locale, slug }}
                   className="hidden text-sm font-semibold sm:inline"
                   style={{ color: "var(--svc)" }}
@@ -195,7 +195,7 @@ function SubServicePage() {
                 {siblings.map((x) => (
                   <Link
                     key={x.slug}
-                    to="/$locale/services/$slug/$sub"
+                    to="/{-$locale}/services/$slug/$sub"
                     params={{ locale, slug, sub: x.slug }}
                     className="group overflow-hidden rounded-3xl border border-border bg-card shadow-card transition hover:-translate-y-1 hover:shadow-svc"
                   >

@@ -34,7 +34,7 @@ export function SubServicesGrid({
           {items.map((s) => (
             <Link
               key={s.slug}
-              to="/$locale/services/$slug/$sub"
+              to="/{-$locale}/services/$slug/$sub"
               params={{ locale, slug: parentSlug, sub: s.slug }}
               className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
             >

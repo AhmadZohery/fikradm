@@ -29,7 +29,7 @@ export function IndustriesShowcase() {
               )}
             </h2>
           </div>
-          <Link to="/$locale/industries" params={{ locale }} className="group inline-flex items-center gap-2 text-sm font-semibold text-primary">
+          <Link to="/{-$locale}/industries" params={{ locale }} className="group inline-flex items-center gap-2 text-sm font-semibold text-primary">
             {isAr ? "كل القطاعات" : "All industries"}
             <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-0.5 rtl:rotate-90" />
           </Link>
@@ -41,7 +41,7 @@ export function IndustriesShowcase() {
             return (
               <Link
                 key={ind.slug}
-                to="/$locale/industries/$slug"
+                to="/{-$locale}/industries/$slug"
                 params={{ locale, slug: ind.slug }}
                 className="group relative overflow-hidden rounded-3xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant"
               >

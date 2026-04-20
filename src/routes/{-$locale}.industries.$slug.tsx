@@ -109,7 +109,7 @@ function IndustryPage() {
               {subs.map((x, i) => (
                 <Reveal key={x.slug} delay={i * 80}>
                   <Link
-                    to="/$locale/industries/$slug/$sub"
+                    to="/{-$locale}/industries/$slug/$sub"
                     params={{ locale, slug, sub: x.slug }}
                     className="group block h-full overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
                   >

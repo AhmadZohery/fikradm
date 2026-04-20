@@ -66,7 +66,7 @@ function SubIndustryPage() {
         <div className="container-app grid items-center gap-10 py-16 md:py-24 lg:grid-cols-2">
           <Reveal>
             <Link
-              to="/$locale/industries/$slug"
+              to="/{-$locale}/industries/$slug"
               params={{ locale, slug }}
               className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
             >
@@ -84,7 +84,7 @@ function SubIndustryPage() {
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/$locale/contact"
+                to="/{-$locale}/contact"
                 params={{ locale }}
                 className="inline-flex h-11 items-center rounded-full bg-gradient-primary px-6 text-sm font-semibold text-primary-foreground shadow-soft transition hover:opacity-95 hover:shadow-glow"
               >
@@ -150,7 +150,7 @@ function SubIndustryPage() {
               {siblings.map((x, i) => (
                 <Reveal key={x.slug} delay={i * 80}>
                   <Link
-                    to="/$locale/industries/$slug/$sub"
+                    to="/{-$locale}/industries/$slug/$sub"
                     params={{ locale, slug, sub: x.slug }}
                     className="group block overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
                   >
