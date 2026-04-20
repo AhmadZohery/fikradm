@@ -43,7 +43,7 @@ export const Route = createFileRoute("/{-$locale}/services/$slug/$sub")({
     <SiteLayout>
       <div className="container-app section text-center">
         <h1 className="text-3xl font-bold">Not found</h1>
-        <Link to="/{-$locale}/services" params={{ locale: "ar" }} className="mt-4 inline-block text-primary">
+        <Link to="/{-$locale}/services" params={{ locale: undefined }} className="mt-4 inline-block text-primary">
           العودة للخدمات
         </Link>
       </div>
