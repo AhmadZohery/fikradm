@@ -14,6 +14,7 @@ import { BlockCanvas } from "@/cms/editor/BlockCanvas";
 import { BlockInspector } from "@/cms/editor/BlockInspector";
 import { EditorToolbar } from "@/cms/editor/EditorToolbar";
 import { SeoPanel, type SeoData } from "@/cms/editor/SeoPanel";
+import { RevisionHistoryDialog } from "@/cms/editor/RevisionHistoryDialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/admin/pages/$pageId")({
@@ -67,6 +68,8 @@ function EditPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [savedSnapshot, setSavedSnapshot] = useState<string>(JSON.stringify(EMPTY_STATE));
   const [lastSavedAt, setLastSavedAt] = useState<number | null>(null);
+  const [publishing, setPublishing] = useState(false);
+  const [revisionsOpen, setRevisionsOpen] = useState(false);
 
   const history = useUndoRedo<EditorState>(EMPTY_STATE);
   const state = history.state;
@@ -197,6 +200,39 @@ function EditPage() {
     }
   }, [page, state, savedSnapshot]);
 
+  const togglePublish = useCallback(async () => {
+    if (!page) return;
+    const next = page.status === "published" ? "draft" : "published";
+    setPublishing(true);
+    try {
+      const { error } = await supabase
+        .from("pages")
+        .update({
+          status: next,
+          published_at: next === "published" ? new Date().toISOString() : null,
+        })
+        .eq("id", page.id);
+      if (error) throw error;
+      setPage((p) => (p ? { ...p, status: next } : p));
+      toast.success(next === "published" ? "تم النشر" : "تم إلغاء النشر");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "خطأ");
+    } finally {
+      setPublishing(false);
+    }
+  }, [page]);
+
+  const restoreRevision = useCallback(
+    (snapshot: { blocks: BlockInstance[]; seo?: SeoData }) => {
+      history.set(() => ({
+        blocks: Array.isArray(snapshot.blocks) ? snapshot.blocks : [],
+        seo: snapshot.seo ?? state.seo,
+      }));
+      setSelectedId(null);
+    },
+    [history, state.seo],
+  );
+
   // Auto-save every 30s if dirty
   const saveRef = useRef(save);
   saveRef.current = save;
@@ -265,6 +301,16 @@ function EditPage() {
         saving={saving}
         dirty={dirty}
         lastSavedAt={lastSavedAt}
+        onTogglePublish={togglePublish}
+        publishing={publishing}
+        onOpenRevisions={() => setRevisionsOpen(true)}
+      />
+
+      <RevisionHistoryDialog
+        open={revisionsOpen}
+        onClose={() => setRevisionsOpen(false)}
+        pageId={page.id}
+        onRestore={restoreRevision}
       />
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[260px_1fr_320px] min-h-0">

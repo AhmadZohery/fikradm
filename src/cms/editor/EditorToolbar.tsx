@@ -2,13 +2,16 @@ import { Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
   Eye,
+  History,
   Loader2,
   Monitor,
   Redo2,
   Save,
+  Send,
   Smartphone,
   Tablet,
   Undo2,
+  Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +20,7 @@ type Device = "desktop" | "tablet" | "mobile";
 
 type Props = {
   title: string;
-  status: string;
+  status: "draft" | "published" | "archived" | string;
   previewUrl: string;
   device: Device;
   onDeviceChange: (d: Device) => void;
@@ -29,9 +32,13 @@ type Props = {
   saving: boolean;
   dirty: boolean;
   lastSavedAt: number | null;
+  onTogglePublish: () => void;
+  publishing: boolean;
+  onOpenRevisions: () => void;
 };
 
 export function EditorToolbar(p: Props) {
+  const isPublished = p.status === "published";
   return (
     <div className="border-b bg-background px-4 py-2.5 flex items-center justify-between gap-3 flex-wrap">
       <div className="flex items-center gap-3 min-w-0">
@@ -45,7 +52,12 @@ export function EditorToolbar(p: Props) {
           <div className="font-semibold text-sm truncate">{p.title}</div>
           <div className="text-xs text-muted-foreground flex items-center gap-2" dir="ltr">
             <span className="font-mono">{p.previewUrl}</span>
-            <Badge variant="secondary" className="text-[10px] h-4 px-1.5">{p.status}</Badge>
+            <Badge
+              variant={isPublished ? "default" : "secondary"}
+              className="text-[10px] h-4 px-1.5"
+            >
+              {p.status}
+            </Badge>
           </div>
         </div>
       </div>
@@ -80,7 +92,7 @@ export function EditorToolbar(p: Props) {
         </Button>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         <div className="flex items-center gap-0.5 border rounded-md p-0.5">
           <Button
             variant="ghost"
@@ -88,7 +100,7 @@ export function EditorToolbar(p: Props) {
             className="h-8 w-8"
             onClick={p.onUndo}
             disabled={!p.canUndo}
-            title="تراجع"
+            title="تراجع (Ctrl+Z)"
           >
             <Undo2 className="w-4 h-4" />
           </Button>
@@ -98,11 +110,21 @@ export function EditorToolbar(p: Props) {
             className="h-8 w-8"
             onClick={p.onRedo}
             disabled={!p.canRedo}
-            title="إعادة"
+            title="إعادة (Ctrl+Shift+Z)"
           >
             <Redo2 className="w-4 h-4" />
           </Button>
         </div>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={p.onOpenRevisions}
+          title="سجل المراجعات"
+        >
+          <History className="w-4 h-4 ml-1" /> المراجعات
+        </Button>
+
         <span className="text-[11px] text-muted-foreground hidden md:inline">
           {p.saving
             ? "جاري الحفظ..."
@@ -112,11 +134,30 @@ export function EditorToolbar(p: Props) {
                 ? `محفوظ ${formatTime(p.lastSavedAt)}`
                 : "محفوظ"}
         </span>
+
         <Button variant="outline" size="sm" asChild>
           <a href={p.previewUrl} target="_blank" rel="noreferrer">
             <Eye className="w-4 h-4 ml-1" /> معاينة
           </a>
         </Button>
+
+        <Button
+          variant={isPublished ? "outline" : "default"}
+          size="sm"
+          onClick={p.onTogglePublish}
+          disabled={p.publishing}
+          title={isPublished ? "إلغاء النشر" : "نشر"}
+        >
+          {p.publishing ? (
+            <Loader2 className="w-4 h-4 ml-1 animate-spin" />
+          ) : isPublished ? (
+            <Upload className="w-4 h-4 ml-1 rotate-180" />
+          ) : (
+            <Send className="w-4 h-4 ml-1" />
+          )}
+          {isPublished ? "إلغاء النشر" : "نشر"}
+        </Button>
+
         <Button onClick={p.onSave} disabled={p.saving || !p.dirty} size="sm">
           {p.saving ? (
             <Loader2 className="w-4 h-4 ml-1 animate-spin" />
