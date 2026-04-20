@@ -25,11 +25,13 @@ export function BlockRenderer({ blocks }: Props) {
           return null;
         }
         const Entry = BLOCK_REGISTRY[block.type];
-        const Component = Entry.component;
-        // Pass `data` prop only when present — components keep their static defaults otherwise.
+        // Components have heterogeneous prop signatures; the registry guarantees
+        // the type is valid. Cast to a permissive component to allow optional data injection.
+        const Component = Entry.component as React.ComponentType<Record<string, unknown>>;
+        const props: Record<string, unknown> = block.data ? { data: block.data } : {};
         return (
           <Fragment key={block.id}>
-            {block.data ? <Component data={block.data} /> : <Component />}
+            <Component {...props} />
           </Fragment>
         );
       })}
