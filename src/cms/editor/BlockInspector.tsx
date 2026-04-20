@@ -50,10 +50,58 @@ export function BlockInspector({ block, onChange }: Props) {
 
         <div className="flex-1 overflow-y-auto p-3 space-y-4">
           <TabsContent value="content" className="space-y-3 mt-0">
-            <p className="text-xs text-muted-foreground p-3 bg-muted/40 rounded-md leading-relaxed">
-              💡 محرر المحتوى المتقدم (Tiptap + حقول مخصصة لكل بلوك) هيتفعل في Phase 4.
-              دلوقتي البلوك بيستخدم البيانات الافتراضية من الكود.
-            </p>
+            {block.type === "rich_text" ? (
+              <div className="space-y-3">
+                <Label className="text-xs">المحتوى</Label>
+                <RichTextEditor
+                  value={(block.data?.html as string) ?? ""}
+                  onChange={(html) =>
+                    onChange({ ...block, data: { ...(block.data ?? {}), html } })
+                  }
+                  placeholder="ابدأ الكتابة هنا..."
+                  minHeight={260}
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">العرض</Label>
+                    <Select
+                      value={(block.data?.container as string) ?? "default"}
+                      onValueChange={(v) =>
+                        onChange({ ...block, data: { ...(block.data ?? {}), container: v } })
+                      }
+                    >
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="narrow">ضيق</SelectItem>
+                        <SelectItem value="default">افتراضي</SelectItem>
+                        <SelectItem value="wide">واسع</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">المحاذاة</Label>
+                    <Select
+                      value={(block.data?.align as string) ?? "right"}
+                      onValueChange={(v) =>
+                        onChange({ ...block, data: { ...(block.data ?? {}), align: v } })
+                      }
+                    >
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="right">يمين</SelectItem>
+                        <SelectItem value="center">وسط</SelectItem>
+                        <SelectItem value="left">يسار</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-muted-foreground p-3 bg-muted/40 rounded-md leading-relaxed">
+                💡 هذا البلوك يستخدم بياناته الافتراضية من الكود. حقول التحرير المخصصة لكل بلوك هتتفعل تدريجياً.
+                ضيف بلوك "نص حر (Rich Text)" من المكتبة لتحرير محتوى نصي حر.
+              </p>
+            )}
           </TabsContent>
 
           <TabsContent value="style" className="space-y-4 mt-0">
