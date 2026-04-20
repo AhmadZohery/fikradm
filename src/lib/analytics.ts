@@ -1,0 +1,93 @@
+import { supabase } from "@/integrations/supabase/client";
+
+const BOT_REGEX =
+  /bot|crawler|spider|crawling|facebookexternalhit|slurp|mediapartners|googleother|bingpreview|chatgpt|gptbot|ahrefs|semrush|petal|yandex|baidu|duckduckbot|applebot|whatsapp|telegrambot|linkedinbot|twitterbot|discordbot/i;
+
+const SESSION_KEY = "fk_session_id";
+const TRACKED_KEY = "fk_tracked_paths";
+
+function getSessionId(): string {
+  try {
+    let sid = sessionStorage.getItem(SESSION_KEY);
+    if (!sid) {
+      sid = crypto.randomUUID();
+      sessionStorage.setItem(SESSION_KEY, sid);
+    }
+    return sid;
+  } catch {
+    return "anon";
+  }
+}
+
+function detectDevice(ua: string): "mobile" | "tablet" | "desktop" {
+  if (/tablet|ipad|playbook|silk/i.test(ua)) return "tablet";
+  if (/mobile|iphone|ipod|android.*mobile|blackberry|iemobile|opera mini/i.test(ua))
+    return "mobile";
+  return "desktop";
+}
+
+async function detectCountry(): Promise<string | null> {
+  try {
+    const cached = sessionStorage.getItem("fk_country");
+    if (cached) return cached;
+    const res = await fetch("https://ipapi.co/country/", { cache: "force-cache" });
+    if (!res.ok) return null;
+    const country = (await res.text()).trim().slice(0, 2).toUpperCase();
+    if (country && /^[A-Z]{2}$/.test(country)) {
+      sessionStorage.setItem("fk_country", country);
+      return country;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function getTrackedPaths(): Set<string> {
+  try {
+    const raw = sessionStorage.getItem(TRACKED_KEY);
+    return new Set(raw ? (JSON.parse(raw) as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function markTracked(path: string) {
+  try {
+    const set = getTrackedPaths();
+    set.add(path);
+    sessionStorage.setItem(TRACKED_KEY, JSON.stringify([...set]));
+  } catch {
+    /* noop */
+  }
+}
+
+export async function trackPageView(opts: { path: string; locale?: string; pageSlug?: string }) {
+  if (typeof window === "undefined") return;
+  const ua = navigator.userAgent || "";
+  if (BOT_REGEX.test(ua)) return;
+
+  // Honor DNT
+  if (navigator.doNotTrack === "1") return;
+
+  // Dedupe per session+path
+  if (getTrackedPaths().has(opts.path)) return;
+  markTracked(opts.path);
+
+  const country = await detectCountry();
+
+  const { error } = await supabase.from("page_views").insert({
+    page_slug: opts.pageSlug ?? opts.path,
+    path: opts.path,
+    locale: opts.locale ?? null,
+    session_id: getSessionId(),
+    device: detectDevice(ua),
+    country,
+    user_agent: ua.slice(0, 500),
+    referrer: document.referrer ? document.referrer.slice(0, 500) : null,
+  });
+
+  if (error && import.meta.env.DEV) {
+    console.warn("[analytics] insert failed", error.message);
+  }
+}
