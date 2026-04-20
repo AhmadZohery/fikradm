@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { BLOCK_REGISTRY, isKnownBlock, type BlockInstance } from "@/cms/blocks/registry";
+import { RichTextEditor } from "./RichTextEditor";
 
 type Props = {
   block: BlockInstance | null;
