@@ -15,7 +15,7 @@ import { getServiceVariant } from "@/components/site/services/serviceVariants";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
 import { Check, ArrowUpRight } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/services/$slug/")({
+export const Route = createFileRoute("/{-$locale}/services/$slug/")({
   beforeLoad: ({ params }) => {
     if (!findService(params.slug)) throw notFound();
   },

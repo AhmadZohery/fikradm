@@ -7,7 +7,7 @@ import { Reveal } from "@/components/site/Reveal";
 import { useLocale } from "@/i18n/useLocale";
 import { blogCategories, getCategoryBySlug, getPostsByCategory } from "@/content/blog";
 
-export const Route = createFileRoute("/$locale/blog/category/$slug")({
+export const Route = createFileRoute("/{-$locale}/blog/category/$slug")({
   head: ({ params }) => {
     const cat = getCategoryBySlug(params.slug);
     const ar = params.locale === "ar";

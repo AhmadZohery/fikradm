@@ -4,7 +4,7 @@ import { BlockRenderer } from "@/cms/blocks/BlockRenderer";
 import { DEFAULT_HOME_BLOCKS } from "@/cms/blocks/registry";
 import { fetchPage, type CmsPage } from "@/cms/loadPage";
 
-export const Route = createFileRoute("/$locale/")({
+export const Route = createFileRoute("/{-$locale}/")({
   loader: async ({ params }) => {
     // Fetch from DB; fall back to static defaults on miss.
     const page = await fetchPage("home", params.locale);

@@ -10,7 +10,7 @@ const titles: Record<string, { ar: string; en: string }> = {
   "web-design-cairo": { ar: "تصميم مواقع في القاهرة", en: "Web Design in Cairo" },
 };
 
-export const Route = createFileRoute("/$locale/locations/$slug")({
+export const Route = createFileRoute("/{-$locale}/locations/$slug")({
   head: ({ params }) => {
     const t = titles[params.slug];
     if (!t) return { meta: [{ title: "Location" }] };

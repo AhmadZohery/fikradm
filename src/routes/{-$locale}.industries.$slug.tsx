@@ -8,7 +8,7 @@ import { Reveal } from "@/components/site/Reveal";
 import { findIndustry } from "@/content/data";
 import { Check, X, ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/industries/$slug")({
+export const Route = createFileRoute("/{-$locale}/industries/$slug")({
   beforeLoad: ({ params }) => {
     if (!findIndustry(params.slug)) throw notFound();
   },

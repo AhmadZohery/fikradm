@@ -6,7 +6,7 @@ import { industries } from "@/content/data";
 import { ArrowRight } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 
-export const Route = createFileRoute("/$locale/industries/")({
+export const Route = createFileRoute("/{-$locale}/industries/")({
   head: ({ params }) => {
     const isAr = params.locale === "ar";
     return {

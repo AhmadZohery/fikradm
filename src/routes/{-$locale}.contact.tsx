@@ -7,7 +7,7 @@ import { useLocale } from "@/i18n/useLocale";
 import { ArrowRight, ArrowLeft, Check, Mail, Phone, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/$locale/contact")({
+export const Route = createFileRoute("/{-$locale}/contact")({
   head: ({ params }) => ({
     meta: [
       { title: params.locale === "ar" ? "احجز استشارتك | فكرة" : "Book a Consultation | Fikra" },

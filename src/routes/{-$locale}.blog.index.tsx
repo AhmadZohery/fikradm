@@ -8,7 +8,7 @@ import { useLocale } from "@/i18n/useLocale";
 import { blogCategories, getAllPostsSorted } from "@/content/blog";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/blog/")({
+export const Route = createFileRoute("/{-$locale}/blog/")({
   head: ({ params }) => {
     const ar = params.locale === "ar";
     const title = ar ? "مدونة فكرة | أدلة التسويق الرقمي والسيو" : "Fikra Blog | Digital Marketing & SEO Guides";

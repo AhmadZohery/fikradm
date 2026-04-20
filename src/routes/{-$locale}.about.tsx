@@ -7,7 +7,7 @@ import { Testimonials } from "@/components/site/Testimonials";
 import { useLocale } from "@/i18n/useLocale";
 import { Target, Heart, Award, Users } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/about")({
+export const Route = createFileRoute("/{-$locale}/about")({
   head: ({ params }) => ({
     meta: [
       { title: params.locale === "ar" ? "من نحن | فكرة للتسويق الرقمي" : "About | Fikra Digital Marketing" },

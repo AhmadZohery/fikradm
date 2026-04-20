@@ -7,7 +7,7 @@ import { Reveal } from "@/components/site/Reveal";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
 import { ArrowUpRight, TrendingUp, ShoppingBag, Heart, Building2, GraduationCap, Utensils, Plane, Sparkles, Quote } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/case-studies/")({
+export const Route = createFileRoute("/{-$locale}/case-studies/")({
   head: ({ params }) => {
     const ar = params.locale === "ar";
     return {
