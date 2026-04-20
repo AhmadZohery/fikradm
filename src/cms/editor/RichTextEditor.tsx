@@ -10,7 +10,8 @@ import Typography from "@tiptap/extension-typography";
 import Highlight from "@tiptap/extension-highlight";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { MediaPickerDialog } from "./MediaPickerDialog";
 import {
   Bold,
   Italic,
@@ -116,6 +117,9 @@ export function RichTextEditor({
     </div>
   );
 }
+
+function Toolbar({ editor }: { editor: Editor }) {
+  const [pickerOpen, setPickerOpen] = useState(false);
 
 function Toolbar({ editor }: { editor: Editor }) {
   const Btn = ({
