@@ -115,7 +115,7 @@ function AdminLogin() {
         </div>
 
         <div className="text-center text-xs text-muted-foreground border-t pt-4">
-          <Link to="/{-$locale}" params={{ locale: "ar" }} className="hover:text-foreground">
+          <Link to="/{-$locale}" params={{ locale: undefined }} className="hover:text-foreground">
             ← العودة إلى الموقع
           </Link>
         </div>
