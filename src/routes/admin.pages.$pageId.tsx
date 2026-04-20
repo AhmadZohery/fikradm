@@ -1,34 +1,18 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import {
-  ArrowLeft,
-  ChevronDown,
-  ChevronUp,
-  Eye,
-  EyeOff,
-  Loader2,
-  Plus,
-  Save,
-  Trash2,
-} from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import {
-  BLOCK_REGISTRY,
   isKnownBlock,
   type BlockInstance,
   type BlockType,
 } from "@/cms/blocks/registry";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useUndoRedo } from "@/cms/editor/useUndoRedo";
+import { BlockLibrary } from "@/cms/editor/BlockLibrary";
+import { BlockCanvas } from "@/cms/editor/BlockCanvas";
+import { BlockInspector } from "@/cms/editor/BlockInspector";
+import { EditorToolbar } from "@/cms/editor/EditorToolbar";
 
 export const Route = createFileRoute("/admin/pages/$pageId")({
   component: EditPage,
@@ -43,93 +27,145 @@ type PageRow = {
   blocks: BlockInstance[];
 };
 
+type Device = "desktop" | "tablet" | "mobile";
+
 function EditPage() {
   const { pageId } = Route.useParams();
   const navigate = useNavigate();
   const [page, setPage] = useState<PageRow | null>(null);
-  const [blocks, setBlocks] = useState<BlockInstance[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [pickerOpen, setPickerOpen] = useState(false);
-  const [newType, setNewType] = useState<BlockType | "">("");
+  const [device, setDevice] = useState<Device>("desktop");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [savedSnapshot, setSavedSnapshot] = useState<string>("[]");
+  const [lastSavedAt, setLastSavedAt] = useState<number | null>(null);
 
+  const history = useUndoRedo<BlockInstance[]>([]);
+  const blocks = history.state;
+  const setBlocks = history.set;
+  const resetBlocks = history.reset;
+
+  // Load
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       const { data, error } = await supabase
         .from("pages")
         .select("id, slug, locale, title, status, blocks")
         .eq("id", pageId)
         .maybeSingle();
+      if (cancelled) return;
       if (error || !data) {
         toast.error("تعذر تحميل الصفحة");
         navigate({ to: "/admin/pages" });
         return;
       }
       const row = data as unknown as PageRow;
+      const initial = Array.isArray(row.blocks) ? row.blocks : [];
       setPage(row);
-      setBlocks(Array.isArray(row.blocks) ? row.blocks : []);
+      resetBlocks(initial);
+      setSavedSnapshot(JSON.stringify(initial));
       setLoading(false);
     })();
-  }, [pageId, navigate]);
+    return () => {
+      cancelled = true;
+    };
+  }, [pageId, navigate, resetBlocks]);
 
-  const blockOptions = useMemo(
-    () =>
-      (Object.keys(BLOCK_REGISTRY) as BlockType[]).map((k) => ({
-        value: k,
-        label: BLOCK_REGISTRY[k].label,
-      })),
-    [],
+  const dirty = useMemo(
+    () => JSON.stringify(blocks) !== savedSnapshot,
+    [blocks, savedSnapshot],
   );
 
-  function move(idx: number, dir: -1 | 1) {
-    const next = [...blocks];
-    const target = idx + dir;
-    if (target < 0 || target >= next.length) return;
-    [next[idx], next[target]] = [next[target], next[idx]];
-    setBlocks(next);
-  }
+  const selected = useMemo(
+    () => blocks.find((b) => b.id === selectedId) ?? null,
+    [blocks, selectedId],
+  );
 
-  function toggle(idx: number) {
-    const next = [...blocks];
-    next[idx] = { ...next[idx], visible: next[idx].visible === false };
-    setBlocks(next);
-  }
+  const addBlock = useCallback(
+    (type: BlockType) => {
+      if (!isKnownBlock(type)) return;
+      const id = `b_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
+      setBlocks((prev) => [...prev, { id, type }]);
+      setSelectedId(id);
+    },
+    [setBlocks],
+  );
 
-  function remove(idx: number) {
-    setBlocks(blocks.filter((_, i) => i !== idx));
-  }
+  const updateBlock = useCallback(
+    (next: BlockInstance) => {
+      setBlocks((prev) => prev.map((b) => (b.id === next.id ? next : b)));
+    },
+    [setBlocks],
+  );
 
-  function addBlock() {
-    if (!newType || !isKnownBlock(newType)) return;
-    const id = `b_${Date.now().toString(36)}`;
-    setBlocks([...blocks, { id, type: newType }]);
-    setNewType("");
-    setPickerOpen(false);
-  }
-
-  async function save() {
+  const save = useCallback(async () => {
     if (!page) return;
+    const snapshot = JSON.stringify(blocks);
+    if (snapshot === savedSnapshot) return;
     setSaving(true);
     try {
-      // Snapshot current state to revisions before overwriting
+      // Snapshot previous state for revisions
       await supabase.from("page_revisions").insert({
         page_id: page.id,
-        snapshot: { blocks: page.blocks } as never,
+        snapshot: { blocks: JSON.parse(savedSnapshot) } as never,
       });
       const { error } = await supabase
         .from("pages")
         .update({ blocks: blocks as never })
         .eq("id", page.id);
       if (error) throw error;
-      setPage({ ...page, blocks });
-      toast.success("تم الحفظ");
+      setSavedSnapshot(snapshot);
+      setLastSavedAt(Date.now());
     } catch (e) {
       const msg = e instanceof Error ? e.message : "خطأ في الحفظ";
       toast.error(msg);
     } finally {
       setSaving(false);
     }
-  }
+  }, [page, blocks, savedSnapshot]);
+
+  // Auto-save every 30s if dirty
+  const saveRef = useRef(save);
+  saveRef.current = save;
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      if (dirty) saveRef.current();
+    }, 30000);
+    return () => window.clearInterval(id);
+  }, [dirty]);
+
+  // Warn on unload if dirty
+  useEffect(() => {
+    if (!dirty) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [dirty]);
+
+  // Keyboard shortcuts: Ctrl/Cmd+Z, Ctrl/Cmd+Shift+Z, Ctrl/Cmd+S
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const meta = e.metaKey || e.ctrlKey;
+      if (!meta) return;
+      const key = e.key.toLowerCase();
+      if (key === "z" && !e.shiftKey) {
+        e.preventDefault();
+        history.undo();
+      } else if ((key === "z" && e.shiftKey) || key === "y") {
+        e.preventDefault();
+        history.redo();
+      } else if (key === "s") {
+        e.preventDefault();
+        saveRef.current();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [history]);
 
   if (loading || !page) {
     return (
@@ -142,154 +178,52 @@ function EditPage() {
   const previewUrl = `/${page.locale}${page.slug === "home" ? "" : `/${page.slug}`}`;
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <Button variant="ghost" size="sm" asChild className="mb-2">
-            <Link to="/admin/pages">
-              <ArrowLeft className="w-4 h-4 ml-1" /> الصفحات
-            </Link>
-          </Button>
-          <h1 className="text-2xl font-bold">{page.title}</h1>
-          <p className="text-sm text-muted-foreground mt-1" dir="ltr">
-            {previewUrl} · {page.locale.toUpperCase()} ·{" "}
-            <Badge
-              variant={page.status === "published" ? "default" : "secondary"}
-              className="text-xs"
-            >
-              {page.status}
-            </Badge>
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <a href={previewUrl} target="_blank" rel="noreferrer">
-              <Eye className="w-4 h-4 ml-1" /> معاينة
-            </a>
-          </Button>
-          <Button onClick={save} disabled={saving} size="sm">
-            {saving ? (
-              <Loader2 className="w-4 h-4 ml-1 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4 ml-1" />
-            )}
-            حفظ
-          </Button>
-        </div>
+    <div className="flex flex-col h-[calc(100vh-4rem)] -m-4 md:-m-6">
+      <EditorToolbar
+        title={page.title}
+        status={page.status}
+        previewUrl={previewUrl}
+        device={device}
+        onDeviceChange={setDevice}
+        canUndo={history.canUndo}
+        canRedo={history.canRedo}
+        onUndo={history.undo}
+        onRedo={history.redo}
+        onSave={save}
+        saving={saving}
+        dirty={dirty}
+        lastSavedAt={lastSavedAt}
+      />
+
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[260px_1fr_300px] min-h-0">
+        <aside className="border-l bg-background hidden lg:block min-h-0">
+          <BlockLibrary onAdd={addBlock} />
+        </aside>
+        <main className="min-h-0">
+          <BlockCanvas
+            blocks={blocks}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+            onChange={setBlocks}
+            device={device}
+          />
+        </main>
+        <aside className="border-r bg-background hidden lg:block min-h-0">
+          <BlockInspector block={selected} onChange={updateBlock} />
+        </aside>
       </div>
 
-      <Card className="p-4 space-y-2">
-        <div className="text-sm font-medium mb-2">
-          ترتيب البلوكات ({blocks.length})
-        </div>
-        {blocks.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-6 text-center">
-            لا توجد بلوكات بعد
-          </p>
-        ) : (
-          <ul className="space-y-2">
-            {blocks.map((b, i) => {
-              const known = isKnownBlock(b.type);
-              const label = known ? BLOCK_REGISTRY[b.type].label : b.type;
-              const hidden = b.visible === false;
-              return (
-                <li
-                  key={b.id}
-                  className={`flex items-center gap-2 p-3 rounded-lg border bg-background ${
-                    hidden ? "opacity-50" : ""
-                  }`}
-                >
-                  <div className="flex flex-col">
-                    <button
-                      onClick={() => move(i, -1)}
-                      disabled={i === 0}
-                      className="text-muted-foreground hover:text-foreground disabled:opacity-30 leading-none"
-                      aria-label="رفع"
-                    >
-                      <ChevronUp className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => move(i, 1)}
-                      disabled={i === blocks.length - 1}
-                      className="text-muted-foreground hover:text-foreground disabled:opacity-30 leading-none"
-                      aria-label="إنزال"
-                    >
-                      <ChevronDown className="w-4 h-4" />
-                    </button>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-sm truncate">{label}</div>
-                    <div className="text-xs text-muted-foreground font-mono">{b.type}</div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => toggle(i)}
-                    title={hidden ? "إظهار" : "إخفاء"}
-                  >
-                    {hidden ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => remove(i)}
-                    title="حذف"
-                  >
-                    <Trash2 className="w-4 h-4 text-destructive" />
-                  </Button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-
-        <div className="pt-3 border-t mt-3">
-          {!pickerOpen ? (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPickerOpen(true)}
-              className="w-full"
-            >
-              <Plus className="w-4 h-4 ml-1" /> إضافة بلوك
-            </Button>
-          ) : (
-            <div className="flex items-center gap-2">
-              <Select value={newType} onValueChange={(v) => setNewType(v as BlockType)}>
-                <SelectTrigger className="flex-1">
-                  <SelectValue placeholder="اختر نوع البلوك..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {blockOptions.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button size="sm" onClick={addBlock} disabled={!newType}>
-                إضافة
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setPickerOpen(false);
-                  setNewType("");
-                }}
-              >
-                إلغاء
-              </Button>
-            </div>
-          )}
-        </div>
-      </Card>
-
-      <Card className="p-4 text-xs text-muted-foreground">
-        💡 محرر متكامل بـ drag &amp; drop والـ inline editing هيتوفر في Phase 3.
-        دلوقتي تقدر ترتب وتُخفي وتضيف وتحذف البلوكات. كل حفظ بيعمل snapshot في
-        page_revisions تلقائياً.
-      </Card>
+      {/* Mobile fallback library */}
+      <div className="lg:hidden border-t bg-background">
+        <details>
+          <summary className="px-4 py-2 text-sm font-medium cursor-pointer">
+            مكتبة البلوكات
+          </summary>
+          <div className="h-64">
+            <BlockLibrary onAdd={addBlock} />
+          </div>
+        </details>
+      </div>
     </div>
   );
 }
