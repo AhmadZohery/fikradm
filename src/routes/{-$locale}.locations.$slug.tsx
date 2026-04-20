@@ -14,7 +14,7 @@ export const Route = createFileRoute("/{-$locale}/locations/$slug")({
   head: ({ params }) => {
     const t = titles[params.slug];
     if (!t) return { meta: [{ title: "Location" }] };
-    const loc = params.locale === "en" ? "en" : "ar";
+    const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
     return { meta: [{ title: `${t[loc]} | Fikra` }, { name: "description", content: t[loc] }] };
   },
   component: () => {

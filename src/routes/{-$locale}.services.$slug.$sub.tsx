@@ -21,7 +21,7 @@ export const Route = createFileRoute("/{-$locale}/services/$slug/$sub")({
   head: ({ params }) => {
     const s = findSubService(params.slug, params.sub);
     if (!s) return { meta: [{ title: "Not found" }] };
-    const loc = params.locale === "en" ? "en" : "ar";
+    const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
     return {
       meta: [
         { title: s.metaTitle[loc] },
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/{-$locale}/services/$slug/$sub")({
         { name: "twitter:image", content: s.image },
       ],
       links: [
-        { rel: "canonical", href: `https://fikra-dm.com/${params.locale}/services/${params.slug}/${s.slug}` },
+        { rel: "canonical", href: `https://fikra-dm.com/${(params.locale ?? "ar")}/services/${params.slug}/${s.slug}` },
         { rel: "alternate", hrefLang: "ar", href: `https://fikra-dm.com/ar/services/${params.slug}/${s.slug}` },
         { rel: "alternate", hrefLang: "en", href: `https://fikra-dm.com/en/services/${params.slug}/${s.slug}` },
       ],

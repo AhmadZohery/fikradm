@@ -9,7 +9,7 @@ import { useLocale } from "@/i18n/useLocale";
 
 export const Route = createFileRoute("/{-$locale}/services/")({
   head: ({ params }) => {
-    const isAr = params.locale === "ar";
+    const isAr = (params.locale ?? "ar") === "ar";
     return {
       meta: [
         { title: isAr ? "خدماتنا | فكرة للتسويق الرقمي" : "Our Services | Fikra Digital Marketing" },

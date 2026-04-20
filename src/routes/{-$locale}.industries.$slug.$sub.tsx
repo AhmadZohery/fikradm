@@ -15,7 +15,7 @@ export const Route = createFileRoute("/{-$locale}/industries/$slug/$sub")({
   head: ({ params }) => {
     const s = findSubIndustry(params.slug, params.sub);
     if (!s) return { meta: [{ title: "Not found" }] };
-    const loc = params.locale === "en" ? "en" : "ar";
+    const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
     return {
       meta: [
         { title: s.metaTitle[loc] },
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/{-$locale}/industries/$slug/$sub")({
         { name: "twitter:image", content: s.image },
       ],
       links: [
-        { rel: "canonical", href: `https://fikra-dm.com/${params.locale}/industries/${params.slug}/${s.slug}` },
+        { rel: "canonical", href: `https://fikra-dm.com/${(params.locale ?? "ar")}/industries/${params.slug}/${s.slug}` },
         { rel: "alternate", hrefLang: "ar", href: `https://fikra-dm.com/ar/industries/${params.slug}/${s.slug}` },
         { rel: "alternate", hrefLang: "en", href: `https://fikra-dm.com/en/industries/${params.slug}/${s.slug}` },
       ],

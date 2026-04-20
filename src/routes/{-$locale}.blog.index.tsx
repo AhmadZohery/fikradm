@@ -10,7 +10,7 @@ import { ArrowLeft, Calendar, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/{-$locale}/blog/")({
   head: ({ params }) => {
-    const ar = params.locale === "ar";
+    const ar = (params.locale ?? "ar") === "ar";
     const title = ar ? "مدونة فكرة | أدلة التسويق الرقمي والسيو" : "Fikra Blog | Digital Marketing & SEO Guides";
     const desc = ar
       ? "أدلة عملية وعميقة في السيو، إعلانات Meta وGoogle، نمو المتاجر الإلكترونية، والمحتوى الإبداعي."

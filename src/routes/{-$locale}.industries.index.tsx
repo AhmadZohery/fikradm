@@ -8,7 +8,7 @@ import { useLocale } from "@/i18n/useLocale";
 
 export const Route = createFileRoute("/{-$locale}/industries/")({
   head: ({ params }) => {
-    const isAr = params.locale === "ar";
+    const isAr = (params.locale ?? "ar") === "ar";
     return {
       meta: [
         { title: isAr ? "حلول حسب القطاع | فكرة" : "Industry Solutions | Fikra" },

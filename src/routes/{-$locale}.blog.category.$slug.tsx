@@ -10,7 +10,7 @@ import { blogCategories, getCategoryBySlug, getPostsByCategory } from "@/content
 export const Route = createFileRoute("/{-$locale}/blog/category/$slug")({
   head: ({ params }) => {
     const cat = getCategoryBySlug(params.slug);
-    const ar = params.locale === "ar";
+    const ar = (params.locale ?? "ar") === "ar";
     const loc = ar ? "ar" : "en";
     if (!cat) {
       return { meta: [{ title: ar ? "تصنيف غير موجود | فكرة" : "Category not found | Fikra" }] };

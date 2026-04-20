@@ -9,7 +9,7 @@ import { ArrowUpRight, TrendingUp, ShoppingBag, Heart, Building2, GraduationCap,
 
 export const Route = createFileRoute("/{-$locale}/case-studies/")({
   head: ({ params }) => {
-    const ar = params.locale === "ar";
+    const ar = (params.locale ?? "ar") === "ar";
     return {
       meta: [
         { title: ar ? "قصص النجاح والبورتفوليو | فكرة" : "Case Studies & Portfolio | Fikra" },

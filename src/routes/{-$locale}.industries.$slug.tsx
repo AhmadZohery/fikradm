@@ -15,7 +15,7 @@ export const Route = createFileRoute("/{-$locale}/industries/$slug")({
   head: ({ params }) => {
     const ind = findIndustry(params.slug);
     if (!ind) return { meta: [{ title: "Not found" }] };
-    const loc = params.locale === "en" ? "en" : "ar";
+    const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
     return {
       meta: [
         { title: ind.metaTitle[loc] },
