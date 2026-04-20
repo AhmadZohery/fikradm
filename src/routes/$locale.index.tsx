@@ -1,41 +1,49 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { HeroSlider } from "@/components/site/HeroSlider";
-import { TrustStrip } from "@/components/site/cinematic/TrustStrip";
-import { StatsBand } from "@/components/site/StatsBand";
-import { LogosStrip } from "@/components/site/LogosStrip";
-import { ServicesGrid } from "@/components/site/ServicesGrid";
-import { ProcessSection } from "@/components/site/ProcessSection";
-import { HomePackages } from "@/components/site/HomePackages";
-import { PackageBuilder } from "@/components/site/PackageBuilder";
-import { HomeBeforeAfter } from "@/components/site/HomeBeforeAfter";
-import { HomeGuarantees } from "@/components/site/HomeGuarantees";
-import { HomeResultsShowcase } from "@/components/site/HomeResultsShowcase";
-import { IndustriesShowcase } from "@/components/site/IndustriesShowcase";
-import { Testimonials } from "@/components/site/Testimonials";
-import { HomeBlogTeaser } from "@/components/site/HomeBlogTeaser";
-import { CtaBand } from "@/components/site/CtaBand";
+import { BlockRenderer } from "@/cms/blocks/BlockRenderer";
+import { DEFAULT_HOME_BLOCKS } from "@/cms/blocks/registry";
+import { fetchPage, type CmsPage } from "@/cms/loadPage";
 
 export const Route = createFileRoute("/$locale/")({
-  head: ({ params }) => {
+  loader: async ({ params }) => {
+    // Fetch from DB; fall back to static defaults on miss.
+    const page = await fetchPage("home", params.locale);
+    return { page };
+  },
+  head: ({ params, loaderData }) => {
     const isAr = params.locale === "ar";
+    const page: CmsPage | null | undefined = loaderData?.page;
+    const title =
+      page?.meta_title ??
+      (isAr
+        ? "فكرة | وكالة تسويق رقمي مرخّصة في السعودية"
+        : "Fikra | Licensed Digital Marketing Agency in KSA");
+    const description =
+      page?.meta_description ??
+      (isAr
+        ? "وكالة تسويق رقمي مرخّصة في السعودية. سيو، إعلانات، تصميم، وتطوير مواقع لشركات الخليج. باقات تسويق متكاملة. احجز استشارتك المجانية اليوم."
+        : "Licensed digital marketing agency in KSA. SEO, ads, creative and web for Gulf brands. Integrated marketing bundles. Book your free consultation today.");
+
+    const meta = [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:locale", content: isAr ? "ar_SA" : "en_US" },
+    ];
+    if (page?.no_index) meta.push({ name: "robots", content: "noindex,nofollow" });
+    if (page?.og_image_url)
+      meta.push({ property: "og:image", content: page.og_image_url });
+
     return {
-      meta: [
-        { title: isAr ? "فكرة | وكالة تسويق رقمي مرخّصة في السعودية" : "Fikra | Licensed Digital Marketing Agency in KSA" },
-        {
-          name: "description",
-          content: isAr
-            ? "وكالة تسويق رقمي مرخّصة في السعودية. سيو، إعلانات، تصميم، وتطوير مواقع لشركات الخليج. باقات تسويق متكاملة. احجز استشارتك المجانية اليوم."
-            : "Licensed digital marketing agency in KSA. SEO, ads, creative and web for Gulf brands. Integrated marketing bundles. Book your free consultation today.",
-        },
-        { property: "og:title", content: isAr ? "فكرة | وكالة تسويق رقمي مرخّصة في السعودية" : "Fikra | Licensed Digital Marketing Agency in KSA" },
-        { property: "og:description", content: isAr ? "حلول تسويق رقمي متكاملة للشركات في الخليج." : "Integrated digital marketing solutions for Gulf brands." },
-        { property: "og:locale", content: isAr ? "ar_SA" : "en_US" },
-      ],
+      meta,
       links: [
         { rel: "alternate", hrefLang: "ar", href: "https://fikra-dm.com/ar" },
         { rel: "alternate", hrefLang: "en", href: "https://fikra-dm.com/en" },
-        { rel: "canonical", href: `https://fikra-dm.com/${params.locale}` },
+        {
+          rel: "canonical",
+          href: page?.canonical_url ?? `https://fikra-dm.com/${params.locale}`,
+        },
       ],
     };
   },
@@ -43,23 +51,16 @@ export const Route = createFileRoute("/$locale/")({
 });
 
 function HomePage() {
+  const { page } = Route.useLoaderData();
+  // Use DB blocks when present, otherwise the built-in default order.
+  const blocks =
+    page && Array.isArray(page.blocks) && page.blocks.length > 0
+      ? page.blocks
+      : DEFAULT_HOME_BLOCKS;
+
   return (
     <SiteLayout>
-      <HeroSlider />
-      <TrustStrip />
-      <StatsBand />
-      <ServicesGrid />
-      <HomePackages />
-      <HomeBeforeAfter />
-      <HomeResultsShowcase />
-      <PackageBuilder />
-      <HomeGuarantees />
-      <ProcessSection />
-      <Testimonials />
-      <IndustriesShowcase />
-      <LogosStrip />
-      <HomeBlogTeaser />
-      <CtaBand />
+      <BlockRenderer blocks={blocks} />
     </SiteLayout>
   );
 }
