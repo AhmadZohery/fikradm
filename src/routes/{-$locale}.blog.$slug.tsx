@@ -8,10 +8,10 @@ import { useLocale } from "@/i18n/useLocale";
 import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blog";
 import { Calendar, Clock, User, Share2 } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/blog/$slug")({
+export const Route = createFileRoute("/{-$locale}/blog/$slug")({
   head: ({ params }) => {
     const post = getPostBySlug(params.slug);
-    const ar = params.locale === "ar";
+    const ar = (params.locale ?? "ar") === "ar";
     if (!post) {
       return { meta: [{ title: ar ? "مقال غير موجود | فكرة" : "Article not found | Fikra" }] };
     }

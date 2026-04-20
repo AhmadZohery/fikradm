@@ -102,7 +102,7 @@ export function ServicesGrid() {
             </p>
           </div>
           <Link
-            to="/$locale/services"
+            to="/{-$locale}/services"
             params={{ locale }}
             className="group inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-primary shadow-card transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-soft"
           >

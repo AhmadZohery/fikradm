@@ -7,11 +7,11 @@ import { Testimonials } from "@/components/site/Testimonials";
 import { useLocale } from "@/i18n/useLocale";
 import { Target, Heart, Award, Users } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/about")({
+export const Route = createFileRoute("/{-$locale}/about")({
   head: ({ params }) => ({
     meta: [
-      { title: params.locale === "ar" ? "من نحن | فكرة للتسويق الرقمي" : "About | Fikra Digital Marketing" },
-      { name: "description", content: params.locale === "ar" ? "تعرّف على فكرة، وكالة تسويق رقمي مرخّصة في السعودية ورؤيتنا في النمو." : "Meet Fikra — a licensed KSA digital marketing agency and our vision for growth." },
+      { title: (params.locale ?? "ar") === "ar" ? "من نحن | فكرة للتسويق الرقمي" : "About | Fikra Digital Marketing" },
+      { name: "description", content: (params.locale ?? "ar") === "ar" ? "تعرّف على فكرة، وكالة تسويق رقمي مرخّصة في السعودية ورؤيتنا في النمو." : "Meet Fikra — a licensed KSA digital marketing agency and our vision for growth." },
     ],
   }),
   component: AboutPage,

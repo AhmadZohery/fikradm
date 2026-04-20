@@ -4,14 +4,14 @@ import { BlockRenderer } from "@/cms/blocks/BlockRenderer";
 import { DEFAULT_HOME_BLOCKS } from "@/cms/blocks/registry";
 import { fetchPage, type CmsPage } from "@/cms/loadPage";
 
-export const Route = createFileRoute("/$locale/")({
+export const Route = createFileRoute("/{-$locale}/")({
   loader: async ({ params }) => {
     // Fetch from DB; fall back to static defaults on miss.
-    const page = await fetchPage("home", params.locale);
+    const page = await fetchPage("home", (params.locale ?? "ar"));
     return { page };
   },
   head: ({ params, loaderData }) => {
-    const isAr = params.locale === "ar";
+    const isAr = (params.locale ?? "ar") === "ar";
     const page: CmsPage | null | undefined = loaderData?.page;
     const title =
       page?.meta_title ??
@@ -42,7 +42,7 @@ export const Route = createFileRoute("/$locale/")({
         { rel: "alternate", hrefLang: "en", href: "https://fikra-dm.com/en" },
         {
           rel: "canonical",
-          href: page?.canonical_url ?? `https://fikra-dm.com/${params.locale}`,
+          href: page?.canonical_url ?? `https://fikra-dm.com/${(params.locale ?? "ar")}`,
         },
       ],
     };

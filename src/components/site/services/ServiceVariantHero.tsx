@@ -40,7 +40,7 @@ export function ServiceVariantHero({ service, parent, variantOverride, isSubServ
         <div className="animate-fade-up">
           {parent ? (
             <Link
-              to="/$locale/services/$slug"
+              to="/{-$locale}/services/$slug"
               params={{ locale, slug: parent.slug }}
               className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest"
               style={{ color: "var(--svc)" }}

@@ -7,9 +7,9 @@ import { Reveal } from "@/components/site/Reveal";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
 import { ArrowUpRight, TrendingUp, ShoppingBag, Heart, Building2, GraduationCap, Utensils, Plane, Sparkles, Quote } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/case-studies/")({
+export const Route = createFileRoute("/{-$locale}/case-studies/")({
   head: ({ params }) => {
-    const ar = params.locale === "ar";
+    const ar = (params.locale ?? "ar") === "ar";
     return {
       meta: [
         { title: ar ? "قصص النجاح والبورتفوليو | فكرة" : "Case Studies & Portfolio | Fikra" },
@@ -241,7 +241,7 @@ function CaseStudiesIndex() {
         <div className="container-app">
           <Reveal>
             <Link
-              to="/$locale/case-studies"
+              to="/{-$locale}/case-studies"
               params={{ locale }}
               className="group relative grid overflow-hidden rounded-[2.5rem] border border-border bg-card shadow-elegant lg:grid-cols-[1.2fr_1fr]"
             >
@@ -313,7 +313,7 @@ function CaseStudiesIndex() {
               return (
                 <Reveal key={c.slug} delay={i * 60}>
                   <Link
-                    to="/$locale/case-studies"
+                    to="/{-$locale}/case-studies"
                     params={{ locale }}
                     className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-card transition duration-500 hover:-translate-y-2 hover:border-primary/30 hover:shadow-elegant"
                   >
@@ -379,7 +379,7 @@ function CaseStudiesIndex() {
                   : "Every story here started with a free consultation. The next one could be yours."}
               </p>
               <Link
-                to="/$locale/contact"
+                to="/{-$locale}/contact"
                 params={{ locale }}
                 className="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-primary px-7 py-3.5 text-sm font-bold text-primary-foreground shadow-pop transition hover:scale-[1.02]"
               >

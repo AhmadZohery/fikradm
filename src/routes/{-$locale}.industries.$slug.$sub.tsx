@@ -8,14 +8,14 @@ import { Reveal } from "@/components/site/Reveal";
 import { findIndustry, findSubIndustry, getSubIndustriesFor } from "@/content/data";
 import { Check, X, ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/industries/$slug/$sub")({
+export const Route = createFileRoute("/{-$locale}/industries/$slug/$sub")({
   beforeLoad: ({ params }) => {
     if (!findSubIndustry(params.slug, params.sub)) throw notFound();
   },
   head: ({ params }) => {
     const s = findSubIndustry(params.slug, params.sub);
     if (!s) return { meta: [{ title: "Not found" }] };
-    const loc = params.locale === "en" ? "en" : "ar";
+    const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
     return {
       meta: [
         { title: s.metaTitle[loc] },
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/$locale/industries/$slug/$sub")({
         { name: "twitter:image", content: s.image },
       ],
       links: [
-        { rel: "canonical", href: `https://fikra-dm.com/${params.locale}/industries/${params.slug}/${s.slug}` },
+        { rel: "canonical", href: `https://fikra-dm.com/${(params.locale ?? "ar")}/industries/${params.slug}/${s.slug}` },
         { rel: "alternate", hrefLang: "ar", href: `https://fikra-dm.com/ar/industries/${params.slug}/${s.slug}` },
         { rel: "alternate", hrefLang: "en", href: `https://fikra-dm.com/en/industries/${params.slug}/${s.slug}` },
       ],
@@ -66,7 +66,7 @@ function SubIndustryPage() {
         <div className="container-app grid items-center gap-10 py-16 md:py-24 lg:grid-cols-2">
           <Reveal>
             <Link
-              to="/$locale/industries/$slug"
+              to="/{-$locale}/industries/$slug"
               params={{ locale, slug }}
               className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
             >
@@ -84,7 +84,7 @@ function SubIndustryPage() {
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/$locale/contact"
+                to="/{-$locale}/contact"
                 params={{ locale }}
                 className="inline-flex h-11 items-center rounded-full bg-gradient-primary px-6 text-sm font-semibold text-primary-foreground shadow-soft transition hover:opacity-95 hover:shadow-glow"
               >
@@ -150,7 +150,7 @@ function SubIndustryPage() {
               {siblings.map((x, i) => (
                 <Reveal key={x.slug} delay={i * 80}>
                   <Link
-                    to="/$locale/industries/$slug/$sub"
+                    to="/{-$locale}/industries/$slug/$sub"
                     params={{ locale, slug, sub: x.slug }}
                     className="group block overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
                   >

@@ -8,14 +8,14 @@ import { Reveal } from "@/components/site/Reveal";
 import { findIndustry } from "@/content/data";
 import { Check, X, ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/industries/$slug")({
+export const Route = createFileRoute("/{-$locale}/industries/$slug")({
   beforeLoad: ({ params }) => {
     if (!findIndustry(params.slug)) throw notFound();
   },
   head: ({ params }) => {
     const ind = findIndustry(params.slug);
     if (!ind) return { meta: [{ title: "Not found" }] };
-    const loc = params.locale === "en" ? "en" : "ar";
+    const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
     return {
       meta: [
         { title: ind.metaTitle[loc] },
@@ -109,7 +109,7 @@ function IndustryPage() {
               {subs.map((x, i) => (
                 <Reveal key={x.slug} delay={i * 80}>
                   <Link
-                    to="/$locale/industries/$slug/$sub"
+                    to="/{-$locale}/industries/$slug/$sub"
                     params={{ locale, slug, sub: x.slug }}
                     className="group block h-full overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
                   >

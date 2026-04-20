@@ -7,11 +7,11 @@ import { useLocale } from "@/i18n/useLocale";
 import { ArrowRight, ArrowLeft, Check, Mail, Phone, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/$locale/contact")({
+export const Route = createFileRoute("/{-$locale}/contact")({
   head: ({ params }) => ({
     meta: [
-      { title: params.locale === "ar" ? "احجز استشارتك | فكرة" : "Book a Consultation | Fikra" },
-      { name: "description", content: params.locale === "ar" ? "احجز استشارة مجانية مع خبرائنا — نحلل وضعك ونعطيك خطة عمل." : "Book a free consultation — we analyze your situation and deliver an action plan." },
+      { title: (params.locale ?? "ar") === "ar" ? "احجز استشارتك | فكرة" : "Book a Consultation | Fikra" },
+      { name: "description", content: (params.locale ?? "ar") === "ar" ? "احجز استشارة مجانية مع خبرائنا — نحلل وضعك ونعطيك خطة عمل." : "Book a free consultation — we analyze your situation and deliver an action plan." },
     ],
   }),
   component: ContactPage,

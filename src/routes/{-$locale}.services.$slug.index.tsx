@@ -15,14 +15,14 @@ import { getServiceVariant } from "@/components/site/services/serviceVariants";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
 import { Check, ArrowUpRight } from "lucide-react";
 
-export const Route = createFileRoute("/$locale/services/$slug/")({
+export const Route = createFileRoute("/{-$locale}/services/$slug/")({
   beforeLoad: ({ params }) => {
     if (!findService(params.slug)) throw notFound();
   },
   head: ({ params }) => {
     const s = findService(params.slug);
     if (!s) return { meta: [{ title: "Not found" }] };
-    const loc = params.locale === "en" ? "en" : "ar";
+    const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
     return {
       meta: [
         { title: s.metaTitle[loc] },
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/$locale/services/$slug/")({
         { property: "og:image", content: s.image },
       ],
       links: [
-        { rel: "canonical", href: `https://fikra-dm.com/${params.locale}/services/${s.slug}` },
+        { rel: "canonical", href: `https://fikra-dm.com/${(params.locale ?? "ar")}/services/${s.slug}` },
         { rel: "alternate", hrefLang: "ar", href: `https://fikra-dm.com/ar/services/${s.slug}` },
         { rel: "alternate", hrefLang: "en", href: `https://fikra-dm.com/en/services/${s.slug}` },
       ],
