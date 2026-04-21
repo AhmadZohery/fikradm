@@ -23,6 +23,9 @@ export type BlogPost = {
   image: string;
   tableOfContents: LocalizedList;
   body: { heading: LocalizedString; paragraphs: LocalizedList }[];
+  faq?: { q: LocalizedString; a: LocalizedString }[];
+  internalLinks?: { label: LocalizedString; href: string }[];
+  cta?: { title: LocalizedString; description: LocalizedString; buttonLabel: LocalizedString; href: string };
 };
 
 export const blogCategories: BlogCategory[] = [
