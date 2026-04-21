@@ -1,0 +1,65 @@
+import { useEffect, useState } from "react";
+import { X, Sparkles, Phone, Gift } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { useLocale } from "@/i18n/useLocale";
+
+export function AnnouncementBar() {
+  const { locale, buildHref } = useLocale();
+  const isAr = locale === "ar";
+  const [dismissed, setDismissed] = useState(true);
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setDismissed(window.localStorage.getItem("fikra:ann:v1") === "1");
+  }, []);
+
+  const items = isAr
+    ? [
+        { icon: Gift, text: "استشارة مجانية + Audit شامل لموقعك", cta: "احجز الآن" },
+        { icon: Sparkles, text: "خصم 15% للعملاء الجدد على باقة الإطلاق", cta: "اعرف أكثر" },
+        { icon: Phone, text: "تواصل واتساب مباشر مع خبراء فكرة", cta: "تواصل" },
+      ]
+    : [
+        { icon: Gift, text: "Free consultation + full website Audit", cta: "Book now" },
+        { icon: Sparkles, text: "15% off launch bundle for new clients", cta: "Learn more" },
+        { icon: Phone, text: "Direct WhatsApp chat with our experts", cta: "Chat" },
+      ];
+
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % items.length), 4500);
+    return () => clearInterval(t);
+  }, [items.length]);
+
+  if (dismissed) return null;
+  const cur = items[idx];
+  const Icon = cur.icon;
+
+  return (
+    <div className="relative isolate overflow-hidden bg-gradient-to-r from-primary via-primary-glow to-primary text-primary-foreground">
+      <div className="container-app flex items-center justify-between gap-3 py-2 text-xs sm:text-sm">
+        <Link
+          to={buildHref(locale, "/contact")}
+          className="flex flex-1 items-center justify-center gap-2 font-medium transition hover:opacity-90"
+        >
+          <Icon className="h-3.5 w-3.5 shrink-0 animate-pulse" />
+          <span key={idx} className="animate-fade-in">{cur.text}</span>
+          <span className="hidden rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide sm:inline-block">
+            {cur.cta} →
+          </span>
+        </Link>
+        <button
+          type="button"
+          aria-label="Dismiss"
+          onClick={() => {
+            setDismissed(true);
+            try { window.localStorage.setItem("fikra:ann:v1", "1"); } catch { /* noop */ }
+          }}
+          className="shrink-0 rounded-full p-1 transition hover:bg-white/15"
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}

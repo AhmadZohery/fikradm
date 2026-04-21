@@ -6,12 +6,14 @@ import { CookieBanner } from "./CookieBanner";
 import { ScrollProgress } from "./cinematic/ScrollProgress";
 import { ScrollToTop } from "./cinematic/ScrollToTop";
 import { PageViewTracker } from "./PageViewTracker";
+import { AnnouncementBar } from "./AnnouncementBar";
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <PageViewTracker />
       <ScrollProgress />
+      <AnnouncementBar />
       <SiteHeader />
       <main className="flex-1 pt-[var(--header-h,4.5rem)]">{children}</main>
       <SiteFooter />

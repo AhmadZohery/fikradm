@@ -6,7 +6,9 @@ import { BlogCard } from "@/components/site/BlogCard";
 import { Reveal } from "@/components/site/Reveal";
 import { useLocale } from "@/i18n/useLocale";
 import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blog";
-import { Calendar, Clock, User, Share2 } from "lucide-react";
+import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/{-$locale}/blog/$slug")({
   head: ({ params }) => {
@@ -62,6 +64,21 @@ function PostPage() {
   const post = getPostBySlug(slug)!;
   const cat = getCategoryBySlug(post.categorySlug);
   const related = getRelatedPosts(slug, 3);
+  const [readingProgress, setReadingProgress] = useState(0);
+  const [shareUrl, setShareUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setShareUrl(window.location.href);
+    const onScroll = () => {
+      const h = document.documentElement;
+      const total = h.scrollHeight - h.clientHeight;
+      setReadingProgress(total > 0 ? Math.min(100, (h.scrollTop / total) * 100) : 0);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const dateText = new Date(post.publishedAt).toLocaleDateString(locale === "ar" ? "ar-SA" : "en-US", {
     year: "numeric",
@@ -101,10 +118,55 @@ function PostPage() {
     ],
   };
 
+  const faqJsonLd = post.faq && post.faq.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: post.faq.map((f) => ({
+      "@type": "Question",
+      name: f.q[loc],
+      acceptedAnswer: { "@type": "Answer", text: f.a[loc] },
+    })),
+  } : null;
+
+  const speakableJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SpeakableSpecification",
+    cssSelector: ["h1", ".prose-fikra h2", ".prose-fikra p"],
+  };
+
+  const encShare = encodeURIComponent(shareUrl);
+  const encTitle = encodeURIComponent(post.title[loc]);
+  const shareLinks = [
+    { id: "twitter", label: "X / Twitter", icon: Twitter, href: `https://twitter.com/intent/tweet?url=${encShare}&text=${encTitle}`, color: "hover:text-[#1DA1F2]" },
+    { id: "facebook", label: "Facebook", icon: Facebook, href: `https://www.facebook.com/sharer/sharer.php?u=${encShare}`, color: "hover:text-[#1877F2]" },
+    { id: "linkedin", label: "LinkedIn", icon: Linkedin, href: `https://www.linkedin.com/sharing/share-offsite/?url=${encShare}`, color: "hover:text-[#0A66C2]" },
+    { id: "whatsapp", label: "WhatsApp", icon: MessageCircle, href: `https://wa.me/?text=${encTitle}%20${encShare}`, color: "hover:text-[#25D366]" },
+    { id: "telegram", label: "Telegram", icon: Send, href: `https://t.me/share/url?url=${encShare}&text=${encTitle}`, color: "hover:text-[#26A5E4]" },
+  ];
+
+  const copyLink = () => {
+    if (typeof navigator === "undefined" || !navigator.clipboard) return;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      toast.success(locale === "ar" ? "تم نسخ الرابط ✓" : "Link copied ✓");
+    });
+  };
+
   return (
     <SiteLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }} />
+      {faqJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      )}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableJsonLd) }} />
+
+      {/* Reading progress bar */}
+      <div className="fixed left-0 right-0 top-0 z-40 h-1 bg-transparent">
+        <div
+          className="h-full bg-gradient-primary transition-[width] duration-150 ease-out"
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
 
       <Breadcrumbs
         trail={[
@@ -177,6 +239,107 @@ function PostPage() {
                 </span>
               ))}
             </div>
+
+            {/* Inline CTA */}
+            {post.cta && (
+              <Reveal>
+                <div className="my-10 overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-7 md:p-10">
+                  <h3 className="text-2xl font-extrabold text-foreground md:text-3xl">{post.cta.title[loc]}</h3>
+                  <p className="mt-3 text-base text-foreground/80 md:text-lg">{post.cta.description[loc]}</p>
+                  <Link
+                    to={buildHref(locale, post.cta.href)}
+                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-elegant transition-transform hover:scale-105 active:scale-95"
+                  >
+                    {post.cta.buttonLabel[loc]}
+                    {locale === "ar" ? <ArrowLeft className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
+                  </Link>
+                </div>
+              </Reveal>
+            )}
+
+            {/* FAQ Section */}
+            {post.faq && post.faq.length > 0 && (
+              <Reveal>
+                <section id="faq" className="mt-12 scroll-mt-24">
+                  <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-foreground md:text-3xl">
+                    <HelpCircle className="h-6 w-6 text-primary" />
+                    {locale === "ar" ? "الأسئلة الشائعة" : "Frequently Asked Questions"}
+                  </h2>
+                  <div className="space-y-3">
+                    {post.faq.map((f, i) => (
+                      <details
+                        key={i}
+                        className="group rounded-2xl border border-border bg-card p-5 transition-shadow hover:shadow-soft open:shadow-elegant"
+                      >
+                        <summary className="flex cursor-pointer list-none items-start justify-between gap-3 text-base font-semibold text-foreground">
+                          <span>{f.q[loc]}</span>
+                          <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform group-open:rotate-45">
+                            +
+                          </span>
+                        </summary>
+                        <p className="mt-3 text-sm leading-relaxed text-foreground/75">{f.a[loc]}</p>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+              </Reveal>
+            )}
+
+            {/* Internal links */}
+            {post.internalLinks && post.internalLinks.length > 0 && (
+              <Reveal>
+                <section className="mt-12">
+                  <h2 className="mb-5 text-2xl font-bold text-foreground md:text-3xl">
+                    {locale === "ar" ? "اقرأ أيضاً" : "Read also"}
+                  </h2>
+                  <ul className="grid gap-3 sm:grid-cols-2">
+                    {post.internalLinks.map((l, i) => (
+                      <li key={i}>
+                        <Link
+                          to={buildHref(locale, l.href)}
+                          className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-medium text-foreground transition-all hover:border-primary hover:bg-primary/5 hover:shadow-soft"
+                        >
+                          <span className="line-clamp-2">{l.label[loc]}</span>
+                          <span className="shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                            {locale === "ar" ? "←" : "→"}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </Reveal>
+            )}
+
+            {/* Social Share Bar (bottom) */}
+            <div className="mt-12 rounded-2xl border border-border bg-card p-5">
+              <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-foreground">
+                <Share2 className="h-4 w-4 text-primary" />
+                {locale === "ar" ? "شارك المقال" : "Share this article"}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {shareLinks.map((s) => (
+                  <a
+                    key={s.id}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className={`inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground/70 transition-all hover:scale-110 hover:border-primary hover:shadow-soft ${s.color}`}
+                  >
+                    <s.icon className="h-4 w-4" />
+                  </a>
+                ))}
+                <button
+                  type="button"
+                  onClick={copyLink}
+                  aria-label={locale === "ar" ? "نسخ الرابط" : "Copy link"}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground/70 transition-all hover:scale-110 hover:border-primary hover:text-primary hover:shadow-soft"
+                >
+                  <Link2 className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
           </article>
 
           {/* Sidebar */}
@@ -213,6 +376,30 @@ function PostPage() {
                 <Share2 className="h-4 w-4" />
                 {locale === "ar" ? "مشاركة المقال" : "Share article"}
               </button>
+
+              {/* Quick share icons in sidebar */}
+              <div className="mt-4 flex flex-wrap justify-center gap-1.5 border-t border-border pt-4">
+                {shareLinks.slice(0, 4).map((s) => (
+                  <a
+                    key={s.id}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-foreground/60 transition-transform hover:scale-110 ${s.color}`}
+                  >
+                    <s.icon className="h-3.5 w-3.5" />
+                  </a>
+                ))}
+                <button
+                  type="button"
+                  onClick={copyLink}
+                  aria-label={locale === "ar" ? "نسخ الرابط" : "Copy link"}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full text-foreground/60 transition-transform hover:scale-110 hover:text-primary"
+                >
+                  <Link2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
             </div>
           </aside>
         </div>
