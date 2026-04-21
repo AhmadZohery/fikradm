@@ -28,6 +28,7 @@ import { Route as Char123LocaleChar125BlogIndexRouteImport } from './routes/{-$l
 import { Route as Char123LocaleChar125LocationsSlugRouteImport } from './routes/{-$locale}.locations.$slug'
 import { Route as Char123LocaleChar125IndustriesSlugRouteImport } from './routes/{-$locale}.industries.$slug'
 import { Route as Char123LocaleChar125BlogSlugRouteImport } from './routes/{-$locale}.blog.$slug'
+import { Route as ApiAdminBootstrapRoleRouteImport } from './routes/api/admin.bootstrap-role'
 import { Route as AdminPagesPageIdRouteImport } from './routes/admin.pages.$pageId'
 import { Route as Char123LocaleChar125ServicesSlugIndexRouteImport } from './routes/{-$locale}.services.$slug.index'
 import { Route as Char123LocaleChar125ServicesSlugSubRouteImport } from './routes/{-$locale}.services.$slug.$sub'
@@ -139,6 +140,11 @@ const Char123LocaleChar125BlogSlugRoute =
     path: '/blog/$slug',
     getParentRoute: () => Char123LocaleChar125Route,
   } as any)
+const ApiAdminBootstrapRoleRoute = ApiAdminBootstrapRoleRouteImport.update({
+  id: '/api/admin/bootstrap-role',
+  path: '/api/admin/bootstrap-role',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminPagesPageIdRoute = AdminPagesPageIdRouteImport.update({
   id: '/$pageId',
   path: '/$pageId',
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
   '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
+  '/api/admin/bootstrap-role': typeof ApiAdminBootstrapRoleRoute
   '/{-$locale}/blog/$slug': typeof Char123LocaleChar125BlogSlugRoute
   '/{-$locale}/industries/$slug': typeof Char123LocaleChar125IndustriesSlugRouteWithChildren
   '/{-$locale}/locations/$slug': typeof Char123LocaleChar125LocationsSlugRoute
@@ -207,6 +214,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/{-$locale}': typeof Char123LocaleChar125IndexRoute
   '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
+  '/api/admin/bootstrap-role': typeof ApiAdminBootstrapRoleRoute
   '/{-$locale}/blog/$slug': typeof Char123LocaleChar125BlogSlugRoute
   '/{-$locale}/industries/$slug': typeof Char123LocaleChar125IndustriesSlugRouteWithChildren
   '/{-$locale}/locations/$slug': typeof Char123LocaleChar125LocationsSlugRoute
@@ -234,6 +242,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
   '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
+  '/api/admin/bootstrap-role': typeof ApiAdminBootstrapRoleRoute
   '/{-$locale}/blog/$slug': typeof Char123LocaleChar125BlogSlugRoute
   '/{-$locale}/industries/$slug': typeof Char123LocaleChar125IndustriesSlugRouteWithChildren
   '/{-$locale}/locations/$slug': typeof Char123LocaleChar125LocationsSlugRoute
@@ -262,6 +271,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/{-$locale}/'
     | '/admin/pages/$pageId'
+    | '/api/admin/bootstrap-role'
     | '/{-$locale}/blog/$slug'
     | '/{-$locale}/industries/$slug'
     | '/{-$locale}/locations/$slug'
@@ -286,6 +296,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/{-$locale}'
     | '/admin/pages/$pageId'
+    | '/api/admin/bootstrap-role'
     | '/{-$locale}/blog/$slug'
     | '/{-$locale}/industries/$slug'
     | '/{-$locale}/locations/$slug'
@@ -312,6 +323,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/{-$locale}/'
     | '/admin/pages/$pageId'
+    | '/api/admin/bootstrap-role'
     | '/{-$locale}/blog/$slug'
     | '/{-$locale}/industries/$slug'
     | '/{-$locale}/locations/$slug'
@@ -328,6 +340,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   Char123LocaleChar125Route: typeof Char123LocaleChar125RouteWithChildren
+  ApiAdminBootstrapRoleRoute: typeof ApiAdminBootstrapRoleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -465,6 +478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char123LocaleChar125BlogSlugRouteImport
       parentRoute: typeof Char123LocaleChar125Route
     }
+    '/api/admin/bootstrap-role': {
+      id: '/api/admin/bootstrap-role'
+      path: '/api/admin/bootstrap-role'
+      fullPath: '/api/admin/bootstrap-role'
+      preLoaderRoute: typeof ApiAdminBootstrapRoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/pages/$pageId': {
       id: '/admin/pages/$pageId'
       path: '/$pageId'
@@ -598,7 +618,17 @@ const Char123LocaleChar125RouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   Char123LocaleChar125Route: Char123LocaleChar125RouteWithChildren,
+  ApiAdminBootstrapRoleRoute: ApiAdminBootstrapRoleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

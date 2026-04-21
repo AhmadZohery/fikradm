@@ -109,7 +109,7 @@ function AdminLayout() {
           <SidebarFooter className="border-t">
             <div className="px-2 py-2 space-y-2">
               <a
-                href="/ar"
+                href="/"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
