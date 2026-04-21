@@ -64,6 +64,21 @@ function PostPage() {
   const post = getPostBySlug(slug)!;
   const cat = getCategoryBySlug(post.categorySlug);
   const related = getRelatedPosts(slug, 3);
+  const [readingProgress, setReadingProgress] = useState(0);
+  const [shareUrl, setShareUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setShareUrl(window.location.href);
+    const onScroll = () => {
+      const h = document.documentElement;
+      const total = h.scrollHeight - h.clientHeight;
+      setReadingProgress(total > 0 ? Math.min(100, (h.scrollTop / total) * 100) : 0);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const dateText = new Date(post.publishedAt).toLocaleDateString(locale === "ar" ? "ar-SA" : "en-US", {
     year: "numeric",
@@ -103,10 +118,55 @@ function PostPage() {
     ],
   };
 
+  const faqJsonLd = post.faq && post.faq.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: post.faq.map((f) => ({
+      "@type": "Question",
+      name: f.q[loc],
+      acceptedAnswer: { "@type": "Answer", text: f.a[loc] },
+    })),
+  } : null;
+
+  const speakableJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SpeakableSpecification",
+    cssSelector: ["h1", ".prose-fikra h2", ".prose-fikra p"],
+  };
+
+  const encShare = encodeURIComponent(shareUrl);
+  const encTitle = encodeURIComponent(post.title[loc]);
+  const shareLinks = [
+    { id: "twitter", label: "X / Twitter", icon: Twitter, href: `https://twitter.com/intent/tweet?url=${encShare}&text=${encTitle}`, color: "hover:text-[#1DA1F2]" },
+    { id: "facebook", label: "Facebook", icon: Facebook, href: `https://www.facebook.com/sharer/sharer.php?u=${encShare}`, color: "hover:text-[#1877F2]" },
+    { id: "linkedin", label: "LinkedIn", icon: Linkedin, href: `https://www.linkedin.com/sharing/share-offsite/?url=${encShare}`, color: "hover:text-[#0A66C2]" },
+    { id: "whatsapp", label: "WhatsApp", icon: MessageCircle, href: `https://wa.me/?text=${encTitle}%20${encShare}`, color: "hover:text-[#25D366]" },
+    { id: "telegram", label: "Telegram", icon: Send, href: `https://t.me/share/url?url=${encShare}&text=${encTitle}`, color: "hover:text-[#26A5E4]" },
+  ];
+
+  const copyLink = () => {
+    if (typeof navigator === "undefined" || !navigator.clipboard) return;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      toast.success(locale === "ar" ? "تم نسخ الرابط ✓" : "Link copied ✓");
+    });
+  };
+
   return (
     <SiteLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }} />
+      {faqJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      )}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableJsonLd) }} />
+
+      {/* Reading progress bar */}
+      <div className="fixed left-0 right-0 top-0 z-40 h-1 bg-transparent">
+        <div
+          className="h-full bg-gradient-primary transition-[width] duration-150 ease-out"
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
 
       <Breadcrumbs
         trail={[
