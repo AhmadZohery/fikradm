@@ -47,16 +47,19 @@ function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Login page is rendered standalone (no sidebar / no auth gate).
-  if (location.pathname === "/admin/login") return <Outlet />;
+  const isLoginRoute = location.pathname === "/admin/login";
 
   useEffect(() => {
+    if (isLoginRoute) return;
     if (loading) return;
     if (!user) {
       navigate({ to: "/admin/login" });
       return;
     }
-  }, [user, isStaff, loading, navigate]);
+  }, [user, isStaff, loading, navigate, isLoginRoute]);
+
+  // Login page is rendered standalone (no sidebar / no auth gate).
+  if (isLoginRoute) return <Outlet />;
 
   if (loading) {
     return (
