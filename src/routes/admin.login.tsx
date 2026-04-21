@@ -23,9 +23,13 @@ function AdminLogin() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/admin" });
+      if (!cancelled && data.session) navigate({ to: "/admin" });
     });
+    return () => {
+      cancelled = true;
+    };
   }, [navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -39,7 +43,13 @@ function AdminLogin() {
           options: { emailRedirectTo: `${window.location.origin}/admin` },
         });
         if (error) throw error;
-        toast.success("تم إنشاء الحساب! جاري تسجيل الدخول...");
+        // Auto-confirm is enabled, sign-in immediately if no session was returned.
+        const { data: sessRes } = await supabase.auth.getSession();
+        if (!sessRes.session) {
+          const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInErr) throw signInErr;
+        }
+        toast.success("تم إنشاء الحساب وتسجيل الدخول");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
