@@ -13,13 +13,17 @@ export function useAuth() {
   useEffect(() => {
     // 1) Set up listener FIRST to avoid race conditions
     const { data: sub } = supabase.auth.onAuthStateChange((_event, sess) => {
+      setLoading(true);
       setSession(sess);
       setUser(sess?.user ?? null);
       if (sess?.user) {
         // Defer Supabase calls (avoid deadlocks inside callback)
-        setTimeout(() => fetchRoles(sess.user.id), 0);
+        setTimeout(() => {
+          void fetchRoles(sess.user.id, sess.access_token).finally(() => setLoading(false));
+        }, 0);
       } else {
         setRoles([]);
+        setLoading(false);
       }
     });
 
@@ -28,7 +32,7 @@ export function useAuth() {
       setSession(sess);
       setUser(sess?.user ?? null);
       if (sess?.user) {
-        fetchRoles(sess.user.id).finally(() => setLoading(false));
+        fetchRoles(sess.user.id, sess.access_token).finally(() => setLoading(false));
       } else {
         setLoading(false);
       }
@@ -37,12 +41,29 @@ export function useAuth() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  async function fetchRoles(userId: string) {
+  async function fetchRoles(userId: string, accessToken?: string) {
     const { data } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", userId);
-    setRoles((data ?? []).map((r) => r.role as AppRole));
+
+    let nextRoles = (data ?? []).map((r) => r.role as AppRole);
+
+    if (nextRoles.length === 0 && accessToken) {
+      const res = await fetch("/api/admin/bootstrap-role", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (res.ok) {
+        const payload = (await res.json()) as { roles?: AppRole[] };
+        nextRoles = Array.isArray(payload.roles) ? payload.roles : [];
+      }
+    }
+
+    setRoles(nextRoles);
   }
 
   const isAdmin = roles.includes("admin");
