@@ -239,6 +239,107 @@ function PostPage() {
                 </span>
               ))}
             </div>
+
+            {/* Inline CTA */}
+            {post.cta && (
+              <Reveal>
+                <div className="my-10 overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-7 md:p-10">
+                  <h3 className="text-2xl font-extrabold text-foreground md:text-3xl">{post.cta.title[loc]}</h3>
+                  <p className="mt-3 text-base text-foreground/80 md:text-lg">{post.cta.description[loc]}</p>
+                  <Link
+                    to={buildHref(locale, post.cta.href)}
+                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-elegant transition-transform hover:scale-105 active:scale-95"
+                  >
+                    {post.cta.buttonLabel[loc]}
+                    {locale === "ar" ? <ArrowLeft className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
+                  </Link>
+                </div>
+              </Reveal>
+            )}
+
+            {/* FAQ Section */}
+            {post.faq && post.faq.length > 0 && (
+              <Reveal>
+                <section id="faq" className="mt-12 scroll-mt-24">
+                  <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-foreground md:text-3xl">
+                    <HelpCircle className="h-6 w-6 text-primary" />
+                    {locale === "ar" ? "الأسئلة الشائعة" : "Frequently Asked Questions"}
+                  </h2>
+                  <div className="space-y-3">
+                    {post.faq.map((f, i) => (
+                      <details
+                        key={i}
+                        className="group rounded-2xl border border-border bg-card p-5 transition-shadow hover:shadow-soft open:shadow-elegant"
+                      >
+                        <summary className="flex cursor-pointer list-none items-start justify-between gap-3 text-base font-semibold text-foreground">
+                          <span>{f.q[loc]}</span>
+                          <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform group-open:rotate-45">
+                            +
+                          </span>
+                        </summary>
+                        <p className="mt-3 text-sm leading-relaxed text-foreground/75">{f.a[loc]}</p>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+              </Reveal>
+            )}
+
+            {/* Internal links */}
+            {post.internalLinks && post.internalLinks.length > 0 && (
+              <Reveal>
+                <section className="mt-12">
+                  <h2 className="mb-5 text-2xl font-bold text-foreground md:text-3xl">
+                    {locale === "ar" ? "اقرأ أيضاً" : "Read also"}
+                  </h2>
+                  <ul className="grid gap-3 sm:grid-cols-2">
+                    {post.internalLinks.map((l, i) => (
+                      <li key={i}>
+                        <Link
+                          to={buildHref(locale, l.href)}
+                          className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-medium text-foreground transition-all hover:border-primary hover:bg-primary/5 hover:shadow-soft"
+                        >
+                          <span className="line-clamp-2">{l.label[loc]}</span>
+                          <span className="shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                            {locale === "ar" ? "←" : "→"}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </Reveal>
+            )}
+
+            {/* Social Share Bar (bottom) */}
+            <div className="mt-12 rounded-2xl border border-border bg-card p-5">
+              <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-foreground">
+                <Share2 className="h-4 w-4 text-primary" />
+                {locale === "ar" ? "شارك المقال" : "Share this article"}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {shareLinks.map((s) => (
+                  <a
+                    key={s.id}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className={`inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground/70 transition-all hover:scale-110 hover:border-primary hover:shadow-soft ${s.color}`}
+                  >
+                    <s.icon className="h-4 w-4" />
+                  </a>
+                ))}
+                <button
+                  type="button"
+                  onClick={copyLink}
+                  aria-label={locale === "ar" ? "نسخ الرابط" : "Copy link"}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground/70 transition-all hover:scale-110 hover:border-primary hover:text-primary hover:shadow-soft"
+                >
+                  <Link2 className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
           </article>
 
           {/* Sidebar */}
