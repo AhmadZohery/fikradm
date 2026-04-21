@@ -376,6 +376,30 @@ function PostPage() {
                 <Share2 className="h-4 w-4" />
                 {locale === "ar" ? "مشاركة المقال" : "Share article"}
               </button>
+
+              {/* Quick share icons in sidebar */}
+              <div className="mt-4 flex flex-wrap justify-center gap-1.5 border-t border-border pt-4">
+                {shareLinks.slice(0, 4).map((s) => (
+                  <a
+                    key={s.id}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-foreground/60 transition-transform hover:scale-110 ${s.color}`}
+                  >
+                    <s.icon className="h-3.5 w-3.5" />
+                  </a>
+                ))}
+                <button
+                  type="button"
+                  onClick={copyLink}
+                  aria-label={locale === "ar" ? "نسخ الرابط" : "Copy link"}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full text-foreground/60 transition-transform hover:scale-110 hover:text-primary"
+                >
+                  <Link2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
             </div>
           </aside>
         </div>
