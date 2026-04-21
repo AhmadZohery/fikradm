@@ -47,19 +47,18 @@ function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Login page is rendered standalone (no sidebar / no auth gate).
+  if (location.pathname === "/admin/login") return <Outlet />;
+
   useEffect(() => {
     if (loading) return;
     if (!user) {
       navigate({ to: "/admin/login" });
       return;
     }
-    if (!isStaff) {
-      // Logged in but no staff role
-      navigate({ to: "/admin/login" });
-    }
   }, [user, isStaff, loading, navigate]);
 
-  if (loading || !user || !isStaff) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-muted-foreground text-sm">جاري التحميل...</div>
@@ -67,8 +66,30 @@ function AdminLayout() {
     );
   }
 
-  // Skip layout for the login page itself (it's a sibling route, but just in case)
-  if (location.pathname === "/admin/login") return <Outlet />;
+  if (!user) return null; // navigation kicks in
+
+  if (!isStaff) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background p-6">
+        <div className="max-w-md text-center space-y-4">
+          <div className="mx-auto w-12 h-12 rounded-2xl bg-destructive/10 text-destructive grid place-items-center">!</div>
+          <h1 className="text-xl font-bold">لا توجد لديك صلاحية وصول</h1>
+          <p className="text-sm text-muted-foreground">
+            حسابك ({user.email}) ليس لديه دور admin أو editor. تواصل مع المسؤول لمنحك الصلاحية، أو سجّل خروج وادخل بحساب آخر.
+          </p>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              await supabase.auth.signOut();
+              navigate({ to: "/admin/login" });
+            }}
+          >
+            تسجيل الخروج
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider>
