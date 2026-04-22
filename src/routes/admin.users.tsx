@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Loader2, Trash2, Plus, Mail } from "lucide-react";
+import { Loader2, Trash2, Plus, Mail, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { usePermissions } from "@/hooks/usePermissions";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ async function callAdminUsers<T = unknown>(payload: Record<string, unknown>): Pr
 }
 
 function UsersPage() {
+  const { canManageUsers, loading: permLoading } = usePermissions();
   const [rows, setRows] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -56,8 +58,24 @@ function UsersPage() {
   };
 
   useEffect(() => {
-    void load();
-  }, []);
+    if (canManageUsers) void load();
+  }, [canManageUsers]);
+
+  if (permLoading) return null;
+  if (!canManageUsers) {
+    return (
+      <Card className="mx-auto mt-10 max-w-lg space-y-3 p-6 text-center">
+        <ShieldAlert className="mx-auto h-8 w-8 text-muted-foreground" />
+        <h1 className="text-lg font-bold">صفحة المستخدمين متاحة لـ admin فقط</h1>
+        <p className="text-sm text-muted-foreground">
+          صلاحيتك الحالية لا تسمح بإدارة الحسابات. تواصل مع المسؤول إذا كنت بحاجة لذلك.
+        </p>
+        <Button asChild variant="outline">
+          <Link to="/admin">العودة للوحة التحكم</Link>
+        </Button>
+      </Card>
+    );
+  }
 
   const updateRole = async (user: UserRow, role: Role) => {
     setBusyId(user.id);
