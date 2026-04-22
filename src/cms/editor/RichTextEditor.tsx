@@ -188,6 +188,8 @@ function Toolbar({ editor }: { editor: Editor }) {
         <Btn onClick={() => editor.chain().focus().toggleOrderedList().run()} active={editor.isActive("orderedList")} title="قائمة مرقمة"><ListOrdered className="w-3.5 h-3.5" /></Btn>
         <Btn onClick={() => editor.chain().focus().toggleBlockquote().run()} active={editor.isActive("blockquote")} title="اقتباس"><Quote className="w-3.5 h-3.5" /></Btn>
         <Btn onClick={() => editor.chain().focus().toggleCodeBlock().run()} active={editor.isActive("codeBlock")} title="كود"><Code className="w-3.5 h-3.5" /></Btn>
+        <Btn onClick={() => editor.chain().focus().toggleTaskList().run()} active={editor.isActive("taskList")} title="قائمة مهام"><ListChecks className="w-3.5 h-3.5" /></Btn>
+        <Btn onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} title="جدول"><TableIcon className="w-3.5 h-3.5" /></Btn>
         <Separator orientation="vertical" className="h-5 mx-0.5" />
         <Btn onClick={() => editor.chain().focus().setTextAlign("right").run()} active={editor.isActive({ textAlign: "right" })} title="يمين"><AlignRight className="w-3.5 h-3.5" /></Btn>
         <Btn onClick={() => editor.chain().focus().setTextAlign("center").run()} active={editor.isActive({ textAlign: "center" })} title="وسط"><AlignCenter className="w-3.5 h-3.5" /></Btn>
