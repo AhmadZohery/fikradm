@@ -97,12 +97,16 @@ function PagesList() {
       toast.error("تعذر النسخ");
       return;
     }
-    const newSlug = `${full.slug}-copy-${Math.random().toString(36).slice(2, 5)}`;
-    const { id: _id, created_at: _c, updated_at: _u, published_at: _p, ...rest } = full as Record<string, unknown> & { id: string; created_at: string; updated_at: string; published_at: string | null };
-    void _id; void _c; void _u; void _p;
+    const src = full as Record<string, unknown> & { slug: string; title: string };
+    const newSlug = `${src.slug}-copy-${Math.random().toString(36).slice(2, 5)}`;
+    const rest: Record<string, unknown> = { ...src };
+    delete rest.id;
+    delete rest.created_at;
+    delete rest.updated_at;
+    delete rest.published_at;
     const { data: ins, error: e2 } = await supabase
       .from("pages")
-      .insert({ ...(rest as never), slug: newSlug, status: "draft", title: `${full.title} (نسخة)` } as never)
+      .insert({ ...rest, slug: newSlug, status: "draft", title: `${src.title} (نسخة)` } as never)
       .select("id")
       .single();
     if (e2 || !ins) {
