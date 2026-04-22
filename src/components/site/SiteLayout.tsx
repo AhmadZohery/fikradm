@@ -8,9 +8,20 @@ import { ScrollProgress } from "./cinematic/ScrollProgress";
 import { ScrollToTop } from "./cinematic/ScrollToTop";
 import { PageViewTracker } from "./PageViewTracker";
 import { AnnouncementBar } from "./AnnouncementBar";
+import { useSiteSetting } from "@/hooks/useSiteSettings";
 import { performPreviewHardReload, PREVIEW_RELOAD_EVENT_KEY } from "@/lib/previewRuntime";
 
 export function SiteLayout({ children }: { children: ReactNode }) {
+  const brand = useSiteSetting("brand", {} as Record<string, string>);
+  useEffect(() => {
+    const color = (brand as Record<string, string>).primary_color;
+    if (!color) return;
+    document.documentElement.style.setProperty("--brand-primary-override", color);
+    // Apply to common token if user provided a valid color
+    const root = document.documentElement.style;
+    root.setProperty("--primary-runtime", color);
+  }, [brand]);
+
   useEffect(() => {
     const applyQaClass = () => {
       const qaVisual = new URLSearchParams(window.location.search).get("qa") === "visual";
