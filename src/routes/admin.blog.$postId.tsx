@@ -178,18 +178,23 @@ function BlogPostEditorPage() {
     };
   }, [postId, navigate]);
 
-  // Auto-extract TOC and inject ids on every body change
+  // Auto-extract TOC (debounced) — DOES NOT rewrite body HTML, only updates toc list
+  // to avoid breaking cursor position inside the editor on every keystroke.
   useEffect(() => {
     if (!post) return;
-    const bodyKey = lang === "ar" ? "body_html_ar" : "body_html_en";
-    const tocKey = lang === "ar" ? "toc_ar" : "toc_en";
-    const html = post[bodyKey];
+    const html = lang === "ar" ? post.body_html_ar : post.body_html_en;
     if (lastTocAutoUpdate.current[lang] === html) return;
-    const { html: rewritten, toc } = extractToc(html);
-    if (rewritten !== html || JSON.stringify(toc) !== JSON.stringify(post[tocKey])) {
-      setPost({ ...post, [bodyKey]: rewritten, [tocKey]: toc });
-    }
-    lastTocAutoUpdate.current[lang] = rewritten;
+    const t = setTimeout(() => {
+      const { toc } = extractToc(html);
+      lastTocAutoUpdate.current[lang] = html;
+      setPost((prev) => {
+        if (!prev) return prev;
+        const tocKey = lang === "ar" ? "toc_ar" : "toc_en";
+        if (JSON.stringify(prev[tocKey]) === JSON.stringify(toc)) return prev;
+        return { ...prev, [tocKey]: toc };
+      });
+    }, 600);
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post?.body_html_ar, post?.body_html_en, lang]);
 
