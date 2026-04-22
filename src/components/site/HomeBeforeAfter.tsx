@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useLocale } from "@/i18n/useLocale";
 import { SectionEyebrow } from "./cinematic/SectionEyebrow";
 import { BeforeAfter } from "./cinematic/BeforeAfter";
@@ -7,12 +7,10 @@ import { CountUp } from "./cinematic/CountUp";
 export function HomeBeforeAfter() {
   const { locale } = useLocale();
   const isAr = locale === "ar";
-  const [qaVisual, setQaVisual] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    setQaVisual(new URLSearchParams(window.location.search).get("qa") === "visual");
-  }, []);
+  const qaVisual = useMemo(
+    () => typeof window !== "undefined" && new URLSearchParams(window.location.search).get("qa") === "visual",
+    [],
+  );
 
   return (
     <section className={`section bg-surface-soft ${qaVisual ? "qa-visualize" : ""}`}>
