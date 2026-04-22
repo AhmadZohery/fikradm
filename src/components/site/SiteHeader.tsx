@@ -262,24 +262,26 @@ export function SiteHeader() {
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Search — icon only on mobile, full pill on md+ */}
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
               aria-label={loc === "ar" ? "بحث" : "Search"}
-              className="group inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background/60 px-3 text-xs font-bold text-foreground/80 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 hover:text-primary hover:shadow-soft"
+              className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/60 text-foreground/80 backdrop-blur transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 hover:text-primary md:h-9 md:w-auto md:gap-1.5 md:px-3 md:text-xs md:font-bold"
             >
-              <Search className="h-3.5 w-3.5" />
+              <Search className="h-4 w-4 md:h-3.5 md:w-3.5" />
               <span className="hidden md:inline">{loc === "ar" ? "بحث" : "Search"}</span>
               <kbd className="hidden rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground md:inline">⌘K</kbd>
             </button>
+            {/* Language toggle — icon only on mobile */}
             <Link
               to={buildHref(otherLocale)}
-              className="group inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background/60 px-3 text-xs font-bold text-foreground/80 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 hover:text-primary hover:shadow-soft"
+              className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/60 text-foreground/80 backdrop-blur transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 hover:text-primary md:h-9 md:w-auto md:gap-1.5 md:px-3 md:text-xs md:font-bold"
               aria-label={`Switch to ${LOCALE_LABELS[otherLocale]}`}
             >
-              <Globe className="h-3.5 w-3.5 transition duration-500 group-hover:rotate-180" />
-              {LOCALE_LABELS[otherLocale]}
+              <Globe className="h-4 w-4 transition duration-500 group-hover:rotate-180 md:h-3.5 md:w-3.5" />
+              <span className="hidden md:inline">{LOCALE_LABELS[otherLocale]}</span>
             </Link>
             <Link
               to={buildHref(locale, "/contact")}
@@ -291,10 +293,11 @@ export function SiteHeader() {
             </Link>
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/60 backdrop-blur transition hover:border-primary/40 hover:bg-primary/5 lg:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/60 text-foreground backdrop-blur transition hover:border-primary/40 hover:bg-primary/5 active:scale-95 lg:hidden"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={t("nav.menu")}
               aria-expanded={mobileOpen}
+              aria-controls="mobile-menu-drawer"
             >
              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
