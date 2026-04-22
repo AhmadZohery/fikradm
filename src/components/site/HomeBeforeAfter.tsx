@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useLocale } from "@/i18n/useLocale";
 import { SectionEyebrow } from "./cinematic/SectionEyebrow";
 import { BeforeAfter } from "./cinematic/BeforeAfter";
@@ -6,8 +7,15 @@ import { CountUp } from "./cinematic/CountUp";
 export function HomeBeforeAfter() {
   const { locale } = useLocale();
   const isAr = locale === "ar";
+  const [qaVisual, setQaVisual] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setQaVisual(new URLSearchParams(window.location.search).get("qa") === "visual");
+  }, []);
+
   return (
-    <section className="section bg-surface-soft">
+    <section className={`section bg-surface-soft ${qaVisual ? "qa-visualize" : ""}`}>
       <div className="container-app">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:items-center lg:gap-16">
           <div>
