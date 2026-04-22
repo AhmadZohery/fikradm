@@ -17,6 +17,7 @@ import { StringArrayEditor } from "@/cms/admin/StringArrayEditor";
 import { BulkImportDialog } from "@/cms/admin/BulkImportDialog";
 import { SchedulePublishField } from "@/cms/admin/SchedulePublishField";
 import type { ImportColumn } from "@/cms/admin/csvImport";
+import { LocaleSwitcher, dirFor, type AdminLocale } from "@/cms/admin/LocaleSwitcher";
 
 export const Route = createFileRoute("/admin/services")({
   component: ServicesAdmin,
