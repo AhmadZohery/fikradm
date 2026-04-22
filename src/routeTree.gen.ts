@@ -19,6 +19,7 @@ import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$local
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminSeoAuditRouteImport } from './routes/admin.seo-audit'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
@@ -93,6 +94,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
 const AdminServicesRoute = AdminServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSeoAuditRoute = AdminSeoAuditRouteImport.update({
+  id: '/seo-audit',
+  path: '/seo-audit',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminPagesRoute = AdminPagesRouteImport.update({
@@ -223,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/admin/media': typeof AdminMediaRoute
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -254,6 +261,7 @@ export interface FileRoutesByTo {
   '/admin/media': typeof AdminMediaRoute
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -288,6 +296,7 @@ export interface FileRoutesById {
   '/admin/media': typeof AdminMediaRoute
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -323,6 +332,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/packages'
     | '/admin/pages'
+    | '/admin/seo-audit'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
@@ -354,6 +364,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/packages'
     | '/admin/pages'
+    | '/admin/seo-audit'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
@@ -387,6 +398,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/packages'
     | '/admin/pages'
+    | '/admin/seo-audit'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
@@ -486,6 +498,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/admin/services'
       preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/seo-audit': {
+      id: '/admin/seo-audit'
+      path: '/seo-audit'
+      fullPath: '/admin/seo-audit'
+      preLoaderRoute: typeof AdminSeoAuditRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/pages': {
@@ -659,6 +678,7 @@ interface AdminRouteChildren {
   AdminMediaRoute: typeof AdminMediaRoute
   AdminPackagesRoute: typeof AdminPackagesRoute
   AdminPagesRoute: typeof AdminPagesRouteWithChildren
+  AdminSeoAuditRoute: typeof AdminSeoAuditRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -674,6 +694,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMediaRoute: AdminMediaRoute,
   AdminPackagesRoute: AdminPackagesRoute,
   AdminPagesRoute: AdminPagesRouteWithChildren,
+  AdminSeoAuditRoute: AdminSeoAuditRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
@@ -750,12 +771,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

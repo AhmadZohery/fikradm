@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Pencil, Trash2, Loader2, ChevronRight, Eye, EyeOff, ArrowUp, ArrowDown } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, ChevronRight, Eye, EyeOff, ArrowUp, ArrowDown, FileSpreadsheet } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -14,6 +14,9 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { StringArrayEditor } from "@/cms/admin/StringArrayEditor";
+import { BulkImportDialog } from "@/cms/admin/BulkImportDialog";
+import { SchedulePublishField } from "@/cms/admin/SchedulePublishField";
+import type { ImportColumn } from "@/cms/admin/csvImport";
 
 export const Route = createFileRoute("/admin/services")({
   component: ServicesAdmin,
@@ -38,6 +41,8 @@ type Service = {
   og_image_url: string | null;
   is_published: boolean;
   sort_order: number;
+  scheduled_publish_at?: string | null;
+  scheduled_unpublish_at?: string | null;
 };
 
 type SubService = {
@@ -65,11 +70,27 @@ function asArr(v: unknown): string[] {
   return Array.isArray(v) ? (v as string[]) : [];
 }
 
+const SERVICE_COLUMNS: ImportColumn[] = [
+  { key: "slug", label: "Slug", required: true, type: "string" },
+  { key: "icon", label: "Icon (Lucide)", type: "string" },
+  { key: "title_ar", label: "العنوان (AR)", required: true, type: "string" },
+  { key: "title_en", label: "Title (EN)", required: true, type: "string" },
+  { key: "intro_ar", label: "مقدمة (AR)", type: "string" },
+  { key: "intro_en", label: "Intro (EN)", type: "string" },
+  { key: "description_ar", label: "الوصف (AR)", type: "string" },
+  { key: "description_en", label: "Description (EN)", type: "string" },
+  { key: "highlights_ar", label: "نقاط (AR)", type: "list", hint: "افصل بـ |" },
+  { key: "highlights_en", label: "Highlights (EN)", type: "list" },
+  { key: "is_published", label: "منشور", type: "bool" },
+  { key: "sort_order", label: "الترتيب", type: "number" },
+];
+
 function ServicesAdmin() {
   const [items, setItems] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Service | null>(null);
   const [subFor, setSubFor] = useState<Service | null>(null);
+  const [importing, setImporting] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -127,8 +148,54 @@ function ServicesAdmin() {
           <h1 className="text-2xl font-bold">إدارة الخدمات</h1>
           <p className="text-sm text-muted-foreground mt-1">CRUD كامل للخدمات الرئيسية والفرعية مع SEO ثنائي اللغة.</p>
         </div>
-        <Button onClick={create}><Plus className="w-4 h-4 ml-2" /> إضافة خدمة</Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setImporting(true)}><FileSpreadsheet className="w-4 h-4 ml-2" /> استيراد CSV</Button>
+          <Button onClick={create}><Plus className="w-4 h-4 ml-2" /> إضافة خدمة</Button>
+        </div>
       </div>
+
+      <BulkImportDialog
+        open={importing}
+        onClose={() => setImporting(false)}
+        title="استيراد خدمات من CSV"
+        description="ارفع ملف CSV. يتم استخدام | لفصل عناصر القوائم."
+        templateFilename="services-template.csv"
+        columns={SERVICE_COLUMNS}
+        templateExample={{
+          slug: "seo-services",
+          icon: "Search",
+          title_ar: "خدمات SEO",
+          title_en: "SEO Services",
+          intro_ar: "تحسين ظهورك في جوجل",
+          intro_en: "Boost your Google ranking",
+          description_ar: "وصف تفصيلي…",
+          description_en: "Detailed description…",
+          highlights_ar: "تحليل الكلمات|بناء الروابط|تقارير شهرية",
+          highlights_en: "Keyword research|Link building|Monthly reports",
+          is_published: "true",
+          sort_order: "10",
+        }}
+        onImport={async (rows) => {
+          const insertRows = rows.map((r) => ({
+            slug: String(r.slug),
+            icon: (r.icon as string) || "Search",
+            title_ar: String(r.title_ar),
+            title_en: String(r.title_en),
+            intro_ar: (r.intro_ar as string) || null,
+            intro_en: (r.intro_en as string) || null,
+            description_ar: (r.description_ar as string) || null,
+            description_en: (r.description_en as string) || null,
+            highlights_ar: (r.highlights_ar as string[]) ?? [],
+            highlights_en: (r.highlights_en as string[]) ?? [],
+            is_published: !!r.is_published,
+            sort_order: (r.sort_order as number) ?? 0,
+          }));
+          const { error, data } = await supabase.from("services").insert(insertRows as never).select("id");
+          if (error) throw error;
+          return { inserted: data?.length ?? 0, failed: rows.length - (data?.length ?? 0) };
+        }}
+        onDone={load}
+      />
 
       <Card className="p-0 overflow-hidden">
         {loading ? (
@@ -212,6 +279,8 @@ function ServiceEditor({ service, onClose, onSaved }: { service: Service; onClos
       meta_title_ar: s.meta_title_ar, meta_title_en: s.meta_title_en,
       meta_description_ar: s.meta_description_ar, meta_description_en: s.meta_description_en,
       og_image_url: s.og_image_url, is_published: s.is_published,
+      scheduled_publish_at: s.scheduled_publish_at ?? null,
+      scheduled_unpublish_at: s.scheduled_unpublish_at ?? null,
     }).eq("id", s.id);
     setSaving(false);
     if (error) toast.error("فشل الحفظ: " + error.message);
@@ -258,6 +327,14 @@ function ServiceEditor({ service, onClose, onSaved }: { service: Service; onClos
               <div><div className="text-sm font-medium">منشور</div><div className="text-xs text-muted-foreground">يظهر للزوار</div></div>
               <Switch checked={s.is_published} onCheckedChange={(v) => setS({ ...s, is_published: v })} />
             </div>
+            <SchedulePublishField
+              publishAt={s.scheduled_publish_at ?? null}
+              unpublishAt={s.scheduled_unpublish_at ?? null}
+              hidePublishAt={s.is_published}
+              onChange={({ publishAt, unpublishAt }) =>
+                setS({ ...s, scheduled_publish_at: publishAt, scheduled_unpublish_at: unpublishAt })
+              }
+            />
           </TabsContent>
         </Tabs>
         <div className="flex justify-end gap-2 mt-6 sticky bottom-0 bg-background pt-3 border-t">

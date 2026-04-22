@@ -75,6 +75,7 @@ export type Database = {
           meta_title_en: string | null
           published_at: string | null
           reading_minutes: number
+          scheduled_unpublish_at: string | null
           slug: string
           status: string
           table_of_contents_ar: Json
@@ -104,6 +105,7 @@ export type Database = {
           meta_title_en?: string | null
           published_at?: string | null
           reading_minutes?: number
+          scheduled_unpublish_at?: string | null
           slug: string
           status?: string
           table_of_contents_ar?: Json
@@ -133,6 +135,7 @@ export type Database = {
           meta_title_en?: string | null
           published_at?: string | null
           reading_minutes?: number
+          scheduled_unpublish_at?: string | null
           slug?: string
           status?: string
           table_of_contents_ar?: Json
@@ -201,6 +204,8 @@ export type Database = {
           meta_title_ar: string | null
           meta_title_en: string | null
           og_image_url: string | null
+          scheduled_publish_at: string | null
+          scheduled_unpublish_at: string | null
           slug: string
           sort_order: number
           title_ar: string
@@ -223,6 +228,8 @@ export type Database = {
           meta_title_ar?: string | null
           meta_title_en?: string | null
           og_image_url?: string | null
+          scheduled_publish_at?: string | null
+          scheduled_unpublish_at?: string | null
           slug: string
           sort_order?: number
           title_ar: string
@@ -245,6 +252,8 @@ export type Database = {
           meta_title_ar?: string | null
           meta_title_en?: string | null
           og_image_url?: string | null
+          scheduled_publish_at?: string | null
+          scheduled_unpublish_at?: string | null
           slug?: string
           sort_order?: number
           title_ar?: string
@@ -273,6 +282,8 @@ export type Database = {
           og_image_url: string | null
           region_ar: string | null
           region_en: string | null
+          scheduled_publish_at: string | null
+          scheduled_unpublish_at: string | null
           slug: string
           sort_order: number
           updated_at: string
@@ -296,6 +307,8 @@ export type Database = {
           og_image_url?: string | null
           region_ar?: string | null
           region_en?: string | null
+          scheduled_publish_at?: string | null
+          scheduled_unpublish_at?: string | null
           slug: string
           sort_order?: number
           updated_at?: string
@@ -319,6 +332,8 @@ export type Database = {
           og_image_url?: string | null
           region_ar?: string | null
           region_en?: string | null
+          scheduled_publish_at?: string | null
+          scheduled_unpublish_at?: string | null
           slug?: string
           sort_order?: number
           updated_at?: string
@@ -530,6 +545,8 @@ export type Database = {
           page_type: Database["public"]["Enums"]["page_type"]
           parent_slug: string | null
           published_at: string | null
+          scheduled_publish_at: string | null
+          scheduled_unpublish_at: string | null
           slug: string
           status: Database["public"]["Enums"]["page_status"]
           title: string
@@ -552,6 +569,8 @@ export type Database = {
           page_type?: Database["public"]["Enums"]["page_type"]
           parent_slug?: string | null
           published_at?: string | null
+          scheduled_publish_at?: string | null
+          scheduled_unpublish_at?: string | null
           slug: string
           status?: Database["public"]["Enums"]["page_status"]
           title: string
@@ -574,6 +593,8 @@ export type Database = {
           page_type?: Database["public"]["Enums"]["page_type"]
           parent_slug?: string | null
           published_at?: string | null
+          scheduled_publish_at?: string | null
+          scheduled_unpublish_at?: string | null
           slug?: string
           status?: Database["public"]["Enums"]["page_status"]
           title?: string
@@ -599,6 +620,8 @@ export type Database = {
           meta_title_ar: string | null
           meta_title_en: string | null
           og_image_url: string | null
+          scheduled_publish_at: string | null
+          scheduled_unpublish_at: string | null
           slug: string
           sort_order: number
           title_ar: string
@@ -621,6 +644,8 @@ export type Database = {
           meta_title_ar?: string | null
           meta_title_en?: string | null
           og_image_url?: string | null
+          scheduled_publish_at?: string | null
+          scheduled_unpublish_at?: string | null
           slug: string
           sort_order?: number
           title_ar: string
@@ -643,6 +668,8 @@ export type Database = {
           meta_title_ar?: string | null
           meta_title_en?: string | null
           og_image_url?: string | null
+          scheduled_publish_at?: string | null
+          scheduled_unpublish_at?: string | null
           slug?: string
           sort_order?: number
           title_ar?: string
@@ -897,6 +924,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      apply_scheduled_publishing: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
