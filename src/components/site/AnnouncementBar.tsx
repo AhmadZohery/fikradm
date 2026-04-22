@@ -33,6 +33,11 @@ export function AnnouncementBar() {
       ];
 
   useEffect(() => {
+    // Respect reduced-motion: do not auto-rotate
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    if (reduce) return;
     const t = setInterval(() => setIdx((i) => (i + 1) % items.length), 4500);
     return () => clearInterval(t);
   }, [items.length]);
@@ -44,17 +49,23 @@ export function AnnouncementBar() {
   return (
     <div
       style={{ ["--ann-h" as string]: "2.25rem" }}
-      className="fixed inset-x-0 top-0 z-50 isolate overflow-hidden bg-gradient-to-r from-primary via-primary-glow to-primary text-primary-foreground shadow-soft"
+      className="fixed inset-x-0 top-0 z-50 isolate overflow-hidden bg-gradient-to-r from-primary via-primary-glow to-primary text-primary-foreground shadow-soft motion-reduce:[&_*]:!animate-none"
+      role="region"
+      aria-label={isAr ? "شريط إعلانات" : "Announcements"}
     >
       <div className="container-app flex h-9 items-center justify-between gap-2 text-[11px] sm:text-sm">
         <Link
           to={buildHref(locale, "/contact")}
           className="flex min-w-0 flex-1 items-center justify-center gap-2 font-medium transition hover:opacity-90"
+          data-cta="announcement_link"
+          data-cta-placement="announcement_bar"
         >
           <Icon className="h-3.5 w-3.5 shrink-0 animate-pulse" />
-          <span key={idx} className="truncate animate-fade-in">{cur.text}</span>
+          <span key={idx} className="truncate animate-fade-in" aria-live="polite">
+            {cur.text}
+          </span>
           <span className="hidden shrink-0 rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide sm:inline-block">
-            {cur.cta} →
+            {cur.cta} <span aria-hidden>{isAr ? "←" : "→"}</span>
           </span>
         </Link>
         <button
