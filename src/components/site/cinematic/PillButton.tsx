@@ -12,31 +12,15 @@ type Props = {
 };
 
 export function PillButton({ to, href, children, variant = "solid", className = "", iconLeft = false }: Props) {
-  const baseSolid =
-    "btn-pill group magnetic ripple focus-ring";
-  const baseOutline =
-    "group magnetic ripple focus-ring inline-flex items-center gap-2 rounded-full border border-border bg-white px-5 py-3.5 text-sm font-semibold text-foreground transition hover:border-primary/40 hover:shadow-soft";
-
+  const cls = `btn-cta btn-cta--lg ${variant === "outline" ? "btn-cta--ghost" : ""} ${className}`.trim();
+  const ctaLabel = typeof children === "string" ? children : "pill_cta";
   const inner = (
     <>
-      {iconLeft && variant === "solid" && (
-        <span className="pill-icon order-first">
-          <ArrowUpRight className="h-4 w-4 text-white rtl:rotate-90" />
-        </span>
-      )}
-      <span className={variant === "solid" ? "px-2" : ""}>{children}</span>
-      {!iconLeft && variant === "solid" && (
-        <span className="pill-icon">
-          <ArrowUpRight className="h-4 w-4 text-white rtl:rotate-90" />
-        </span>
-      )}
-      {variant === "outline" && (
-        <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-1 group-hover:-translate-y-0.5 rtl:-translate-x-0 rtl:rotate-90" />
-      )}
+      {iconLeft && <ArrowUpRight className="cta-arrow order-first" aria-hidden />}
+      <span>{children}</span>
+      {!iconLeft && <ArrowUpRight className="cta-arrow" aria-hidden />}
     </>
   );
-
-  const cls = `${variant === "solid" ? baseSolid : baseOutline} ${className}`;
-  if (to) return <Link to={to} className={cls}>{inner}</Link>;
-  return <a href={href ?? "#"} className={cls}>{inner}</a>;
+  if (to) return <Link to={to} className={cls} data-cta={ctaLabel}>{inner}</Link>;
+  return <a href={href ?? "#"} className={cls} data-cta={ctaLabel}>{inner}</a>;
 }

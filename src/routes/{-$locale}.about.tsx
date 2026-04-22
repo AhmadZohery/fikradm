@@ -112,16 +112,21 @@ function AboutPage() {
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link
                 to={buildHref(locale, "/contact")}
-                className="group magnetic ripple focus-ring inline-flex h-12 items-center gap-2 rounded-full bg-gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-soft transition hover:shadow-glow"
+                className="btn-cta"
+                data-cta="about_book_consultation"
+                data-cta-placement="about_hero"
               >
                 {isAr ? "احجز استشارة مجانية" : "Book a free consultation"}
-                <ArrowUpRight className="h-4 w-4 rtl:rotate-90" />
+                <ArrowUpRight className="cta-arrow" aria-hidden />
               </Link>
               <Link
                 to={buildHref(locale, "/case-studies")}
-                className="magnetic focus-ring inline-flex h-12 items-center gap-2 rounded-full border border-border bg-background/60 px-6 text-sm font-bold text-foreground backdrop-blur transition hover:border-primary/40 hover:text-primary"
+                className="btn-cta btn-cta--ghost"
+                data-cta="about_view_cases"
+                data-cta-placement="about_hero"
               >
                 {isAr ? "قصص نجاحنا" : "Our success stories"}
+                <ArrowUpRight className="cta-arrow" aria-hidden />
               </Link>
             </div>
           </div>
