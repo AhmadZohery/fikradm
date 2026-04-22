@@ -21,6 +21,7 @@ export function SiteHeader() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [annVisible, setAnnVisible] = useState(false);
   const loc = locale === "en" ? "en" : "ar";
 
   useEffect(() => {
@@ -28,6 +29,22 @@ export function SiteHeader() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Track announcement bar visibility (it's fixed at top-0 above the header)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const check = () => {
+      try {
+        setAnnVisible(window.localStorage.getItem("fikra:ann:v1") !== "1");
+      } catch {
+        setAnnVisible(true);
+      }
+    };
+    check();
+    const onDismiss = () => setAnnVisible(false);
+    window.addEventListener("fikra:ann:dismissed", onDismiss);
+    return () => window.removeEventListener("fikra:ann:dismissed", onDismiss);
   }, []);
 
   // Close mobile on route change
@@ -110,9 +127,12 @@ export function SiteHeader() {
       />
 
       <header
-        style={{ ["--header-h" as string]: scrolled ? "4rem" : "5rem" }}
+        style={{
+          ["--header-h" as string]: scrolled ? "4rem" : "5rem",
+          top: annVisible ? "2.25rem" : "0",
+        }}
         className={cn(
-          "fixed inset-x-0 top-0 z-40 w-full transition-all duration-500 ease-out",
+          "fixed inset-x-0 z-40 w-full transition-all duration-500 ease-out",
           scrolled ? "py-2" : "py-3 md:py-4",
         )}
       >

@@ -15,7 +15,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <ScrollProgress />
       <AnnouncementBar />
       <SiteHeader />
-      <main className="flex-1 pt-[var(--header-h,4.5rem)]">{children}</main>
+      <main className="flex-1 pt-[calc(var(--header-h,4.5rem)+2.25rem)]">{children}</main>
       <SiteFooter />
       <WhatsAppButton />
       <ScrollToTop />
