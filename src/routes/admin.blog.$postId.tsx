@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
   Loader2,
@@ -12,6 +12,10 @@ import {
   AlertTriangle,
   XCircle,
   ListTree,
+  History,
+  Copy,
+  ExternalLink,
+  Clock,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -104,6 +108,12 @@ function BlogPostEditorPage() {
   const [lang, setLang] = useState<Lang>("ar");
   const [pickerOpen, setPickerOpen] = useState(false);
   const lastTocAutoUpdate = useRef<{ ar: string; en: string }>({ ar: "", en: "" });
+  const [dirty, setDirty] = useState(false);
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+  const [autoSaveOn, setAutoSaveOn] = useState(true);
+  const dirtyRef = useRef(false);
+  const postRef = useRef<PostState | null>(null);
+  useEffect(() => { postRef.current = post; }, [post]);
 
   useEffect(() => {
     let cancelled = false;
@@ -168,18 +178,23 @@ function BlogPostEditorPage() {
     };
   }, [postId, navigate]);
 
-  // Auto-extract TOC and inject ids on every body change
+  // Auto-extract TOC (debounced) — DOES NOT rewrite body HTML, only updates toc list
+  // to avoid breaking cursor position inside the editor on every keystroke.
   useEffect(() => {
     if (!post) return;
-    const bodyKey = lang === "ar" ? "body_html_ar" : "body_html_en";
-    const tocKey = lang === "ar" ? "toc_ar" : "toc_en";
-    const html = post[bodyKey];
+    const html = lang === "ar" ? post.body_html_ar : post.body_html_en;
     if (lastTocAutoUpdate.current[lang] === html) return;
-    const { html: rewritten, toc } = extractToc(html);
-    if (rewritten !== html || JSON.stringify(toc) !== JSON.stringify(post[tocKey])) {
-      setPost({ ...post, [bodyKey]: rewritten, [tocKey]: toc });
-    }
-    lastTocAutoUpdate.current[lang] = rewritten;
+    const t = setTimeout(() => {
+      const { toc } = extractToc(html);
+      lastTocAutoUpdate.current[lang] = html;
+      setPost((prev) => {
+        if (!prev) return prev;
+        const tocKey = lang === "ar" ? "toc_ar" : "toc_en";
+        if (JSON.stringify(prev[tocKey]) === JSON.stringify(toc)) return prev;
+        return { ...prev, [tocKey]: toc };
+      });
+    }, 600);
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post?.body_html_ar, post?.body_html_en, lang]);
 
@@ -232,8 +247,65 @@ function BlogPostEditorPage() {
       })
       .eq("id", post.id);
     setSaving(false);
-    if (error) toast.error(error.message);
-    else toast.success("تم الحفظ");
+    if (error) {
+      toast.error(error.message);
+    } else {
+      setDirty(false);
+      dirtyRef.current = false;
+      setLastSavedAt(new Date());
+    }
+  };
+
+  // Auto-save every 30s when dirty
+  const saveRef = useRef(save);
+  useEffect(() => { saveRef.current = save; });
+  useEffect(() => {
+    if (!autoSaveOn) return;
+    const id = window.setInterval(() => {
+      if (dirtyRef.current && !saving) void saveRef.current();
+    }, 30_000);
+    return () => window.clearInterval(id);
+  }, [autoSaveOn, saving]);
+
+  // Warn before leaving with unsaved changes
+  useEffect(() => {
+    const before = (e: BeforeUnloadEvent) => {
+      if (dirtyRef.current) { e.preventDefault(); e.returnValue = ""; }
+    };
+    window.addEventListener("beforeunload", before);
+    return () => window.removeEventListener("beforeunload", before);
+  }, []);
+
+  const duplicate = async () => {
+    if (!post) return;
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .insert({
+        slug: `${post.slug}-copy-${Date.now().toString(36).slice(-4)}`,
+        title_ar: `${post.title_ar} (نسخة)`,
+        title_en: `${post.title_en} (Copy)`,
+        excerpt_ar: post.excerpt_ar,
+        excerpt_en: post.excerpt_en,
+        cover_image_url: post.cover_image_url,
+        reading_minutes: post.reading_minutes,
+        category_id: post.category_id,
+        body: { ar: post.body_html_ar, en: post.body_html_en } as never,
+        keywords_ar: post.keywords_ar,
+        keywords_en: post.keywords_en,
+        author_ar: post.author_ar,
+        author_en: post.author_en,
+        meta_title_ar: post.meta_title_ar,
+        meta_title_en: post.meta_title_en,
+        meta_description_ar: post.meta_description_ar,
+        meta_description_en: post.meta_description_en,
+        faq: post.faq as never,
+        status: "draft",
+      })
+      .select("id")
+      .single();
+    if (error || !data) return toast.error(error?.message ?? "فشل النسخ");
+    toast.success("تم النسخ كمسودة جديدة");
+    navigate({ to: "/admin/blog/$postId", params: { postId: data.id } });
   };
 
   const togglePublish = async () => {
@@ -279,7 +351,11 @@ function BlogPostEditorPage() {
   const focusKw = lang === "ar" ? post.focus_keyword_ar : post.focus_keyword_en;
   const keywordsVal = lang === "ar" ? post.keywords_ar : post.keywords_en;
 
-  const setField = <K extends keyof PostState>(k: K, v: PostState[K]) => setPost({ ...post, [k]: v });
+  const setField = <K extends keyof PostState>(k: K, v: PostState[K]) => {
+    setPost({ ...post, [k]: v });
+    if (!dirty) setDirty(true);
+    dirtyRef.current = true;
+  };
 
   return (
     <div className="space-y-4 max-w-7xl mx-auto" dir="rtl">
@@ -298,6 +374,21 @@ function BlogPostEditorPage() {
         </div>
         <div className="flex items-center gap-2">
           <LocaleSwitcher value={lang} onChange={setLang} />
+          {dirty ? (
+            <span className="text-[11px] text-amber-600 flex items-center gap-1">
+              <Clock className="w-3 h-3" /> غير محفوظ
+            </span>
+          ) : lastSavedAt ? (
+            <span className="text-[11px] text-emerald-600 flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> محفوظ {lastSavedAt.toLocaleTimeString("ar-EG")}
+            </span>
+          ) : null}
+          <Button asChild variant="ghost" size="icon" title="معاينة">
+            <a href={`/blog/${post.slug}`} target="_blank" rel="noreferrer"><ExternalLink className="w-4 h-4" /></a>
+          </Button>
+          <Button variant="ghost" size="icon" title="نسخ المقال" onClick={duplicate}>
+            <Copy className="w-4 h-4" />
+          </Button>
           <Button variant="outline" onClick={togglePublish}>
             {post.status === "published" ? <EyeOff className="w-4 h-4 ml-1" /> : <Eye className="w-4 h-4 ml-1" />}
             {post.status === "published" ? "إخفاء" : "نشر"}
