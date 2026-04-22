@@ -1,12 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, RefreshCw, ExternalLink, CheckCircle2, AlertTriangle, XCircle, Search } from "lucide-react";
+import { Loader2, RefreshCw, ExternalLink, CheckCircle2, AlertTriangle, XCircle, Search, Wand2, Check } from "lucide-react";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { loadPageAudits, type PageAudit, type AuditLevel } from "@/cms/admin/seoAudit";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { loadPageAudits, type PageAudit, type AuditLevel, type PageRow } from "@/cms/admin/seoAudit";
+import { buildFixes, type SuggestedFix } from "@/cms/admin/seoFixes";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin/seo-audit")({
   component: SeoAuditPage,
@@ -14,15 +25,33 @@ export const Route = createFileRoute("/admin/seo-audit")({
 
 function SeoAuditPage() {
   const [audits, setAudits] = useState<PageAudit[]>([]);
+  const [pageRows, setPageRows] = useState<Record<string, PageRow>>({});
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<"all" | "issues" | "ctr" | "schema">("all");
+  const [fixDialog, setFixDialog] = useState<{
+    pageId: string;
+    fix: SuggestedFix;
+    edited: string;
+  } | null>(null);
+  const [applying, setApplying] = useState(false);
 
   const load = async () => {
     setLoading(true);
     try {
-      const list = await loadPageAudits();
-      setAudits(list);
+      const { data, error } = await supabase
+        .from("pages")
+        .select(
+          "id, title, slug, locale, status, page_type, meta_title, meta_description, og_image_url, canonical_url, keywords, no_index, json_ld, blocks",
+        )
+        .order("title");
+      if (error) throw error;
+      const rows = (data ?? []) as unknown as PageRow[];
+      const { auditPage } = await import("@/cms/admin/seoAudit");
+      setAudits(rows.map((r) => auditPage(r)));
+      const map: Record<string, PageRow> = {};
+      rows.forEach((r) => { map[r.id] = r; });
+      setPageRows(map);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "فشل التحميل");
     } finally {
@@ -57,6 +86,57 @@ function SeoAuditPage() {
     ).length;
     return { total, avg, issues, ctrLow, noSchema };
   }, [audits]);
+
+  const openFixDialog = (pageId: string, fix: SuggestedFix) => {
+    const initial =
+      typeof fix.suggested === "string"
+        ? fix.suggested
+        : JSON.stringify(fix.suggested, null, 2);
+    setFixDialog({ pageId, fix, edited: initial });
+  };
+
+  const applyQuickFix = async (pageId: string, fix: SuggestedFix) => {
+    try {
+      const update: Record<string, unknown> = { [fix.field]: fix.suggested };
+      const { error } = await supabase.from("pages").update(update).eq("id", pageId);
+      if (error) throw error;
+      toast.success("تم تطبيق الإصلاح");
+      void load();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "فشل التطبيق");
+    }
+  };
+
+  const applyFromDialog = async () => {
+    if (!fixDialog) return;
+    setApplying(true);
+    try {
+      let value: unknown = fixDialog.edited;
+      if (fixDialog.fix.id === "schema") {
+        try {
+          value = JSON.parse(fixDialog.edited);
+        } catch {
+          toast.error("Schema غير صالح JSON");
+          setApplying(false);
+          return;
+        }
+      }
+      if (fixDialog.fix.field === "no_index") value = fixDialog.fix.suggested;
+      const update: Record<string, unknown> = { [fixDialog.fix.field]: value };
+      const { error } = await supabase
+        .from("pages")
+        .update(update)
+        .eq("id", fixDialog.pageId);
+      if (error) throw error;
+      toast.success("تم الحفظ");
+      setFixDialog(null);
+      void load();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "فشل الحفظ");
+    } finally {
+      setApplying(false);
+    }
+  };
 
   return (
     <div className="space-y-4 max-w-7xl">
@@ -138,11 +218,117 @@ function SeoAuditPage() {
                     <CheckRow key={c.id} level={c.level} label={c.label} hint={c.hint} />
                   ))}
                 </div>
+                {pageRows[a.id] && (
+                  <FixesPanel
+                    row={pageRows[a.id]}
+                    onPreview={(fix) => openFixDialog(a.id, fix)}
+                    onQuickApply={(fix) => applyQuickFix(a.id, fix)}
+                  />
+                )}
               </details>
             ))}
           </div>
         )}
       </Card>
+
+      <Dialog open={!!fixDialog} onOpenChange={(o) => !o && setFixDialog(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{fixDialog?.fix.label ?? ""}</DialogTitle>
+            <DialogDescription className="text-xs">
+              راجع القيمة المقترحة وعدّلها قبل الحفظ.
+            </DialogDescription>
+          </DialogHeader>
+          {fixDialog && fixDialog.fix.field !== "no_index" && (
+            <div className="space-y-3">
+              <div className="text-[11px] text-muted-foreground">القيمة الحالية</div>
+              <div className="rounded-md border bg-muted/30 px-3 py-2 text-xs font-mono whitespace-pre-wrap break-words max-h-32 overflow-auto">
+                {fixDialog.fix.current
+                  ? typeof fixDialog.fix.current === "string"
+                    ? fixDialog.fix.current
+                    : JSON.stringify(fixDialog.fix.current, null, 2)
+                  : "—"}
+              </div>
+              <div className="text-[11px] text-muted-foreground">القيمة المقترحة (قابلة للتعديل)</div>
+              <Textarea
+                value={fixDialog.edited}
+                onChange={(e) => setFixDialog({ ...fixDialog, edited: e.target.value })}
+                rows={fixDialog.fix.id === "schema" ? 12 : 4}
+                className="font-mono text-xs"
+              />
+              {fixDialog.fix.id === "meta_title" && (
+                <div className="text-[10px] text-muted-foreground">
+                  الطول الحالي: {fixDialog.edited.length} (المثالي 30-60)
+                </div>
+              )}
+              {fixDialog.fix.id === "meta_description" && (
+                <div className="text-[10px] text-muted-foreground">
+                  الطول الحالي: {fixDialog.edited.length} (المثالي 70-160)
+                </div>
+              )}
+            </div>
+          )}
+          {fixDialog?.fix.field === "no_index" && (
+            <div className="text-sm">
+              سيتم تعيين <code>no_index</code> إلى{" "}
+              <strong>{String(fixDialog.fix.suggested)}</strong>.
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setFixDialog(null)}>
+              إلغاء
+            </Button>
+            <Button onClick={applyFromDialog} disabled={applying}>
+              {applying ? <Loader2 className="w-4 h-4 ml-2 animate-spin" /> : <Check className="w-4 h-4 ml-2" />}
+              حفظ
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+function FixesPanel({
+  row,
+  onPreview,
+  onQuickApply,
+}: {
+  row: PageRow;
+  onPreview: (fix: SuggestedFix) => void;
+  onQuickApply: (fix: SuggestedFix) => void;
+}) {
+  const fixes = useMemo(() => buildFixes(row), [row]);
+  if (fixes.length === 0) {
+    return (
+      <div className="px-4 pb-4 text-xs text-emerald-600 flex items-center gap-2">
+        <CheckCircle2 className="w-4 h-4" /> لا توجد إصلاحات مقترحة
+      </div>
+    );
+  }
+  return (
+    <div className="px-4 pb-4 border-t bg-muted/20">
+      <div className="text-xs font-bold mb-2 mt-3 flex items-center gap-2">
+        <Wand2 className="w-3.5 h-3.5 text-primary" /> إصلاحات سريعة
+      </div>
+      <div className="space-y-1.5">
+        {fixes.map((fix) => (
+          <div
+            key={fix.id}
+            className="flex items-center justify-between gap-2 rounded-md border bg-background px-3 py-2"
+          >
+            <div className="text-xs font-medium min-w-0 truncate">{fix.label}</div>
+            <div className="flex items-center gap-1 shrink-0">
+              <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={() => onPreview(fix)}>
+                معاينة
+              </Button>
+              <Button size="sm" className="h-7 text-xs" onClick={() => onQuickApply(fix)}>
+                <Wand2 className="w-3 h-3 ml-1" /> تطبيق
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
