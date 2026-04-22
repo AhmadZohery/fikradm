@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X, Globe, ChevronDown, ArrowUpRight, Sparkles, Search } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { LOCALE_LABELS, type Locale } from "@/i18n/types";
@@ -192,8 +192,8 @@ export function SiteHeader() {
                   <div
                     key={item.key}
                     className="relative"
-                    onMouseEnter={() => setOpenMenu(item.key)}
-                    onMouseLeave={() => setOpenMenu(null)}
+                    onMouseEnter={() => openMega(item.key)}
+                    onMouseLeave={scheduleCloseMega}
                   >
                     <Link
                       to={href}
