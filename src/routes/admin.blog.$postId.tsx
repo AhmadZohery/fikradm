@@ -32,6 +32,7 @@ import {
 import { RichTextEditor } from "@/cms/editor/RichTextEditor";
 import { MediaPickerDialog } from "@/cms/editor/MediaPickerDialog";
 import { StringArrayEditor } from "@/cms/admin/StringArrayEditor";
+import { LocaleSwitcher } from "@/cms/admin/LocaleSwitcher";
 import {
   analyzeBlog,
   extractToc,
@@ -296,13 +297,7 @@ function BlogPostEditorPage() {
           </Badge>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex border rounded-md p-0.5">
-            {(["ar", "en"] as const).map((l) => (
-              <Button key={l} size="sm" variant={lang === l ? "secondary" : "ghost"} className="h-7" onClick={() => setLang(l)}>
-                {l.toUpperCase()}
-              </Button>
-            ))}
-          </div>
+          <LocaleSwitcher value={lang} onChange={setLang} />
           <Button variant="outline" onClick={togglePublish}>
             {post.status === "published" ? <EyeOff className="w-4 h-4 ml-1" /> : <Eye className="w-4 h-4 ml-1" />}
             {post.status === "published" ? "إخفاء" : "نشر"}
