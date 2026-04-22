@@ -211,11 +211,60 @@ function NavigationTab({ data, update, onSave, saving }: { data: Record<string, 
 function BrandTab({ data, update, onSave, saving }: { data: Record<string, unknown>; update: (p: Record<string, unknown>) => void; onSave: () => void; saving: boolean }) {
   const v = data as Record<string, string | Record<string, string>>;
   const social = (v.social as Record<string, string>) || {};
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const handleLogoUpload = async (file: File) => {
+    setUploading(true);
+    try {
+      const m = await uploadMediaFile(file, "brand");
+      update({ logo_url: m.public_url });
+      toast.success("تم رفع اللوجو");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "فشل الرفع");
+    } finally {
+      setUploading(false);
+    }
+  };
   return (
     <Card className="p-6 space-y-5">
+      <div>
+        <Label className="text-xs font-medium mb-2 block">اللوجو</Label>
+        <div className="flex items-center gap-3">
+          <div className="w-20 h-20 rounded-lg border bg-muted/30 flex items-center justify-center overflow-hidden">
+            {v.logo_url ? (
+              <img src={v.logo_url as string} alt="logo" className="max-w-full max-h-full object-contain" />
+            ) : (
+              <ImageIcon className="w-6 h-6 text-muted-foreground" />
+            )}
+          </div>
+          <div className="space-y-2">
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) void handleLogoUpload(f);
+                e.target.value = "";
+              }}
+            />
+            <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()} disabled={uploading}>
+              {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin ml-1" /> : <Upload className="w-3.5 h-3.5 ml-1" />}
+              رفع لوجو
+            </Button>
+            {v.logo_url && (
+              <Button size="sm" variant="ghost" onClick={() => update({ logo_url: "" })}>
+                إزالة
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+      <Separator />
       <div className="grid md:grid-cols-2 gap-4">
-        <Field label="رابط اللوجو (URL)" value={(v.logo_url as string) || ""} onChange={(x) => update({ logo_url: x })} placeholder="https://..." />
-        <div />
+        <Field label="رابط اللوجو (يدوي)" value={(v.logo_url as string) || ""} onChange={(x) => update({ logo_url: x })} placeholder="https://..." />
+        <Field label="اللون الأساسي (oklch أو hex)" value={(v.primary_color as string) || ""} onChange={(x) => update({ primary_color: x })} placeholder="#0ea5e9" />
         <Field label="اسم العلامة (عربي)" value={(v.logo_text_ar as string) || ""} onChange={(x) => update({ logo_text_ar: x })} />
         <Field label="اسم العلامة (English)" value={(v.logo_text_en as string) || ""} onChange={(x) => update({ logo_text_en: x })} />
         <TextField label="السطر التعريفي (عربي)" value={(v.tagline_ar as string) || ""} onChange={(x) => update({ tagline_ar: x })} />
@@ -226,6 +275,64 @@ function BrandTab({ data, update, onSave, saving }: { data: Record<string, unkno
       <div className="grid md:grid-cols-2 gap-3">
         {["twitter", "instagram", "linkedin", "youtube", "tiktok", "snapchat"].map((k) => (
           <Field key={k} label={k.charAt(0).toUpperCase() + k.slice(1)} value={social[k] || ""} onChange={(x) => update({ social: { ...social, [k]: x } })} placeholder="https://..." />
+        ))}
+      </div>
+      <SaveBar onSave={onSave} saving={saving} />
+    </Card>
+  );
+}
+
+/* ---------- FOOTER ---------- */
+type FooterColumn = { title_ar: string; title_en: string; links: NavL[] };
+function FooterTab({ data, update, onSave, saving }: { data: Record<string, unknown>; update: (p: Record<string, unknown>) => void; onSave: () => void; saving: boolean }) {
+  const columns = (data.footer_columns as FooterColumn[]) || [];
+  const setColumns = (c: FooterColumn[]) => update({ footer_columns: c });
+  return (
+    <Card className="p-6 space-y-5">
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="font-semibold text-sm">أعمدة التذييل</h3>
+          <p className="text-xs text-muted-foreground mt-1">تظهر في footer الموقع — كل عمود له عنوان وروابط.</p>
+        </div>
+        <Button size="sm" variant="outline" onClick={() => setColumns([...columns, { title_ar: "", title_en: "", links: [] }])}>
+          <Plus className="w-3.5 h-3.5 ml-1" /> إضافة عمود
+        </Button>
+      </div>
+      {columns.length === 0 && (
+        <div className="text-sm text-muted-foreground py-6 text-center bg-muted/30 rounded-lg">لا توجد أعمدة بعد</div>
+      )}
+      <div className="space-y-4">
+        {columns.map((col, ci) => (
+          <div key={ci} className="rounded-lg border p-4 space-y-3 bg-muted/20">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                <GripVertical className="w-3.5 h-3.5" /> عمود #{ci + 1}
+              </div>
+              <Button size="sm" variant="ghost" onClick={() => setColumns(columns.filter((_, j) => j !== ci))}>
+                <Trash2 className="w-3.5 h-3.5 text-destructive" />
+              </Button>
+            </div>
+            <div className="grid md:grid-cols-2 gap-3">
+              <Field label="العنوان (عربي)" value={col.title_ar} onChange={(x) => setColumns(columns.map((c, j) => j === ci ? { ...c, title_ar: x } : c))} />
+              <Field label="العنوان (English)" value={col.title_en} onChange={(x) => setColumns(columns.map((c, j) => j === ci ? { ...c, title_en: x } : c))} />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-xs font-medium">الروابط</Label>
+              {col.links.map((l, li) => (
+                <div key={li} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center">
+                  <Input placeholder="عربي" value={l.ar} onChange={(e) => setColumns(columns.map((c, j) => j === ci ? { ...c, links: c.links.map((ll, k) => k === li ? { ...ll, ar: e.target.value } : ll) } : c))} />
+                  <Input placeholder="English" value={l.en} onChange={(e) => setColumns(columns.map((c, j) => j === ci ? { ...c, links: c.links.map((ll, k) => k === li ? { ...ll, en: e.target.value } : ll) } : c))} />
+                  <Input placeholder="/path" value={l.href} dir="ltr" onChange={(e) => setColumns(columns.map((c, j) => j === ci ? { ...c, links: c.links.map((ll, k) => k === li ? { ...ll, href: e.target.value } : ll) } : c))} />
+                  <Button size="sm" variant="ghost" onClick={() => setColumns(columns.map((c, j) => j === ci ? { ...c, links: c.links.filter((_, k) => k !== li) } : c))}>
+                    <Trash2 className="w-3.5 h-3.5 text-destructive" />
+                  </Button>
+                </div>
+              ))}
+              <Button size="sm" variant="outline" onClick={() => setColumns(columns.map((c, j) => j === ci ? { ...c, links: [...c.links, { ar: "", en: "", href: "/" }] } : c))}>
+                <Plus className="w-3.5 h-3.5 ml-1" /> إضافة رابط
+              </Button>
+            </div>
+          </div>
         ))}
       </div>
       <SaveBar onSave={onSave} saving={saving} />
