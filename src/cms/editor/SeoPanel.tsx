@@ -1,12 +1,19 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import { CheckCircle2, AlertTriangle, XCircle, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { analyzeSeo, type SeoCheck, type SeoFields } from "./seoAnalysis";
+import {
+  generateJsonLd,
+  safeParseJsonLd,
+  safeStringifyJsonLd,
+  type JsonLdPageType,
+} from "@/cms/admin/jsonLd";
 
 export type SeoData = {
   meta_title: string;
@@ -18,6 +25,8 @@ export type SeoData = {
   canonical_url: string;
   keywords: string[];
   no_index: boolean;
+  json_ld?: unknown;
+  page_type?: string;
 };
 
 type Props = {
@@ -50,6 +59,36 @@ export function SeoPanel({ data, onChange }: Props) {
   const set = <K extends keyof SeoData>(k: K, v: SeoData[K]) => onChange({ ...data, [k]: v });
 
   const url = `${SITE_ORIGIN}/${data.locale}${data.slug === "home" ? "" : `/${data.slug}`}`;
+  const [jsonLdText, setJsonLdText] = useState<string>(
+    data.json_ld ? safeStringifyJsonLd(data.json_ld) : "",
+  );
+  const [jsonLdError, setJsonLdError] = useState<string | null>(null);
+
+  const generateForType = () => {
+    const generated = generateJsonLd({
+      pageType: ((data.page_type as JsonLdPageType) ?? "custom"),
+      url: data.canonical_url || url,
+      title: data.meta_title,
+      description: data.meta_description,
+      image: data.og_image_url || undefined,
+      locale: data.locale,
+    });
+    const text = safeStringifyJsonLd(generated);
+    setJsonLdText(text);
+    setJsonLdError(null);
+    onChange({ ...data, json_ld: generated });
+  };
+
+  const onJsonLdChange = (text: string) => {
+    setJsonLdText(text);
+    const r = safeParseJsonLd(text);
+    if (r.ok) {
+      setJsonLdError(null);
+      onChange({ ...data, json_ld: r.value });
+    } else {
+      setJsonLdError(r.error);
+    }
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -58,9 +97,10 @@ export function SeoPanel({ data, onChange }: Props) {
         <ScoreBadge score={report.score} />
       </div>
       <Tabs defaultValue="basic" className="flex-1 flex flex-col min-h-0">
-        <TabsList className="m-3 mb-0 grid grid-cols-4 h-8">
+        <TabsList className="m-3 mb-0 grid grid-cols-5 h-8">
           <TabsTrigger value="basic" className="text-[11px] px-1">أساسي</TabsTrigger>
           <TabsTrigger value="social" className="text-[11px] px-1">Social</TabsTrigger>
+          <TabsTrigger value="schema" className="text-[11px] px-1">Schema</TabsTrigger>
           <TabsTrigger value="advanced" className="text-[11px] px-1">متقدم</TabsTrigger>
           <TabsTrigger value="analysis" className="text-[11px] px-1">تحليل</TabsTrigger>
         </TabsList>
@@ -161,6 +201,34 @@ export function SeoPanel({ data, onChange }: Props) {
                 onCheckedChange={(v) => set("no_index", v)}
               />
             </div>
+          </TabsContent>
+
+          <TabsContent value="schema" className="space-y-3 mt-0">
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-xs text-muted-foreground leading-snug">
+                JSON-LD Schema.org حسب نوع الصفحة{data.page_type ? ` (${data.page_type})` : ""}.
+              </div>
+              <Button size="sm" variant="outline" onClick={generateForType} className="shrink-0 h-7 text-xs">
+                <Sparkles className="w-3.5 h-3.5 ml-1" /> توليد تلقائي
+              </Button>
+            </div>
+            <Textarea
+              value={jsonLdText}
+              onChange={(e) => onJsonLdChange(e.target.value)}
+              rows={14}
+              dir="ltr"
+              className="font-mono text-[11px] leading-snug"
+              placeholder='{"@context": "https://schema.org", ...}'
+            />
+            {jsonLdError ? (
+              <div className="text-[10px] text-rose-600 flex items-start gap-1">
+                <XCircle className="w-3 h-3 mt-0.5 shrink-0" /> {jsonLdError}
+              </div>
+            ) : (
+              <div className="text-[10px] text-emerald-600 flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> JSON صالح
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="analysis" className="space-y-2 mt-0">
