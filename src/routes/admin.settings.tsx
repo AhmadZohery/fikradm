@@ -42,7 +42,7 @@ function SettingsPage() {
     setSaving(key);
     const { error } = await supabase
       .from("site_settings")
-      .update({ data: rows[key] })
+      .update({ data: rows[key] as never })
       .eq("key", key);
     setSaving(null);
     if (error) {
