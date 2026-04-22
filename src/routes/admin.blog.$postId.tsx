@@ -122,6 +122,8 @@ function BlogPostEditorPage() {
   const [post, setPost] = useState<PostState | null>(null);
   const [lang, setLang] = useState<Lang>("ar");
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [revisionsOpen, setRevisionsOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const lastTocAutoUpdate = useRef<{ ar: string; en: string }>({ ar: "", en: "" });
   const [dirty, setDirty] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
