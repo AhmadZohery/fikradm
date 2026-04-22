@@ -76,6 +76,8 @@ type PostState = {
   cover_alt: string;
   reading_minutes: number;
   published_at: string | null;
+  scheduled_publish_at: string | null;
+  scheduled_unpublish_at: string | null;
   title_ar: string;
   title_en: string;
   excerpt_ar: string;
@@ -163,6 +165,8 @@ function BlogPostEditorPage() {
         cover_alt: "",
         reading_minutes: Number(r.reading_minutes ?? 5),
         published_at: (r.published_at as string) ?? null,
+        scheduled_publish_at: (r.scheduled_publish_at as string) ?? null,
+        scheduled_unpublish_at: (r.scheduled_unpublish_at as string) ?? null,
         title_ar: String(r.title_ar ?? ""),
         title_en: String(r.title_en ?? ""),
         excerpt_ar: String(r.excerpt_ar ?? ""),
