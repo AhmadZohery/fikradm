@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MoveHorizontal } from "lucide-react";
 import { MediaSlot } from "./MediaSlot";
 
@@ -26,8 +26,19 @@ export function BeforeAfter({
   className = "",
 }: Props) {
   const [pos, setPos] = useState(50);
+  const [width, setWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => setWidth(el.clientWidth);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const move = (clientX: number) => {
     const el = containerRef.current;
@@ -51,16 +62,23 @@ export function BeforeAfter({
       <div className="absolute inset-0">
         <MediaSlot src={afterSrc} alt={afterAlt} ratio="video" rounded="3xl" badge={afterLabel} />
       </div>
-      {/* Before (clipped) */}
-      <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
-        <div className="h-full w-[100vw] max-w-none">
+      {/* Before (clipped to pos%). Inner wrapper keeps full container width so
+          the image stays perfectly aligned with the "after" layer underneath. */}
+      <div
+        className="absolute inset-y-0 left-0 overflow-hidden"
+        style={{ width: `${pos}%` }}
+      >
+        <div
+          className="absolute inset-y-0 left-0 h-full"
+          style={{ width: width || "100%" }}
+        >
           <MediaSlot src={beforeSrc} alt={beforeAlt} ratio="video" rounded="3xl" badge={beforeLabel} />
         </div>
       </div>
       {/* Divider */}
       <div
         className="absolute inset-y-0 z-10 w-0.5 bg-white shadow-elegant"
-        style={{ insetInlineStart: `${pos}%`, transform: "translateX(-50%)" }}
+        style={{ left: `${pos}%`, transform: "translateX(-50%)" }}
         aria-hidden
       >
         <button
