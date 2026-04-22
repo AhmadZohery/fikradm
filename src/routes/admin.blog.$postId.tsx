@@ -245,6 +245,8 @@ function BlogPostEditorPage() {
         category_id: post.category_id,
         cover_image_url: post.cover_image_url,
         reading_minutes: reading,
+        scheduled_publish_at: post.scheduled_publish_at,
+        scheduled_unpublish_at: post.scheduled_unpublish_at,
         title_ar: post.title_ar,
         title_en: post.title_en,
         excerpt_ar: post.excerpt_ar,
@@ -270,6 +272,11 @@ function BlogPostEditorPage() {
       setDirty(false);
       dirtyRef.current = false;
       setLastSavedAt(new Date());
+      // Snapshot to revisions (best-effort, ignore failures)
+      void supabase.from("blog_revisions" as never).insert({
+        post_id: post.id,
+        snapshot: post as never,
+      } as never);
     }
   };
 
