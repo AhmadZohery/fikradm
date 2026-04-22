@@ -6,6 +6,7 @@ import { CountUp } from "./cinematic/CountUp";
 export function HomeBeforeAfter() {
   const { locale } = useLocale();
   const isAr = locale === "ar";
+
   return (
     <section className="section bg-surface-soft">
       <div className="container-app">
