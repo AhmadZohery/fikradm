@@ -604,6 +604,35 @@ function BlogPostEditorPage() {
 
         {/* Sidebar: SEO score live */}
         <div className="space-y-3">
+          <Card className="p-4 space-y-3">
+            <h3 className="font-semibold text-sm flex items-center gap-2">
+              <Calendar className="w-4 h-4" /> النشر
+            </h3>
+            <div className="text-xs text-muted-foreground">
+              الحالة: <Badge variant={post.status === "published" ? "default" : "secondary"} className="ms-1">
+                {post.status === "published" ? "منشور" : post.status === "scheduled" ? "مجدول" : "مسودة"}
+              </Badge>
+            </div>
+            <SchedulePublishField
+              publishAt={post.scheduled_publish_at}
+              unpublishAt={post.scheduled_unpublish_at}
+              onChange={({ publishAt, unpublishAt }) => {
+                setPost({ ...post, scheduled_publish_at: publishAt, scheduled_unpublish_at: unpublishAt });
+                setDirty(true);
+                dirtyRef.current = true;
+              }}
+              hidePublishAt={post.status === "published"}
+            />
+            <div className="flex flex-col gap-2">
+              <Button variant="outline" size="sm" onClick={() => setRevisionsOpen(true)}>
+                <History className="w-3.5 h-3.5 ms-1" /> سجل النسخ
+              </Button>
+              <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setConfirmDelete(true)}>
+                <Trash2 className="w-3.5 h-3.5 ms-1" /> حذف المقال
+              </Button>
+            </div>
+          </Card>
+
           <Card className="p-4 sticky top-16">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold">نتيجة SEO</h3>
@@ -640,6 +669,30 @@ function BlogPostEditorPage() {
           setPickerOpen(false);
         }}
       />
+
+      <BlogRevisionsDialog
+        open={revisionsOpen}
+        onClose={() => setRevisionsOpen(false)}
+        postId={post.id}
+        onRestore={handleRestore}
+      />
+
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent dir="rtl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>حذف المقال نهائياً؟</AlertDialogTitle>
+            <AlertDialogDescription>
+              هذه العملية لا يمكن التراجع عنها. ستفقد المقال وكل نسخه السابقة.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">
+              حذف
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
