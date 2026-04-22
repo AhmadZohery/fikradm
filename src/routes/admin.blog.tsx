@@ -231,7 +231,7 @@ function PostsList() {
                     <td className="p-3 text-xs text-muted-foreground">{p.published_at ? new Date(p.published_at).toLocaleDateString("ar-EG") : "—"}</td>
                     <td className="p-3"><div className="flex justify-end gap-1">
                       <Button variant="ghost" size="icon" onClick={() => togglePublish(p)}>{p.status === "published" ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}</Button>
-                      <Button variant="ghost" size="icon" onClick={() => setEditing(p)}><Pencil className="w-4 h-4" /></Button>
+                      <Button asChild variant="ghost" size="icon"><Link to="/admin/blog/$postId" params={{ postId: p.id }}><Pencil className="w-4 h-4" /></Link></Button>
                       <Button variant="ghost" size="icon" onClick={() => remove(p.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
                     </div></td>
                   </tr>
