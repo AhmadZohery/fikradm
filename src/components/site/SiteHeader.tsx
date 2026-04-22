@@ -305,7 +305,7 @@ export function SiteHeader() {
             </Link>
             <Link
               to={buildHref(locale, "/contact")}
-              className="group relative hidden h-10 items-center gap-1.5 overflow-hidden rounded-full bg-gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-[1.04] hover:shadow-glow md:inline-flex"
+              className="group magnetic ripple focus-ring relative hidden h-10 items-center gap-1.5 overflow-hidden rounded-full bg-gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-soft transition-all duration-300 hover:shadow-glow md:inline-flex"
             >
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
               <span className="relative">{t("nav.cta")}</span>

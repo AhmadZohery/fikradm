@@ -96,11 +96,11 @@ function AboutPage() {
                 ? "فكرة وكالة تسويق رقمي مرخّصة في المملكة العربية السعودية، نخدم أكثر من 150 علامة تجارية في السعودية والإمارات والكويت بحلول متكاملة من السيو والإعلانات إلى الكرييتيف والتطوير — بفهم عميق للسوق الخليجي وثقافته."
                 : "Fikra is a licensed Saudi digital marketing agency serving 150+ brands across KSA, UAE and Kuwait with integrated solutions — from SEO and ads to creative and development — built on deep Gulf market expertise."}
             </p>
-            <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="mt-6 grid grid-cols-1 gap-2 stagger-children sm:grid-cols-2">
               {credentials.map((c, i) => {
                 const Icon = c.icon;
                 return (
-                  <div key={i} className="flex items-center gap-2.5 rounded-xl border border-border/60 bg-card/70 px-3 py-2.5 text-sm font-semibold backdrop-blur">
+                  <div key={i} className="group flex items-center gap-2.5 rounded-xl border border-border/60 bg-card/70 px-3 py-2.5 text-sm font-semibold backdrop-blur transition hover:border-primary/40 hover:shadow-soft">
                     <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary/10 text-primary">
                       <Icon className="h-4 w-4" />
                     </span>
