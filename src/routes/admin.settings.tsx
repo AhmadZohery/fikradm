@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Save, Plus, Trash2, GripVertical, Loader2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Save, Plus, Trash2, GripVertical, Loader2, Upload, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { refreshSiteSettings } from "@/hooks/useSiteSettings";
+import { uploadMediaFile } from "@/lib/uploadMedia";
 
 export const Route = createFileRoute("/admin/settings")({
   component: SettingsPage,
@@ -79,6 +80,7 @@ function SettingsPage() {
           <TabsTrigger value="contact">التواصل</TabsTrigger>
           <TabsTrigger value="announcement">شريط الإعلانات</TabsTrigger>
           <TabsTrigger value="navigation">القائمة الرئيسية</TabsTrigger>
+          <TabsTrigger value="footer">التذييل (Footer)</TabsTrigger>
           <TabsTrigger value="brand">هوية الموقع</TabsTrigger>
         </TabsList>
 
@@ -90,6 +92,9 @@ function SettingsPage() {
         </TabsContent>
         <TabsContent value="navigation" className="mt-4">
           <NavigationTab data={rows.navigation || {}} update={(p) => update("navigation", p)} onSave={() => save("navigation")} saving={saving === "navigation"} />
+        </TabsContent>
+        <TabsContent value="footer" className="mt-4">
+          <FooterTab data={rows.navigation || {}} update={(p) => update("navigation", p)} onSave={() => save("navigation")} saving={saving === "navigation"} />
         </TabsContent>
         <TabsContent value="brand" className="mt-4">
           <BrandTab data={rows.brand || {}} update={(p) => update("brand", p)} onSave={() => save("brand")} saving={saving === "brand"} />
