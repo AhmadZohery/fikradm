@@ -351,7 +351,11 @@ function BlogPostEditorPage() {
   const focusKw = lang === "ar" ? post.focus_keyword_ar : post.focus_keyword_en;
   const keywordsVal = lang === "ar" ? post.keywords_ar : post.keywords_en;
 
-  const setField = <K extends keyof PostState>(k: K, v: PostState[K]) => setPost({ ...post, [k]: v });
+  const setField = <K extends keyof PostState>(k: K, v: PostState[K]) => {
+    setPost({ ...post, [k]: v });
+    if (!dirty) setDirty(true);
+    dirtyRef.current = true;
+  };
 
   return (
     <div className="space-y-4 max-w-7xl mx-auto" dir="rtl">
@@ -370,6 +374,21 @@ function BlogPostEditorPage() {
         </div>
         <div className="flex items-center gap-2">
           <LocaleSwitcher value={lang} onChange={setLang} />
+          {dirty ? (
+            <span className="text-[11px] text-amber-600 flex items-center gap-1">
+              <Clock className="w-3 h-3" /> غير محفوظ
+            </span>
+          ) : lastSavedAt ? (
+            <span className="text-[11px] text-emerald-600 flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> محفوظ {lastSavedAt.toLocaleTimeString("ar-EG")}
+            </span>
+          ) : null}
+          <Button asChild variant="ghost" size="icon" title="معاينة">
+            <a href={`/blog/${post.slug}`} target="_blank" rel="noreferrer"><ExternalLink className="w-4 h-4" /></a>
+          </Button>
+          <Button variant="ghost" size="icon" title="نسخ المقال" onClick={duplicate}>
+            <Copy className="w-4 h-4" />
+          </Button>
           <Button variant="outline" onClick={togglePublish}>
             {post.status === "published" ? <EyeOff className="w-4 h-4 ml-1" /> : <Eye className="w-4 h-4 ml-1" />}
             {post.status === "published" ? "إخفاء" : "نشر"}
