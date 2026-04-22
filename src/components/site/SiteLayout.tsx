@@ -12,13 +12,25 @@ import { performPreviewHardReload, PREVIEW_RELOAD_EVENT_KEY } from "@/lib/previe
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
+    const applyQaClass = () => {
+      const qaVisual = new URLSearchParams(window.location.search).get("qa") === "visual";
+      document.body.classList.toggle("qa-visualize", qaVisual);
+    };
+
+    applyQaClass();
+
     const onStorage = (event: StorageEvent) => {
       if (event.key !== PREVIEW_RELOAD_EVENT_KEY) return;
       void performPreviewHardReload();
     };
 
+    window.addEventListener("popstate", applyQaClass);
     window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("popstate", applyQaClass);
+      window.removeEventListener("storage", onStorage);
+      document.body.classList.remove("qa-visualize");
+    };
   }, []);
 
   return (

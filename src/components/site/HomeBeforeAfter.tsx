@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useLocale } from "@/i18n/useLocale";
 import { SectionEyebrow } from "./cinematic/SectionEyebrow";
 import { BeforeAfter } from "./cinematic/BeforeAfter";
@@ -7,13 +6,9 @@ import { CountUp } from "./cinematic/CountUp";
 export function HomeBeforeAfter() {
   const { locale } = useLocale();
   const isAr = locale === "ar";
-  const qaVisual = useMemo(
-    () => typeof window !== "undefined" && new URLSearchParams(window.location.search).get("qa") === "visual",
-    [],
-  );
 
   return (
-    <section className={`section bg-surface-soft ${qaVisual ? "qa-visualize" : ""}`}>
+    <section className="section bg-surface-soft">
       <div className="container-app">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:items-center lg:gap-16">
           <div>
