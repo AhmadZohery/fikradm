@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Loader2, Eye, EyeOff, FolderOpen, Calendar } from "lucide-react";
 import { toast } from "sonner";
@@ -169,6 +169,7 @@ function PostsList() {
   const [cats, setCats] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Post | null>(null);
+  const navigate = useNavigate();
   const load = async () => {
     setLoading(true);
     const [postsRes, catsRes] = await Promise.all([
@@ -194,10 +195,7 @@ function PostsList() {
     }).select().single();
     if (error) return toast.error(error.message);
     await load();
-    setEditing({
-      ...(data as unknown as Post),
-      body: [], table_of_contents_ar: [], table_of_contents_en: [], faq: [], internal_links: [],
-    });
+    navigate({ to: "/admin/blog/$postId", params: { postId: (data as { id: string }).id } });
   };
   const remove = async (id: string) => {
     if (!confirm("حذف المقال نهائياً؟")) return;

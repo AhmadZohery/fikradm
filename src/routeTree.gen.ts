@@ -37,6 +37,7 @@ import { Route as Char123LocaleChar125IndustriesSlugRouteImport } from './routes
 import { Route as Char123LocaleChar125BlogSlugRouteImport } from './routes/{-$locale}.blog.$slug'
 import { Route as ApiAdminBootstrapRoleRouteImport } from './routes/api/admin.bootstrap-role'
 import { Route as AdminPagesPageIdRouteImport } from './routes/admin.pages.$pageId'
+import { Route as AdminBlogPostIdRouteImport } from './routes/admin.blog.$postId'
 import { Route as Char123LocaleChar125ServicesSlugIndexRouteImport } from './routes/{-$locale}.services.$slug.index'
 import { Route as Char123LocaleChar125ServicesSlugSubRouteImport } from './routes/{-$locale}.services.$slug.$sub'
 import { Route as Char123LocaleChar125IndustriesSlugSubRouteImport } from './routes/{-$locale}.industries.$slug.$sub'
@@ -193,6 +194,11 @@ const AdminPagesPageIdRoute = AdminPagesPageIdRouteImport.update({
   path: '/$pageId',
   getParentRoute: () => AdminPagesRoute,
 } as any)
+const AdminBlogPostIdRoute = AdminBlogPostIdRouteImport.update({
+  id: '/$postId',
+  path: '/$postId',
+  getParentRoute: () => AdminBlogRoute,
+} as any)
 const Char123LocaleChar125ServicesSlugIndexRoute =
   Char123LocaleChar125ServicesSlugIndexRouteImport.update({
     id: '/services/$slug/',
@@ -221,7 +227,7 @@ const Char123LocaleChar125BlogCategorySlugRoute =
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
-  '/admin/blog': typeof AdminBlogRoute
+  '/admin/blog': typeof AdminBlogRouteWithChildren
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -238,6 +244,7 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/admin/': typeof AdminIndexRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
+  '/admin/blog/$postId': typeof AdminBlogPostIdRoute
   '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
   '/api/admin/bootstrap-role': typeof ApiAdminBootstrapRoleRoute
   '/{-$locale}/blog/$slug': typeof Char123LocaleChar125BlogSlugRoute
@@ -253,7 +260,7 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/services/$slug/': typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
 export interface FileRoutesByTo {
-  '/admin/blog': typeof AdminBlogRoute
+  '/admin/blog': typeof AdminBlogRouteWithChildren
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -270,6 +277,7 @@ export interface FileRoutesByTo {
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/admin': typeof AdminIndexRoute
   '/{-$locale}': typeof Char123LocaleChar125IndexRoute
+  '/admin/blog/$postId': typeof AdminBlogPostIdRoute
   '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
   '/api/admin/bootstrap-role': typeof ApiAdminBootstrapRoleRoute
   '/{-$locale}/blog/$slug': typeof Char123LocaleChar125BlogSlugRoute
@@ -288,7 +296,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/admin': typeof AdminRouteWithChildren
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
-  '/admin/blog': typeof AdminBlogRoute
+  '/admin/blog': typeof AdminBlogRouteWithChildren
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -305,6 +313,7 @@ export interface FileRoutesById {
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/admin/': typeof AdminIndexRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
+  '/admin/blog/$postId': typeof AdminBlogPostIdRoute
   '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
   '/api/admin/bootstrap-role': typeof ApiAdminBootstrapRoleRoute
   '/{-$locale}/blog/$slug': typeof Char123LocaleChar125BlogSlugRoute
@@ -341,6 +350,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/search'
     | '/admin/'
     | '/{-$locale}/'
+    | '/admin/blog/$postId'
     | '/admin/pages/$pageId'
     | '/api/admin/bootstrap-role'
     | '/{-$locale}/blog/$slug'
@@ -373,6 +383,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/search'
     | '/admin'
     | '/{-$locale}'
+    | '/admin/blog/$postId'
     | '/admin/pages/$pageId'
     | '/api/admin/bootstrap-role'
     | '/{-$locale}/blog/$slug'
@@ -407,6 +418,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/search'
     | '/admin/'
     | '/{-$locale}/'
+    | '/admin/blog/$postId'
     | '/admin/pages/$pageId'
     | '/api/admin/bootstrap-role'
     | '/{-$locale}/blog/$slug'
@@ -626,6 +638,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPagesPageIdRouteImport
       parentRoute: typeof AdminPagesRoute
     }
+    '/admin/blog/$postId': {
+      id: '/admin/blog/$postId'
+      path: '/$postId'
+      fullPath: '/admin/blog/$postId'
+      preLoaderRoute: typeof AdminBlogPostIdRouteImport
+      parentRoute: typeof AdminBlogRoute
+    }
     '/{-$locale}/services/$slug/': {
       id: '/{-$locale}/services/$slug/'
       path: '/services/$slug'
@@ -657,6 +676,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminBlogRouteChildren {
+  AdminBlogPostIdRoute: typeof AdminBlogPostIdRoute
+}
+
+const AdminBlogRouteChildren: AdminBlogRouteChildren = {
+  AdminBlogPostIdRoute: AdminBlogPostIdRoute,
+}
+
+const AdminBlogRouteWithChildren = AdminBlogRoute._addFileChildren(
+  AdminBlogRouteChildren,
+)
+
 interface AdminPagesRouteChildren {
   AdminPagesPageIdRoute: typeof AdminPagesPageIdRoute
 }
@@ -670,7 +701,7 @@ const AdminPagesRouteWithChildren = AdminPagesRoute._addFileChildren(
 )
 
 interface AdminRouteChildren {
-  AdminBlogRoute: typeof AdminBlogRoute
+  AdminBlogRoute: typeof AdminBlogRouteWithChildren
   AdminFormsRoute: typeof AdminFormsRoute
   AdminIndustriesRoute: typeof AdminIndustriesRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
@@ -686,7 +717,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminBlogRoute: AdminBlogRoute,
+  AdminBlogRoute: AdminBlogRouteWithChildren,
   AdminFormsRoute: AdminFormsRoute,
   AdminIndustriesRoute: AdminIndustriesRoute,
   AdminLocationsRoute: AdminLocationsRoute,
