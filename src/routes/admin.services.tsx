@@ -268,6 +268,7 @@ function ServicesAdmin() {
 function ServiceEditor({ service, onClose, onSaved }: { service: Service; onClose: () => void; onSaved: () => void }) {
   const [s, setS] = useState<Service>(service);
   const [saving, setSaving] = useState(false);
+  const [loc, setLoc] = useState<AdminLocale>("ar");
 
   const save = async () => {
     setSaving(true);
@@ -292,26 +293,55 @@ function ServiceEditor({ service, onClose, onSaved }: { service: Service; onClos
     <Sheet open onOpenChange={(o) => !o && onClose()}>
       <SheetContent side="left" className="w-full sm:max-w-2xl overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>تعديل الخدمة</SheetTitle>
+          <div className="flex items-center justify-between gap-3">
+            <SheetTitle>{loc === "ar" ? "تعديل الخدمة" : "Edit service"}</SheetTitle>
+            <LocaleSwitcher value={loc} onChange={setLoc} />
+          </div>
         </SheetHeader>
-        <Tabs defaultValue="ar" className="mt-4">
-          <TabsList className="grid grid-cols-4">
-            <TabsTrigger value="ar">عربي</TabsTrigger>
-            <TabsTrigger value="en">English</TabsTrigger>
+        <Tabs defaultValue="content" className="mt-4">
+          <TabsList className="grid grid-cols-3">
+            <TabsTrigger value="content">{loc === "ar" ? "المحتوى" : "Content"}</TabsTrigger>
             <TabsTrigger value="seo">SEO</TabsTrigger>
-            <TabsTrigger value="meta">إعدادات</TabsTrigger>
+            <TabsTrigger value="meta">{loc === "ar" ? "إعدادات" : "Settings"}</TabsTrigger>
           </TabsList>
-          <TabsContent value="ar" className="space-y-3 mt-4">
-            <div><Label>العنوان</Label><Input value={s.title_ar} onChange={(e) => setS({ ...s, title_ar: e.target.value })} /></div>
-            <div><Label>مقدمة قصيرة</Label><Textarea rows={2} value={s.intro_ar ?? ""} onChange={(e) => setS({ ...s, intro_ar: e.target.value })} /></div>
-            <div><Label>الوصف الكامل</Label><Textarea rows={5} value={s.description_ar ?? ""} onChange={(e) => setS({ ...s, description_ar: e.target.value })} /></div>
-            <div><Label>النقاط البارزة</Label><StringArrayEditor value={s.highlights_ar} onChange={(v) => setS({ ...s, highlights_ar: v })} /></div>
-          </TabsContent>
-          <TabsContent value="en" className="space-y-3 mt-4" dir="ltr">
-            <div><Label>Title</Label><Input value={s.title_en} onChange={(e) => setS({ ...s, title_en: e.target.value })} /></div>
-            <div><Label>Intro</Label><Textarea rows={2} value={s.intro_en ?? ""} onChange={(e) => setS({ ...s, intro_en: e.target.value })} /></div>
-            <div><Label>Description</Label><Textarea rows={5} value={s.description_en ?? ""} onChange={(e) => setS({ ...s, description_en: e.target.value })} /></div>
-            <div><Label>Highlights</Label><StringArrayEditor value={s.highlights_en} onChange={(v) => setS({ ...s, highlights_en: v })} dir="ltr" /></div>
+          <TabsContent value="content" className="space-y-3 mt-4" dir={dirFor(loc)}>
+            <div className="rounded-md border-l-2 border-primary/50 bg-muted/30 px-3 py-1.5 text-xs text-muted-foreground">
+              {loc === "ar" ? "تحرّر النسخة العربية الآن" : "You are editing the English version"}
+            </div>
+            <div>
+              <Label>{loc === "ar" ? "العنوان" : "Title"}</Label>
+              <Input
+                dir={dirFor(loc)}
+                value={loc === "ar" ? s.title_ar : s.title_en}
+                onChange={(e) => setS({ ...s, [loc === "ar" ? "title_ar" : "title_en"]: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label>{loc === "ar" ? "مقدمة قصيرة" : "Intro"}</Label>
+              <Textarea
+                rows={2}
+                dir={dirFor(loc)}
+                value={(loc === "ar" ? s.intro_ar : s.intro_en) ?? ""}
+                onChange={(e) => setS({ ...s, [loc === "ar" ? "intro_ar" : "intro_en"]: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label>{loc === "ar" ? "الوصف الكامل" : "Description"}</Label>
+              <Textarea
+                rows={5}
+                dir={dirFor(loc)}
+                value={(loc === "ar" ? s.description_ar : s.description_en) ?? ""}
+                onChange={(e) => setS({ ...s, [loc === "ar" ? "description_ar" : "description_en"]: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label>{loc === "ar" ? "النقاط البارزة" : "Highlights"}</Label>
+              <StringArrayEditor
+                value={loc === "ar" ? s.highlights_ar : s.highlights_en}
+                onChange={(v) => setS({ ...s, [loc === "ar" ? "highlights_ar" : "highlights_en"]: v })}
+                dir={dirFor(loc)}
+              />
+            </div>
           </TabsContent>
           <TabsContent value="seo" className="space-y-3 mt-4">
             <div><Label>Meta Title (عربي)</Label><Input value={s.meta_title_ar ?? ""} onChange={(e) => setS({ ...s, meta_title_ar: e.target.value })} /></div>
