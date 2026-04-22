@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Menu, X, Globe, ChevronDown, ArrowUpRight, Sparkles, Search } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { LOCALE_LABELS, type Locale } from "@/i18n/types";
