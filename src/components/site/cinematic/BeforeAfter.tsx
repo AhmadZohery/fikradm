@@ -51,9 +51,13 @@ export function BeforeAfter({
       <div className="absolute inset-0">
         <MediaSlot src={afterSrc} alt={afterAlt} ratio="video" rounded="3xl" badge={afterLabel} />
       </div>
-      {/* Before (clipped) */}
-      <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
-        <div className="h-full w-[100vw] max-w-none">
+      {/* Before (clipped to pos%). Inner wrapper keeps full container width so
+          the image stays perfectly aligned with the "after" layer underneath. */}
+      <div
+        className="absolute inset-y-0 start-0 overflow-hidden"
+        style={{ width: `${pos}%` }}
+      >
+        <div ref={null} className="absolute inset-y-0 start-0 h-full" style={{ width: containerRef.current?.clientWidth ?? "100%" }}>
           <MediaSlot src={beforeSrc} alt={beforeAlt} ratio="video" rounded="3xl" badge={beforeLabel} />
         </div>
       </div>
