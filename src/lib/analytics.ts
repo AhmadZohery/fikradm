@@ -91,3 +91,32 @@ export async function trackPageView(opts: { path: string; locale?: string; pageS
     console.warn("[analytics] insert failed", error.message);
   }
 }
+
+/**
+ * Lightweight CTA click tracker — pushes to window.dataLayer (GA/GTM-friendly)
+ * and emits a custom DOM event for any listener. Zero network. Safe in SSR.
+ */
+export function trackCtaClick(label: string, meta?: Record<string, string | number | boolean | null>) {
+  if (typeof window === "undefined") return;
+  try {
+    const payload = {
+      event: "cta_click",
+      cta_label: label,
+      cta_path: window.location.pathname,
+      cta_locale: document.documentElement.lang || "ar",
+      ...meta,
+    };
+    // GTM/GA4-friendly dataLayer push
+    type DataLayerWindow = Window & { dataLayer?: Array<Record<string, unknown>> };
+    const w = window as DataLayerWindow;
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push(payload);
+    // Custom event for in-app listeners
+    window.dispatchEvent(new CustomEvent("fikra:cta", { detail: payload }));
+    if (import.meta.env.DEV) {
+      console.debug("[cta]", label, payload);
+    }
+  } catch {
+    /* noop */
+  }
+}

@@ -18,7 +18,7 @@ export function SubServicesGrid({
   if (!items.length) return null;
 
   return (
-    <section className="section bg-surface">
+    <section className="section bg-surface smart-reveal smart-reveal--stagger">
       <div className="container-app">
         <div className="max-w-2xl">
           <h2 className="text-3xl font-extrabold md:text-4xl">
@@ -36,8 +36,12 @@ export function SubServicesGrid({
               key={s.slug}
               to="/{-$locale}/services/$slug/$sub"
               params={{ locale, slug: parentSlug, sub: s.slug }}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
+              className="svc-card press-fx sr-item group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft"
+              data-cta={`subservice_card_${s.slug}`}
+              data-cta-placement="subservices_grid"
             >
+              <span className="svc-card__top-rail" aria-hidden />
+              <span className="svc-card__glow" aria-hidden />
               <div className="aspect-[16/10] w-full overflow-hidden">
                 <img
                   src={s.image}

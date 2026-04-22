@@ -77,7 +77,7 @@ export function ServicesGrid() {
   ];
 
   return (
-    <section className="section relative overflow-hidden">
+    <section className="section relative overflow-hidden smart-reveal smart-reveal--stagger">
       <div className="container-app">
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
@@ -118,17 +118,17 @@ export function ServicesGrid() {
               <Link
                 key={s.slug}
                 to={s.href}
-                className="group relative isolate overflow-hidden rounded-3xl border border-border bg-card p-7 transition duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-elegant"
+                className="svc-card press-fx sr-item group relative isolate overflow-hidden rounded-3xl border border-border bg-card p-7"
+                data-cta={`service_card_${s.slug}`}
+                data-cta-placement="services_grid"
                 style={{ animationDelay: `${i * 60}ms` }}
               >
+                <span className="svc-card__top-rail" aria-hidden />
+                <span className="svc-card__glow" aria-hidden />
                 {/* Hover gradient */}
                 <span
                   aria-hidden
                   className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-primary/0 via-primary/0 to-primary/0 opacity-0 transition duration-500 group-hover:from-primary/5 group-hover:to-primary/10 group-hover:opacity-100"
-                />
-                <span
-                  aria-hidden
-                  className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-primary transition-transform duration-500 group-hover:scale-x-100"
                 />
 
                 <div className="flex items-start justify-between gap-3">

@@ -305,11 +305,12 @@ export function SiteHeader() {
             </Link>
             <Link
               to={buildHref(locale, "/contact")}
-              className="group magnetic ripple focus-ring relative hidden h-10 items-center gap-1.5 overflow-hidden rounded-full bg-gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-soft transition-all duration-300 hover:shadow-glow md:inline-flex"
+              className="btn-cta btn-cta--sm hidden md:inline-flex"
+              data-cta="header_contact"
+              data-cta-placement="header"
             >
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-              <span className="relative">{t("nav.cta")}</span>
-              <ArrowUpRight className="relative h-3.5 w-3.5 transition group-hover:rotate-45 rtl:rotate-90 rtl:group-hover:rotate-[135deg]" />
+              <span>{t("nav.cta")}</span>
+              <ArrowUpRight className="cta-arrow" aria-hidden />
             </Link>
             <button
               type="button"
@@ -467,10 +468,12 @@ export function SiteHeader() {
             <Link
               to={buildHref(locale, "/contact")}
               onClick={() => setMobileOpen(false)}
-              className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-primary text-sm font-bold text-primary-foreground shadow-soft active:scale-[0.98]"
+              className="btn-cta w-full"
+              data-cta="mobile_drawer_contact"
+              data-cta-placement="mobile_drawer"
             >
               {t("nav.cta")}
-              <ArrowUpRight className="h-4 w-4 rtl:rotate-90" />
+              <ArrowUpRight className="cta-arrow" aria-hidden />
             </Link>
             <Link
               to={buildHref(otherLocale)}

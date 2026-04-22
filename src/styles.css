@@ -742,3 +742,272 @@
   /* 12. Performance: cleanup will-change after animations */
   .reveal-on-scroll.is-visible { will-change: auto; }
 }
+
+/* =====================================================================
+ * CTA system — semantic .btn-cta with full state coverage + RTL safe
+ * One class to rule them all. Use data-cta="<label>" for click tracking.
+ * Variants: .btn-cta--primary (default), .btn-cta--ghost, .btn-cta--soft
+ * Sizes: .btn-cta--sm | .btn-cta--md (default) | .btn-cta--lg
+ * All states: hover / focus-visible / active / disabled / loading
+ * ===================================================================== */
+@layer utilities {
+  .btn-cta {
+    --cta-bg: var(--gradient-primary);
+    --cta-fg: var(--primary-foreground);
+    --cta-shadow: 0 14px 32px -16px color-mix(in oklab, var(--primary) 65%, transparent);
+    --cta-shadow-hover: 0 22px 50px -18px color-mix(in oklab, var(--primary) 78%, transparent);
+    --cta-ring: color-mix(in oklab, var(--primary) 38%, transparent);
+
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0 1.5rem;
+    height: 3rem;
+    border-radius: 999px;
+    background: var(--cta-bg);
+    color: var(--cta-fg);
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1;
+    letter-spacing: -0.005em;
+    box-shadow: var(--cta-shadow);
+    overflow: hidden;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s ease,
+      filter 0.25s ease;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+  /* Sheen overlay (pure CSS, RTL-aware) */
+  .btn-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.32) 50%, transparent 70%);
+    transform: translateX(-130%);
+    transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    z-index: 0;
+  }
+  html[dir="rtl"] .btn-cta::before {
+    background: linear-gradient(245deg, transparent 30%, rgba(255,255,255,0.32) 50%, transparent 70%);
+    transform: translateX(130%);
+  }
+  .btn-cta:hover::before { transform: translateX(130%); }
+  html[dir="rtl"] .btn-cta:hover::before { transform: translateX(-130%); }
+  .btn-cta > * { position: relative; z-index: 1; }
+
+  /* States */
+  .btn-cta:hover {
+    transform: translate3d(0, -2px, 0) scale(1.02);
+    box-shadow: var(--cta-shadow-hover);
+    filter: brightness(1.04);
+  }
+  .btn-cta:focus-visible {
+    outline: none;
+    box-shadow: var(--cta-shadow), 0 0 0 4px var(--cta-ring);
+  }
+  .btn-cta:active {
+    transform: translate3d(0, 0, 0) scale(0.97);
+    transition-duration: 0.12s, 0.12s, 0.12s;
+    filter: brightness(0.96);
+  }
+  .btn-cta[aria-disabled="true"],
+  .btn-cta:disabled {
+    opacity: 0.55;
+    pointer-events: none;
+    filter: grayscale(0.3);
+  }
+  .btn-cta[data-loading="true"] {
+    color: transparent !important;
+    pointer-events: none;
+  }
+  .btn-cta[data-loading="true"]::after {
+    content: "";
+    position: absolute;
+    inset: 50% 50%;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin: -0.55rem 0 0 -0.55rem;
+    border: 2px solid color-mix(in oklab, var(--cta-fg) 35%, transparent);
+    border-top-color: var(--cta-fg);
+    border-radius: 50%;
+    animation: spinSlow 0.8s linear infinite;
+    z-index: 2;
+  }
+
+  /* Sizes */
+  .btn-cta--sm { height: 2.5rem; padding: 0 1.1rem; font-size: 0.8125rem; }
+  .btn-cta--lg { height: 3.5rem; padding: 0 2rem; font-size: 0.95rem; }
+
+  /* Variants */
+  .btn-cta--ghost {
+    --cta-bg: transparent;
+    --cta-fg: var(--foreground);
+    --cta-shadow: 0 0 0 0 transparent;
+    --cta-shadow-hover: 0 12px 28px -16px color-mix(in oklab, var(--primary) 32%, transparent);
+    border: 1px solid var(--border);
+    background: color-mix(in oklab, var(--background) 70%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .btn-cta--ghost:hover {
+    border-color: color-mix(in oklab, var(--primary) 45%, transparent);
+    color: var(--primary);
+  }
+
+  .btn-cta--soft {
+    --cta-bg: color-mix(in oklab, var(--primary) 12%, var(--background));
+    --cta-fg: var(--primary);
+    --cta-shadow: 0 8px 22px -14px color-mix(in oklab, var(--primary) 40%, transparent);
+    --cta-shadow-hover: 0 16px 36px -16px color-mix(in oklab, var(--primary) 55%, transparent);
+  }
+
+  /* Trailing arrow inside CTAs — RTL-aware */
+  .btn-cta .cta-arrow {
+    width: 1rem; height: 1rem;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-cta:hover .cta-arrow { transform: translateX(3px) rotate(-45deg); }
+  html[dir="rtl"] .btn-cta .cta-arrow { transform: rotate(90deg); }
+  html[dir="rtl"] .btn-cta:hover .cta-arrow { transform: translateX(-3px) rotate(45deg); }
+}
+
+/* =====================================================================
+ * Service-card system — uniform interactions for all card grids
+ * .svc-card    : base hover lift + border highlight
+ * .press-fx    : tap/press scale (mobile feedback)
+ * .svc-card__top-rail : top accent bar that grows on hover (RTL-safe)
+ * ===================================================================== */
+@layer utilities {
+  .svc-card {
+    position: relative;
+    isolation: isolate;
+    transform: translate3d(0, 0, 0);
+    transition:
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.45s ease,
+      border-color 0.35s ease;
+    will-change: transform;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .svc-card:hover {
+      transform: translate3d(0, -6px, 0);
+      border-color: color-mix(in oklab, var(--primary) 38%, transparent);
+      box-shadow: var(--shadow-pop);
+    }
+  }
+  .svc-card:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 38%, transparent), var(--shadow-soft);
+  }
+  .press-fx { transition: transform 0.18s ease; }
+  .press-fx:active { transform: scale(0.985); }
+
+  /* Top accent rail that wipes in from start side (RTL-safe) */
+  .svc-card__top-rail {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    border-radius: inherit;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  html[dir="rtl"] .svc-card__top-rail { transform-origin: right center; }
+  .svc-card:hover .svc-card__top-rail { transform: scaleX(1); }
+
+  /* Soft glow that fades in (uses inset to avoid layout) */
+  .svc-card__glow {
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(60% 80% at 50% 0%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .svc-card:hover .svc-card__glow { opacity: 1; }
+}
+
+/* =====================================================================
+ * Smart reveal — scroll-driven via animation-timeline: view() (modern)
+ * Falls back to instant-visible for older browsers (no flash, no JS).
+ * Use:
+ *   <section class="smart-reveal">           // root
+ *     <div class="sr-item">...</div>          // each child fades + rises
+ *   </section>
+ * For staggered grids: add .smart-reveal--stagger to root.
+ * ===================================================================== */
+@layer utilities {
+  /* Default: visible (graceful fallback when @supports fails) */
+  .smart-reveal .sr-item { opacity: 1; transform: none; }
+  .smart-reveal-self { opacity: 1; transform: none; }
+
+  @supports (animation-timeline: view()) {
+    @keyframes srRise {
+      from { opacity: 0; transform: translate3d(0, 28px, 0); }
+      to   { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    .smart-reveal .sr-item,
+    .smart-reveal-self {
+      animation: srRise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+      will-change: transform, opacity;
+    }
+    /* Staggered version using nth-child */
+    .smart-reveal--stagger .sr-item:nth-child(2) { animation-range: entry 4% cover 24%; }
+    .smart-reveal--stagger .sr-item:nth-child(3) { animation-range: entry 8% cover 26%; }
+    .smart-reveal--stagger .sr-item:nth-child(4) { animation-range: entry 12% cover 28%; }
+    .smart-reveal--stagger .sr-item:nth-child(5) { animation-range: entry 16% cover 30%; }
+    .smart-reveal--stagger .sr-item:nth-child(6) { animation-range: entry 20% cover 32%; }
+    .smart-reveal--stagger .sr-item:nth-child(n+7) { animation-range: entry 24% cover 34%; }
+
+    /* Cleanup will-change at end of timeline (browser handles automatically with timeline) */
+  }
+
+  /* Reduced motion: disable scroll-driven animation entirely */
+  @media (prefers-reduced-motion: reduce) {
+    .smart-reveal .sr-item,
+    .smart-reveal-self {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
+
+/* =====================================================================
+ * RTL polish — fix directional animations for Arabic interface
+ * ===================================================================== */
+@layer utilities {
+  /* Marquee reverses direction in RTL */
+  html[dir="rtl"] .animate-marquee { animation-direction: reverse; }
+
+  /* link-underline grows from end-side in RTL */
+  html[dir="rtl"] .link-underline { background-position: 100% 100%; }
+
+  /* gradient-shift starts from opposite corner in RTL */
+  html[dir="rtl"] .gradient-shift { background-position: 100% 50%; }
+  html[dir="rtl"] .gradient-shift:hover { background-position: 0% 50%; }
+
+  /* tilt-3d mirrors rotateY for RTL */
+  @media (hover: hover) and (pointer: fine) {
+    html[dir="rtl"] .tilt-3d:hover {
+      transform: perspective(1000px) rotateX(2deg) rotateY(3deg) translateZ(8px);
+    }
+  }
+}
