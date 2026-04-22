@@ -247,8 +247,65 @@ function BlogPostEditorPage() {
       })
       .eq("id", post.id);
     setSaving(false);
-    if (error) toast.error(error.message);
-    else toast.success("تم الحفظ");
+    if (error) {
+      toast.error(error.message);
+    } else {
+      setDirty(false);
+      dirtyRef.current = false;
+      setLastSavedAt(new Date());
+    }
+  };
+
+  // Auto-save every 30s when dirty
+  const saveRef = useRef(save);
+  useEffect(() => { saveRef.current = save; });
+  useEffect(() => {
+    if (!autoSaveOn) return;
+    const id = window.setInterval(() => {
+      if (dirtyRef.current && !saving) void saveRef.current();
+    }, 30_000);
+    return () => window.clearInterval(id);
+  }, [autoSaveOn, saving]);
+
+  // Warn before leaving with unsaved changes
+  useEffect(() => {
+    const before = (e: BeforeUnloadEvent) => {
+      if (dirtyRef.current) { e.preventDefault(); e.returnValue = ""; }
+    };
+    window.addEventListener("beforeunload", before);
+    return () => window.removeEventListener("beforeunload", before);
+  }, []);
+
+  const duplicate = async () => {
+    if (!post) return;
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .insert({
+        slug: `${post.slug}-copy-${Date.now().toString(36).slice(-4)}`,
+        title_ar: `${post.title_ar} (نسخة)`,
+        title_en: `${post.title_en} (Copy)`,
+        excerpt_ar: post.excerpt_ar,
+        excerpt_en: post.excerpt_en,
+        cover_image_url: post.cover_image_url,
+        reading_minutes: post.reading_minutes,
+        category_id: post.category_id,
+        body: { ar: post.body_html_ar, en: post.body_html_en } as never,
+        keywords_ar: post.keywords_ar,
+        keywords_en: post.keywords_en,
+        author_ar: post.author_ar,
+        author_en: post.author_en,
+        meta_title_ar: post.meta_title_ar,
+        meta_title_en: post.meta_title_en,
+        meta_description_ar: post.meta_description_ar,
+        meta_description_en: post.meta_description_en,
+        faq: post.faq as never,
+        status: "draft",
+      })
+      .select("id")
+      .single();
+    if (error || !data) return toast.error(error?.message ?? "فشل النسخ");
+    toast.success("تم النسخ كمسودة جديدة");
+    navigate({ to: "/admin/blog/$postId", params: { postId: data.id } });
   };
 
   const togglePublish = async () => {
