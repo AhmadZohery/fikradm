@@ -108,6 +108,12 @@ function BlogPostEditorPage() {
   const [lang, setLang] = useState<Lang>("ar");
   const [pickerOpen, setPickerOpen] = useState(false);
   const lastTocAutoUpdate = useRef<{ ar: string; en: string }>({ ar: "", en: "" });
+  const [dirty, setDirty] = useState(false);
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+  const [autoSaveOn, setAutoSaveOn] = useState(true);
+  const dirtyRef = useRef(false);
+  const postRef = useRef<PostState | null>(null);
+  useEffect(() => { postRef.current = post; }, [post]);
 
   useEffect(() => {
     let cancelled = false;
