@@ -13,9 +13,9 @@ type Props = {
 
 export function PillButton({ to, href, children, variant = "solid", className = "", iconLeft = false }: Props) {
   const baseSolid =
-    "btn-pill group";
+    "btn-pill group magnetic ripple focus-ring";
   const baseOutline =
-    "group inline-flex items-center gap-2 rounded-full border border-border bg-white px-5 py-3.5 text-sm font-semibold text-foreground transition hover:border-primary/40 hover:shadow-soft";
+    "group magnetic ripple focus-ring inline-flex items-center gap-2 rounded-full border border-border bg-white px-5 py-3.5 text-sm font-semibold text-foreground transition hover:border-primary/40 hover:shadow-soft";
 
   const inner = (
     <>

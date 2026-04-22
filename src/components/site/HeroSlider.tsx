@@ -126,6 +126,9 @@ export function HeroSlider() {
                 className="h-full w-full object-cover"
                 loading="eager"
                 fetchPriority="high"
+                decoding="async"
+                width={1024}
+                height={1280}
               />
             </div>
 
