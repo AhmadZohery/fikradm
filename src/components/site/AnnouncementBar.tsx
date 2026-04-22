@@ -37,14 +37,14 @@ export function AnnouncementBar() {
 
   return (
     <div className="relative isolate overflow-hidden bg-gradient-to-r from-primary via-primary-glow to-primary text-primary-foreground">
-      <div className="container-app flex items-center justify-between gap-3 py-2 text-xs sm:text-sm">
+      <div className="container-app flex items-center justify-between gap-2 py-2 text-[11px] sm:text-sm">
         <Link
           to={buildHref(locale, "/contact")}
-          className="flex flex-1 items-center justify-center gap-2 font-medium transition hover:opacity-90"
+          className="flex min-w-0 flex-1 items-center justify-center gap-2 font-medium transition hover:opacity-90"
         >
           <Icon className="h-3.5 w-3.5 shrink-0 animate-pulse" />
-          <span key={idx} className="animate-fade-in">{cur.text}</span>
-          <span className="hidden rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide sm:inline-block">
+          <span key={idx} className="truncate animate-fade-in">{cur.text}</span>
+          <span className="hidden shrink-0 rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide sm:inline-block">
             {cur.cta} →
           </span>
         </Link>

@@ -262,24 +262,26 @@ export function SiteHeader() {
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Search — icon only on mobile, full pill on md+ */}
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
               aria-label={loc === "ar" ? "بحث" : "Search"}
-              className="group inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background/60 px-3 text-xs font-bold text-foreground/80 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 hover:text-primary hover:shadow-soft"
+              className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/60 text-foreground/80 backdrop-blur transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 hover:text-primary md:h-9 md:w-auto md:gap-1.5 md:px-3 md:text-xs md:font-bold"
             >
-              <Search className="h-3.5 w-3.5" />
+              <Search className="h-4 w-4 md:h-3.5 md:w-3.5" />
               <span className="hidden md:inline">{loc === "ar" ? "بحث" : "Search"}</span>
               <kbd className="hidden rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground md:inline">⌘K</kbd>
             </button>
+            {/* Language toggle — icon only on mobile */}
             <Link
               to={buildHref(otherLocale)}
-              className="group inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background/60 px-3 text-xs font-bold text-foreground/80 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 hover:text-primary hover:shadow-soft"
+              className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/60 text-foreground/80 backdrop-blur transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 hover:text-primary md:h-9 md:w-auto md:gap-1.5 md:px-3 md:text-xs md:font-bold"
               aria-label={`Switch to ${LOCALE_LABELS[otherLocale]}`}
             >
-              <Globe className="h-3.5 w-3.5 transition duration-500 group-hover:rotate-180" />
-              {LOCALE_LABELS[otherLocale]}
+              <Globe className="h-4 w-4 transition duration-500 group-hover:rotate-180 md:h-3.5 md:w-3.5" />
+              <span className="hidden md:inline">{LOCALE_LABELS[otherLocale]}</span>
             </Link>
             <Link
               to={buildHref(locale, "/contact")}
@@ -291,36 +293,132 @@ export function SiteHeader() {
             </Link>
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/60 backdrop-blur transition hover:border-primary/40 hover:bg-primary/5 lg:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/60 text-foreground backdrop-blur transition hover:border-primary/40 hover:bg-primary/5 active:scale-95 lg:hidden"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={t("nav.menu")}
               aria-expanded={mobileOpen}
+              aria-controls="mobile-menu-drawer"
             >
              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
 
-          {/* Mobile menu */}
-          {mobileOpen && (
-            <div className="mt-2 overflow-hidden rounded-3xl border border-border/60 bg-background/95 shadow-elegant backdrop-blur-xl lg:hidden animate-mega-in">
-              <nav className="flex max-h-[75vh] flex-col gap-1 overflow-y-auto p-4" aria-label="Mobile">
-                {navItems.map((item, idx) => (
-                  <div key={item.key} className="animate-fade-up" style={{ animationDelay: `${idx * 40}ms` }}>
-                    <Link
-                      to={buildHref(locale, item.href)}
-                      className="block rounded-xl px-3 py-2.5 text-sm font-bold text-foreground transition hover:bg-accent hover:text-primary"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {t(`nav.${item.key}`)}
-                    </Link>
-                    {item.mega && (
-                      <div className="ms-3 border-s-2 border-primary/20 ps-3">
+        </div>
+        </div>
+      </header>
+      {/* Mobile off-canvas drawer (full-screen) */}
+      <div
+        id="mobile-menu-drawer"
+        className={cn(
+          "fixed inset-0 z-[60] lg:hidden",
+          mobileOpen ? "pointer-events-auto" : "pointer-events-none",
+        )}
+        aria-hidden={!mobileOpen}
+      >
+        {/* Backdrop */}
+        <div
+          className={cn(
+            "absolute inset-0 bg-ink/60 backdrop-blur-sm transition-opacity duration-300",
+            mobileOpen ? "opacity-100" : "opacity-0",
+          )}
+          onClick={() => setMobileOpen(false)}
+        />
+        {/* Panel */}
+        <div
+          className={cn(
+            "absolute inset-y-0 end-0 flex h-full w-[88%] max-w-sm flex-col bg-background shadow-elegant transition-transform duration-300 ease-out",
+            mobileOpen
+              ? "translate-x-0"
+              : (locale === "ar" ? "-translate-x-full" : "translate-x-full"),
+          )}
+          role="dialog"
+          aria-modal="true"
+          aria-label={t("nav.menu")}
+        >
+          {/* Drawer header */}
+          <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
+            <div className="flex items-center gap-2">
+              <img src={logo} alt="" className="h-8 w-8 rounded-lg object-cover" />
+              <span className="text-sm font-extrabold">{t("brand.name")}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setMobileOpen(false)}
+              aria-label={loc === "ar" ? "إغلاق" : "Close"}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground/80 transition hover:bg-accent active:scale-95"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Search shortcut */}
+          <button
+            type="button"
+            onClick={() => { setMobileOpen(false); setSearchOpen(true); }}
+            className="mx-4 mt-3 flex items-center gap-2 rounded-2xl border border-border bg-muted/40 px-4 py-3 text-start text-sm text-muted-foreground transition active:scale-[0.98]"
+          >
+            <Search className="h-4 w-4" />
+            <span className="flex-1">{loc === "ar" ? "ابحث في الموقع…" : "Search the site…"}</span>
+          </button>
+
+          {/* Nav list */}
+          <nav className="mt-2 flex-1 overflow-y-auto overscroll-contain px-2 pb-6" aria-label="Mobile">
+            {navItems.map((item) => {
+              const label = t(`nav.${item.key}`);
+              const href = buildHref(locale, item.href);
+              const active = pathWithoutLocale === item.href || (item.href !== "/" && pathWithoutLocale.startsWith(item.href));
+              const isOpen = openMenu === item.key;
+
+              if (!item.mega) {
+                return (
+                  <Link
+                    key={item.key}
+                    to={href}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "flex min-h-12 items-center rounded-2xl px-4 py-3 text-base font-bold transition active:scale-[0.98]",
+                      active ? "bg-primary/10 text-primary" : "text-foreground hover:bg-accent",
+                    )}
+                  >
+                    {label}
+                  </Link>
+                );
+              }
+              return (
+                <div key={item.key} className="mb-1">
+                  <button
+                    type="button"
+                    onClick={() => setOpenMenu(isOpen ? null : item.key)}
+                    aria-expanded={isOpen}
+                    className={cn(
+                      "flex min-h-12 w-full items-center justify-between rounded-2xl px-4 py-3 text-base font-bold transition active:scale-[0.98]",
+                      active || isOpen ? "bg-primary/10 text-primary" : "text-foreground hover:bg-accent",
+                    )}
+                  >
+                    <span>{label}</span>
+                    <ChevronDown className={cn("h-4 w-4 transition-transform duration-300", isOpen && "rotate-180")} />
+                  </button>
+                  <div
+                    className={cn(
+                      "grid transition-[grid-template-rows] duration-300 ease-out",
+                      isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                    )}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="ms-3 mt-1 border-s-2 border-primary/20 ps-3">
+                        <Link
+                          to={href}
+                          onClick={() => setMobileOpen(false)}
+                          className="flex min-h-11 items-center rounded-xl px-3 py-2 text-[11px] font-bold uppercase tracking-widest text-primary hover:bg-primary/5"
+                        >
+                          {loc === "ar" ? "عرض الكل" : "View all"} ←
+                        </Link>
                         {item.mega.map((g) => (
                           <div key={g.groupKey} className="mt-1">
                             <Link
                               to={buildHref(locale, g.href)}
-                              className="block rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-primary"
                               onClick={() => setMobileOpen(false)}
+                              className="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold text-foreground hover:bg-accent"
                             >
                               {g.groupLabel}
                             </Link>
@@ -328,8 +426,8 @@ export function SiteHeader() {
                               <Link
                                 key={c.key}
                                 to={buildHref(locale, c.href)}
-                                className="block rounded-lg px-4 py-1.5 text-sm text-muted-foreground transition hover:text-primary"
                                 onClick={() => setMobileOpen(false)}
+                                className="flex min-h-10 items-center rounded-xl px-5 py-1.5 text-sm text-muted-foreground transition hover:text-primary"
                               >
                                 {c.label}
                               </Link>
@@ -337,23 +435,34 @@ export function SiteHeader() {
                           </div>
                         ))}
                       </div>
-                    )}
+                    </div>
                   </div>
-                ))}
-                <Link
-                  to={buildHref(locale, "/contact")}
-                  className="mt-3 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-soft"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {t("nav.cta")}
-                  <ArrowUpRight className="h-4 w-4 rtl:rotate-90" />
-                </Link>
-              </nav>
-            </div>
-          )}
+                </div>
+              );
+            })}
+          </nav>
+
+          {/* Drawer footer CTA + lang */}
+          <div className="border-t border-border/60 bg-background/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <Link
+              to={buildHref(locale, "/contact")}
+              onClick={() => setMobileOpen(false)}
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-primary text-sm font-bold text-primary-foreground shadow-soft active:scale-[0.98]"
+            >
+              {t("nav.cta")}
+              <ArrowUpRight className="h-4 w-4 rtl:rotate-90" />
+            </Link>
+            <Link
+              to={buildHref(otherLocale)}
+              onClick={() => setMobileOpen(false)}
+              className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-border text-xs font-bold text-foreground/80"
+            >
+              <Globe className="h-3.5 w-3.5" />
+              {LOCALE_LABELS[otherLocale]}
+            </Link>
+          </div>
         </div>
-        </div>
-      </header>
+      </div>
       <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
