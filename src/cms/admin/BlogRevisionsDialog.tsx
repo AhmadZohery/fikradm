@@ -1,0 +1,163 @@
+import { useEffect, useState } from "react";
+import { Loader2, History, RotateCcw, Clock } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+/**
+ * Snapshot stored when a blog post is saved. Mirrors the editable state.
+ * Kept as Record<string, unknown> here because the editor owns the type.
+ */
+export type BlogSnapshot = Record<string, unknown>;
+
+type Revision = {
+  id: string;
+  created_at: string;
+  note: string | null;
+  snapshot: BlogSnapshot;
+};
+
+type Props = {
+  open: boolean;
+  onClose: () => void;
+  postId: string;
+  onRestore: (snapshot: BlogSnapshot) => void;
+};
+
+/**
+ * Version history dialog for blog posts. Reads from `blog_revisions`
+ * (latest 50). Restoring loads the snapshot into the editor — user must
+ * click Save to persist.
+ */
+export function BlogRevisionsDialog({ open, onClose, postId, onRestore }: Props) {
+  const [revisions, setRevisions] = useState<Revision[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [confirm, setConfirm] = useState<Revision | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("blog_revisions" as never)
+        .select("id, created_at, note, snapshot")
+        .eq("post_id", postId)
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (cancelled) return;
+      if (error) toast.error(error.message);
+      setRevisions(((data ?? []) as unknown) as Revision[]);
+      setLoading(false);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [open, postId]);
+
+  const handleRestore = () => {
+    if (!confirm) return;
+    onRestore(confirm.snapshot);
+    setConfirm(null);
+    onClose();
+    toast.success("تم استعادة النسخة. اضغط حفظ لتثبيتها.");
+  };
+
+  return (
+    <>
+      <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+        <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col" dir="rtl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <History className="w-5 h-5" /> سجل النسخ
+            </DialogTitle>
+            <DialogDescription>
+              النسخ السابقة من المقال — كل حفظ بينشئ نسخة جديدة. الاستعادة لا تحفظ تلقائياً.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex-1 overflow-auto -mx-6 px-6">
+            {loading ? (
+              <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin ml-2" /> جاري التحميل...
+              </div>
+            ) : revisions.length === 0 ? (
+              <div className="text-center py-12 text-sm text-muted-foreground">
+                لا توجد نسخ بعد. كل حفظ بينشئ snapshot جديد.
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {revisions.map((rev, i) => (
+                  <div
+                    key={rev.id}
+                    className="flex items-center justify-between border rounded-md p-3 hover:bg-muted/40 transition-colors"
+                  >
+                    <div className="min-w-0">
+                      <div className="font-medium text-sm flex items-center gap-2">
+                        <Clock className="w-3.5 h-3.5 text-muted-foreground" />
+                        {formatDate(rev.created_at)}
+                        {i === 0 && (
+                          <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                            الأحدث
+                          </span>
+                        )}
+                      </div>
+                      {rev.note && (
+                        <div className="text-xs text-muted-foreground mt-0.5 truncate">{rev.note}</div>
+                      )}
+                    </div>
+                    <Button size="sm" variant="outline" onClick={() => setConfirm(rev)}>
+                      <RotateCcw className="w-3.5 h-3.5 ms-1" /> استعادة
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog open={!!confirm} onOpenChange={(o) => !o && setConfirm(null)}>
+        <AlertDialogContent dir="rtl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>استعادة هذه النسخة؟</AlertDialogTitle>
+            <AlertDialogDescription>
+              هيتم استبدال محتوى المقال الحالي بنسخة {confirm && formatDate(confirm.created_at)}. لازم تضغط حفظ بعدها لتثبيت التغيير.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
+            <AlertDialogAction onClick={handleRestore}>استعادة</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  );
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleString("ar-EG", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
