@@ -7,6 +7,7 @@ import { FloatingStatCard } from "./cinematic/FloatingStatCard";
 import { SocialRail } from "./cinematic/SocialRail";
 import { PillButton } from "./cinematic/PillButton";
 import { Sparkle } from "./cinematic/Sparkle";
+import heroSaudiMarketer from "@/assets/hero-saudi-marketer.jpg";
 
 export function HeroSlider() {
   const { locale, t, buildHref } = useLocale();
@@ -120,8 +121,8 @@ export function HeroSlider() {
 
             <div className="absolute inset-0 overflow-hidden rounded-[2rem] border border-border/60 bg-card shadow-elegant">
               <img
-                src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=1200&q=85"
-                alt={isAr ? "فريق فكرة" : "Fikra team"}
+                src={heroSaudiMarketer}
+                alt={isAr ? "خبير تسويق رقمي سعودي بالزي التقليدي" : "Saudi digital marketing expert in traditional attire"}
                 className="h-full w-full object-cover"
                 loading="eager"
                 fetchPriority="high"
