@@ -18,6 +18,7 @@ import { BulkImportDialog } from "@/cms/admin/BulkImportDialog";
 import { SchedulePublishField } from "@/cms/admin/SchedulePublishField";
 import type { ImportColumn } from "@/cms/admin/csvImport";
 import { LocaleSwitcher, dirFor, type AdminLocale } from "@/cms/admin/LocaleSwitcher";
+import { ReadOnlyBanner } from "@/components/admin/PermissionGate";
 
 export const Route = createFileRoute("/admin/services")({
   component: ServicesAdmin,
@@ -144,6 +145,7 @@ function ServicesAdmin() {
 
   return (
     <div className="space-y-4 max-w-6xl">
+      <ReadOnlyBanner />
       <div className="flex items-end justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-bold">إدارة الخدمات</h1>

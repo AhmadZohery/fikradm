@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ReadOnlyBanner } from "@/components/admin/PermissionGate";
 
 export const Route = createFileRoute("/admin/pages")({
   component: PagesList,
@@ -37,6 +38,7 @@ function PagesList() {
 
   return (
     <div className="space-y-6">
+      <ReadOnlyBanner />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">الصفحات</h1>

@@ -19,6 +19,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { usePermissions } from "@/hooks/usePermissions";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -136,12 +137,20 @@ function SortableNavItem({
 
 function AdminLayout() {
   const { user, isStaff, loading } = useAuth();
+  const { isAdmin, isViewer, canAccessAdmin } = usePermissions();
   const navigate = useNavigate();
   const location = useLocation();
   const [unread, setUnread] = useState(0);
   const [navOrder, setNavOrder] = useState<string[]>(() => loadNavOrder());
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const visibleItems = NAV_ITEMS.filter((i) => {
+    // Only admins see Users + Settings
+    if (i.to === "/admin/users" || i.to === "/admin/settings") return isAdmin;
+    return true;
+  });
+  const visibleSet = new Set(visibleItems.map((i) => i.to));
   const orderedItems = navOrder
+    .filter((to) => visibleSet.has(to))
     .map((to) => NAV_ITEMS.find((n) => n.to === to))
     .filter((x): x is NavItem => !!x);
   const grouped = {
@@ -209,14 +218,14 @@ function AdminLayout() {
 
   if (!user) return null; // navigation kicks in
 
-  if (!isStaff) {
+  if (!canAccessAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background p-6">
         <div className="max-w-md text-center space-y-4">
           <div className="mx-auto w-12 h-12 rounded-2xl bg-destructive/10 text-destructive grid place-items-center">!</div>
           <h1 className="text-xl font-bold">لا توجد لديك صلاحية وصول</h1>
           <p className="text-sm text-muted-foreground">
-            حسابك ({user.email}) ليس لديه دور admin أو editor. تواصل مع المسؤول لمنحك الصلاحية، أو سجّل خروج وادخل بحساب آخر.
+            حسابك ({user.email}) لا يملك أي صلاحية. تواصل مع المسؤول لمنحك دور viewer / editor / admin.
           </p>
           <Button
             variant="outline"
@@ -288,6 +297,17 @@ function AdminLayout() {
                 عرض الموقع
               </a>
               <div className="text-xs text-muted-foreground truncate">{user.email}</div>
+              <div className="flex items-center gap-1.5">
+                <Badge
+                  variant={isAdmin ? "default" : isViewer ? "outline" : "secondary"}
+                  className="text-[10px]"
+                >
+                  {isAdmin ? "admin" : isViewer ? "viewer" : "editor"}
+                </Badge>
+                {isViewer && (
+                  <span className="text-[10px] text-muted-foreground">قراءة فقط</span>
+                )}
+              </div>
               <Button
                 variant="ghost"
                 size="sm"
