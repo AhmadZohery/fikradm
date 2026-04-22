@@ -33,7 +33,7 @@ export type JsonLdContext = {
   };
 };
 
-const DEFAULT_ORG = {
+const DEFAULT_ORG: { name: string; url: string; logo?: string; sameAs?: string[] } = {
   name: "فكرة",
   url: "https://fikradm.lovable.app",
   logo: "https://fikradm.lovable.app/logo.png",
