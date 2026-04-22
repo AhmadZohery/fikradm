@@ -34,6 +34,8 @@ type PageRow = {
   canonical_url: string | null;
   keywords: string[] | null;
   no_index: boolean;
+  json_ld: unknown;
+  page_type: string;
 };
 
 type Device = "desktop" | "tablet" | "mobile";
@@ -55,6 +57,8 @@ const EMPTY_STATE: EditorState = {
     canonical_url: "",
     keywords: [],
     no_index: false,
+    json_ld: null,
+    page_type: "custom",
   },
 };
 
@@ -100,7 +104,7 @@ function EditPage() {
       const { data, error } = await supabase
         .from("pages")
         .select(
-          "id, slug, locale, title, status, blocks, meta_title, meta_description, og_image_url, canonical_url, keywords, no_index",
+          "id, slug, locale, title, status, blocks, meta_title, meta_description, og_image_url, canonical_url, keywords, no_index, json_ld, page_type",
         )
         .eq("id", pageId)
         .maybeSingle();
@@ -123,6 +127,8 @@ function EditPage() {
           canonical_url: row.canonical_url ?? "",
           keywords: row.keywords ?? [],
           no_index: row.no_index,
+          json_ld: row.json_ld ?? null,
+          page_type: row.page_type ?? "custom",
         },
       };
       setPage(row);
@@ -185,6 +191,7 @@ function EditPage() {
           canonical_url: state.seo.canonical_url || null,
           keywords: state.seo.keywords.length ? state.seo.keywords : null,
           no_index: state.seo.no_index,
+          json_ld: (state.seo.json_ld ?? null) as never,
         })
         .eq("id", page.id);
       if (error) throw error;
