@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 import { SiteHeader } from "./SiteHeader";
+import { SiteHeaderBoundary } from "./SiteHeaderBoundary";
 import { SiteFooter } from "./SiteFooter";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { CookieBanner } from "./CookieBanner";
@@ -14,7 +15,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <PageViewTracker />
       <ScrollProgress />
       <AnnouncementBar />
-      <SiteHeader />
+      <SiteHeaderBoundary>
+        <SiteHeader />
+      </SiteHeaderBoundary>
       <main className="flex-1 pt-[calc(var(--header-h,4.5rem)+var(--ann-h,0px))]">{children}</main>
       <SiteFooter />
       <WhatsAppButton />
