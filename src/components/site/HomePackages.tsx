@@ -109,7 +109,7 @@ export function HomePackages() {
   const isAr = locale === "ar";
 
   return (
-    <section id="packages" className="section relative overflow-hidden bg-gradient-soft">
+    <section id="packages" className="section relative overflow-hidden bg-gradient-soft smart-reveal smart-reveal--stagger">
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-25 [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]" aria-hidden />
       <div className="container-app relative">
         <div className="mx-auto max-w-3xl text-center">
