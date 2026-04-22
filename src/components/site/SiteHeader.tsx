@@ -129,7 +129,7 @@ export function SiteHeader() {
       <header
         style={{
           ["--header-h" as string]: scrolled ? "4rem" : "5rem",
-          top: annVisible ? "2.25rem" : "0",
+          top: annVisible ? "36px" : "0",
         }}
         className={cn(
           "fixed inset-x-0 z-40 w-full transition-all duration-500 ease-out",

@@ -14,6 +14,12 @@ export function AnnouncementBar() {
     setDismissed(window.localStorage.getItem("fikra:ann:v1") === "1");
   }, []);
 
+  // Sync --ann-h CSS var on root so layout can offset main and header
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.documentElement.style.setProperty("--ann-h", dismissed ? "0px" : "36px");
+  }, [dismissed]);
+
   const items = isAr
     ? [
         { icon: Gift, text: "استشارة مجانية + Audit شامل لموقعك", cta: "احجز الآن" },
