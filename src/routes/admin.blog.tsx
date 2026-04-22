@@ -15,6 +15,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { StringArrayEditor } from "@/cms/admin/StringArrayEditor";
+import { ReadOnlyBanner } from "@/components/admin/PermissionGate";
 
 export const Route = createFileRoute("/admin/blog")({
   component: BlogAdmin,
@@ -58,6 +59,7 @@ function BlogAdmin() {
   const [tab, setTab] = useState<"posts" | "cats">("posts");
   return (
     <div className="space-y-4 max-w-6xl">
+      <ReadOnlyBanner />
       <div>
         <h1 className="text-2xl font-bold">المدونة</h1>
         <p className="text-sm text-muted-foreground mt-1">إدارة المقالات والتصنيفات بكل حقول الـ SEO والمحتوى المنظم.</p>
