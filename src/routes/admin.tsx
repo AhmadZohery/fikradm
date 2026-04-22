@@ -7,6 +7,7 @@ import {
   Inbox,
   Users,
   Settings,
+  LogOut,
   ExternalLink,
   Package,
   Briefcase,
