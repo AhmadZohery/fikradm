@@ -104,7 +104,10 @@ const ChartTooltipContent = React.forwardRef<
     }
 >(
   (
-    {
+    props,
+    ref,
+  ) => {
+    const {
       active,
       payload,
       className,
@@ -118,9 +121,7 @@ const ChartTooltipContent = React.forwardRef<
       color,
       nameKey,
       labelKey,
-    },
-    ref,
-  ) => {
+    } = props as any;
     const { config } = useChart();
 
     const tooltipLabel = React.useMemo(() => {
@@ -165,9 +166,9 @@ const ChartTooltipContent = React.forwardRef<
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
-          {payload
-            .filter((item) => item.type !== "none")
-            .map((item, index) => {
+          {(payload as any[])
+            .filter((item: any) => item.type !== "none")
+            .map((item: any, index: number) => {
               const key = `${nameKey || item.name || item.dataKey || "value"}`;
               const itemConfig = getPayloadConfigFromPayload(config, item, key);
               const indicatorColor = color || item.payload.fill || item.color;
