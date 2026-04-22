@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
   Loader2,
@@ -12,6 +12,10 @@ import {
   AlertTriangle,
   XCircle,
   ListTree,
+  History,
+  Copy,
+  ExternalLink,
+  Clock,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
