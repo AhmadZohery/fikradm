@@ -18,10 +18,15 @@ import { Route as Char123LocaleChar125ContactRouteImport } from './routes/{-$loc
 import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$locale}.about'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
+import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminLocationsRouteImport } from './routes/admin.locations'
+import { Route as AdminIndustriesRouteImport } from './routes/admin.industries'
 import { Route as AdminFormsRouteImport } from './routes/admin.forms'
+import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as Char123LocaleChar125ServicesIndexRouteImport } from './routes/{-$locale}.services.index'
 import { Route as Char123LocaleChar125IndustriesIndexRouteImport } from './routes/{-$locale}.industries.index'
 import { Route as Char123LocaleChar125CaseStudiesIndexRouteImport } from './routes/{-$locale}.case-studies.index'
@@ -85,9 +90,19 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminServicesRoute = AdminServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPagesRoute = AdminPagesRouteImport.update({
   id: '/pages',
   path: '/pages',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPackagesRoute = AdminPackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminMediaRoute = AdminMediaRouteImport.update({
@@ -100,9 +115,24 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLocationsRoute = AdminLocationsRouteImport.update({
+  id: '/locations',
+  path: '/locations',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminIndustriesRoute = AdminIndustriesRouteImport.update({
+  id: '/industries',
+  path: '/industries',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminFormsRoute = AdminFormsRouteImport.update({
   id: '/forms',
   path: '/forms',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBlogRoute = AdminBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => AdminRoute,
 } as any)
 const Char123LocaleChar125ServicesIndexRoute =
@@ -185,10 +215,15 @@ const Char123LocaleChar125BlogCategorySlugRoute =
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/forms': typeof AdminFormsRoute
+  '/admin/industries': typeof AdminIndustriesRoute
+  '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/media': typeof AdminMediaRoute
+  '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
@@ -211,10 +246,15 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/services/$slug/': typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
 export interface FileRoutesByTo {
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/forms': typeof AdminFormsRoute
+  '/admin/industries': typeof AdminIndustriesRoute
+  '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/media': typeof AdminMediaRoute
+  '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
@@ -240,10 +280,15 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/admin': typeof AdminRouteWithChildren
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/forms': typeof AdminFormsRoute
+  '/admin/industries': typeof AdminIndustriesRoute
+  '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/media': typeof AdminMediaRoute
+  '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
@@ -270,10 +315,15 @@ export interface FileRouteTypes {
   fullPaths:
     | '/admin'
     | '/{-$locale}'
+    | '/admin/blog'
     | '/admin/forms'
+    | '/admin/industries'
+    | '/admin/locations'
     | '/admin/login'
     | '/admin/media'
+    | '/admin/packages'
     | '/admin/pages'
+    | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
     | '/{-$locale}/about'
@@ -296,10 +346,15 @@ export interface FileRouteTypes {
     | '/{-$locale}/services/$slug/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/admin/blog'
     | '/admin/forms'
+    | '/admin/industries'
+    | '/admin/locations'
     | '/admin/login'
     | '/admin/media'
+    | '/admin/packages'
     | '/admin/pages'
+    | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
     | '/{-$locale}/about'
@@ -324,10 +379,15 @@ export interface FileRouteTypes {
     | '__root__'
     | '/admin'
     | '/{-$locale}'
+    | '/admin/blog'
     | '/admin/forms'
+    | '/admin/industries'
+    | '/admin/locations'
     | '/admin/login'
     | '/admin/media'
+    | '/admin/packages'
     | '/admin/pages'
+    | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
     | '/{-$locale}/about'
@@ -421,11 +481,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/services': {
+      id: '/admin/services'
+      path: '/services'
+      fullPath: '/admin/services'
+      preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/pages': {
       id: '/admin/pages'
       path: '/pages'
       fullPath: '/admin/pages'
       preLoaderRoute: typeof AdminPagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/packages': {
+      id: '/admin/packages'
+      path: '/packages'
+      fullPath: '/admin/packages'
+      preLoaderRoute: typeof AdminPackagesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/media': {
@@ -442,11 +516,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/locations': {
+      id: '/admin/locations'
+      path: '/locations'
+      fullPath: '/admin/locations'
+      preLoaderRoute: typeof AdminLocationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/industries': {
+      id: '/admin/industries'
+      path: '/industries'
+      fullPath: '/admin/industries'
+      preLoaderRoute: typeof AdminIndustriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/forms': {
       id: '/admin/forms'
       path: '/forms'
       fullPath: '/admin/forms'
       preLoaderRoute: typeof AdminFormsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/blog': {
+      id: '/admin/blog'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AdminBlogRouteImport
       parentRoute: typeof AdminRoute
     }
     '/{-$locale}/services/': {
@@ -556,20 +651,30 @@ const AdminPagesRouteWithChildren = AdminPagesRoute._addFileChildren(
 )
 
 interface AdminRouteChildren {
+  AdminBlogRoute: typeof AdminBlogRoute
   AdminFormsRoute: typeof AdminFormsRoute
+  AdminIndustriesRoute: typeof AdminIndustriesRoute
+  AdminLocationsRoute: typeof AdminLocationsRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminMediaRoute: typeof AdminMediaRoute
+  AdminPackagesRoute: typeof AdminPackagesRoute
   AdminPagesRoute: typeof AdminPagesRouteWithChildren
+  AdminServicesRoute: typeof AdminServicesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBlogRoute: AdminBlogRoute,
   AdminFormsRoute: AdminFormsRoute,
+  AdminIndustriesRoute: AdminIndustriesRoute,
+  AdminLocationsRoute: AdminLocationsRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminMediaRoute: AdminMediaRoute,
+  AdminPackagesRoute: AdminPackagesRoute,
   AdminPagesRoute: AdminPagesRouteWithChildren,
+  AdminServicesRoute: AdminServicesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
