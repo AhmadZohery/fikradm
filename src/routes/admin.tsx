@@ -14,6 +14,7 @@ import {
   Building2,
   MapPin,
   Newspaper,
+  SearchCheck,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -48,6 +49,7 @@ const navItems = [
   { to: "/admin/locations", label: "المواقع", icon: MapPin },
   { to: "/admin/blog", label: "المدونة", icon: Newspaper },
   { to: "/admin/media", label: "مكتبة الوسائط", icon: ImageIcon },
+  { to: "/admin/seo-audit", label: "فحص SEO", icon: SearchCheck },
   { to: "/admin/forms", label: "الرسائل", icon: Inbox },
   { to: "/admin/users", label: "المستخدمين", icon: Users },
   { to: "/admin/settings", label: "الإعدادات", icon: Settings },

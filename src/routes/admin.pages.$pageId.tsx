@@ -14,7 +14,7 @@ import { BlockCanvas } from "@/cms/editor/BlockCanvas";
 import { BlockInspector } from "@/cms/editor/BlockInspector";
 import { EditorToolbar } from "@/cms/editor/EditorToolbar";
 import { SeoPanel, type SeoData } from "@/cms/editor/SeoPanel";
-import { RevisionHistoryDialog } from "@/cms/editor/RevisionHistoryDialog";
+import { RevisionDiffDialog } from "@/cms/editor/RevisionDiffDialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/admin/pages/$pageId")({
@@ -313,10 +313,11 @@ function EditPage() {
         onOpenRevisions={() => setRevisionsOpen(true)}
       />
 
-      <RevisionHistoryDialog
+      <RevisionDiffDialog
         open={revisionsOpen}
         onClose={() => setRevisionsOpen(false)}
         pageId={page.id}
+        currentState={state}
         onRestore={restoreRevision}
       />
 
