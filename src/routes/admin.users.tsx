@@ -25,10 +25,11 @@ type UserRow = {
 };
 
 async function callAdminUsers<T = unknown>(payload: Record<string, unknown>): Promise<T> {
-  const { data, error } = await supabase.functions.invoke<T>("admin-users", { body: payload });
+  const { data, error } = await supabase.functions.invoke("admin-users", { body: payload });
   if (error) throw new Error(error.message);
-  if (data && typeof data === "object" && "error" in (data as Record<string, unknown>)) {
-    throw new Error((data as { error: string }).error);
+  const obj = data as unknown as Record<string, unknown> | null;
+  if (obj && typeof obj === "object" && "error" in obj && typeof obj.error === "string") {
+    throw new Error(obj.error);
   }
   return data as T;
 }
