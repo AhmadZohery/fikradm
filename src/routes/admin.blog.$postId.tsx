@@ -359,6 +359,23 @@ function BlogPostEditorPage() {
     toast.success(`اقتراح: ${kw}`);
   };
 
+  const handleRestore = (snap: BlogSnapshot) => {
+    setPost((prev) => {
+      if (!prev) return prev;
+      return { ...prev, ...(snap as Partial<PostState>), id: prev.id };
+    });
+    setDirty(true);
+    dirtyRef.current = true;
+  };
+
+  const handleDelete = async () => {
+    if (!post) return;
+    const { error } = await supabase.from("blog_posts").delete().eq("id", post.id);
+    if (error) return toast.error(error.message);
+    toast.success("تم حذف المقال");
+    navigate({ to: "/admin/blog" });
+  };
+
   if (loading || !post) {
     return (
       <div className="flex items-center justify-center min-h-[60vh] text-muted-foreground">
