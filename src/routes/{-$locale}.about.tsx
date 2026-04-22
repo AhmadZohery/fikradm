@@ -112,14 +112,14 @@ function AboutPage() {
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link
                 to={buildHref(locale, "/contact")}
-                className="group inline-flex h-12 items-center gap-2 rounded-full bg-gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-soft transition hover:scale-[1.04] hover:shadow-glow"
+                className="group magnetic ripple focus-ring inline-flex h-12 items-center gap-2 rounded-full bg-gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-soft transition hover:shadow-glow"
               >
                 {isAr ? "احجز استشارة مجانية" : "Book a free consultation"}
                 <ArrowUpRight className="h-4 w-4 rtl:rotate-90" />
               </Link>
               <Link
                 to={buildHref(locale, "/case-studies")}
-                className="inline-flex h-12 items-center gap-2 rounded-full border border-border bg-background/60 px-6 text-sm font-bold text-foreground backdrop-blur transition hover:border-primary/40 hover:text-primary"
+                className="magnetic focus-ring inline-flex h-12 items-center gap-2 rounded-full border border-border bg-background/60 px-6 text-sm font-bold text-foreground backdrop-blur transition hover:border-primary/40 hover:text-primary"
               >
                 {isAr ? "قصص نجاحنا" : "Our success stories"}
               </Link>
@@ -136,6 +136,9 @@ function AboutPage() {
                   className="h-full w-full object-cover"
                   loading="eager"
                   fetchPriority="high"
+                  decoding="async"
+                  width={1024}
+                  height={1280}
                 />
               </div>
               <div className="absolute -bottom-5 -start-5 hidden rounded-2xl border border-border bg-card/95 px-4 py-3 shadow-elegant backdrop-blur md:block animate-float">
@@ -186,9 +189,9 @@ function AboutPage() {
             <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">{isAr ? "وعدنا لكم" : "Our promise"}</span>
             <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">{isAr ? "ست ضمانات نلتزم بها مع كل عميل" : "Six commitments we honor with every client"}</h2>
           </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-4 stagger-children sm:grid-cols-2 lg:grid-cols-3">
             {promises.map((p, i) => (
-              <div key={i} className="group flex items-start gap-3 rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elegant">
+              <div key={i} className="group tilt-3d glow-halo flex items-start gap-3 rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elegant">
                 <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary transition group-hover:scale-110">
                   <CheckCircle2 className="h-5 w-5" />
                 </span>
@@ -206,9 +209,9 @@ function AboutPage() {
             <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">{isAr ? "رحلتنا" : "Our journey"}</span>
             <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">{isAr ? "محطّات بنينا فيها الثقة" : "Milestones that built trust"}</h2>
           </div>
-          <ol className="relative mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ol className="relative mt-12 grid gap-6 stagger-children sm:grid-cols-2 lg:grid-cols-4">
             {milestones.map((m, i) => (
-              <li key={i} className="group relative rounded-2xl border border-border bg-card p-6 shadow-soft transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-elegant">
+              <li key={i} className="group tilt-3d relative rounded-2xl border border-border bg-card p-6 shadow-soft transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-elegant">
                 <div className="text-3xl font-black text-gradient">{m.y}</div>
                 <p className="mt-2 text-sm font-semibold leading-7 text-foreground">{isAr ? m.ar : m.en}</p>
               </li>
@@ -224,11 +227,11 @@ function AboutPage() {
             <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">{isAr ? "قيمنا" : "Our values"}</span>
             <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">{isAr ? "ما يحرّكنا كل يوم" : "What drives us every day"}</h2>
           </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-6 stagger-children sm:grid-cols-2 lg:grid-cols-4">
             {values.map((v, i) => {
               const Icon = v.icon;
               return (
-                <div key={i} className="group rounded-2xl border border-border bg-card p-6 shadow-soft transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-elegant">
+                <div key={i} className="group tilt-3d glow-halo rounded-2xl border border-border bg-card p-6 shadow-soft transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-elegant">
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground"><Icon className="h-6 w-6" /></div>
                   <h3 className="mt-4 text-base font-bold">{v.title[locale]}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{v.desc[locale]}</p>
