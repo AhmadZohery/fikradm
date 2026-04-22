@@ -9,6 +9,11 @@ import {
   Settings,
   LogOut,
   ExternalLink,
+  Package,
+  Briefcase,
+  Building2,
+  MapPin,
+  Newspaper,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -37,6 +42,11 @@ export const Route = createFileRoute("/admin")({
 const navItems = [
   { to: "/admin", label: "لوحة التحكم", icon: LayoutDashboard, exact: true },
   { to: "/admin/pages", label: "الصفحات", icon: FileText },
+  { to: "/admin/packages", label: "الباقات", icon: Package },
+  { to: "/admin/services", label: "الخدمات", icon: Briefcase },
+  { to: "/admin/industries", label: "الصناعات", icon: Building2 },
+  { to: "/admin/locations", label: "المواقع", icon: MapPin },
+  { to: "/admin/blog", label: "المدونة", icon: Newspaper },
   { to: "/admin/media", label: "مكتبة الوسائط", icon: ImageIcon },
   { to: "/admin/forms", label: "الرسائل", icon: Inbox },
   { to: "/admin/users", label: "المستخدمين", icon: Users },
