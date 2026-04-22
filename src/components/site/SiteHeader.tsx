@@ -23,6 +23,20 @@ export function SiteHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [annVisible, setAnnVisible] = useState(false);
   const loc = locale === "en" ? "en" : "ar";
+  // Hover-intent close timer to avoid flicker when crossing the small gap
+  // between the nav trigger and the mega panel.
+  const closeTimerRef = useRef<number | null>(null);
+  const openMega = (key: string) => {
+    if (closeTimerRef.current) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    setOpenMenu(key);
+  };
+  const scheduleCloseMega = () => {
+    if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = window.setTimeout(() => setOpenMenu(null), 150);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
