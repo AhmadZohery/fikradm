@@ -140,14 +140,14 @@ export function HomePackages() {
               <article
                 key={b.id}
                 className={
-                  "relative flex flex-col overflow-hidden rounded-3xl border bg-card p-8 transition " +
+                  "relative flex flex-col rounded-3xl border bg-card p-8 pt-12 transition " +
                   (b.popular
                     ? "border-primary/50 shadow-elegant ring-1 ring-primary/30 lg:-translate-y-3"
                     : "border-border shadow-card hover:-translate-y-1 hover:shadow-elegant")
                 }
               >
                 {b.popular && (
-                  <span className="absolute -top-3 start-1/2 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-gradient-primary px-4 py-1 text-[11px] font-bold uppercase tracking-widest text-primary-foreground shadow-soft">
+                  <span className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full bg-gradient-primary px-4 py-1 text-[11px] font-bold uppercase tracking-widest text-primary-foreground shadow-soft rtl:left-auto rtl:right-1/2 rtl:translate-x-1/2">
                     <Sparkles className="h-3 w-3" />
                     {isAr ? "الأكثر طلباً" : "Most popular"}
                   </span>
