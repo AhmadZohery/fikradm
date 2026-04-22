@@ -97,7 +97,7 @@ function SeoAuditPage() {
 
   const applyQuickFix = async (pageId: string, fix: SuggestedFix) => {
     try {
-      const update: Record<string, unknown> = { [fix.field]: fix.suggested };
+      const update = { [fix.field]: fix.suggested } as never;
       const { error } = await supabase.from("pages").update(update).eq("id", pageId);
       if (error) throw error;
       toast.success("تم تطبيق الإصلاح");
@@ -122,7 +122,7 @@ function SeoAuditPage() {
         }
       }
       if (fixDialog.fix.field === "no_index") value = fixDialog.fix.suggested;
-      const update: Record<string, unknown> = { [fixDialog.fix.field]: value };
+      const update = { [fixDialog.fix.field]: value } as never;
       const { error } = await supabase
         .from("pages")
         .update(update)
