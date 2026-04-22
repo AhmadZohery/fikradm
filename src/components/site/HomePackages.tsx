@@ -143,7 +143,7 @@ export function HomePackages() {
                   "relative flex flex-col rounded-3xl border bg-card p-8 pt-12 transition " +
                   (b.popular
                     ? "border-primary/50 shadow-elegant ring-1 ring-primary/30 lg:-translate-y-3"
-                    : "border-border shadow-card hover:-translate-y-1 hover:shadow-elegant")
+                    : "border-border shadow-card tilt-3d glow-halo hover:-translate-y-1 hover:shadow-elegant")
                 }
               >
                 {b.popular && (
