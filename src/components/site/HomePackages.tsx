@@ -140,10 +140,10 @@ export function HomePackages() {
               <article
                 key={b.id}
                 className={
-                  "relative flex flex-col rounded-3xl border bg-card p-8 pt-12 transition " +
+                  "svc-card press-fx sr-item relative flex flex-col rounded-3xl border bg-card p-8 pt-12 " +
                   (b.popular
                     ? "border-primary/50 shadow-elegant ring-1 ring-primary/30 lg:-translate-y-3"
-                    : "border-border shadow-card tilt-3d glow-halo hover:-translate-y-1 hover:shadow-elegant")
+                    : "border-border shadow-card")
                 }
               >
                 {b.popular && (
