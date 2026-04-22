@@ -142,8 +142,8 @@ export function HeroSlider() {
               />
             </div>
 
-            {/* Floating stat card top-end */}
-            <div className="absolute start-4 top-4 z-20 sm:start-6 sm:top-6 md:start-auto md:-end-10 md:top-12 md:block animate-float">
+            {/* Floating stat card — sits below the image edge so it never covers the face. */}
+            <div className="absolute -bottom-6 start-1/2 z-20 -translate-x-1/2 rtl:translate-x-1/2 md:start-auto md:-end-8 md:bottom-8 md:translate-x-0 md:rtl:translate-x-0 animate-float">
               <FloatingStatCard
                 title={isAr ? "إحصائيات المشاريع 2025" : "Project Statistic 2025"}
                 stats={[

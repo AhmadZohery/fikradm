@@ -12,40 +12,25 @@ type Props = {
 export function FloatingStatCard({ title, stats, className = "", badge }: Props) {
   return (
     <div
-      className={`relative w-[min(17rem,calc(100vw-2rem))] rounded-[1.75rem] border border-white/70 bg-white/96 p-4 shadow-pop backdrop-blur-xl md:p-5 ${className}`}
+      className={`relative w-[14rem] rounded-2xl border border-white/70 bg-white/95 p-3 shadow-pop backdrop-blur-xl md:w-[15rem] md:p-4 ${className}`}
     >
-      <div className="flex items-center justify-between gap-3">
-        <h4 className="text-sm font-bold leading-6 text-ink">{title}</h4>
+      <div className="flex items-center justify-between gap-2">
+        <h4 className="text-[12px] font-bold leading-5 text-ink md:text-sm">{title}</h4>
         {badge}
       </div>
-      <div className="mt-4 space-y-3">
+      <div className="mt-3 space-y-2">
         {stats.map((s, i) => (
-          <div key={i} className="flex items-center gap-3 rounded-2xl bg-surface/70 px-3 py-2">
+          <div key={i} className="flex items-center gap-2 rounded-xl bg-surface/70 px-2 py-1.5">
             <span
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-[11px] font-extrabold text-white tabular-nums shadow-soft"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[10px] font-extrabold text-white tabular-nums shadow-soft"
               style={{ background: "var(--svc, var(--primary))" }}
             >
               {s.value}
             </span>
-            <span className="text-sm font-semibold leading-5 text-ink">{s.label}</span>
+            <span className="text-[11px] font-semibold leading-4 text-ink md:text-xs">{s.label}</span>
           </div>
         ))}
       </div>
-      {/* Connector dots */}
-      <svg
-        aria-hidden
-        className="absolute -end-6 top-1/2 hidden h-24 w-24 -translate-y-1/2 lg:block"
-        viewBox="0 0 80 80"
-        fill="none"
-      >
-        <path
-          d="M0 40 Q 40 0 80 40"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeDasharray="3 4"
-          className="text-primary/40"
-        />
-      </svg>
     </div>
   );
 }
