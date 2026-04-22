@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Star } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
@@ -12,7 +13,12 @@ import heroSaudiMarketer from "@/assets/hero-saudi-marketer.jpg";
 export function HeroSlider() {
   const { locale, t, buildHref } = useLocale();
   const isAr = locale === "ar";
-  const qaVisual = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("qa") === "visual";
+  const [qaVisual, setQaVisual] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setQaVisual(new URLSearchParams(window.location.search).get("qa") === "visual");
+  }, []);
 
   return (
     <section className={`relative isolate overflow-hidden bg-gradient-hero ${qaVisual ? "qa-visualize" : ""}`}>

@@ -68,7 +68,7 @@ export function BeforeAfter({
       onMouseMove={(e) => dragging.current && move(e.clientX)}
       onMouseUp={stopDrag}
       onMouseLeave={stopDrag}
-      onTouchMove={(e) => move(e.touches[0].clientX)}
+      onTouchMove={(e) => dragging.current && move(e.touches[0].clientX)}
       onTouchEnd={stopDrag}
       onPointerMove={(e) => dragging.current && move(e.clientX)}
       onPointerUp={stopDrag}
@@ -81,12 +81,12 @@ export function BeforeAfter({
       {/* Before (clipped to pos%). Inner wrapper keeps full container width so
           the image stays perfectly aligned with the "after" layer underneath. */}
       <div
-        className="absolute inset-y-0 left-0 overflow-hidden"
-        style={{ width: `${pos}%` }}
+        className="absolute inset-y-0 overflow-hidden"
+        style={{ width: `${pos}%`, [isRtl ? "right" : "left"]: 0 }}
       >
         <div
-          className="absolute inset-y-0 left-0 h-full"
-          style={{ width: width || "100%" }}
+          className="absolute inset-y-0 h-full"
+          style={{ width: width || "100%", [isRtl ? "right" : "left"]: 0 }}
         >
           <MediaSlot src={beforeSrc} alt={beforeAlt} ratio="video" rounded="3xl" badge={beforeLabel} />
         </div>
@@ -94,7 +94,7 @@ export function BeforeAfter({
       {/* Divider */}
       <div
         className="absolute inset-y-0 z-10 w-0.5 bg-white shadow-elegant will-change-transform"
-        style={{ left: `${pos}%`, transform: "translateX(-50%)" }}
+        style={{ [isRtl ? "right" : "left"]: `${pos}%`, transform: isRtl ? "translateX(50%)" : "translateX(-50%)" }}
         aria-hidden
       >
         <button

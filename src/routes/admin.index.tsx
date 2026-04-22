@@ -7,6 +7,9 @@ import {
   Eye,
   Users as UsersIcon,
   TrendingUp,
+  Bug,
+  RotateCcw,
+  ExternalLink,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -26,6 +29,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { requestPreviewHardReload } from "@/lib/previewRuntime";
 
 export const Route = createFileRoute("/admin/")({
   component: Dashboard,
@@ -247,6 +252,30 @@ function Dashboard() {
           </Card>
         ))}
       </div>
+
+      <Card className="p-5">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h2 className="flex items-center gap-2 font-semibold">
+              <Bug className="h-4 w-4 text-primary" />
+              أدوات QA السريعة
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              افتح الهوم بوضع بصري يبرز الحدود والـ clipping، أو نفّذ hard reload للمعاينة لتجاوز أخطاء الكاش القديمة.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" variant="outline" onClick={() => window.open("/?qa=visual", "_blank", "noopener,noreferrer")}>
+              <ExternalLink className="ms-2 h-4 w-4" />
+              Visual QA للهوم
+            </Button>
+            <Button type="button" onClick={() => requestPreviewHardReload()}>
+              <RotateCcw className="ms-2 h-4 w-4" />
+              Hard Reload للمعاينة
+            </Button>
+          </div>
+        </div>
+      </Card>
 
       <Card className="p-5">
         <div className="flex items-center justify-between mb-4">
