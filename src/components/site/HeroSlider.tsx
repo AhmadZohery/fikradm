@@ -22,9 +22,9 @@ export function HeroSlider() {
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]" aria-hidden />
 
       <div className="container-app relative z-10 grid items-center gap-12 pb-12 pt-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24 lg:pt-12">
-        {/* LEFT */}
-        <div className="relative animate-fade-up">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-white/90 px-4 py-1.5 text-xs font-semibold text-primary shadow-soft backdrop-blur">
+        {/* LEFT — Smart Reveal on text only; image stays eager for LCP */}
+        <div className="relative animate-fade-up smart-reveal smart-reveal--stagger">
+          <span className="sr-item inline-flex items-center gap-2 rounded-full border border-primary/25 bg-white/90 px-4 py-1.5 text-xs font-semibold text-primary shadow-soft backdrop-blur">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
@@ -32,7 +32,7 @@ export function HeroSlider() {
             {isAr ? "وكالة تسويق رقمي مرخّصة في السعودية" : "Licensed digital marketing agency in KSA"}
           </span>
 
-          <h1 className="display-1 mt-6 text-[2.6rem] text-ink md:text-[3.6rem] lg:text-[4.6rem]">
+          <h1 className="sr-item display-1 mt-6 text-[2.6rem] text-ink md:text-[3.6rem] lg:text-[4.6rem]">
             {isAr ? (
               <>
                 استراتيجيات تسويق
@@ -55,13 +55,13 @@ export function HeroSlider() {
             )}
           </h1>
 
-          <p className="mt-6 max-w-xl text-base leading-8 text-muted-foreground md:text-lg">
+          <p className="sr-item mt-6 max-w-xl text-base leading-8 text-muted-foreground md:text-lg">
             {isAr
               ? "نقدّم استراتيجيات مبتكرة ونتائج موثّقة لمساعدة الشركات على النمو والريادة في الأسواق التنافسية — لأكثر من 150 علامة تجارية في الخليج."
               : "Innovative strategies and proven results to help businesses thrive and lead in competitive markets — for 150+ Gulf brands."}
           </p>
 
-          <div className="mt-9 flex flex-wrap items-center gap-3">
+          <div className="sr-item mt-9 flex flex-wrap items-center gap-3">
             <PillButton to={buildHref(locale, "/contact")} iconLeft>
               {t("cta.primary")}
             </PillButton>
@@ -71,7 +71,7 @@ export function HeroSlider() {
           </div>
 
           {/* Trust */}
-          <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <div className="sr-item mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
             <div className="flex items-center gap-2.5">
               <div className="flex -space-x-2 rtl:space-x-reverse">
                 {[1, 2, 3, 4].map((i) => (
@@ -102,9 +102,13 @@ export function HeroSlider() {
           </div>
         </div>
 
-        {/* RIGHT — image + floating stat card */}
+        {/* RIGHT — image + floating stat card.
+            Aspect-ratio reserves space → no CLS while LCP image loads. */}
         <div className="relative">
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-md">
+          <div
+            className="relative mx-auto aspect-[4/5] w-full max-w-md"
+            style={{ contain: "layout paint" }}
+          >
             {/* Sparkle decoration */}
             <Sparkle className="absolute -top-6 -start-2 z-10 animate-glow-pulse" size={36} />
 
