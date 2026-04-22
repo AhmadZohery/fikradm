@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Loader2, Eye, EyeOff, FolderOpen, Calendar } from "lucide-react";
 import { toast } from "sonner";
@@ -169,6 +169,7 @@ function PostsList() {
   const [cats, setCats] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Post | null>(null);
+  const navigate = useNavigate();
   const load = async () => {
     setLoading(true);
     const [postsRes, catsRes] = await Promise.all([
@@ -194,10 +195,7 @@ function PostsList() {
     }).select().single();
     if (error) return toast.error(error.message);
     await load();
-    setEditing({
-      ...(data as unknown as Post),
-      body: [], table_of_contents_ar: [], table_of_contents_en: [], faq: [], internal_links: [],
-    });
+    navigate({ to: "/admin/blog/$postId", params: { postId: (data as { id: string }).id } });
   };
   const remove = async (id: string) => {
     if (!confirm("حذف المقال نهائياً؟")) return;
@@ -233,7 +231,7 @@ function PostsList() {
                     <td className="p-3 text-xs text-muted-foreground">{p.published_at ? new Date(p.published_at).toLocaleDateString("ar-EG") : "—"}</td>
                     <td className="p-3"><div className="flex justify-end gap-1">
                       <Button variant="ghost" size="icon" onClick={() => togglePublish(p)}>{p.status === "published" ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}</Button>
-                      <Button variant="ghost" size="icon" onClick={() => setEditing(p)}><Pencil className="w-4 h-4" /></Button>
+                      <Button asChild variant="ghost" size="icon"><Link to="/admin/blog/$postId" params={{ postId: p.id }}><Pencil className="w-4 h-4" /></Link></Button>
                       <Button variant="ghost" size="icon" onClick={() => remove(p.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
                     </div></td>
                   </tr>
