@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, Loader2, Eye, EyeOff, FolderOpen, Calendar } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, Eye, EyeOff, FolderOpen, Calendar, ExternalLink, Search } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -171,6 +171,8 @@ function PostsList() {
   const [cats, setCats] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Post | null>(null);
+  const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft" | "scheduled">("all");
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const load = async () => {
     setLoading(true);
@@ -212,18 +214,65 @@ function PostsList() {
     void load();
   };
 
+  const filtered = posts.filter((p) => {
+    if (statusFilter !== "all" && p.status !== statusFilter) return false;
+    if (search) {
+      const q = search.toLowerCase();
+      if (
+        !p.title_ar.toLowerCase().includes(q) &&
+        !p.title_en.toLowerCase().includes(q) &&
+        !p.slug.toLowerCase().includes(q)
+      )
+        return false;
+    }
+    return true;
+  });
+  const counts = {
+    all: posts.length,
+    published: posts.filter((p) => p.status === "published").length,
+    draft: posts.filter((p) => p.status === "draft").length,
+    scheduled: posts.filter((p) => p.status === "scheduled").length,
+  };
+
   return (
     <div className="space-y-3">
-      <div className="flex justify-end"><Button onClick={create}><Plus className="w-4 h-4 ml-2" /> مقال جديد</Button></div>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
+          {(["all", "published", "draft", "scheduled"] as const).map((k) => (
+            <Button
+              key={k}
+              size="sm"
+              variant={statusFilter === k ? "default" : "outline"}
+              onClick={() => setStatusFilter(k)}
+              className="h-8"
+            >
+              {k === "all" ? "الكل" : k === "published" ? "منشور" : k === "draft" ? "مسودة" : "مجدول"}
+              <Badge variant="secondary" className="ms-2 h-5 px-1.5 text-[10px]">{counts[k]}</Badge>
+            </Button>
+          ))}
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <Search className="pointer-events-none absolute start-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="بحث بالعنوان أو slug..."
+              className="h-8 w-56 ps-7"
+            />
+          </div>
+          <Button size="sm" onClick={create}><Plus className="w-4 h-4 ml-2" /> مقال جديد</Button>
+        </div>
+      </div>
       <Card className="p-0 overflow-hidden">
         {loading ? <div className="p-8 text-center"><Loader2 className="w-4 h-4 animate-spin inline" /></div> :
-          posts.length === 0 ? <div className="p-8 text-center text-muted-foreground text-sm">لا مقالات بعد</div> : (
+          filtered.length === 0 ? <div className="p-8 text-center text-muted-foreground text-sm">{posts.length === 0 ? "لا مقالات بعد" : "لا نتائج بهذا الفلتر"}</div> : (
           <table className="w-full text-sm">
             <thead className="bg-muted/40 text-right"><tr>
               <th className="p-3">العنوان</th><th className="p-3">التصنيف</th><th className="p-3">الحالة</th><th className="p-3">النشر</th><th className="p-3 text-left">إجراءات</th>
             </tr></thead>
             <tbody>
-              {posts.map((p) => {
+              {filtered.map((p) => {
                 const cat = cats.find((c) => c.id === p.category_id);
                 return (
                   <tr key={p.id} className="border-t hover:bg-muted/20">
@@ -232,6 +281,9 @@ function PostsList() {
                     <td className="p-3"><Badge variant={p.status === "published" ? "default" : "secondary"}>{p.status === "published" ? "منشور" : p.status === "scheduled" ? "مجدول" : "مسودة"}</Badge></td>
                     <td className="p-3 text-xs text-muted-foreground">{p.published_at ? new Date(p.published_at).toLocaleDateString("ar-EG") : "—"}</td>
                     <td className="p-3"><div className="flex justify-end gap-1">
+                      <Button asChild variant="ghost" size="icon" title="معاينة">
+                        <a href={`/blog/${p.slug}`} target="_blank" rel="noreferrer"><ExternalLink className="w-4 h-4" /></a>
+                      </Button>
                       <Button variant="ghost" size="icon" onClick={() => togglePublish(p)}>{p.status === "published" ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}</Button>
                       <Button asChild variant="ghost" size="icon"><Link to="/admin/blog/$postId" params={{ postId: p.id }}><Pencil className="w-4 h-4" /></Link></Button>
                       <Button variant="ghost" size="icon" onClick={() => remove(p.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
