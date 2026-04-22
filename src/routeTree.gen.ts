@@ -13,6 +13,7 @@ import { Route as Char123LocaleChar125RouteImport } from './routes/{-$locale}'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as Char123LocaleChar125IndexRouteImport } from './routes/{-$locale}.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as Char123LocaleChar125SearchRouteImport } from './routes/{-$locale}.search'
 import { Route as Char123LocaleChar125ContactRouteImport } from './routes/{-$locale}.contact'
 import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$locale}.about'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -56,6 +57,12 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const Char123LocaleChar125SearchRoute =
+  Char123LocaleChar125SearchRouteImport.update({
+    id: '/search',
+    path: '/search',
+    getParentRoute: () => Char123LocaleChar125Route,
+  } as any)
 const Char123LocaleChar125ContactRoute =
   Char123LocaleChar125ContactRouteImport.update({
     id: '/contact',
@@ -186,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
+  '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/admin/': typeof AdminIndexRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
   '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
@@ -211,6 +219,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
+  '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/admin': typeof AdminIndexRoute
   '/{-$locale}': typeof Char123LocaleChar125IndexRoute
   '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
@@ -239,6 +248,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
+  '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/admin/': typeof AdminIndexRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
   '/admin/pages/$pageId': typeof AdminPagesPageIdRoute
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
+    | '/{-$locale}/search'
     | '/admin/'
     | '/{-$locale}/'
     | '/admin/pages/$pageId'
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
+    | '/{-$locale}/search'
     | '/admin'
     | '/{-$locale}'
     | '/admin/pages/$pageId'
@@ -320,6 +332,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
+    | '/{-$locale}/search'
     | '/admin/'
     | '/{-$locale}/'
     | '/admin/pages/$pageId'
@@ -372,6 +385,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/{-$locale}/search': {
+      id: '/{-$locale}/search'
+      path: '/search'
+      fullPath: '/{-$locale}/search'
+      preLoaderRoute: typeof Char123LocaleChar125SearchRouteImport
+      parentRoute: typeof Char123LocaleChar125Route
     }
     '/{-$locale}/contact': {
       id: '/{-$locale}/contact'
@@ -575,6 +595,7 @@ const Char123LocaleChar125IndustriesSlugRouteWithChildren =
 interface Char123LocaleChar125RouteChildren {
   Char123LocaleChar125AboutRoute: typeof Char123LocaleChar125AboutRoute
   Char123LocaleChar125ContactRoute: typeof Char123LocaleChar125ContactRoute
+  Char123LocaleChar125SearchRoute: typeof Char123LocaleChar125SearchRoute
   Char123LocaleChar125IndexRoute: typeof Char123LocaleChar125IndexRoute
   Char123LocaleChar125BlogSlugRoute: typeof Char123LocaleChar125BlogSlugRoute
   Char123LocaleChar125IndustriesSlugRoute: typeof Char123LocaleChar125IndustriesSlugRouteWithChildren
@@ -591,6 +612,7 @@ interface Char123LocaleChar125RouteChildren {
 const Char123LocaleChar125RouteChildren: Char123LocaleChar125RouteChildren = {
   Char123LocaleChar125AboutRoute: Char123LocaleChar125AboutRoute,
   Char123LocaleChar125ContactRoute: Char123LocaleChar125ContactRoute,
+  Char123LocaleChar125SearchRoute: Char123LocaleChar125SearchRoute,
   Char123LocaleChar125IndexRoute: Char123LocaleChar125IndexRoute,
   Char123LocaleChar125BlogSlugRoute: Char123LocaleChar125BlogSlugRoute,
   Char123LocaleChar125IndustriesSlugRoute:

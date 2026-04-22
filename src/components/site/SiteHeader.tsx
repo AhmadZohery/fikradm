@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X, Globe, ChevronDown, ArrowUpRight, Sparkles } from "lucide-react";
+import { Menu, X, Globe, ChevronDown, ArrowUpRight, Sparkles, Search } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { LOCALE_LABELS, type Locale } from "@/i18n/types";
 import { services as allServices, industries as allIndustries, getSubServicesFor, getSubIndustriesFor } from "@/content/data";
 import logo from "@/assets/fikra-logo.jpg";
 import { cn } from "@/lib/utils";
+import { CommandPalette } from "./CommandPalette";
 
 type SubLink = { key: string; label: string; href: string; desc?: string };
 type NavItem = {
@@ -19,6 +20,7 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const loc = locale === "en" ? "en" : "ar";
 
   useEffect(() => {
@@ -45,6 +47,16 @@ export function SiteHeader() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") { setOpenMenu(null); setMobileOpen(false); }
+      // Cmd/Ctrl + K to open search
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+      }
+      // "/" anywhere (when not typing) to open
+      if (e.key === "/" && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement)) {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -251,6 +263,16 @@ export function SiteHeader() {
 
           {/* Right actions */}
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              aria-label={loc === "ar" ? "بحث" : "Search"}
+              className="group inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background/60 px-3 text-xs font-bold text-foreground/80 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 hover:text-primary hover:shadow-soft"
+            >
+              <Search className="h-3.5 w-3.5" />
+              <span className="hidden md:inline">{loc === "ar" ? "بحث" : "Search"}</span>
+              <kbd className="hidden rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground md:inline">⌘K</kbd>
+            </button>
             <Link
               to={buildHref(otherLocale)}
               className="group inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background/60 px-3 text-xs font-bold text-foreground/80 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 hover:text-primary hover:shadow-soft"
@@ -332,6 +354,7 @@ export function SiteHeader() {
         </div>
         </div>
       </header>
+      <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

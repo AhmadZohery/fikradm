@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, Link, useNavigate, useLocation } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   FileText,
@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { Badge } from "@/components/ui/badge";
 import {
   SidebarProvider,
   Sidebar,
@@ -46,6 +47,7 @@ function AdminLayout() {
   const { user, isStaff, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [unread, setUnread] = useState(0);
 
   const isLoginRoute = location.pathname === "/admin/login";
 
@@ -57,6 +59,29 @@ function AdminLayout() {
       return;
     }
   }, [user, isStaff, loading, navigate, isLoginRoute]);
+
+  // Live unread badge
+  useEffect(() => {
+    if (!user || !isStaff) return;
+    const fetchCount = async () => {
+      const { count } = await supabase
+        .from("form_submissions")
+        .select("id", { count: "exact", head: true })
+        .eq("is_read", false)
+        .eq("is_archived", false);
+      setUnread(count ?? 0);
+    };
+    fetchCount();
+    const channel = supabase
+      .channel("admin_unread_badge")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "form_submissions" },
+        () => { fetchCount(); },
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user, isStaff]);
 
   // Login page is rendered standalone (no sidebar / no auth gate).
   if (isLoginRoute) return <Outlet />;
@@ -120,7 +145,12 @@ function AdminLayout() {
                         <SidebarMenuButton asChild isActive={active}>
                           <Link to={item.to}>
                             <item.icon className="w-4 h-4" />
-                            <span>{item.label}</span>
+                            <span className="flex-1">{item.label}</span>
+                            {item.to === "/admin/forms" && unread > 0 && (
+                              <Badge className="bg-primary text-primary-foreground h-5 px-1.5 text-[10px]">
+                                {unread}
+                              </Badge>
+                            )}
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
