@@ -104,7 +104,7 @@ export function HeroSlider() {
 
         {/* RIGHT — image + floating stat card.
             Aspect-ratio reserves space → no CLS while LCP image loads. */}
-        <div className="relative">
+        <div className="relative pb-24 md:pb-0">
           <div
             className="relative mx-auto aspect-[4/5] w-full max-w-md"
             style={{ contain: "layout paint" }}
@@ -142,8 +142,12 @@ export function HeroSlider() {
               />
             </div>
 
-            {/* Floating stat card — sits below the image edge so it never covers the face. */}
-            <div className="absolute -bottom-6 start-1/2 z-20 -translate-x-1/2 rtl:translate-x-1/2 md:start-auto md:-end-8 md:bottom-8 md:translate-x-0 md:rtl:translate-x-0 animate-float">
+            {/* Floating stat card.
+                - Mobile: sits BELOW the image (no overlap with face) using a wrapper offset.
+                - md+: anchored to the bottom-end corner (slightly inset) so it doesn't crop or cover the face.
+                Centering uses `left-1/2 -translate-x-1/2` (logical-property safe) instead of start/rtl mix. */}
+            <div className="pointer-events-none absolute inset-x-0 -bottom-20 z-20 flex justify-center md:inset-auto md:-bottom-4 md:-end-6 md:block lg:-bottom-6 lg:-end-10">
+              <div className="pointer-events-auto animate-float">
               <FloatingStatCard
                 title={isAr ? "إحصائيات المشاريع 2025" : "Project Statistic 2025"}
                 stats={[
@@ -151,6 +155,7 @@ export function HeroSlider() {
                   { value: "87", label: isAr ? "نجاح المشاريع %" : "Project Success %" },
                 ]}
               />
+              </div>
             </div>
           </div>
         </div>
