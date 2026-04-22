@@ -12,9 +12,10 @@ import heroSaudiMarketer from "@/assets/hero-saudi-marketer.jpg";
 export function HeroSlider() {
   const { locale, t, buildHref } = useLocale();
   const isAr = locale === "ar";
+  const qaVisual = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("qa") === "visual";
 
   return (
-    <section className="relative isolate overflow-hidden bg-gradient-hero">
+    <section className={`relative isolate overflow-hidden bg-gradient-hero ${qaVisual ? "qa-visualize" : ""}`}>
       <GlowOrbs />
       <SocialRail />
 
@@ -112,6 +113,12 @@ export function HeroSlider() {
             {/* Sparkle decoration */}
             <Sparkle className="absolute -top-6 -start-2 z-10 animate-glow-pulse" size={36} />
 
+            {/* Background moving frame */}
+            <div
+              className="absolute -inset-7 -z-10 rounded-[2.75rem] border border-primary/15 bg-gradient-brand opacity-20 blur-sm animate-float"
+              aria-hidden
+            />
+
             {/* Conic ring */}
             <div
               className="absolute -inset-4 rounded-[2.5rem] opacity-25 blur-2xl"
@@ -137,7 +144,7 @@ export function HeroSlider() {
             </div>
 
             {/* Floating stat card top-end */}
-            <div className="absolute -end-6 top-12 hidden md:block animate-float">
+            <div className="absolute start-4 top-4 z-20 sm:start-6 sm:top-6 md:start-auto md:-end-10 md:top-12 md:block animate-float">
               <FloatingStatCard
                 title={isAr ? "إحصائيات المشاريع 2025" : "Project Statistic 2025"}
                 stats={[

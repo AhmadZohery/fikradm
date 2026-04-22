@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MoveHorizontal } from "lucide-react";
 import { MediaSlot } from "./MediaSlot";
 
@@ -29,6 +29,10 @@ export function BeforeAfter({
   const [width, setWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
+  const isRtl = useMemo(() => {
+    if (typeof document === "undefined") return false;
+    return document.documentElement.dir === "rtl";
+  }, []);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -44,9 +48,17 @@ export function BeforeAfter({
     const el = containerRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const x = clientX - rect.left;
+    const x = isRtl ? rect.right - clientX : clientX - rect.left;
     const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
     setPos(pct);
+  };
+
+  const startDrag = () => {
+    dragging.current = true;
+  };
+
+  const stopDrag = () => {
+    dragging.current = false;
   };
 
   return (
@@ -54,9 +66,13 @@ export function BeforeAfter({
       ref={containerRef}
       className={`relative aspect-video overflow-hidden rounded-3xl border border-border bg-surface-soft shadow-elegant select-none ${className}`}
       onMouseMove={(e) => dragging.current && move(e.clientX)}
-      onMouseUp={() => (dragging.current = false)}
-      onMouseLeave={() => (dragging.current = false)}
+      onMouseUp={stopDrag}
+      onMouseLeave={stopDrag}
       onTouchMove={(e) => move(e.touches[0].clientX)}
+      onTouchEnd={stopDrag}
+      onPointerMove={(e) => dragging.current && move(e.clientX)}
+      onPointerUp={stopDrag}
+      onPointerCancel={stopDrag}
     >
       {/* After (full) */}
       <div className="absolute inset-0">
@@ -77,16 +93,17 @@ export function BeforeAfter({
       </div>
       {/* Divider */}
       <div
-        className="absolute inset-y-0 z-10 w-0.5 bg-white shadow-elegant"
+        className="absolute inset-y-0 z-10 w-0.5 bg-white shadow-elegant will-change-transform"
         style={{ left: `${pos}%`, transform: "translateX(-50%)" }}
         aria-hidden
       >
         <button
           type="button"
-          onMouseDown={() => (dragging.current = true)}
-          onTouchStart={() => (dragging.current = true)}
+          onMouseDown={startDrag}
+          onTouchStart={startDrag}
+          onPointerDown={startDrag}
           aria-label="Drag to compare"
-          className="absolute top-1/2 grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize place-items-center rounded-full bg-white text-ink shadow-pop transition hover:scale-110"
+          className="absolute top-1/2 grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize touch-none place-items-center rounded-full bg-white text-ink shadow-pop transition-transform duration-150 hover:scale-110"
         >
           <MoveHorizontal className="h-5 w-5" />
         </button>
