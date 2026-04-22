@@ -96,6 +96,28 @@ function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const [unread, setUnread] = useState(0);
+  const [navOrder, setNavOrder] = useState<string[]>(() => loadNavOrder());
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const orderedItems = navOrder
+    .map((to) => NAV_ITEMS.find((n) => n.to === to))
+    .filter((x): x is NavItem => !!x);
+  const grouped = {
+    main: orderedItems.filter((i) => i.group === "main"),
+    content: orderedItems.filter((i) => i.group === "content"),
+    system: orderedItems.filter((i) => i.group === "system"),
+  };
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+    if (!over || active.id === over.id) return;
+    setNavOrder((prev) => {
+      const oldIdx = prev.indexOf(String(active.id));
+      const newIdx = prev.indexOf(String(over.id));
+      if (oldIdx < 0 || newIdx < 0) return prev;
+      const next = arrayMove(prev, oldIdx, newIdx);
+      try { window.localStorage.setItem(NAV_ORDER_KEY, JSON.stringify(next)); } catch { /* noop */ }
+      return next;
+    });
+  };
 
   const isLoginRoute = location.pathname === "/admin/login";
 
@@ -180,33 +202,36 @@ function AdminLayout() {
             </div>
           </SidebarHeader>
           <SidebarContent>
-            <SidebarGroup>
-              <SidebarGroupLabel>الإدارة</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {navItems.map((item) => {
-                    const active = item.exact
-                      ? location.pathname === item.to
-                      : location.pathname.startsWith(item.to);
-                    return (
-                      <SidebarMenuItem key={item.to}>
-                        <SidebarMenuButton asChild isActive={active}>
-                          <Link to={item.to}>
-                            <item.icon className="w-4 h-4" />
-                            <span className="flex-1">{item.label}</span>
-                            {item.to === "/admin/forms" && unread > 0 && (
-                              <Badge className="bg-primary text-primary-foreground h-5 px-1.5 text-[10px]">
-                                {unread}
-                              </Badge>
-                            )}
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    );
-                  })}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+              {(["main", "content", "system"] as const).map((g) => (
+                <SidebarGroup key={g}>
+                  <SidebarGroupLabel className="flex items-center gap-1.5">
+                    {g === "main" && <><Sparkles className="w-3 h-3" /> الرئيسية</>}
+                    {g === "content" && <>المحتوى</>}
+                    {g === "system" && <>النظام</>}
+                  </SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      <SortableContext items={grouped[g].map((i) => i.to)} strategy={verticalListSortingStrategy}>
+                        {grouped[g].map((item) => {
+                          const active = item.exact
+                            ? location.pathname === item.to
+                            : location.pathname.startsWith(item.to);
+                          return (
+                            <SortableNavItem
+                              key={item.to}
+                              item={item}
+                              active={active}
+                              unread={item.to === "/admin/forms" ? unread : 0}
+                            />
+                          );
+                        })}
+                      </SortableContext>
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+              ))}
+            </DndContext>
           </SidebarContent>
           <SidebarFooter className="border-t">
             <div className="px-2 py-2 space-y-2">
