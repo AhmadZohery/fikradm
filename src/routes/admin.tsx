@@ -15,6 +15,8 @@ import {
   MapPin,
   Newspaper,
   SearchCheck,
+  GripVertical,
+  Sparkles,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,26 +36,60 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ name: "robots", content: "noindex" }] }),
   component: AdminLayout,
 });
 
-const navItems = [
-  { to: "/admin", label: "لوحة التحكم", icon: LayoutDashboard, exact: true },
-  { to: "/admin/pages", label: "الصفحات", icon: FileText },
-  { to: "/admin/packages", label: "الباقات", icon: Package },
-  { to: "/admin/services", label: "الخدمات", icon: Briefcase },
-  { to: "/admin/industries", label: "الصناعات", icon: Building2 },
-  { to: "/admin/locations", label: "المواقع", icon: MapPin },
-  { to: "/admin/blog", label: "المدونة", icon: Newspaper },
-  { to: "/admin/media", label: "مكتبة الوسائط", icon: ImageIcon },
-  { to: "/admin/seo-audit", label: "فحص SEO", icon: SearchCheck },
-  { to: "/admin/forms", label: "الرسائل", icon: Inbox },
-  { to: "/admin/users", label: "المستخدمين", icon: Users },
-  { to: "/admin/settings", label: "الإعدادات", icon: Settings },
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean; group: "main" | "content" | "system" };
+
+const NAV_ITEMS: NavItem[] = [
+  { to: "/admin", label: "لوحة التحكم", icon: LayoutDashboard, exact: true, group: "main" },
+  { to: "/admin/pages", label: "الصفحات", icon: FileText, group: "content" },
+  { to: "/admin/packages", label: "الباقات", icon: Package, group: "content" },
+  { to: "/admin/services", label: "الخدمات", icon: Briefcase, group: "content" },
+  { to: "/admin/industries", label: "الصناعات", icon: Building2, group: "content" },
+  { to: "/admin/locations", label: "المواقع", icon: MapPin, group: "content" },
+  { to: "/admin/blog", label: "المدونة", icon: Newspaper, group: "content" },
+  { to: "/admin/media", label: "مكتبة الوسائط", icon: ImageIcon, group: "content" },
+  { to: "/admin/seo-audit", label: "فحص SEO", icon: SearchCheck, group: "system" },
+  { to: "/admin/forms", label: "الرسائل", icon: Inbox, group: "system" },
+  { to: "/admin/users", label: "المستخدمين", icon: Users, group: "system" },
+  { to: "/admin/settings", label: "الإعدادات", icon: Settings, group: "system" },
 ];
+
+const NAV_ORDER_KEY = "fikra:admin:nav_order:v1";
+
+function loadNavOrder(): string[] {
+  if (typeof window === "undefined") return NAV_ITEMS.map((n) => n.to);
+  try {
+    const raw = window.localStorage.getItem(NAV_ORDER_KEY);
+    if (!raw) return NAV_ITEMS.map((n) => n.to);
+    const arr = JSON.parse(raw) as string[];
+    const known = new Set(NAV_ITEMS.map((n) => n.to));
+    const filtered = arr.filter((to) => known.has(to));
+    NAV_ITEMS.forEach((n) => { if (!filtered.includes(n.to)) filtered.push(n.to); });
+    return filtered;
+  } catch {
+    return NAV_ITEMS.map((n) => n.to);
+  }
+}
 
 function AdminLayout() {
   const { user, isStaff, loading } = useAuth();
