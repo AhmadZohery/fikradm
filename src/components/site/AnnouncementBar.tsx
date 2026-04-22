@@ -36,8 +36,11 @@ export function AnnouncementBar() {
   const Icon = cur.icon;
 
   return (
-    <div className="relative isolate overflow-hidden bg-gradient-to-r from-primary via-primary-glow to-primary text-primary-foreground">
-      <div className="container-app flex items-center justify-between gap-2 py-2 text-[11px] sm:text-sm">
+    <div
+      style={{ ["--ann-h" as string]: "2.25rem" }}
+      className="fixed inset-x-0 top-0 z-50 isolate overflow-hidden bg-gradient-to-r from-primary via-primary-glow to-primary text-primary-foreground shadow-soft"
+    >
+      <div className="container-app flex h-9 items-center justify-between gap-2 text-[11px] sm:text-sm">
         <Link
           to={buildHref(locale, "/contact")}
           className="flex min-w-0 flex-1 items-center justify-center gap-2 font-medium transition hover:opacity-90"
@@ -54,6 +57,8 @@ export function AnnouncementBar() {
           onClick={() => {
             setDismissed(true);
             try { window.localStorage.setItem("fikra:ann:v1", "1"); } catch { /* noop */ }
+            // Notify header to recalc top offset
+            try { window.dispatchEvent(new CustomEvent("fikra:ann:dismissed")); } catch { /* noop */ }
           }}
           className="shrink-0 rounded-full p-1 transition hover:bg-white/15"
         >
