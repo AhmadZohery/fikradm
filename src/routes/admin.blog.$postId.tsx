@@ -16,6 +16,8 @@ import {
   Copy,
   ExternalLink,
   Clock,
+  Calendar,
+  Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,7 +27,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -37,6 +38,18 @@ import { RichTextEditor } from "@/cms/editor/RichTextEditor";
 import { MediaPickerDialog } from "@/cms/editor/MediaPickerDialog";
 import { StringArrayEditor } from "@/cms/admin/StringArrayEditor";
 import { LocaleSwitcher } from "@/cms/admin/LocaleSwitcher";
+import { SchedulePublishField } from "@/cms/admin/SchedulePublishField";
+import { BlogRevisionsDialog, type BlogSnapshot } from "@/cms/admin/BlogRevisionsDialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   analyzeBlog,
   extractToc,
@@ -63,6 +76,8 @@ type PostState = {
   cover_alt: string;
   reading_minutes: number;
   published_at: string | null;
+  scheduled_publish_at: string | null;
+  scheduled_unpublish_at: string | null;
   title_ar: string;
   title_en: string;
   excerpt_ar: string;
@@ -107,6 +122,8 @@ function BlogPostEditorPage() {
   const [post, setPost] = useState<PostState | null>(null);
   const [lang, setLang] = useState<Lang>("ar");
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [revisionsOpen, setRevisionsOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const lastTocAutoUpdate = useRef<{ ar: string; en: string }>({ ar: "", en: "" });
   const [dirty, setDirty] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
@@ -150,6 +167,8 @@ function BlogPostEditorPage() {
         cover_alt: "",
         reading_minutes: Number(r.reading_minutes ?? 5),
         published_at: (r.published_at as string) ?? null,
+        scheduled_publish_at: (r.scheduled_publish_at as string) ?? null,
+        scheduled_unpublish_at: (r.scheduled_unpublish_at as string) ?? null,
         title_ar: String(r.title_ar ?? ""),
         title_en: String(r.title_en ?? ""),
         excerpt_ar: String(r.excerpt_ar ?? ""),
@@ -228,6 +247,8 @@ function BlogPostEditorPage() {
         category_id: post.category_id,
         cover_image_url: post.cover_image_url,
         reading_minutes: reading,
+        scheduled_publish_at: post.scheduled_publish_at as never,
+        scheduled_unpublish_at: post.scheduled_unpublish_at as never,
         title_ar: post.title_ar,
         title_en: post.title_en,
         excerpt_ar: post.excerpt_ar,
@@ -253,6 +274,11 @@ function BlogPostEditorPage() {
       setDirty(false);
       dirtyRef.current = false;
       setLastSavedAt(new Date());
+      // Snapshot to revisions (best-effort, ignore failures)
+      void supabase.from("blog_revisions" as never).insert({
+        post_id: post.id,
+        snapshot: post as never,
+      } as never);
     }
   };
 
@@ -331,6 +357,23 @@ function BlogPostEditorPage() {
     if (lang === "ar") setPost({ ...post, focus_keyword_ar: kw });
     else setPost({ ...post, focus_keyword_en: kw });
     toast.success(`اقتراح: ${kw}`);
+  };
+
+  const handleRestore = (snap: BlogSnapshot) => {
+    setPost((prev) => {
+      if (!prev) return prev;
+      return { ...prev, ...(snap as Partial<PostState>), id: prev.id };
+    });
+    setDirty(true);
+    dirtyRef.current = true;
+  };
+
+  const handleDelete = async () => {
+    if (!post) return;
+    const { error } = await supabase.from("blog_posts").delete().eq("id", post.id);
+    if (error) return toast.error(error.message);
+    toast.success("تم حذف المقال");
+    navigate({ to: "/admin/blog" });
   };
 
   if (loading || !post) {
@@ -561,6 +604,35 @@ function BlogPostEditorPage() {
 
         {/* Sidebar: SEO score live */}
         <div className="space-y-3">
+          <Card className="p-4 space-y-3">
+            <h3 className="font-semibold text-sm flex items-center gap-2">
+              <Calendar className="w-4 h-4" /> النشر
+            </h3>
+            <div className="text-xs text-muted-foreground">
+              الحالة: <Badge variant={post.status === "published" ? "default" : "secondary"} className="ms-1">
+                {post.status === "published" ? "منشور" : post.status === "scheduled" ? "مجدول" : "مسودة"}
+              </Badge>
+            </div>
+            <SchedulePublishField
+              publishAt={post.scheduled_publish_at}
+              unpublishAt={post.scheduled_unpublish_at}
+              onChange={({ publishAt, unpublishAt }) => {
+                setPost({ ...post, scheduled_publish_at: publishAt, scheduled_unpublish_at: unpublishAt });
+                setDirty(true);
+                dirtyRef.current = true;
+              }}
+              hidePublishAt={post.status === "published"}
+            />
+            <div className="flex flex-col gap-2">
+              <Button variant="outline" size="sm" onClick={() => setRevisionsOpen(true)}>
+                <History className="w-3.5 h-3.5 ms-1" /> سجل النسخ
+              </Button>
+              <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setConfirmDelete(true)}>
+                <Trash2 className="w-3.5 h-3.5 ms-1" /> حذف المقال
+              </Button>
+            </div>
+          </Card>
+
           <Card className="p-4 sticky top-16">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold">نتيجة SEO</h3>
@@ -597,6 +669,30 @@ function BlogPostEditorPage() {
           setPickerOpen(false);
         }}
       />
+
+      <BlogRevisionsDialog
+        open={revisionsOpen}
+        onClose={() => setRevisionsOpen(false)}
+        postId={post.id}
+        onRestore={handleRestore}
+      />
+
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent dir="rtl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>حذف المقال نهائياً؟</AlertDialogTitle>
+            <AlertDialogDescription>
+              هذه العملية لا يمكن التراجع عنها. ستفقد المقال وكل نسخه السابقة.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">
+              حذف
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
