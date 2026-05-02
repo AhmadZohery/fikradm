@@ -7,6 +7,7 @@ import { CtaBand } from "@/components/site/CtaBand";
 import { Reveal } from "@/components/site/Reveal";
 import { findIndustry, findSubIndustry, getSubIndustriesFor } from "@/content/data";
 import { Check, X, ArrowRight } from "lucide-react";
+import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd as breadcrumbLdGen } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/industries/$slug/$sub")({
   beforeLoad: ({ params }) => {
