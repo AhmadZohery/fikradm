@@ -22,6 +22,7 @@ export function SiteFooter() {
 
   const company = [
     { label: t("nav.about"), href: "/about" },
+    { label: isAr ? "الفريق والتراخيص" : "Team & Licensing", href: "/team-and-licensing" },
     { label: t("nav.industries"), href: "/industries" },
     { label: t("nav.cases"), href: "/case-studies" },
     { label: t("nav.blog"), href: "/blog" },
