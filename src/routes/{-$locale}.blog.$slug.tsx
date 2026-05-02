@@ -4,6 +4,8 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { CtaBand } from "@/components/site/CtaBand";
 import { BlogCard } from "@/components/site/BlogCard";
 import { Reveal } from "@/components/site/Reveal";
+import { AutoInternalLinks } from "@/components/site/AutoInternalLinks";
+import { findService } from "@/content/cities";
 import { useLocale } from "@/i18n/useLocale";
 import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blog";
 import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle } from "lucide-react";

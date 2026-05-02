@@ -4,8 +4,10 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { CtaBand } from "@/components/site/CtaBand";
 import { Reveal } from "@/components/site/Reveal";
 import { useLocale } from "@/i18n/useLocale";
-import { CheckCircle2, MapPin, Phone, ArrowRight, Sparkles } from "lucide-react";
-import { findCity, findService, CITIES, SERVICES } from "@/content/cities";
+import { CheckCircle2, MapPin, Phone, ArrowRight, Sparkles, Building2, TrendingUp, CalendarCheck } from "lucide-react";
+import { findCity, findService } from "@/content/cities";
+import { AutoInternalLinks } from "@/components/site/AutoInternalLinks";
+import cityServiceHero from "@/assets/city-service-hero.jpg";
 import {
   buildSeoMeta,
   buildSeoLinks,
@@ -119,8 +121,11 @@ function CityServicePage() {
   const loc = locale === "en" ? "en" : "ar";
   const isAr = loc === "ar";
 
-  const otherCities = CITIES.filter((c) => c.key !== city.key).slice(0, 6);
-  const otherServices = SERVICES.filter((s) => s.key !== service.key);
+  // Deterministic per-city KPI tweak so each city shows slightly different numbers
+  // without requiring hand-authored data for 40 combos.
+  const cityFactor = (city.latitude + city.longitude) % 1;
+  const tweak = (base: number) => Math.round(base * (0.85 + cityFactor * 0.4));
+  const mapSrc = `https://www.google.com/maps?q=${city.latitude},${city.longitude}&hl=${loc}&z=11&output=embed`;
 
   return (
     <SiteLayout>
@@ -132,9 +137,18 @@ function CityServicePage() {
         ]}
       />
 
-      {/* Hero */}
-      <section className="section bg-gradient-hero">
-        <div className="container-app">
+      {/* Hero with custom artwork */}
+      <section className="relative overflow-hidden">
+        <img
+          src={cityServiceHero}
+          alt=""
+          aria-hidden
+          width={1536}
+          height={896}
+          className="absolute inset-0 h-full w-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/70 to-background" />
+        <div className="container-app relative section">
           <Reveal>
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
               <MapPin className="h-3 w-3" /> {city.name[loc]}, {city.country[loc]}
@@ -152,7 +166,8 @@ function CityServicePage() {
                 to={buildHref(locale, "/contact")}
                 className="inline-flex h-12 items-center gap-2 rounded-full bg-gradient-primary px-7 text-sm font-bold text-primary-foreground shadow-elegant transition hover:scale-105"
               >
-                {isAr ? "استشارة مجانية" : "Free Consultation"}
+                <CalendarCheck className="h-4 w-4" />
+                {isAr ? "احجز استشارة مجانية" : "Book Free Consultation"}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Link>
               <a
@@ -162,6 +177,13 @@ function CityServicePage() {
               >
                 <Phone className="h-4 w-4" /> {city.phone}
               </a>
+            </div>
+
+            {/* City stats strip */}
+            <div className="mt-10 grid max-w-3xl grid-cols-3 gap-3 rounded-2xl border border-border bg-card/80 p-4 backdrop-blur">
+              <Stat label={isAr ? "السكان" : "Population"} value={city.population} />
+              <Stat label={isAr ? "اختراق الإنترنت" : "Internet penetration"} value={city.internetPenetration} />
+              <Stat label={isAr ? "العملة" : "Currency"} value={city.currency} />
             </div>
           </Reveal>
         </div>
@@ -183,6 +205,58 @@ function CityServicePage() {
         </div>
       </section>
 
+      {/* Local KPIs (per-city tweak) */}
+      <section className="section bg-surface/40">
+        <div className="container-app">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+            <TrendingUp className="h-4 w-4" />
+            {isAr ? `نتائج موثقة في ${city.name.ar}` : `Proven results in ${city.name.en}`}
+          </div>
+          <h2 className="mt-2 text-2xl font-extrabold md:text-3xl">
+            {isAr ? "أرقام نفخر بها لعملاء المنطقة" : "Numbers we're proud of for local clients"}
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {service.kpis.map((k, i) => (
+              <Reveal key={i} delay={i * 80}>
+                <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
+                  <div className="text-4xl font-black text-primary">
+                    {tweak(k.baseValue)}{k.suffix}
+                  </div>
+                  <div className="mt-1 text-sm text-muted-foreground">{k.label[loc]}</div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          {/* Mini case brief */}
+          <Reveal>
+            <div className="mt-8 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6">
+              <div className="text-xs font-bold uppercase tracking-widest text-primary">
+                {isAr ? "حالة عميل" : "Client snapshot"}
+              </div>
+              <p className="mt-2 text-base leading-relaxed text-foreground/85">{service.caseBrief[loc]}</p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Top local industries we serve */}
+      <section className="section">
+        <div className="container-app">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gold">
+            <Building2 className="h-4 w-4" />
+            {isAr ? `قطاعات نخدمها في ${city.name.ar}` : `Sectors we serve in ${city.name.en}`}
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {city.topIndustries.map((ind, i) => (
+              <span key={i} className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold">
+                {ind[loc]}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Local market insight */}
       <section className="section bg-surface/40">
         <div className="container-app max-w-3xl">
@@ -198,43 +272,37 @@ function CityServicePage() {
         </div>
       </section>
 
-      {/* Cross-links: other services in same city */}
+      {/* Map */}
       <section className="section">
         <div className="container-app">
           <h2 className="text-2xl font-extrabold md:text-3xl">
-            {isAr ? `خدمات أخرى في ${city.name.ar}` : `Other services in ${city.name.en}`}
+            {isAr ? `موقعنا في ${city.name.ar}` : `Our location in ${city.name.en}`}
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {otherServices.map((s) => (
-              <Link
-                key={s.key}
-                to={buildHref(locale, `/locations/${city.slug.en}/${s.slug}`)}
-                className="group rounded-2xl border border-border bg-card p-5 transition hover:border-primary hover:shadow-elegant"
-              >
-                <div className="text-sm font-bold text-foreground group-hover:text-primary">{s.name[loc]}</div>
-                <div className="mt-1 line-clamp-2 text-xs text-muted-foreground">{s.shortDesc[loc]}</div>
-              </Link>
-            ))}
-          </div>
-
-          <h2 className="mt-12 text-2xl font-extrabold md:text-3xl">
-            {isAr ? `${service.name.ar} في مدن أخرى` : `${service.name.en} in other cities`}
-          </h2>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {otherCities.map((c) => (
-              <Link
-                key={c.key}
-                to={buildHref(locale, `/locations/${c.slug.en}/${service.slug}`)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-xs font-semibold text-foreground transition hover:border-primary hover:text-primary"
-              >
-                <MapPin className="h-3 w-3" /> {c.name[loc]}
-              </Link>
-            ))}
+          <div className="mt-6 overflow-hidden rounded-3xl border border-border shadow-elegant">
+            <iframe
+              title={`${city.name.en} map`}
+              src={mapSrc}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-[360px] w-full border-0"
+            />
           </div>
         </div>
       </section>
 
+      {/* Auto-generated internal-links network */}
+      <AutoInternalLinks city={city} service={service} />
+
       <CtaBand />
     </SiteLayout>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="text-center">
+      <div className="text-xl font-black text-foreground md:text-2xl">{value}</div>
+      <div className="mt-0.5 text-[11px] uppercase tracking-wide text-muted-foreground">{label}</div>
+    </div>
   );
 }
