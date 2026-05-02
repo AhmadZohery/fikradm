@@ -46,7 +46,7 @@ export function IndustriesShowcase() {
                 className="group relative overflow-hidden rounded-3xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <img src={ind.image} alt={ind.title[locale]} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy" />
+                  <img src={ind.image} alt={ind.title[locale]} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy" decoding="async" width={640} height={400} />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent" />
                   <span className="absolute start-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-primary shadow-soft backdrop-blur">
                     <Icon className="h-4 w-4" />
