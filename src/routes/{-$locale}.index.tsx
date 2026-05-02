@@ -41,7 +41,7 @@ export const Route = createFileRoute("/{-$locale}/")({
       description,
       path: `/${locale}`,
       locale,
-      image: page?.og_image_url ?? (heroSaudiMarketer as string),
+      image: page?.og_image_url || heroSaudiMarketer,
       noIndex: page?.no_index ?? false,
     });
 
