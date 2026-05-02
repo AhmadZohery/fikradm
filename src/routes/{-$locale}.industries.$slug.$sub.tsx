@@ -15,22 +15,11 @@ export const Route = createFileRoute("/{-$locale}/industries/$slug/$sub")({
   head: ({ params }) => {
     const s = findSubIndustry(params.slug, params.sub);
     if (!s) return { meta: [{ title: "Not found" }] };
-    const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
+    const loc: "ar" | "en" = (params.locale ?? "ar") === "en" ? "en" : "ar";
+    const path = `/${loc}/industries/${params.slug}/${s.slug}`;
     return {
-      meta: [
-        { title: s.metaTitle[loc] },
-        { name: "description", content: s.metaDescription[loc] },
-        { property: "og:title", content: s.metaTitle[loc] },
-        { property: "og:description", content: s.metaDescription[loc] },
-        { property: "og:image", content: s.image },
-        { property: "og:type", content: "website" },
-        { name: "twitter:image", content: s.image },
-      ],
-      links: [
-        { rel: "canonical", href: `https://fikradm.lovable.app/${(params.locale ?? "ar")}/industries/${params.slug}/${s.slug}` },
-        { rel: "alternate", hrefLang: "ar", href: `https://fikradm.lovable.app/ar/industries/${params.slug}/${s.slug}` },
-        { rel: "alternate", hrefLang: "en", href: `https://fikradm.lovable.app/en/industries/${params.slug}/${s.slug}` },
-      ],
+      meta: __buildIndustryMeta(s.metaTitle[loc], s.metaDescription[loc], path, loc, s.image),
+      links: __buildIndustryLinks(path, loc),
     };
   },
   component: SubIndustryPage,
