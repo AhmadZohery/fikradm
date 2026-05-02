@@ -193,7 +193,13 @@ function GalleryHeroVisual({ image }: { image: string }) {
         <img src={image} alt="" className="h-full w-full object-cover" loading="eager" />
       </div>
       <div className="overflow-hidden rounded-2xl border border-border shadow-soft">
-        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b8?auto=format&fit=crop&w=400&q=80" alt="" className="h-full w-full object-cover" />
+        <img
+          src="https://images.unsplash.com/photo-1561070791-2526d30994b8?auto=format&fit=crop&w=400&q=80"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover"
+        />
       </div>
       <div className="overflow-hidden rounded-2xl shadow-soft animate-float" style={{ background: "var(--svc)" }}>
         <div className="grid h-full place-items-center text-3xl font-black text-white">A</div>
