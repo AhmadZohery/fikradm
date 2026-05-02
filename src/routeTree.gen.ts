@@ -13,6 +13,7 @@ import { Route as Char123LocaleChar125RouteImport } from './routes/{-$locale}'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as Char123LocaleChar125IndexRouteImport } from './routes/{-$locale}.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as Char123LocaleChar125TeamAndLicensingRouteImport } from './routes/{-$locale}.team-and-licensing'
 import { Route as Char123LocaleChar125SearchRouteImport } from './routes/{-$locale}.search'
 import { Route as Char123LocaleChar125ContactRouteImport } from './routes/{-$locale}.contact'
 import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$locale}.about'
@@ -64,6 +65,12 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const Char123LocaleChar125TeamAndLicensingRoute =
+  Char123LocaleChar125TeamAndLicensingRouteImport.update({
+    id: '/team-and-licensing',
+    path: '/team-and-licensing',
+    getParentRoute: () => Char123LocaleChar125Route,
+  } as any)
 const Char123LocaleChar125SearchRoute =
   Char123LocaleChar125SearchRouteImport.update({
     id: '/search',
@@ -242,6 +249,7 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
+  '/{-$locale}/team-and-licensing': typeof Char123LocaleChar125TeamAndLicensingRoute
   '/admin/': typeof AdminIndexRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
   '/admin/blog/$postId': typeof AdminBlogPostIdRoute
@@ -275,6 +283,7 @@ export interface FileRoutesByTo {
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
+  '/{-$locale}/team-and-licensing': typeof Char123LocaleChar125TeamAndLicensingRoute
   '/admin': typeof AdminIndexRoute
   '/{-$locale}': typeof Char123LocaleChar125IndexRoute
   '/admin/blog/$postId': typeof AdminBlogPostIdRoute
@@ -311,6 +320,7 @@ export interface FileRoutesById {
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
+  '/{-$locale}/team-and-licensing': typeof Char123LocaleChar125TeamAndLicensingRoute
   '/admin/': typeof AdminIndexRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
   '/admin/blog/$postId': typeof AdminBlogPostIdRoute
@@ -348,6 +358,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
     | '/{-$locale}/search'
+    | '/{-$locale}/team-and-licensing'
     | '/admin/'
     | '/{-$locale}/'
     | '/admin/blog/$postId'
@@ -381,6 +392,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
     | '/{-$locale}/search'
+    | '/{-$locale}/team-and-licensing'
     | '/admin'
     | '/{-$locale}'
     | '/admin/blog/$postId'
@@ -416,6 +428,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
     | '/{-$locale}/search'
+    | '/{-$locale}/team-and-licensing'
     | '/admin/'
     | '/{-$locale}/'
     | '/admin/blog/$postId'
@@ -469,6 +482,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/{-$locale}/team-and-licensing': {
+      id: '/{-$locale}/team-and-licensing'
+      path: '/team-and-licensing'
+      fullPath: '/{-$locale}/team-and-licensing'
+      preLoaderRoute: typeof Char123LocaleChar125TeamAndLicensingRouteImport
+      parentRoute: typeof Char123LocaleChar125Route
     }
     '/{-$locale}/search': {
       id: '/{-$locale}/search'
@@ -753,6 +773,7 @@ interface Char123LocaleChar125RouteChildren {
   Char123LocaleChar125AboutRoute: typeof Char123LocaleChar125AboutRoute
   Char123LocaleChar125ContactRoute: typeof Char123LocaleChar125ContactRoute
   Char123LocaleChar125SearchRoute: typeof Char123LocaleChar125SearchRoute
+  Char123LocaleChar125TeamAndLicensingRoute: typeof Char123LocaleChar125TeamAndLicensingRoute
   Char123LocaleChar125IndexRoute: typeof Char123LocaleChar125IndexRoute
   Char123LocaleChar125BlogSlugRoute: typeof Char123LocaleChar125BlogSlugRoute
   Char123LocaleChar125IndustriesSlugRoute: typeof Char123LocaleChar125IndustriesSlugRouteWithChildren
@@ -770,6 +791,8 @@ const Char123LocaleChar125RouteChildren: Char123LocaleChar125RouteChildren = {
   Char123LocaleChar125AboutRoute: Char123LocaleChar125AboutRoute,
   Char123LocaleChar125ContactRoute: Char123LocaleChar125ContactRoute,
   Char123LocaleChar125SearchRoute: Char123LocaleChar125SearchRoute,
+  Char123LocaleChar125TeamAndLicensingRoute:
+    Char123LocaleChar125TeamAndLicensingRoute,
   Char123LocaleChar125IndexRoute: Char123LocaleChar125IndexRoute,
   Char123LocaleChar125BlogSlugRoute: Char123LocaleChar125BlogSlugRoute,
   Char123LocaleChar125IndustriesSlugRoute:
