@@ -27,6 +27,10 @@ export type City = {
   // Marketing copy
   tagline: Bilingual;
   marketInsight: Bilingual;
+  // Local trust signals
+  population: string;            // e.g. "7.5M"
+  internetPenetration: string;   // e.g. "98%"
+  topIndustries: Bilingual[];    // 3 sectors
 };
 
 export type ServiceMeta = {
@@ -36,6 +40,10 @@ export type ServiceMeta = {
   shortDesc: Bilingual;
   benefits: Bilingual[];   // 4 bullet points
   serviceType: string;     // schema.org serviceType
+  // KPIs the service is judged on (used for local result cards)
+  kpis: { label: Bilingual; baseValue: number; suffix: string }[];
+  // Sample case-study briefs (anonymized, generic)
+  caseBrief: Bilingual;
 };
 
 export const CITIES: City[] = [
