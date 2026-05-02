@@ -280,15 +280,57 @@ export function HeroSlider() {
 
           </div>
 
-          {/* Floating stat card — OUTSIDE the image container */}
-          <div className="pointer-events-none absolute z-20 inset-x-0 -bottom-4 flex justify-center md:inset-x-auto md:bottom-10 md:justify-start md:[inset-inline-start:-1.5rem]">
-            <div key={`stat-${slide.id}`} className="pointer-events-auto animate-float hs-fade-in">
+          {/* Floating stat card — anchored to the image side (left in LTR / right in RTL) */}
+          <div
+            className="pointer-events-none absolute z-20 inset-x-0 -bottom-2 flex justify-center md:inset-x-auto md:bottom-10 md:justify-start md:[inset-inline-start:-2rem] lg:md:[inset-inline-start:-3rem]"
+            aria-label={isAr ? "إحصائيات المشاريع 2025" : "Project statistics 2025"}
+          >
+            <div
+              key={`stat-${slide.id}`}
+              className={`pointer-events-auto hs-fade-in ${reduceMotion ? "" : "animate-float"}`}
+            >
               <FloatingStatCard
                 title={isAr ? "إحصائيات المشاريع 2025" : "Project Statistic 2025"}
                 stats={slide.stats.map((st) => ({ value: st.value, label: isAr ? st.ar : st.en }))}
               />
             </div>
           </div>
+
+          {/* JSON-LD: Organization with aggregate project stats for richer SERP */}
+          <script
+            type="application/ld+json"
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                name: isAr ? "فكرة للتسويق الرقمي" : "Fikra Digital Marketing",
+                url: "https://fikra-dm.com",
+                description: isAr
+                  ? "وكالة تسويق رقمي مرخّصة في السعودية — استراتيجيات تسويق وأداء وعلامة تجارية."
+                  : "Licensed Saudi digital marketing agency — strategy, performance and brand.",
+                aggregateRating: {
+                  "@type": "AggregateRating",
+                  ratingValue: "4.9",
+                  reviewCount: "150",
+                  bestRating: "5",
+                  worstRating: "1",
+                },
+                makesOffer: slides.map((s) => ({
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: isAr ? s.eyebrow.ar : s.eyebrow.en,
+                  },
+                })),
+                additionalProperty: slide.stats.map((st) => ({
+                  "@type": "PropertyValue",
+                  name: isAr ? st.ar : st.en,
+                  value: st.value,
+                })),
+              }),
+            }}
+          />
         </div>
       </div>
 
