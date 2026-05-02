@@ -14,6 +14,16 @@ import { ServiceShowcase } from "@/components/site/services/ServiceShowcase";
 import { getServiceVariant } from "@/components/site/services/serviceVariants";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
 import { Check, ArrowUpRight } from "lucide-react";
+import {
+  buildSeoMeta,
+  buildSeoLinks,
+  jsonLdScript,
+  breadcrumbLd,
+  organizationLd,
+  SITE_ORIGIN,
+  SITE_NAME,
+  absUrl,
+} from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/services/$slug/")({
   beforeLoad: ({ params }) => {
@@ -22,19 +32,54 @@ export const Route = createFileRoute("/{-$locale}/services/$slug/")({
   head: ({ params }) => {
     const s = findService(params.slug);
     if (!s) return { meta: [{ title: "Not found" }] };
-    const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
+    const loc: "ar" | "en" = (params.locale ?? "ar") === "en" ? "en" : "ar";
+    const isAr = loc === "ar";
+    // CTR-tuned: prepend year/badge, append benefit hook
+    const baseTitle = s.metaTitle[loc];
+    const ctaSuffix = isAr ? "• استشارة مجانية" : "• Free Consultation";
+    const title = baseTitle.length < 50 ? `${baseTitle} ${ctaSuffix}` : baseTitle;
+    const baseDesc = s.metaDescription[loc];
+    const descSuffix = isAr
+      ? " ✓ نتائج خلال 90 يوم ✓ وكالة سعودية مرخّصة. احجز جلستك الآن."
+      : " ✓ Results in 90 days ✓ Licensed Saudi agency. Book your call now.";
+    const description = (baseDesc + descSuffix).slice(0, 158);
+    const path = `/${loc}/services/${s.slug}`;
+
     return {
-      meta: [
-        { title: s.metaTitle[loc] },
-        { name: "description", content: s.metaDescription[loc] },
-        { property: "og:title", content: s.metaTitle[loc] },
-        { property: "og:description", content: s.metaDescription[loc] },
-        { property: "og:image", content: s.image },
-      ],
-      links: [
-        { rel: "canonical", href: `https://fikra-dm.com/${(params.locale ?? "ar")}/services/${s.slug}` },
-        { rel: "alternate", hrefLang: "ar", href: `https://fikra-dm.com/ar/services/${s.slug}` },
-        { rel: "alternate", hrefLang: "en", href: `https://fikra-dm.com/en/services/${s.slug}` },
+      meta: buildSeoMeta({ title, description, path, locale: loc, image: s.image }),
+      links: buildSeoLinks({ path, locale: loc }),
+      scripts: [
+        jsonLdScript({
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: s.title[loc],
+          description: s.metaDescription[loc],
+          url: absUrl(path),
+          image: absUrl(s.image),
+          serviceType: s.title.en,
+          provider: organizationLd(),
+          areaServed: ["SA", "AE", "KW", "QA", "BH", "OM"],
+          offers: {
+            "@type": "AggregateOffer",
+            priceCurrency: "SAR",
+            lowPrice: Math.min(...s.plans.map((p) => p.priceSar)),
+            highPrice: Math.max(...s.plans.map((p) => p.priceSar)),
+            offerCount: s.plans.length,
+            offers: s.plans.map((p) => ({
+              "@type": "Offer",
+              name: p.name[loc],
+              price: p.priceSar,
+              priceCurrency: "SAR",
+              availability: "https://schema.org/InStock",
+              url: absUrl(`${path}#pricing`),
+            })),
+          },
+        }),
+        jsonLdScript(breadcrumbLd([
+          { name: isAr ? "الرئيسية" : "Home", url: `/${loc}` },
+          { name: isAr ? "خدماتنا" : "Services", url: `/${loc}/services` },
+          { name: s.title[loc], url: path },
+        ])),
       ],
     };
   },
@@ -47,15 +92,6 @@ function ServicePage() {
   const loc = locale === "en" ? "en" : "ar";
   const variant = getServiceVariant(slug);
   const isAr = loc === "ar";
-
-  const ld = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: s.title[loc],
-    description: s.metaDescription[loc],
-    provider: { "@type": "Organization", name: "Fikra Digital Marketing" },
-    offers: s.plans.map((p) => ({ "@type": "Offer", name: p.name[loc], price: p.priceSar, priceCurrency: "SAR" })),
-  };
 
   return (
     <SiteLayout>
