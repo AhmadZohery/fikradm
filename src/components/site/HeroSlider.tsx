@@ -278,14 +278,15 @@ export function HeroSlider() {
               />
             </div>
 
-            {/* Floating stat card swaps per slide */}
-            <div className="pointer-events-none absolute inset-x-0 -bottom-20 z-20 flex justify-center md:inset-auto md:-bottom-4 md:-end-6 md:block lg:-bottom-6 lg:-end-10">
-              <div key={`stat-${slide.id}`} className="pointer-events-auto animate-float hs-fade-in">
-                <FloatingStatCard
-                  title={isAr ? "إحصائيات المشاريع 2025" : "Project Statistic 2025"}
-                  stats={slide.stats.map((st) => ({ value: st.value, label: isAr ? st.ar : st.en }))}
-                />
-              </div>
+          </div>
+
+          {/* Floating stat card — OUTSIDE the image container */}
+          <div className="pointer-events-none absolute z-20 inset-x-0 -bottom-4 flex justify-center md:inset-x-auto md:bottom-10 md:justify-start md:[inset-inline-start:-1.5rem]">
+            <div key={`stat-${slide.id}`} className="pointer-events-auto animate-float hs-fade-in">
+              <FloatingStatCard
+                title={isAr ? "إحصائيات المشاريع 2025" : "Project Statistic 2025"}
+                stats={slide.stats.map((st) => ({ value: st.value, label: isAr ? st.ar : st.en }))}
+              />
             </div>
           </div>
         </div>
