@@ -294,9 +294,9 @@ export function HeroSlider() {
               />
             </div>
 
-            {/* Floating stat card — fully detached from the image (sits below it) */}
+            {/* Floating stat card — sits clearly BELOW the image, fully detached */}
             <div
-              className="pointer-events-none absolute inset-x-0 -bottom-32 z-20 flex justify-center md:-bottom-24 lg:-bottom-28"
+              className="pointer-events-none absolute inset-x-0 top-full z-20 mt-6 flex justify-center md:mt-8 lg:mt-10"
             >
               <div key={`stat-${slide.id}`} className="pointer-events-auto hs-card-rise">
                 <FloatingStatCard
