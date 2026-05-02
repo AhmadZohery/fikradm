@@ -53,7 +53,7 @@ function ServicesIndex() {
             {services.map((s) => (
               <Link key={s.slug} to={buildHref(locale, `/services/${s.slug}`)} className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant">
                 <div className="aspect-[16/9] overflow-hidden">
-                  <img src={s.image} alt={s.title[locale]} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                  <img src={s.image} alt={s.title[locale]} loading="lazy" decoding="async" width={800} height={450} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                 </div>
                 <div className="p-6">
                   <h3 className="text-lg font-bold">{s.title[locale]}</h3>
