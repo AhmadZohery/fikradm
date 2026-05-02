@@ -17,6 +17,7 @@ import { CtaBand } from "@/components/site/CtaBand";
 import { FaqSection } from "@/components/site/FaqSection";
 import { HomeVideoTestimonials } from "@/components/site/HomeVideoTestimonials";
 import { RichTextBlock } from "@/components/site/RichTextBlock";
+import { HomeExpertiseTrust } from "@/components/site/HomeExpertiseTrust";
 
 /**
  * BlockInstance — the unit stored inside `pages.blocks` JSONB array.
@@ -176,6 +177,13 @@ export const BLOCK_REGISTRY = {
     icon: "Type",
     category: "content",
   },
+  expertise_trust: {
+    component: HomeExpertiseTrust,
+    label: "الخبرة والتراخيص (EEAT)",
+    description: "فريق + تراخيص + سياسات شفافية لرفع E-E-A-T و AI Overviews",
+    icon: "ShieldCheck",
+    category: "social",
+  },
 } as const satisfies Record<string, BlockEntry>;
 
 export type BlockType = keyof typeof BLOCK_REGISTRY;
@@ -196,9 +204,10 @@ export const DEFAULT_HOME_BLOCKS: BlockInstance[] = [
   { id: "b8", type: "package_builder" },
   { id: "b9", type: "guarantees" },
   { id: "b10", type: "process" },
-  { id: "b11", type: "testimonials" },
-  { id: "b12", type: "industries_showcase" },
-  { id: "b13", type: "logos_strip" },
-  { id: "b14", type: "blog_teaser" },
-  { id: "b15", type: "cta_band" },
+  { id: "b11", type: "expertise_trust" },
+  { id: "b12", type: "testimonials" },
+  { id: "b13", type: "industries_showcase" },
+  { id: "b14", type: "logos_strip" },
+  { id: "b15", type: "blog_teaser" },
+  { id: "b16", type: "cta_band" },
 ];
