@@ -39,15 +39,12 @@ function SubIndustryPage() {
   const loc = locale === "en" ? "en" : "ar";
   const siblings = getSubIndustriesFor(slug).filter((x) => x.slug !== sub);
 
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: loc === "ar" ? "حلول حسب القطاع" : "Industries", item: `https://fikradm.lovable.app/${locale}/industries` },
-      { "@type": "ListItem", position: 2, name: parent.title[loc], item: `https://fikradm.lovable.app/${locale}/industries/${slug}` },
-      { "@type": "ListItem", position: 3, name: s.title[loc] },
-    ],
-  };
+  const breadcrumbLd = breadcrumbLdGen([
+    { name: loc === "ar" ? "الرئيسية" : "Home", url: `/${locale}` },
+    { name: loc === "ar" ? "حلول حسب القطاع" : "Industries", url: `/${locale}/industries` },
+    { name: parent.title[loc], url: `/${locale}/industries/${slug}` },
+    { name: s.title[loc], url: `/${locale}/industries/${slug}/${sub}` },
+  ]);
 
   return (
     <SiteLayout>
