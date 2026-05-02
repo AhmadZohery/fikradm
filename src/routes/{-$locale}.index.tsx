@@ -60,7 +60,7 @@ export const Route = createFileRoute("/{-$locale}/")({
     return {
       meta,
       links: [
-        ...buildSeoLinks({ path: `/${locale}`, locale, canonical: page?.canonical_url }),
+        ...buildSeoLinks({ path: `/${locale}`, locale, canonical: page?.canonical_url ?? undefined }),
         // Preload LCP hero image for faster first paint
         {
           rel: "preload",
