@@ -1089,23 +1089,8 @@
     pointer-events: none;
   }
 
-  /* Stats card slide-up entrance */
-  @keyframes hs-card-rise {
-    0%   { opacity: 0; transform: translate3d(0, 24px, 0) scale(.96); }
-    100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-  }
-  .hs-card-rise { animation: hs-card-rise 720ms cubic-bezier(.22,1,.36,1) both; }
-
-  /* Strong, theme-aware focus ring for slider controls */
-  .hs-focus:focus-visible {
-    outline: none;
-    box-shadow:
-      0 0 0 2px var(--background),
-      0 0 0 4px color-mix(in oklab, var(--primary) 80%, transparent);
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .hs-ken-burns, .hs-fade-in, .hs-word, .hs-progress-fill, .hs-shimmer::after, .hs-card-rise {
+    .hs-ken-burns, .hs-fade-in, .hs-word, .hs-progress-fill, .hs-shimmer::after {
       animation: none !important;
     }
   }
