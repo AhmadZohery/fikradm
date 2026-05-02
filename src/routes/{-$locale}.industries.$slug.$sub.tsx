@@ -18,8 +18,14 @@ export const Route = createFileRoute("/{-$locale}/industries/$slug/$sub")({
     const loc: "ar" | "en" = (params.locale ?? "ar") === "en" ? "en" : "ar";
     const path = `/${loc}/industries/${params.slug}/${s.slug}`;
     return {
-      meta: __buildIndustryMeta(s.metaTitle[loc], s.metaDescription[loc], path, loc, s.image),
-      links: __buildIndustryLinks(path, loc),
+      meta: buildSeoMeta({
+        title: s.metaTitle[loc],
+        description: s.metaDescription[loc],
+        path,
+        locale: loc,
+        image: s.image,
+      }),
+      links: buildSeoLinks({ path, locale: loc }),
     };
   },
   component: SubIndustryPage,
