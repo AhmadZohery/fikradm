@@ -2,6 +2,8 @@ import { useLocale } from "@/i18n/useLocale";
 import { SectionEyebrow } from "./cinematic/SectionEyebrow";
 import { BeforeAfter } from "./cinematic/BeforeAfter";
 import { CountUp } from "./cinematic/CountUp";
+import beforeImg from "@/assets/before-website.jpg";
+import afterImg from "@/assets/after-website.jpg";
 
 export function HomeBeforeAfter() {
   const { locale } = useLocale();
@@ -47,6 +49,8 @@ export function HomeBeforeAfter() {
             </div>
           </div>
           <BeforeAfter
+            beforeSrc={beforeImg}
+            afterSrc={afterImg}
             beforeAlt={isAr ? "موقع قديم بطيء وغير مُحوِّل" : "Old slow non-converting site"}
             afterAlt={isAr ? "تصميم جديد سريع وعالي التحويل" : "New fast high-converting design"}
             beforeLabel={isAr ? "قبل" : "Before"}
