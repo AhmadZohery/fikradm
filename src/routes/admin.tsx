@@ -17,6 +17,8 @@ import {
   SearchCheck,
   GripVertical,
   Sparkles,
+  FileJson,
+  Wand2,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
@@ -70,6 +72,8 @@ const NAV_ITEMS: NavItem[] = [
   { to: "/admin/blog", label: "المدونة", icon: Newspaper, group: "content" },
   { to: "/admin/media", label: "مكتبة الوسائط", icon: ImageIcon, group: "content" },
   { to: "/admin/seo-audit", label: "فحص SEO", icon: SearchCheck, group: "system" },
+  { to: "/admin/seo-reports", label: "تقارير JSON-LD", icon: FileJson, group: "system" },
+  { to: "/admin/schema-fixes", label: "مولّد إصلاحات Schema", icon: Wand2, group: "system" },
   { to: "/admin/forms", label: "الرسائل", icon: Inbox, group: "system" },
   { to: "/admin/users", label: "المستخدمين", icon: Users, group: "system" },
   { to: "/admin/settings", label: "الإعدادات", icon: Settings, group: "system" },
