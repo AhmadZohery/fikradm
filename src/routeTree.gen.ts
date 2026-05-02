@@ -24,6 +24,7 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminSeoReportsRouteImport } from './routes/admin.seo-reports'
 import { Route as AdminSeoAuditRouteImport } from './routes/admin.seo-audit'
+import { Route as AdminSchemaFixesRouteImport } from './routes/admin.schema-fixes'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
@@ -128,6 +129,11 @@ const AdminSeoReportsRoute = AdminSeoReportsRouteImport.update({
 const AdminSeoAuditRoute = AdminSeoAuditRouteImport.update({
   id: '/seo-audit',
   path: '/seo-audit',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSchemaFixesRoute = AdminSchemaFixesRouteImport.update({
+  id: '/schema-fixes',
+  path: '/schema-fixes',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminPagesRoute = AdminPagesRouteImport.update({
@@ -282,6 +288,7 @@ export interface FileRoutesByFullPath {
   '/admin/media': typeof AdminMediaRoute
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
@@ -322,6 +329,7 @@ export interface FileRoutesByTo {
   '/admin/media': typeof AdminMediaRoute
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
@@ -365,6 +373,7 @@ export interface FileRoutesById {
   '/admin/media': typeof AdminMediaRoute
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
@@ -409,6 +418,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/packages'
     | '/admin/pages'
+    | '/admin/schema-fixes'
     | '/admin/seo-audit'
     | '/admin/seo-reports'
     | '/admin/services'
@@ -449,6 +459,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/packages'
     | '/admin/pages'
+    | '/admin/schema-fixes'
     | '/admin/seo-audit'
     | '/admin/seo-reports'
     | '/admin/services'
@@ -491,6 +502,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/packages'
     | '/admin/pages'
+    | '/admin/schema-fixes'
     | '/admin/seo-audit'
     | '/admin/seo-reports'
     | '/admin/services'
@@ -635,6 +647,13 @@ declare module '@tanstack/react-router' {
       path: '/seo-audit'
       fullPath: '/admin/seo-audit'
       preLoaderRoute: typeof AdminSeoAuditRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/schema-fixes': {
+      id: '/admin/schema-fixes'
+      path: '/schema-fixes'
+      fullPath: '/admin/schema-fixes'
+      preLoaderRoute: typeof AdminSchemaFixesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/pages': {
@@ -848,6 +867,7 @@ interface AdminRouteChildren {
   AdminMediaRoute: typeof AdminMediaRoute
   AdminPackagesRoute: typeof AdminPackagesRoute
   AdminPagesRoute: typeof AdminPagesRouteWithChildren
+  AdminSchemaFixesRoute: typeof AdminSchemaFixesRoute
   AdminSeoAuditRoute: typeof AdminSeoAuditRoute
   AdminSeoReportsRoute: typeof AdminSeoReportsRoute
   AdminServicesRoute: typeof AdminServicesRoute
@@ -865,6 +885,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMediaRoute: AdminMediaRoute,
   AdminPackagesRoute: AdminPackagesRoute,
   AdminPagesRoute: AdminPagesRouteWithChildren,
+  AdminSchemaFixesRoute: AdminSchemaFixesRoute,
   AdminSeoAuditRoute: AdminSeoAuditRoute,
   AdminSeoReportsRoute: AdminSeoReportsRoute,
   AdminServicesRoute: AdminServicesRoute,
