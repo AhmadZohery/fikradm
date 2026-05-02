@@ -230,22 +230,29 @@ export function HeroSlider() {
           >
             <Sparkle className="absolute -top-6 -start-2 z-10 animate-glow-pulse" size={36} />
 
+            {/* Ambient gradient glow — replaces the old hard border */}
             <div
-              className="absolute -inset-7 -z-10 rounded-[2.75rem] border border-primary/15 bg-gradient-brand opacity-20 blur-sm animate-float"
-              aria-hidden
-            />
-            <div
-              className="absolute -inset-4 rounded-[2.5rem] opacity-25 blur-2xl"
+              className="absolute -inset-10 -z-10 rounded-[3rem] opacity-40 blur-3xl animate-float"
               style={{ background: "var(--gradient-brand)" }}
               aria-hidden
             />
             <div
-              className="absolute inset-0 rounded-[2.25rem] p-[2px] ring-conic animate-spin-slow [mask:linear-gradient(white,white)_content-box,linear-gradient(white,white)] [mask-composite:exclude]"
+              className="absolute -inset-2 -z-10 rounded-[2.6rem] opacity-60 blur-xl"
+              style={{
+                background:
+                  "radial-gradient(60% 60% at 30% 20%, color-mix(in oklab, var(--primary) 35%, transparent), transparent 70%), radial-gradient(50% 50% at 80% 90%, color-mix(in oklab, var(--accent, var(--primary)) 30%, transparent), transparent 70%)",
+              }}
               aria-hidden
             />
 
-            {/* Crossfade stack — each slide image sits absolutely */}
-            <div className="absolute inset-0 overflow-hidden rounded-[2rem] border border-border/60 bg-card shadow-elegant hs-shimmer">
+            {/* Crossfade stack — cinematic crop, no border, soft elevation */}
+            <div
+              className="absolute inset-0 overflow-hidden rounded-[2rem] bg-card hs-shimmer"
+              style={{
+                boxShadow:
+                  "0 30px 80px -30px color-mix(in oklab, var(--primary) 45%, transparent), 0 10px 30px -15px rgb(0 0 0 / 0.25)",
+              }}
+            >
               {slides.map((s, i) => (
                 <img
                   key={s.id}
@@ -262,8 +269,23 @@ export function HeroSlider() {
                   aria-hidden={i !== index}
                 />
               ))}
-              {/* subtle vignette for readability */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" aria-hidden />
+              {/* Cinematic gradient edges — top fade + bottom vignette + side feathering */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                aria-hidden
+                style={{
+                  background:
+                    "linear-gradient(to top, rgb(0 0 0 / 0.45) 0%, transparent 35%), linear-gradient(to bottom, rgb(0 0 0 / 0.18) 0%, transparent 25%)",
+                }}
+              />
+              <div
+                className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-60"
+                aria-hidden
+                style={{
+                  background:
+                    "radial-gradient(120% 80% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.55) 100%)",
+                }}
+              />
             </div>
 
             {/* Floating stat card swaps per slide */}
