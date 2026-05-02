@@ -154,7 +154,7 @@ export function HeroSlider() {
 
       <div className="container-app relative z-10 grid items-center gap-12 pb-12 pt-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24 lg:pt-12">
         {/* LEFT — kinetic text */}
-        <div key={`txt-${slide.id}`} className="relative">
+        <div key={`txt-${slide.id}`} className="relative min-h-[28rem] md:min-h-[32rem] lg:min-h-[36rem]">
           <span className="hs-fade-in inline-flex items-center gap-2 rounded-full border border-primary/25 bg-white/90 px-4 py-1.5 text-xs font-semibold text-primary shadow-soft backdrop-blur" style={{ animationDelay: "60ms" }}>
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
