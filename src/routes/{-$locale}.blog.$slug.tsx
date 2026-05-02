@@ -9,6 +9,15 @@ import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blo
 import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import {
+  buildSeoMeta,
+  buildSeoLinks,
+  jsonLdScript,
+  breadcrumbLd as breadcrumbLdGen,
+  articleLd,
+  faqLd,
+  absUrl,
+} from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/blog/$slug")({
   head: ({ params }) => {
@@ -17,20 +26,61 @@ export const Route = createFileRoute("/{-$locale}/blog/$slug")({
     if (!post) {
       return { meta: [{ title: ar ? "مقال غير موجود | فكرة" : "Article not found | Fikra" }] };
     }
-    const loc = ar ? "ar" : "en";
+    const loc: "ar" | "en" = ar ? "ar" : "en";
+    const path = `/${loc}/blog/${params.slug}`;
+    const cat = getCategoryBySlug(post.categorySlug);
+    const meta = buildSeoMeta({
+      title: post.metaTitle[loc],
+      description: post.metaDescription[loc],
+      path,
+      locale: loc,
+      image: post.image,
+      type: "article",
+      publishedTime: post.publishedAt,
+      modifiedTime: post.publishedAt,
+    });
+    meta.push({ name: "keywords", content: post.keywords[loc].join(", ") });
+    meta.push({ property: "article:author", content: post.author[loc] });
+    if (cat) meta.push({ property: "article:section", content: cat.name[loc] });
+
+    const breadcrumbItems = [
+      { name: ar ? "الرئيسية" : "Home", url: `/${loc}` },
+      { name: ar ? "المدونة" : "Blog", url: `/${loc}/blog` },
+      ...(cat ? [{ name: cat.name[loc], url: `/${loc}/blog/category/${cat.slug}` }] : []),
+      { name: post.title[loc], url: path },
+    ];
+
     return {
-      meta: [
-        { title: post.metaTitle[loc] },
-        { name: "description", content: post.metaDescription[loc] },
-        { name: "keywords", content: post.keywords[loc].join(", ") },
-        { property: "og:title", content: post.metaTitle[loc] },
-        { property: "og:description", content: post.metaDescription[loc] },
-        { property: "og:type", content: "article" },
-        { property: "og:image", content: post.image },
-        { property: "article:published_time", content: post.publishedAt },
-        { property: "article:author", content: post.author[loc] },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:image", content: post.image },
+      meta,
+      links: buildSeoLinks({ path, locale: loc }),
+      scripts: [
+        jsonLdScript({
+          ...articleLd({
+            headline: post.title[loc],
+            description: post.metaDescription[loc],
+            url: path,
+            image: post.image,
+            datePublished: post.publishedAt,
+            dateModified: post.publishedAt,
+            authorName: post.author[loc],
+          }),
+          inLanguage: loc,
+          articleSection: cat?.name[loc],
+          keywords: post.keywords[loc].join(", "),
+        }),
+        jsonLdScript(breadcrumbLdGen(breadcrumbItems)),
+        ...(post.faq && post.faq.length > 0
+          ? [jsonLdScript(faqLd(post.faq.map((f) => ({ question: f.q[loc], answer: f.a[loc] }))))]
+          : []),
+        jsonLdScript({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "@id": absUrl(path),
+          speakable: {
+            "@type": "SpeakableSpecification",
+            cssSelector: ["h1", ".prose-fikra h2", ".prose-fikra p"],
+          },
+        }),
       ],
     };
   },
