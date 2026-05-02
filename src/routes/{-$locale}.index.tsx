@@ -3,6 +3,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { BlockRenderer } from "@/cms/blocks/BlockRenderer";
 import { DEFAULT_HOME_BLOCKS } from "@/cms/blocks/registry";
 import { fetchPage, type CmsPage } from "@/cms/loadPage";
+import heroSaudiMarketer from "@/assets/hero-saudi-marketer.jpg";
 
 export const Route = createFileRoute("/{-$locale}/")({
   loader: async ({ params }) => {
@@ -44,6 +45,13 @@ export const Route = createFileRoute("/{-$locale}/")({
           rel: "canonical",
           href: page?.canonical_url ?? `https://fikra-dm.com/${(params.locale ?? "ar")}`,
         },
+        // Preload LCP hero image for faster first paint
+        {
+          rel: "preload",
+          as: "image",
+          href: heroSaudiMarketer,
+          fetchpriority: "high",
+        } as any,
       ],
     };
   },
