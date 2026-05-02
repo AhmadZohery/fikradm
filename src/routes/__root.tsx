@@ -72,6 +72,12 @@ export const Route = createRootRoute({
       // dns-prefetch fallback for older browsers
       { rel: "dns-prefetch", href: "https://fonts.googleapis.com" },
       { rel: "dns-prefetch", href: "https://fonts.gstatic.com" },
+      // Preload critical Arabic font weight to accelerate LCP text paint
+      {
+        rel: "preload",
+        as: "style",
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Tajawal:wght@400;700;800&family=Space+Grotesk:wght@600;700&display=swap",
+      },
       {
         rel: "stylesheet",
         // Trim weights & enforce display=swap for faster LCP and zero invisible-text CLS
