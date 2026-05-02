@@ -1095,3 +1095,17 @@
     }
   }
 }
+
+/* Reduced-motion: also tame ambient effects used around the hero */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-glow-pulse,
+  .animate-ping {
+    animation: none !important;
+  }
+  .hs-shimmer::after { display: none !important; }
+  * {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
