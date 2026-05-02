@@ -11,7 +11,7 @@ import { useMemo } from "react";
 import appCss from "@/styles.css?url";
 import { isLocale, DEFAULT_LOCALE } from "@/i18n/types";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { SITE_ORIGIN, SITE_NAME, organizationLd, localBusinessLd } from "@/lib/seo";
+import { SITE_ORIGIN, SITE_NAME, organizationLd, localBusinessLd, siteNavigationLd } from "@/lib/seo";
 
 function NotFoundComponent() {
   return (
@@ -105,6 +105,8 @@ export const Route = createRootRoute({
                 "query-input": "required name=search_term_string",
               },
             },
+            siteNavigationLd("ar"),
+            siteNavigationLd("en"),
           ],
         }),
       },

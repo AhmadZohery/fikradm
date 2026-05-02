@@ -219,6 +219,53 @@ export function faqLd(items: Array<{ question: string; answer: string }>) {
 }
 
 /**
+ * SiteNavigationElement schema describing the global nav for the locale.
+ * Helps search engines (and AI Overviews) understand site structure.
+ */
+export function siteNavigationLd(locale: Locale = "ar") {
+  const isAr = locale === "ar";
+  const items = [
+    { name: isAr ? "الرئيسية" : "Home", url: `/${locale}` },
+    { name: isAr ? "الخدمات" : "Services", url: `/${locale}/services` },
+    { name: isAr ? "القطاعات" : "Industries", url: `/${locale}/industries` },
+    { name: isAr ? "المواقع" : "Locations", url: `/${locale}/locations` },
+    { name: isAr ? "دراسات الحالة" : "Case Studies", url: `/${locale}/case-studies` },
+    { name: isAr ? "المدونة" : "Blog", url: `/${locale}/blog` },
+    { name: isAr ? "من نحن" : "About", url: `/${locale}/about` },
+    { name: isAr ? "تواصل" : "Contact", url: `/${locale}/contact` },
+  ];
+  return {
+    "@context": "https://schema.org",
+    "@type": "SiteNavigationElement",
+    name: items.map((it) => it.name),
+    url: items.map((it) => absUrl(it.url)),
+  };
+}
+
+/**
+ * Build a BreadcrumbList JSON-LD trail from a UI Breadcrumb trail.
+ * Caller passes only the in-between items; "Home" is auto-prepended.
+ */
+export function trailToBreadcrumbLd(
+  locale: Locale,
+  trail: Array<{ label: string; href?: string }>,
+  currentPath?: string,
+) {
+  const home = { name: locale === "ar" ? "الرئيسية" : "Home", url: `/${locale}` };
+  const items = [home];
+  trail.forEach((t, i) => {
+    const isLast = i === trail.length - 1;
+    items.push({
+      name: t.label,
+      url: t.href
+        ? `/${locale}${t.href.startsWith("/") ? t.href : `/${t.href}`}`
+        : currentPath ?? (isLast ? `/${locale}` : `/${locale}`),
+    });
+  });
+  return breadcrumbLd(items);
+}
+
+/**
  * Wrap a JSON-LD object as a TanStack head() scripts entry.
  */
 export function jsonLdScript(value: unknown) {

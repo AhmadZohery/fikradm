@@ -22,6 +22,7 @@ import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$local
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminSeoReportsRouteImport } from './routes/admin.seo-reports'
 import { Route as AdminSeoAuditRouteImport } from './routes/admin.seo-audit'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
@@ -32,6 +33,7 @@ import { Route as AdminIndustriesRouteImport } from './routes/admin.industries'
 import { Route as AdminFormsRouteImport } from './routes/admin.forms'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as Char123LocaleChar125ServicesIndexRouteImport } from './routes/{-$locale}.services.index'
+import { Route as Char123LocaleChar125LocationsIndexRouteImport } from './routes/{-$locale}.locations.index'
 import { Route as Char123LocaleChar125IndustriesIndexRouteImport } from './routes/{-$locale}.industries.index'
 import { Route as Char123LocaleChar125CaseStudiesIndexRouteImport } from './routes/{-$locale}.case-studies.index'
 import { Route as Char123LocaleChar125BlogIndexRouteImport } from './routes/{-$locale}.blog.index'
@@ -43,8 +45,10 @@ import { Route as AdminPagesPageIdRouteImport } from './routes/admin.pages.$page
 import { Route as AdminBlogPostIdRouteImport } from './routes/admin.blog.$postId'
 import { Route as Char123LocaleChar125ServicesSlugIndexRouteImport } from './routes/{-$locale}.services.$slug.index'
 import { Route as Char123LocaleChar125ServicesSlugSubRouteImport } from './routes/{-$locale}.services.$slug.$sub'
+import { Route as Char123LocaleChar125LocationsCityServiceRouteImport } from './routes/{-$locale}.locations.$city.$service'
 import { Route as Char123LocaleChar125IndustriesSlugSubRouteImport } from './routes/{-$locale}.industries.$slug.$sub'
 import { Route as Char123LocaleChar125BlogCategorySlugRouteImport } from './routes/{-$locale}.blog.category.$slug'
+import { Route as ApiPublicHooksSeoAuditRouteImport } from './routes/api/public/hooks/seo-audit'
 
 const Char123LocaleChar125Route = Char123LocaleChar125RouteImport.update({
   id: '/{-$locale}',
@@ -116,6 +120,11 @@ const AdminServicesRoute = AdminServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSeoReportsRoute = AdminSeoReportsRouteImport.update({
+  id: '/seo-reports',
+  path: '/seo-reports',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSeoAuditRoute = AdminSeoAuditRouteImport.update({
   id: '/seo-audit',
   path: '/seo-audit',
@@ -165,6 +174,12 @@ const Char123LocaleChar125ServicesIndexRoute =
   Char123LocaleChar125ServicesIndexRouteImport.update({
     id: '/services/',
     path: '/services/',
+    getParentRoute: () => Char123LocaleChar125Route,
+  } as any)
+const Char123LocaleChar125LocationsIndexRoute =
+  Char123LocaleChar125LocationsIndexRouteImport.update({
+    id: '/locations/',
+    path: '/locations/',
     getParentRoute: () => Char123LocaleChar125Route,
   } as any)
 const Char123LocaleChar125IndustriesIndexRoute =
@@ -230,6 +245,12 @@ const Char123LocaleChar125ServicesSlugSubRoute =
     path: '/services/$slug/$sub',
     getParentRoute: () => Char123LocaleChar125Route,
   } as any)
+const Char123LocaleChar125LocationsCityServiceRoute =
+  Char123LocaleChar125LocationsCityServiceRouteImport.update({
+    id: '/locations/$city/$service',
+    path: '/locations/$city/$service',
+    getParentRoute: () => Char123LocaleChar125Route,
+  } as any)
 const Char123LocaleChar125IndustriesSlugSubRoute =
   Char123LocaleChar125IndustriesSlugSubRouteImport.update({
     id: '/$sub',
@@ -242,6 +263,11 @@ const Char123LocaleChar125BlogCategorySlugRoute =
     path: '/blog/category/$slug',
     getParentRoute: () => Char123LocaleChar125Route,
   } as any)
+const ApiPublicHooksSeoAuditRoute = ApiPublicHooksSeoAuditRouteImport.update({
+  id: '/api/public/hooks/seo-audit',
+  path: '/api/public/hooks/seo-audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
@@ -257,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/seo-audit': typeof AdminSeoAuditRoute
+  '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -275,9 +302,12 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/blog/': typeof Char123LocaleChar125BlogIndexRoute
   '/{-$locale}/case-studies/': typeof Char123LocaleChar125CaseStudiesIndexRoute
   '/{-$locale}/industries/': typeof Char123LocaleChar125IndustriesIndexRoute
+  '/{-$locale}/locations/': typeof Char123LocaleChar125LocationsIndexRoute
   '/{-$locale}/services/': typeof Char123LocaleChar125ServicesIndexRoute
+  '/api/public/hooks/seo-audit': typeof ApiPublicHooksSeoAuditRoute
   '/{-$locale}/blog/category/$slug': typeof Char123LocaleChar125BlogCategorySlugRoute
   '/{-$locale}/industries/$slug/$sub': typeof Char123LocaleChar125IndustriesSlugSubRoute
+  '/{-$locale}/locations/$city/$service': typeof Char123LocaleChar125LocationsCityServiceRoute
   '/{-$locale}/services/$slug/$sub': typeof Char123LocaleChar125ServicesSlugSubRoute
   '/{-$locale}/services/$slug/': typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
@@ -293,6 +323,7 @@ export interface FileRoutesByTo {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/seo-audit': typeof AdminSeoAuditRoute
+  '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -311,9 +342,12 @@ export interface FileRoutesByTo {
   '/{-$locale}/blog': typeof Char123LocaleChar125BlogIndexRoute
   '/{-$locale}/case-studies': typeof Char123LocaleChar125CaseStudiesIndexRoute
   '/{-$locale}/industries': typeof Char123LocaleChar125IndustriesIndexRoute
+  '/{-$locale}/locations': typeof Char123LocaleChar125LocationsIndexRoute
   '/{-$locale}/services': typeof Char123LocaleChar125ServicesIndexRoute
+  '/api/public/hooks/seo-audit': typeof ApiPublicHooksSeoAuditRoute
   '/{-$locale}/blog/category/$slug': typeof Char123LocaleChar125BlogCategorySlugRoute
   '/{-$locale}/industries/$slug/$sub': typeof Char123LocaleChar125IndustriesSlugSubRoute
+  '/{-$locale}/locations/$city/$service': typeof Char123LocaleChar125LocationsCityServiceRoute
   '/{-$locale}/services/$slug/$sub': typeof Char123LocaleChar125ServicesSlugSubRoute
   '/{-$locale}/services/$slug': typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
@@ -332,6 +366,7 @@ export interface FileRoutesById {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/seo-audit': typeof AdminSeoAuditRoute
+  '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -350,9 +385,12 @@ export interface FileRoutesById {
   '/{-$locale}/blog/': typeof Char123LocaleChar125BlogIndexRoute
   '/{-$locale}/case-studies/': typeof Char123LocaleChar125CaseStudiesIndexRoute
   '/{-$locale}/industries/': typeof Char123LocaleChar125IndustriesIndexRoute
+  '/{-$locale}/locations/': typeof Char123LocaleChar125LocationsIndexRoute
   '/{-$locale}/services/': typeof Char123LocaleChar125ServicesIndexRoute
+  '/api/public/hooks/seo-audit': typeof ApiPublicHooksSeoAuditRoute
   '/{-$locale}/blog/category/$slug': typeof Char123LocaleChar125BlogCategorySlugRoute
   '/{-$locale}/industries/$slug/$sub': typeof Char123LocaleChar125IndustriesSlugSubRoute
+  '/{-$locale}/locations/$city/$service': typeof Char123LocaleChar125LocationsCityServiceRoute
   '/{-$locale}/services/$slug/$sub': typeof Char123LocaleChar125ServicesSlugSubRoute
   '/{-$locale}/services/$slug/': typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
@@ -372,6 +410,7 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/seo-audit'
+    | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
@@ -390,9 +429,12 @@ export interface FileRouteTypes {
     | '/{-$locale}/blog/'
     | '/{-$locale}/case-studies/'
     | '/{-$locale}/industries/'
+    | '/{-$locale}/locations/'
     | '/{-$locale}/services/'
+    | '/api/public/hooks/seo-audit'
     | '/{-$locale}/blog/category/$slug'
     | '/{-$locale}/industries/$slug/$sub'
+    | '/{-$locale}/locations/$city/$service'
     | '/{-$locale}/services/$slug/$sub'
     | '/{-$locale}/services/$slug/'
   fileRoutesByTo: FileRoutesByTo
@@ -408,6 +450,7 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/seo-audit'
+    | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
@@ -426,9 +469,12 @@ export interface FileRouteTypes {
     | '/{-$locale}/blog'
     | '/{-$locale}/case-studies'
     | '/{-$locale}/industries'
+    | '/{-$locale}/locations'
     | '/{-$locale}/services'
+    | '/api/public/hooks/seo-audit'
     | '/{-$locale}/blog/category/$slug'
     | '/{-$locale}/industries/$slug/$sub'
+    | '/{-$locale}/locations/$city/$service'
     | '/{-$locale}/services/$slug/$sub'
     | '/{-$locale}/services/$slug'
   id:
@@ -446,6 +492,7 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/seo-audit'
+    | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
@@ -464,9 +511,12 @@ export interface FileRouteTypes {
     | '/{-$locale}/blog/'
     | '/{-$locale}/case-studies/'
     | '/{-$locale}/industries/'
+    | '/{-$locale}/locations/'
     | '/{-$locale}/services/'
+    | '/api/public/hooks/seo-audit'
     | '/{-$locale}/blog/category/$slug'
     | '/{-$locale}/industries/$slug/$sub'
+    | '/{-$locale}/locations/$city/$service'
     | '/{-$locale}/services/$slug/$sub'
     | '/{-$locale}/services/$slug/'
   fileRoutesById: FileRoutesById
@@ -477,6 +527,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   Char123LocaleChar125Route: typeof Char123LocaleChar125RouteWithChildren
   ApiAdminBootstrapRoleRoute: typeof ApiAdminBootstrapRoleRoute
+  ApiPublicHooksSeoAuditRoute: typeof ApiPublicHooksSeoAuditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -572,6 +623,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminServicesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/seo-reports': {
+      id: '/admin/seo-reports'
+      path: '/seo-reports'
+      fullPath: '/admin/seo-reports'
+      preLoaderRoute: typeof AdminSeoReportsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/seo-audit': {
       id: '/admin/seo-audit'
       path: '/seo-audit'
@@ -640,6 +698,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/{-$locale}/services/'
       preLoaderRoute: typeof Char123LocaleChar125ServicesIndexRouteImport
+      parentRoute: typeof Char123LocaleChar125Route
+    }
+    '/{-$locale}/locations/': {
+      id: '/{-$locale}/locations/'
+      path: '/locations'
+      fullPath: '/{-$locale}/locations/'
+      preLoaderRoute: typeof Char123LocaleChar125LocationsIndexRouteImport
       parentRoute: typeof Char123LocaleChar125Route
     }
     '/{-$locale}/industries/': {
@@ -719,6 +784,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char123LocaleChar125ServicesSlugSubRouteImport
       parentRoute: typeof Char123LocaleChar125Route
     }
+    '/{-$locale}/locations/$city/$service': {
+      id: '/{-$locale}/locations/$city/$service'
+      path: '/locations/$city/$service'
+      fullPath: '/{-$locale}/locations/$city/$service'
+      preLoaderRoute: typeof Char123LocaleChar125LocationsCityServiceRouteImport
+      parentRoute: typeof Char123LocaleChar125Route
+    }
     '/{-$locale}/industries/$slug/$sub': {
       id: '/{-$locale}/industries/$slug/$sub'
       path: '/$sub'
@@ -732,6 +804,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/{-$locale}/blog/category/$slug'
       preLoaderRoute: typeof Char123LocaleChar125BlogCategorySlugRouteImport
       parentRoute: typeof Char123LocaleChar125Route
+    }
+    '/api/public/hooks/seo-audit': {
+      id: '/api/public/hooks/seo-audit'
+      path: '/api/public/hooks/seo-audit'
+      fullPath: '/api/public/hooks/seo-audit'
+      preLoaderRoute: typeof ApiPublicHooksSeoAuditRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -770,6 +849,7 @@ interface AdminRouteChildren {
   AdminPackagesRoute: typeof AdminPackagesRoute
   AdminPagesRoute: typeof AdminPagesRouteWithChildren
   AdminSeoAuditRoute: typeof AdminSeoAuditRoute
+  AdminSeoReportsRoute: typeof AdminSeoReportsRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -786,6 +866,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPackagesRoute: AdminPackagesRoute,
   AdminPagesRoute: AdminPagesRouteWithChildren,
   AdminSeoAuditRoute: AdminSeoAuditRoute,
+  AdminSeoReportsRoute: AdminSeoReportsRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
@@ -821,8 +902,10 @@ interface Char123LocaleChar125RouteChildren {
   Char123LocaleChar125BlogIndexRoute: typeof Char123LocaleChar125BlogIndexRoute
   Char123LocaleChar125CaseStudiesIndexRoute: typeof Char123LocaleChar125CaseStudiesIndexRoute
   Char123LocaleChar125IndustriesIndexRoute: typeof Char123LocaleChar125IndustriesIndexRoute
+  Char123LocaleChar125LocationsIndexRoute: typeof Char123LocaleChar125LocationsIndexRoute
   Char123LocaleChar125ServicesIndexRoute: typeof Char123LocaleChar125ServicesIndexRoute
   Char123LocaleChar125BlogCategorySlugRoute: typeof Char123LocaleChar125BlogCategorySlugRoute
+  Char123LocaleChar125LocationsCityServiceRoute: typeof Char123LocaleChar125LocationsCityServiceRoute
   Char123LocaleChar125ServicesSlugSubRoute: typeof Char123LocaleChar125ServicesSlugSubRoute
   Char123LocaleChar125ServicesSlugIndexRoute: typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
@@ -844,10 +927,14 @@ const Char123LocaleChar125RouteChildren: Char123LocaleChar125RouteChildren = {
     Char123LocaleChar125CaseStudiesIndexRoute,
   Char123LocaleChar125IndustriesIndexRoute:
     Char123LocaleChar125IndustriesIndexRoute,
+  Char123LocaleChar125LocationsIndexRoute:
+    Char123LocaleChar125LocationsIndexRoute,
   Char123LocaleChar125ServicesIndexRoute:
     Char123LocaleChar125ServicesIndexRoute,
   Char123LocaleChar125BlogCategorySlugRoute:
     Char123LocaleChar125BlogCategorySlugRoute,
+  Char123LocaleChar125LocationsCityServiceRoute:
+    Char123LocaleChar125LocationsCityServiceRoute,
   Char123LocaleChar125ServicesSlugSubRoute:
     Char123LocaleChar125ServicesSlugSubRoute,
   Char123LocaleChar125ServicesSlugIndexRoute:
@@ -863,6 +950,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   Char123LocaleChar125Route: Char123LocaleChar125RouteWithChildren,
   ApiAdminBootstrapRoleRoute: ApiAdminBootstrapRoleRoute,
+  ApiPublicHooksSeoAuditRoute: ApiPublicHooksSeoAuditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

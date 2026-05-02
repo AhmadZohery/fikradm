@@ -30,12 +30,13 @@ export function SiteFooter() {
   ];
 
   const locations = [
-    { label: isAr ? "الرياض" : "Riyadh", href: "/locations/seo-agency-riyadh" },
-    { label: isAr ? "جدة" : "Jeddah", href: "/locations/seo-agency-riyadh" },
-    { label: isAr ? "دبي" : "Dubai", href: "/locations/digital-marketing-dubai" },
-    { label: isAr ? "أبوظبي" : "Abu Dhabi", href: "/locations/digital-marketing-dubai" },
-    { label: isAr ? "القاهرة" : "Cairo", href: "/locations/web-design-cairo" },
-    { label: isAr ? "الكويت" : "Kuwait", href: "/locations/digital-marketing-dubai" },
+    { label: isAr ? "SEO الرياض" : "SEO Riyadh", href: "/locations/riyadh/seo" },
+    { label: isAr ? "إعلانات جدة" : "Ads Jeddah", href: "/locations/jeddah/performance-marketing" },
+    { label: isAr ? "تسويق دبي" : "Marketing Dubai", href: "/locations/dubai/performance-marketing" },
+    { label: isAr ? "تطوير أبوظبي" : "Web Abu Dhabi", href: "/locations/abu-dhabi/web-development" },
+    { label: isAr ? "تصميم القاهرة" : "Design Cairo", href: "/locations/cairo/creative" },
+    { label: isAr ? "سوشيال الكويت" : "Social Kuwait", href: "/locations/kuwait/social-media" },
+    { label: isAr ? "كل المدن" : "All cities", href: "/locations" },
   ];
 
   const onSubmit = (e: React.FormEvent) => {

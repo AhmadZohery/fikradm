@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { services, industries, subServices, subIndustries } from "@/content/data";
 import { getAllPostsSorted, blogCategories } from "@/content/blog";
+import { CITIES, SERVICES } from "@/content/cities";
 import { SITE_ORIGIN } from "@/lib/seo";
-
-const LOCATION_SLUGS = ["digital-marketing-dubai", "seo-agency-riyadh", "web-design-cairo"];
 
 const STATIC_PATHS = [
   "/",
@@ -14,6 +13,7 @@ const STATIC_PATHS = [
   "/blog",
   "/contact",
   "/team-and-licensing",
+  "/locations",
 ];
 
 type SitemapEntry = {
@@ -52,9 +52,16 @@ function buildEntries(): SitemapEntry[] {
     entries.push({ path: `/industries/${si.parentSlug}/${si.slug}`, lastmod: today, priority: 0.6, changefreq: "monthly" });
   }
 
-  // Locations
-  for (const slug of LOCATION_SLUGS) {
-    entries.push({ path: `/locations/${slug}`, lastmod: today, priority: 0.7, changefreq: "monthly" });
+  // Locations: city × service combinations
+  for (const c of CITIES) {
+    for (const s of SERVICES) {
+      entries.push({
+        path: `/locations/${c.slug.en}/${s.slug}`,
+        lastmod: today,
+        priority: 0.7,
+        changefreq: "monthly",
+      });
+    }
   }
 
   // Blog index already in static; categories
