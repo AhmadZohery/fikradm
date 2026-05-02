@@ -280,8 +280,8 @@ export function HeroSlider() {
 
           </div>
 
-          {/* Floating stat card — OUTSIDE the image container, anchored to the slide column */}
-          <div className="pointer-events-none absolute z-20 left-0 right-0 -bottom-6 flex justify-center md:left-auto md:right-auto md:bottom-8 md:justify-start md:-translate-x-6 rtl:md:translate-x-6 rtl:md:-right-2 md:right-auto md:[inset-inline-start:0]">
+          {/* Floating stat card — OUTSIDE the image container */}
+          <div className="pointer-events-none absolute z-20 inset-x-0 -bottom-4 flex justify-center md:inset-x-auto md:bottom-10 md:justify-start md:[inset-inline-start:-1.5rem]">
             <div key={`stat-${slide.id}`} className="pointer-events-auto animate-float hs-fade-in">
               <FloatingStatCard
                 title={isAr ? "إحصائيات المشاريع 2025" : "Project Statistic 2025"}
