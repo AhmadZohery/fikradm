@@ -32,6 +32,7 @@ import { Route as AdminIndustriesRouteImport } from './routes/admin.industries'
 import { Route as AdminFormsRouteImport } from './routes/admin.forms'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as Char123LocaleChar125ServicesIndexRouteImport } from './routes/{-$locale}.services.index'
+import { Route as Char123LocaleChar125LocationsIndexRouteImport } from './routes/{-$locale}.locations.index'
 import { Route as Char123LocaleChar125IndustriesIndexRouteImport } from './routes/{-$locale}.industries.index'
 import { Route as Char123LocaleChar125CaseStudiesIndexRouteImport } from './routes/{-$locale}.case-studies.index'
 import { Route as Char123LocaleChar125BlogIndexRouteImport } from './routes/{-$locale}.blog.index'
@@ -43,6 +44,7 @@ import { Route as AdminPagesPageIdRouteImport } from './routes/admin.pages.$page
 import { Route as AdminBlogPostIdRouteImport } from './routes/admin.blog.$postId'
 import { Route as Char123LocaleChar125ServicesSlugIndexRouteImport } from './routes/{-$locale}.services.$slug.index'
 import { Route as Char123LocaleChar125ServicesSlugSubRouteImport } from './routes/{-$locale}.services.$slug.$sub'
+import { Route as Char123LocaleChar125LocationsCityServiceRouteImport } from './routes/{-$locale}.locations.$city.$service'
 import { Route as Char123LocaleChar125IndustriesSlugSubRouteImport } from './routes/{-$locale}.industries.$slug.$sub'
 import { Route as Char123LocaleChar125BlogCategorySlugRouteImport } from './routes/{-$locale}.blog.category.$slug'
 
@@ -167,6 +169,12 @@ const Char123LocaleChar125ServicesIndexRoute =
     path: '/services/',
     getParentRoute: () => Char123LocaleChar125Route,
   } as any)
+const Char123LocaleChar125LocationsIndexRoute =
+  Char123LocaleChar125LocationsIndexRouteImport.update({
+    id: '/locations/',
+    path: '/locations/',
+    getParentRoute: () => Char123LocaleChar125Route,
+  } as any)
 const Char123LocaleChar125IndustriesIndexRoute =
   Char123LocaleChar125IndustriesIndexRouteImport.update({
     id: '/industries/',
@@ -230,6 +238,12 @@ const Char123LocaleChar125ServicesSlugSubRoute =
     path: '/services/$slug/$sub',
     getParentRoute: () => Char123LocaleChar125Route,
   } as any)
+const Char123LocaleChar125LocationsCityServiceRoute =
+  Char123LocaleChar125LocationsCityServiceRouteImport.update({
+    id: '/locations/$city/$service',
+    path: '/locations/$city/$service',
+    getParentRoute: () => Char123LocaleChar125Route,
+  } as any)
 const Char123LocaleChar125IndustriesSlugSubRoute =
   Char123LocaleChar125IndustriesSlugSubRouteImport.update({
     id: '/$sub',
@@ -275,9 +289,11 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/blog/': typeof Char123LocaleChar125BlogIndexRoute
   '/{-$locale}/case-studies/': typeof Char123LocaleChar125CaseStudiesIndexRoute
   '/{-$locale}/industries/': typeof Char123LocaleChar125IndustriesIndexRoute
+  '/{-$locale}/locations/': typeof Char123LocaleChar125LocationsIndexRoute
   '/{-$locale}/services/': typeof Char123LocaleChar125ServicesIndexRoute
   '/{-$locale}/blog/category/$slug': typeof Char123LocaleChar125BlogCategorySlugRoute
   '/{-$locale}/industries/$slug/$sub': typeof Char123LocaleChar125IndustriesSlugSubRoute
+  '/{-$locale}/locations/$city/$service': typeof Char123LocaleChar125LocationsCityServiceRoute
   '/{-$locale}/services/$slug/$sub': typeof Char123LocaleChar125ServicesSlugSubRoute
   '/{-$locale}/services/$slug/': typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
@@ -311,9 +327,11 @@ export interface FileRoutesByTo {
   '/{-$locale}/blog': typeof Char123LocaleChar125BlogIndexRoute
   '/{-$locale}/case-studies': typeof Char123LocaleChar125CaseStudiesIndexRoute
   '/{-$locale}/industries': typeof Char123LocaleChar125IndustriesIndexRoute
+  '/{-$locale}/locations': typeof Char123LocaleChar125LocationsIndexRoute
   '/{-$locale}/services': typeof Char123LocaleChar125ServicesIndexRoute
   '/{-$locale}/blog/category/$slug': typeof Char123LocaleChar125BlogCategorySlugRoute
   '/{-$locale}/industries/$slug/$sub': typeof Char123LocaleChar125IndustriesSlugSubRoute
+  '/{-$locale}/locations/$city/$service': typeof Char123LocaleChar125LocationsCityServiceRoute
   '/{-$locale}/services/$slug/$sub': typeof Char123LocaleChar125ServicesSlugSubRoute
   '/{-$locale}/services/$slug': typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
@@ -350,9 +368,11 @@ export interface FileRoutesById {
   '/{-$locale}/blog/': typeof Char123LocaleChar125BlogIndexRoute
   '/{-$locale}/case-studies/': typeof Char123LocaleChar125CaseStudiesIndexRoute
   '/{-$locale}/industries/': typeof Char123LocaleChar125IndustriesIndexRoute
+  '/{-$locale}/locations/': typeof Char123LocaleChar125LocationsIndexRoute
   '/{-$locale}/services/': typeof Char123LocaleChar125ServicesIndexRoute
   '/{-$locale}/blog/category/$slug': typeof Char123LocaleChar125BlogCategorySlugRoute
   '/{-$locale}/industries/$slug/$sub': typeof Char123LocaleChar125IndustriesSlugSubRoute
+  '/{-$locale}/locations/$city/$service': typeof Char123LocaleChar125LocationsCityServiceRoute
   '/{-$locale}/services/$slug/$sub': typeof Char123LocaleChar125ServicesSlugSubRoute
   '/{-$locale}/services/$slug/': typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
@@ -390,9 +410,11 @@ export interface FileRouteTypes {
     | '/{-$locale}/blog/'
     | '/{-$locale}/case-studies/'
     | '/{-$locale}/industries/'
+    | '/{-$locale}/locations/'
     | '/{-$locale}/services/'
     | '/{-$locale}/blog/category/$slug'
     | '/{-$locale}/industries/$slug/$sub'
+    | '/{-$locale}/locations/$city/$service'
     | '/{-$locale}/services/$slug/$sub'
     | '/{-$locale}/services/$slug/'
   fileRoutesByTo: FileRoutesByTo
@@ -426,9 +448,11 @@ export interface FileRouteTypes {
     | '/{-$locale}/blog'
     | '/{-$locale}/case-studies'
     | '/{-$locale}/industries'
+    | '/{-$locale}/locations'
     | '/{-$locale}/services'
     | '/{-$locale}/blog/category/$slug'
     | '/{-$locale}/industries/$slug/$sub'
+    | '/{-$locale}/locations/$city/$service'
     | '/{-$locale}/services/$slug/$sub'
     | '/{-$locale}/services/$slug'
   id:
@@ -464,9 +488,11 @@ export interface FileRouteTypes {
     | '/{-$locale}/blog/'
     | '/{-$locale}/case-studies/'
     | '/{-$locale}/industries/'
+    | '/{-$locale}/locations/'
     | '/{-$locale}/services/'
     | '/{-$locale}/blog/category/$slug'
     | '/{-$locale}/industries/$slug/$sub'
+    | '/{-$locale}/locations/$city/$service'
     | '/{-$locale}/services/$slug/$sub'
     | '/{-$locale}/services/$slug/'
   fileRoutesById: FileRoutesById
@@ -642,6 +668,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char123LocaleChar125ServicesIndexRouteImport
       parentRoute: typeof Char123LocaleChar125Route
     }
+    '/{-$locale}/locations/': {
+      id: '/{-$locale}/locations/'
+      path: '/locations'
+      fullPath: '/{-$locale}/locations/'
+      preLoaderRoute: typeof Char123LocaleChar125LocationsIndexRouteImport
+      parentRoute: typeof Char123LocaleChar125Route
+    }
     '/{-$locale}/industries/': {
       id: '/{-$locale}/industries/'
       path: '/industries'
@@ -717,6 +750,13 @@ declare module '@tanstack/react-router' {
       path: '/services/$slug/$sub'
       fullPath: '/{-$locale}/services/$slug/$sub'
       preLoaderRoute: typeof Char123LocaleChar125ServicesSlugSubRouteImport
+      parentRoute: typeof Char123LocaleChar125Route
+    }
+    '/{-$locale}/locations/$city/$service': {
+      id: '/{-$locale}/locations/$city/$service'
+      path: '/locations/$city/$service'
+      fullPath: '/{-$locale}/locations/$city/$service'
+      preLoaderRoute: typeof Char123LocaleChar125LocationsCityServiceRouteImport
       parentRoute: typeof Char123LocaleChar125Route
     }
     '/{-$locale}/industries/$slug/$sub': {
@@ -821,8 +861,10 @@ interface Char123LocaleChar125RouteChildren {
   Char123LocaleChar125BlogIndexRoute: typeof Char123LocaleChar125BlogIndexRoute
   Char123LocaleChar125CaseStudiesIndexRoute: typeof Char123LocaleChar125CaseStudiesIndexRoute
   Char123LocaleChar125IndustriesIndexRoute: typeof Char123LocaleChar125IndustriesIndexRoute
+  Char123LocaleChar125LocationsIndexRoute: typeof Char123LocaleChar125LocationsIndexRoute
   Char123LocaleChar125ServicesIndexRoute: typeof Char123LocaleChar125ServicesIndexRoute
   Char123LocaleChar125BlogCategorySlugRoute: typeof Char123LocaleChar125BlogCategorySlugRoute
+  Char123LocaleChar125LocationsCityServiceRoute: typeof Char123LocaleChar125LocationsCityServiceRoute
   Char123LocaleChar125ServicesSlugSubRoute: typeof Char123LocaleChar125ServicesSlugSubRoute
   Char123LocaleChar125ServicesSlugIndexRoute: typeof Char123LocaleChar125ServicesSlugIndexRoute
 }
@@ -844,10 +886,14 @@ const Char123LocaleChar125RouteChildren: Char123LocaleChar125RouteChildren = {
     Char123LocaleChar125CaseStudiesIndexRoute,
   Char123LocaleChar125IndustriesIndexRoute:
     Char123LocaleChar125IndustriesIndexRoute,
+  Char123LocaleChar125LocationsIndexRoute:
+    Char123LocaleChar125LocationsIndexRoute,
   Char123LocaleChar125ServicesIndexRoute:
     Char123LocaleChar125ServicesIndexRoute,
   Char123LocaleChar125BlogCategorySlugRoute:
     Char123LocaleChar125BlogCategorySlugRoute,
+  Char123LocaleChar125LocationsCityServiceRoute:
+    Char123LocaleChar125LocationsCityServiceRoute,
   Char123LocaleChar125ServicesSlugSubRoute:
     Char123LocaleChar125ServicesSlugSubRoute,
   Char123LocaleChar125ServicesSlugIndexRoute:
