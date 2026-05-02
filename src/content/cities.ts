@@ -64,6 +64,13 @@ export const CITIES: City[] = [
       ar: "سوق الرياض هو الأسرع نمواً في الخليج رقمياً، مع تحول ملحوظ نحو البحث الصوتي والـ AI Overviews.",
       en: "Riyadh is the fastest-growing digital market in the Gulf, with a noticeable shift toward voice search and AI Overviews.",
     },
+    population: "7.7M",
+    internetPenetration: "99%",
+    topIndustries: [
+      { ar: "العقار والمقاولات", en: "Real estate & construction" },
+      { ar: "التجزئة والمطاعم", en: "Retail & F&B" },
+      { ar: "الخدمات المالية", en: "Financial services" },
+    ],
   },
   {
     key: "jeddah",
@@ -82,6 +89,13 @@ export const CITIES: City[] = [
       ar: "المستهلك الجداوي يعتمد بشكل أكبر على Instagram وTikTok مقارنة بمدن المملكة الأخرى.",
       en: "Jeddah consumers rely more on Instagram and TikTok than other Saudi cities.",
     },
+    population: "4.7M",
+    internetPenetration: "98%",
+    topIndustries: [
+      { ar: "السياحة والضيافة", en: "Tourism & hospitality" },
+      { ar: "الموانئ واللوجستيات", en: "Ports & logistics" },
+      { ar: "تجارة الجملة", en: "Wholesale trade" },
+    ],
   },
   {
     key: "dammam",
@@ -100,6 +114,13 @@ export const CITIES: City[] = [
       ar: "اقتصاد المنطقة الشرقية يقوده B2B وخدمات الطاقة، ويتطلب محتوى تقني متخصص.",
       en: "The Eastern economy is B2B and energy-led, requiring specialized technical content.",
     },
+    population: "1.5M",
+    internetPenetration: "98%",
+    topIndustries: [
+      { ar: "النفط والغاز", en: "Oil & gas" },
+      { ar: "البتروكيماويات", en: "Petrochemicals" },
+      { ar: "خدمات صناعية B2B", en: "Industrial B2B services" },
+    ],
   },
   {
     key: "dubai",
@@ -118,6 +139,13 @@ export const CITIES: City[] = [
       ar: "سوق دبي تنافسي بشكل استثنائي، وتكلفة النقرة فيه أعلى بـ 2-3 أضعاف عن متوسط الخليج.",
       en: "Dubai's market is exceptionally competitive — CPC runs 2–3× the Gulf average.",
     },
+    population: "3.7M",
+    internetPenetration: "100%",
+    topIndustries: [
+      { ar: "العقار والضيافة الفاخرة", en: "Real estate & luxury hospitality" },
+      { ar: "التجارة الإلكترونية", en: "E-commerce" },
+      { ar: "التكنولوجيا المالية", en: "Fintech" },
+    ],
   },
   {
     key: "abu-dhabi",
@@ -136,6 +164,13 @@ export const CITIES: City[] = [
       ar: "أبوظبي تعتمد على المحتوى المتعدد اللغات والامتثال لمعايير TDRA.",
       en: "Abu Dhabi requires multilingual content and TDRA compliance standards.",
     },
+    population: "1.5M",
+    internetPenetration: "100%",
+    topIndustries: [
+      { ar: "الحكومة والقطاع العام", en: "Government & public sector" },
+      { ar: "الطاقة والاستثمار", en: "Energy & investment" },
+      { ar: "الثقافة والسياحة", en: "Culture & tourism" },
+    ],
   },
   {
     key: "cairo",
@@ -154,6 +189,13 @@ export const CITIES: City[] = [
       ar: "السوق المصري يقوده Facebook وTikTok بأرخص تكلفة وصول في الشرق الأوسط.",
       en: "The Egyptian market is led by Facebook and TikTok with the lowest reach cost in the Middle East.",
     },
+    population: "22M",
+    internetPenetration: "82%",
+    topIndustries: [
+      { ar: "التجارة الإلكترونية", en: "E-commerce" },
+      { ar: "العقار والتطوير", en: "Real estate & development" },
+      { ar: "البرمجيات والـ Outsourcing", en: "Software & outsourcing" },
+    ],
   },
   {
     key: "kuwait",
@@ -172,6 +214,13 @@ export const CITIES: City[] = [
       ar: "المستخدم الكويتي من أعلى المستخدمين إنفاقاً على المتاجر الإلكترونية في الخليج.",
       en: "Kuwaiti users are among the highest e-commerce spenders in the Gulf.",
     },
+    population: "3.1M",
+    internetPenetration: "99%",
+    topIndustries: [
+      { ar: "التجزئة والمطاعم", en: "Retail & F&B" },
+      { ar: "الخدمات المصرفية", en: "Banking services" },
+      { ar: "السلع الفاخرة", en: "Luxury goods" },
+    ],
   },
   {
     key: "doha",
@@ -190,6 +239,13 @@ export const CITIES: City[] = [
       ar: "السوق القطري متعدد الجنسيات ويتطلب استراتيجيات بثلاث لغات على الأقل.",
       en: "Qatar's multinational market needs strategies in at least three languages.",
     },
+    population: "2.4M",
+    internetPenetration: "100%",
+    topIndustries: [
+      { ar: "الضيافة والفعاليات", en: "Hospitality & events" },
+      { ar: "العقار التجاري", en: "Commercial real estate" },
+      { ar: "خدمات B2B", en: "B2B services" },
+    ],
   },
 ];
 
