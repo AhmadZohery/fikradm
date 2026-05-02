@@ -22,6 +22,7 @@ import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$local
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminSeoReportsRouteImport } from './routes/admin.seo-reports'
 import { Route as AdminSeoAuditRouteImport } from './routes/admin.seo-audit'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
@@ -117,6 +118,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
 const AdminServicesRoute = AdminServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSeoReportsRoute = AdminSeoReportsRouteImport.update({
+  id: '/seo-reports',
+  path: '/seo-reports',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminSeoAuditRoute = AdminSeoAuditRouteImport.update({
@@ -277,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/seo-audit': typeof AdminSeoAuditRoute
+  '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -316,6 +323,7 @@ export interface FileRoutesByTo {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/seo-audit': typeof AdminSeoAuditRoute
+  '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -358,6 +366,7 @@ export interface FileRoutesById {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/seo-audit': typeof AdminSeoAuditRoute
+  '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -401,6 +410,7 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/seo-audit'
+    | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
@@ -440,6 +450,7 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/seo-audit'
+    | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
@@ -481,6 +492,7 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/seo-audit'
+    | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/users'
@@ -609,6 +621,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/admin/services'
       preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/seo-reports': {
+      id: '/admin/seo-reports'
+      path: '/seo-reports'
+      fullPath: '/admin/seo-reports'
+      preLoaderRoute: typeof AdminSeoReportsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/seo-audit': {
@@ -830,6 +849,7 @@ interface AdminRouteChildren {
   AdminPackagesRoute: typeof AdminPackagesRoute
   AdminPagesRoute: typeof AdminPagesRouteWithChildren
   AdminSeoAuditRoute: typeof AdminSeoAuditRoute
+  AdminSeoReportsRoute: typeof AdminSeoReportsRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -846,6 +866,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPackagesRoute: AdminPackagesRoute,
   AdminPagesRoute: AdminPagesRouteWithChildren,
   AdminSeoAuditRoute: AdminSeoAuditRoute,
+  AdminSeoReportsRoute: AdminSeoReportsRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
