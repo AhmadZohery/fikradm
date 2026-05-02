@@ -245,7 +245,7 @@ export function HomeExpertiseTrust() {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: isAr ? "فكرة للتسويق الرقمي" : "Fikra Digital Marketing",
-            url: "https://fikra-dm.com",
+            url: "https://fikradm.lovable.app",
             address: {
               "@type": "PostalAddress",
               addressCountry: "SA",

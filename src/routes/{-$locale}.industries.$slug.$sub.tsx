@@ -27,9 +27,9 @@ export const Route = createFileRoute("/{-$locale}/industries/$slug/$sub")({
         { name: "twitter:image", content: s.image },
       ],
       links: [
-        { rel: "canonical", href: `https://fikra-dm.com/${(params.locale ?? "ar")}/industries/${params.slug}/${s.slug}` },
-        { rel: "alternate", hrefLang: "ar", href: `https://fikra-dm.com/ar/industries/${params.slug}/${s.slug}` },
-        { rel: "alternate", hrefLang: "en", href: `https://fikra-dm.com/en/industries/${params.slug}/${s.slug}` },
+        { rel: "canonical", href: `https://fikradm.lovable.app/${(params.locale ?? "ar")}/industries/${params.slug}/${s.slug}` },
+        { rel: "alternate", hrefLang: "ar", href: `https://fikradm.lovable.app/ar/industries/${params.slug}/${s.slug}` },
+        { rel: "alternate", hrefLang: "en", href: `https://fikradm.lovable.app/en/industries/${params.slug}/${s.slug}` },
       ],
     };
   },
@@ -47,8 +47,8 @@ function SubIndustryPage() {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: loc === "ar" ? "حلول حسب القطاع" : "Industries", item: `https://fikra-dm.com/${locale}/industries` },
-      { "@type": "ListItem", position: 2, name: parent.title[loc], item: `https://fikra-dm.com/${locale}/industries/${slug}` },
+      { "@type": "ListItem", position: 1, name: loc === "ar" ? "حلول حسب القطاع" : "Industries", item: `https://fikradm.lovable.app/${locale}/industries` },
+      { "@type": "ListItem", position: 2, name: parent.title[loc], item: `https://fikradm.lovable.app/${locale}/industries/${slug}` },
       { "@type": "ListItem", position: 3, name: s.title[loc] },
     ],
   };
