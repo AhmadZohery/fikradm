@@ -242,7 +242,7 @@ export function HeroSlider() {
         </div>
 
         {/* RIGHT — image with ken-burns + crossfade */}
-        <div className="relative pb-32 md:pb-0">
+        <div className="relative pb-40 md:pb-32 lg:pb-36">
           <div
             className="relative mx-auto aspect-[4/5] w-full max-w-md"
             style={{ contain: "layout paint" }}
