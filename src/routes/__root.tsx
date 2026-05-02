@@ -11,6 +11,7 @@ import { useMemo } from "react";
 import appCss from "@/styles.css?url";
 import { isLocale, DEFAULT_LOCALE } from "@/i18n/types";
 import { SiteLayout } from "@/components/site/SiteLayout";
+import { SITE_ORIGIN, SITE_NAME, organizationLd, localBusinessLd } from "@/lib/seo";
 
 function NotFoundComponent() {
   return (
@@ -51,9 +52,11 @@ export const Route = createRootRoute({
       { name: "author", content: "Fikra Digital Marketing" },
       { name: "theme-color", content: "#5b4fe0" },
       { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Fikra Digital Marketing" },
+      { property: "og:site_name", content: SITE_NAME },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@FikraDM" },
+      { name: "format-detection", content: "telephone=no" },
+      { name: "robots", content: "index,follow,max-image-preview:large,max-snippet:-1" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -66,9 +69,19 @@ export const Route = createRootRoute({
         href: "https://fonts.gstatic.com",
         crossOrigin: "anonymous",
       },
+      // dns-prefetch fallback for older browsers
+      { rel: "dns-prefetch", href: "https://fonts.googleapis.com" },
+      { rel: "dns-prefetch", href: "https://fonts.gstatic.com" },
+      // Preload critical Arabic font weight to accelerate LCP text paint
+      {
+        rel: "preload",
+        as: "style",
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Tajawal:wght@400;700;800&family=Space+Grotesk:wght@600;700&display=swap",
+      },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+        // Trim weights & enforce display=swap for faster LCP and zero invisible-text CLS
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Tajawal:wght@400;700;800&family=Space+Grotesk:wght@600;700&display=swap",
       },
     ],
     scripts: [
@@ -76,21 +89,23 @@ export const Route = createRootRoute({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "Fikra Digital Marketing",
-          alternateName: "فكرة للتسويق الرقمي",
-          url: "https://fikra-dm.com",
-          logo: "https://fikra-dm.com/logo.png",
-          sameAs: [
-            "https://twitter.com/FikraDM",
-            "https://www.linkedin.com/company/fikra-dm",
-            "https://www.instagram.com/fikra.dm",
+          "@graph": [
+            organizationLd(),
+            localBusinessLd(),
+            {
+              "@type": "WebSite",
+              "@id": `${SITE_ORIGIN}#website`,
+              url: SITE_ORIGIN,
+              name: SITE_NAME,
+              inLanguage: ["ar", "en"],
+              publisher: { "@id": `${SITE_ORIGIN}#org` },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: `${SITE_ORIGIN}/ar/search?q={search_term_string}`,
+                "query-input": "required name=search_term_string",
+              },
+            },
           ],
-          address: {
-            "@type": "PostalAddress",
-            addressCountry: "SA",
-            addressLocality: "Riyadh",
-          },
         }),
       },
     ],

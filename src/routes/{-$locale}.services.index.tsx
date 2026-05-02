@@ -6,14 +6,32 @@ import { CtaBand } from "@/components/site/CtaBand";
 import { services } from "@/content/data";
 import { ArrowRight } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
+import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd, serviceLd } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/services/")({
   head: ({ params }) => {
-    const isAr = (params.locale ?? "ar") === "ar";
+    const locale = (params.locale ?? "ar") as "ar" | "en";
+    const isAr = locale === "ar";
+    const title = isAr
+      ? "خدماتنا • سيو، إعلانات، تصميم وتطوير مواقع 2025"
+      : "Services • SEO, Ads, Creative & Web Development 2025";
+    const description = isAr
+      ? "ترسانة خدمات تسويق رقمي متكاملة: سيو، Google/Meta/TikTok ads، تصميم هويات، تطوير مواقع وتطبيقات. فريق سعودي مرخّص."
+      : "End-to-end digital services: SEO, Google/Meta/TikTok ads, brand design, web & app development. Licensed Saudi team.";
     return {
-      meta: [
-        { title: isAr ? "خدماتنا | فكرة للتسويق الرقمي" : "Our Services | Fikra Digital Marketing" },
-        { name: "description", content: isAr ? "ترسانة خدمات التسويق الرقمي: سيو، إعلانات، كرييتيف، ومواقع." : "Our digital marketing arsenal: SEO, ads, creative, and web." },
+      meta: buildSeoMeta({ title, description, path: `/${locale}/services`, locale }),
+      links: buildSeoLinks({ path: `/${locale}/services`, locale }),
+      scripts: [
+        jsonLdScript(serviceLd({
+          name: title,
+          description,
+          url: `/${locale}/services`,
+          serviceType: "Digital Marketing Services",
+        })),
+        jsonLdScript(breadcrumbLd([
+          { name: isAr ? "الرئيسية" : "Home", url: `/${locale}` },
+          { name: isAr ? "خدماتنا" : "Services", url: `/${locale}/services` },
+        ])),
       ],
     };
   },
@@ -35,7 +53,7 @@ function ServicesIndex() {
             {services.map((s) => (
               <Link key={s.slug} to={buildHref(locale, `/services/${s.slug}`)} className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:shadow-elegant">
                 <div className="aspect-[16/9] overflow-hidden">
-                  <img src={s.image} alt={s.title[locale]} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                  <img src={s.image} alt={s.title[locale]} loading="lazy" decoding="async" width={800} height={450} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                 </div>
                 <div className="p-6">
                   <h3 className="text-lg font-bold">{s.title[locale]}</h3>

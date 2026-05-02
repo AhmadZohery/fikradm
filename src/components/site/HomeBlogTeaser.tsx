@@ -57,6 +57,9 @@ export function HomeBlogTeaser() {
                   src={p.image}
                   alt={p.title[locale]}
                   loading="lazy"
+                  decoding="async"
+                  width={640}
+                  height={400}
                   className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
                 />
                 <span className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent opacity-60" />

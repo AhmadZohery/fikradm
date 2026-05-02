@@ -10,14 +10,36 @@ import { LogosStrip } from "@/components/site/LogosStrip";
 import { useLocale } from "@/i18n/useLocale";
 import { Target, Heart, Award, Users, ShieldCheck, BadgeCheck, MapPin, Sparkles, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import heroSaudiMarketer from "@/assets/hero-saudi-marketer.jpg";
+import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd, organizationLd } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/about")({
-  head: ({ params }) => ({
-    meta: [
-      { title: (params.locale ?? "ar") === "ar" ? "من نحن | فكرة للتسويق الرقمي" : "About | Fikra Digital Marketing" },
-      { name: "description", content: (params.locale ?? "ar") === "ar" ? "تعرّف على فكرة، وكالة تسويق رقمي مرخّصة في السعودية ورؤيتنا في النمو." : "Meet Fikra — a licensed KSA digital marketing agency and our vision for growth." },
-    ],
-  }),
+  head: ({ params }) => {
+    const locale = (params.locale ?? "ar") as "ar" | "en";
+    const isAr = locale === "ar";
+    const title = isAr
+      ? "من نحن • قصة فكرة، فريق سعودي مرخّص منذ 2019"
+      : "About Us • Fikra story — Licensed Saudi team since 2019";
+    const description = isAr
+      ? "وكالة تسويق رقمي سعودية مرخّصة منذ 2019. +100 علامة تجارية خليجية، فريق متخصص، شراكات معتمدة Google/Meta/TikTok."
+      : "Saudi licensed digital marketing agency since 2019. 100+ Gulf brands, expert team, certified Google/Meta/TikTok partnerships.";
+    return {
+      meta: buildSeoMeta({ title, description, path: `/${locale}/about`, locale, image: heroSaudiMarketer }),
+      links: buildSeoLinks({ path: `/${locale}/about`, locale }),
+      scripts: [
+        jsonLdScript({
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          name: title,
+          description,
+          mainEntity: organizationLd(),
+        }),
+        jsonLdScript(breadcrumbLd([
+          { name: isAr ? "الرئيسية" : "Home", url: `/${locale}` },
+          { name: isAr ? "من نحن" : "About", url: `/${locale}/about` },
+        ])),
+      ],
+    };
+  },
   component: AboutPage,
 });
 

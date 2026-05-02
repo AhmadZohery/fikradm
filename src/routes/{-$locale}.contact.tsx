@@ -8,14 +8,36 @@ import { ArrowRight, ArrowLeft, Check, Mail, Phone, MapPin, Loader2, Sparkles, C
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd, localBusinessLd } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/contact")({
-  head: ({ params }) => ({
-    meta: [
-      { title: (params.locale ?? "ar") === "ar" ? "احجز استشارتك المجانية | فكرة" : "Book a Free Consultation | Fikra" },
-      { name: "description", content: (params.locale ?? "ar") === "ar" ? "احجز استشارة مجانية مع خبراء فكرة — حدد خدماتك وميزانيتك ونصلك خلال 24 ساعة بخطة عمل مخصصة." : "Book a free consultation — pick your services and budget, and we'll send a tailored plan within 24 hours." },
-    ],
-  }),
+  head: ({ params }) => {
+    const locale = (params.locale ?? "ar") as "ar" | "en";
+    const isAr = locale === "ar";
+    const title = isAr
+      ? "احجز استشارة مجانية ٣٠ دقيقة • تواصل مع فكرة"
+      : "Book a Free 30-min Strategy Call • Contact Fikra";
+    const description = isAr
+      ? "خطة عمل مخصصة لعلامتك خلال 24 ساعة. اتصل عبر واتساب أو احجز جلسة استشارية مجانية مع خبراء التسويق الرقمي."
+      : "Custom action plan within 24h. WhatsApp us or book a free strategy call with our digital marketing experts.";
+    return {
+      meta: buildSeoMeta({ title, description, path: `/${locale}/contact`, locale }),
+      links: buildSeoLinks({ path: `/${locale}/contact`, locale }),
+      scripts: [
+        jsonLdScript({
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          name: title,
+          description,
+          mainEntity: localBusinessLd(),
+        }),
+        jsonLdScript(breadcrumbLd([
+          { name: isAr ? "الرئيسية" : "Home", url: `/${locale}` },
+          { name: isAr ? "تواصل معنا" : "Contact", url: `/${locale}/contact` },
+        ])),
+      ],
+    };
+  },
   component: ContactPage,
 });
 
