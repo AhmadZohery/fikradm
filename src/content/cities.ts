@@ -265,6 +265,15 @@ export const SERVICES: ServiceMeta[] = [
       { ar: "بناء روابط محلية موثوقة", en: "Trusted local link-building" },
     ],
     serviceType: "Search Engine Optimization",
+    kpis: [
+      { label: { ar: "نمو الزيارات العضوية", en: "Organic traffic growth" }, baseValue: 180, suffix: "%" },
+      { label: { ar: "كلمات في الصفحة 1", en: "Page-1 keywords" }, baseValue: 65, suffix: "+" },
+      { label: { ar: "وقت لأول نتيجة", en: "Time to first ranking" }, baseValue: 45, suffix: " يوم" },
+    ],
+    caseBrief: {
+      ar: "علامة تجزئة محلية: من 1.2k زيارة شهرياً إلى 18k خلال 6 أشهر، مع 3× طلبات استشارة.",
+      en: "Local retail brand: from 1.2k to 18k monthly visits in 6 months, with 3× consultation requests.",
+    },
   },
   {
     key: "performance-marketing",
@@ -281,6 +290,15 @@ export const SERVICES: ServiceMeta[] = [
       { ar: "اختبارات A/B إبداعية مستمرة", en: "Continuous creative A/B testing" },
     ],
     serviceType: "Performance Marketing",
+    kpis: [
+      { label: { ar: "ROAS", en: "ROAS" }, baseValue: 4, suffix: "×" },
+      { label: { ar: "خفض CPA", en: "CPA reduction" }, baseValue: 38, suffix: "%" },
+      { label: { ar: "معدل التحويل", en: "Conversion rate" }, baseValue: 6, suffix: "%" },
+    ],
+    caseBrief: {
+      ar: "متجر إلكتروني: ROAS من 1.8× إلى 5.2× خلال 90 يوم، بميزانية 25k شهرياً.",
+      en: "E-commerce store: ROAS from 1.8× to 5.2× in 90 days on a 25k monthly budget.",
+    },
   },
   {
     key: "creative",
@@ -297,6 +315,15 @@ export const SERVICES: ServiceMeta[] = [
       { ar: "صياغة عربية وإنجليزية", en: "Arabic + English copywriting" },
     ],
     serviceType: "Creative Production",
+    kpis: [
+      { label: { ar: "تفاعل أعلى", en: "Engagement lift" }, baseValue: 220, suffix: "%" },
+      { label: { ar: "تكلفة الإنتاج", en: "Production cost" }, baseValue: 45, suffix: "% أقل" },
+      { label: { ar: "وقت التسليم", en: "Turnaround" }, baseValue: 5, suffix: " أيام" },
+    ],
+    caseBrief: {
+      ar: "مطعم محلي: 12 Reel شهرياً رفعت متابعي Instagram من 4k إلى 31k في 5 أشهر.",
+      en: "Local restaurant: 12 monthly Reels grew Instagram from 4k to 31k followers in 5 months.",
+    },
   },
   {
     key: "web-development",
@@ -313,6 +340,15 @@ export const SERVICES: ServiceMeta[] = [
       { ar: "بنية SEO جاهزة", en: "SEO-ready architecture" },
     ],
     serviceType: "Web Development",
+    kpis: [
+      { label: { ar: "Lighthouse", en: "Lighthouse" }, baseValue: 95, suffix: "/100" },
+      { label: { ar: "وقت التحميل", en: "Load time" }, baseValue: 1, suffix: "s" },
+      { label: { ar: "معدل الارتداد", en: "Bounce rate" }, baseValue: 32, suffix: "% أقل" },
+    ],
+    caseBrief: {
+      ar: "موقع شركة B2B: من 4.2s إلى 0.9s LCP، ومعدل تحويل النموذج تضاعف.",
+      en: "B2B corporate site: LCP from 4.2s to 0.9s, form conversion doubled.",
+    },
   },
   {
     key: "social-media",
@@ -329,6 +365,15 @@ export const SERVICES: ServiceMeta[] = [
       { ar: "تعاون مع مؤثرين محليين", en: "Local influencer collaborations" },
     ],
     serviceType: "Social Media Management",
+    kpis: [
+      { label: { ar: "نمو المتابعين", en: "Follower growth" }, baseValue: 140, suffix: "%" },
+      { label: { ar: "وقت الرد", en: "Response time" }, baseValue: 12, suffix: " د" },
+      { label: { ar: "Reach شهري", en: "Monthly reach" }, baseValue: 850, suffix: "k" },
+    ],
+    caseBrief: {
+      ar: "علامة جمال: 180k متابع جديد على TikTok خلال 4 أشهر مع تعاون مع 8 مؤثرين محليين.",
+      en: "Beauty brand: 180k new TikTok followers in 4 months with 8 local influencer collaborations.",
+    },
   },
 ];
 
