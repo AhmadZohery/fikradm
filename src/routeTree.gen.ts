@@ -47,6 +47,7 @@ import { Route as Char123LocaleChar125ServicesSlugSubRouteImport } from './route
 import { Route as Char123LocaleChar125LocationsCityServiceRouteImport } from './routes/{-$locale}.locations.$city.$service'
 import { Route as Char123LocaleChar125IndustriesSlugSubRouteImport } from './routes/{-$locale}.industries.$slug.$sub'
 import { Route as Char123LocaleChar125BlogCategorySlugRouteImport } from './routes/{-$locale}.blog.category.$slug'
+import { Route as ApiPublicHooksSeoAuditRouteImport } from './routes/api/public/hooks/seo-audit'
 
 const Char123LocaleChar125Route = Char123LocaleChar125RouteImport.update({
   id: '/{-$locale}',
@@ -256,6 +257,11 @@ const Char123LocaleChar125BlogCategorySlugRoute =
     path: '/blog/category/$slug',
     getParentRoute: () => Char123LocaleChar125Route,
   } as any)
+const ApiPublicHooksSeoAuditRoute = ApiPublicHooksSeoAuditRouteImport.update({
+  id: '/api/public/hooks/seo-audit',
+  path: '/api/public/hooks/seo-audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
@@ -291,6 +297,7 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/industries/': typeof Char123LocaleChar125IndustriesIndexRoute
   '/{-$locale}/locations/': typeof Char123LocaleChar125LocationsIndexRoute
   '/{-$locale}/services/': typeof Char123LocaleChar125ServicesIndexRoute
+  '/api/public/hooks/seo-audit': typeof ApiPublicHooksSeoAuditRoute
   '/{-$locale}/blog/category/$slug': typeof Char123LocaleChar125BlogCategorySlugRoute
   '/{-$locale}/industries/$slug/$sub': typeof Char123LocaleChar125IndustriesSlugSubRoute
   '/{-$locale}/locations/$city/$service': typeof Char123LocaleChar125LocationsCityServiceRoute
@@ -329,6 +336,7 @@ export interface FileRoutesByTo {
   '/{-$locale}/industries': typeof Char123LocaleChar125IndustriesIndexRoute
   '/{-$locale}/locations': typeof Char123LocaleChar125LocationsIndexRoute
   '/{-$locale}/services': typeof Char123LocaleChar125ServicesIndexRoute
+  '/api/public/hooks/seo-audit': typeof ApiPublicHooksSeoAuditRoute
   '/{-$locale}/blog/category/$slug': typeof Char123LocaleChar125BlogCategorySlugRoute
   '/{-$locale}/industries/$slug/$sub': typeof Char123LocaleChar125IndustriesSlugSubRoute
   '/{-$locale}/locations/$city/$service': typeof Char123LocaleChar125LocationsCityServiceRoute
@@ -370,6 +378,7 @@ export interface FileRoutesById {
   '/{-$locale}/industries/': typeof Char123LocaleChar125IndustriesIndexRoute
   '/{-$locale}/locations/': typeof Char123LocaleChar125LocationsIndexRoute
   '/{-$locale}/services/': typeof Char123LocaleChar125ServicesIndexRoute
+  '/api/public/hooks/seo-audit': typeof ApiPublicHooksSeoAuditRoute
   '/{-$locale}/blog/category/$slug': typeof Char123LocaleChar125BlogCategorySlugRoute
   '/{-$locale}/industries/$slug/$sub': typeof Char123LocaleChar125IndustriesSlugSubRoute
   '/{-$locale}/locations/$city/$service': typeof Char123LocaleChar125LocationsCityServiceRoute
@@ -412,6 +421,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/industries/'
     | '/{-$locale}/locations/'
     | '/{-$locale}/services/'
+    | '/api/public/hooks/seo-audit'
     | '/{-$locale}/blog/category/$slug'
     | '/{-$locale}/industries/$slug/$sub'
     | '/{-$locale}/locations/$city/$service'
@@ -450,6 +460,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/industries'
     | '/{-$locale}/locations'
     | '/{-$locale}/services'
+    | '/api/public/hooks/seo-audit'
     | '/{-$locale}/blog/category/$slug'
     | '/{-$locale}/industries/$slug/$sub'
     | '/{-$locale}/locations/$city/$service'
@@ -490,6 +501,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/industries/'
     | '/{-$locale}/locations/'
     | '/{-$locale}/services/'
+    | '/api/public/hooks/seo-audit'
     | '/{-$locale}/blog/category/$slug'
     | '/{-$locale}/industries/$slug/$sub'
     | '/{-$locale}/locations/$city/$service'
@@ -503,6 +515,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   Char123LocaleChar125Route: typeof Char123LocaleChar125RouteWithChildren
   ApiAdminBootstrapRoleRoute: typeof ApiAdminBootstrapRoleRoute
+  ApiPublicHooksSeoAuditRoute: typeof ApiPublicHooksSeoAuditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -773,6 +786,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char123LocaleChar125BlogCategorySlugRouteImport
       parentRoute: typeof Char123LocaleChar125Route
     }
+    '/api/public/hooks/seo-audit': {
+      id: '/api/public/hooks/seo-audit'
+      path: '/api/public/hooks/seo-audit'
+      fullPath: '/api/public/hooks/seo-audit'
+      preLoaderRoute: typeof ApiPublicHooksSeoAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -909,6 +929,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   Char123LocaleChar125Route: Char123LocaleChar125RouteWithChildren,
   ApiAdminBootstrapRoleRoute: ApiAdminBootstrapRoleRoute,
+  ApiPublicHooksSeoAuditRoute: ApiPublicHooksSeoAuditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
