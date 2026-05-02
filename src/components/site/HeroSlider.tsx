@@ -294,8 +294,8 @@ export function HeroSlider() {
               />
             </div>
 
-            {/* Floating stat card — detached from image, lower-corner placement */}
-            <div className="pointer-events-none absolute inset-x-0 -bottom-28 z-20 flex justify-center md:inset-auto md:-bottom-10 md:-end-16 md:block lg:-bottom-12 lg:-end-24">
+            {/* Floating stat card — fully detached from the image */}
+            <div className="pointer-events-none absolute inset-x-0 -bottom-32 z-20 flex justify-center md:inset-auto md:-bottom-16 md:-end-20 md:justify-end lg:-bottom-20 lg:-end-28">
               <div key={`stat-${slide.id}`} className="pointer-events-auto hs-card-rise">
                 <FloatingStatCard
                   title={isAr ? "إحصائيات المشاريع 2025" : "Project Statistic 2025"}
