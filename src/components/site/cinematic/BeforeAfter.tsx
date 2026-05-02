@@ -64,7 +64,7 @@ export function BeforeAfter({
   return (
     <div
       ref={containerRef}
-      className={`relative aspect-video overflow-hidden rounded-3xl border border-border bg-surface-soft shadow-elegant select-none ${className}`}
+      className={`relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-border bg-surface-soft shadow-elegant select-none ${className}`}
       onMouseMove={(e) => dragging.current && move(e.clientX)}
       onMouseUp={stopDrag}
       onMouseLeave={stopDrag}
