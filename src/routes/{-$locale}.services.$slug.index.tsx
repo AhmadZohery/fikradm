@@ -204,8 +204,6 @@ function ServicePage() {
         {s.subServices && s.subServices.length > 0 && (
           <SubServicesGrid parentSlug={s.slug} items={s.subServices} />
         )}
-
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       </div>
     </SiteLayout>
   );
