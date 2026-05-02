@@ -127,6 +127,18 @@ export function HeroSlider() {
   const Badge = slide.badge.icon;
   const kinetic = isAr ? slide.kineticAr : slide.kineticEn;
 
+  // Preload first slide image as LCP hint
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = heroSaudiMarketer;
+    link.fetchPriority = "high";
+    document.head.appendChild(link);
+    return () => { document.head.removeChild(link); };
+  }, []);
+
   return (
     <section
       className="relative isolate overflow-hidden bg-gradient-hero"
@@ -152,7 +164,14 @@ export function HeroSlider() {
       {/* Soft grid */}
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]" aria-hidden />
 
-      <div className="container-app relative z-10 grid items-center gap-12 pb-12 pt-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24 lg:pt-12">
+      {/* Live region: announce slide change for screen readers */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {isAr
+          ? `الشريحة ${index + 1} من ${slides.length}: ${slide.eyebrow.ar}`
+          : `Slide ${index + 1} of ${slides.length}: ${slide.eyebrow.en}`}
+      </div>
+
+      <div className="container-app relative z-10 grid items-center gap-12 pb-12 pt-8 lg:grid-cols-[1.05fr_1fr] lg:gap-20 lg:pb-24 lg:pt-12">
         {/* LEFT — kinetic text */}
         <div key={`txt-${slide.id}`} className="relative">
           <span className="hs-fade-in inline-flex items-center gap-2 rounded-full border border-primary/25 bg-white/90 px-4 py-1.5 text-xs font-semibold text-primary shadow-soft backdrop-blur" style={{ animationDelay: "60ms" }}>
@@ -164,7 +183,7 @@ export function HeroSlider() {
           </span>
 
           {/* Kinetic typography — words rise individually */}
-          <h1 className="display-1 mt-6 text-[2.6rem] text-ink md:text-[3.6rem] lg:text-[4.6rem]" aria-live="polite">
+          <h1 className="display-1 mt-6 text-[2.6rem] text-ink md:text-[3.6rem] lg:text-[4.6rem]">
             <span className="sr-only">{kinetic.join(" ")}</span>
             <span aria-hidden className="block leading-[1.05]">
               {kinetic.map((w, i) => (
@@ -223,34 +242,28 @@ export function HeroSlider() {
         </div>
 
         {/* RIGHT — image with ken-burns + crossfade */}
-        <div className="relative pb-24 md:pb-0">
+        <div className="relative pb-32 md:pb-0">
           <div
             className="relative mx-auto aspect-[4/5] w-full max-w-md"
             style={{ contain: "layout paint" }}
           >
             <Sparkle className="absolute -top-6 -start-2 z-10 animate-glow-pulse" size={36} />
 
-            {/* Ambient gradient glow — replaces the old hard border */}
-            <div
-              className="absolute -inset-10 -z-10 rounded-[3rem] opacity-40 blur-3xl animate-float"
-              style={{ background: "var(--gradient-brand)" }}
-              aria-hidden
-            />
-            <div
-              className="absolute -inset-2 -z-10 rounded-[2.6rem] opacity-60 blur-xl"
-              style={{
-                background:
-                  "radial-gradient(60% 60% at 30% 20%, color-mix(in oklab, var(--primary) 35%, transparent), transparent 70%), radial-gradient(50% 50% at 80% 90%, color-mix(in oklab, var(--accent, var(--primary)) 30%, transparent), transparent 70%)",
-              }}
-              aria-hidden
-            />
+            {/* Ambient gradient glow — lighter blur for performance */}
+            {!reduceMotion && (
+              <div
+                className="absolute -inset-8 -z-10 rounded-[3rem] opacity-30 blur-2xl animate-float"
+                style={{ background: "var(--gradient-brand)" }}
+                aria-hidden
+              />
+            )}
 
-            {/* Crossfade stack — cinematic crop, no border, soft elevation */}
+            {/* Crossfade stack — cinematic crop, soft elevation */}
             <div
-              className="absolute inset-0 overflow-hidden rounded-[2rem] bg-card hs-shimmer"
+              className={`absolute inset-0 overflow-hidden rounded-[2rem] bg-card ${reduceMotion ? "" : "hs-shimmer"}`}
               style={{
                 boxShadow:
-                  "0 30px 80px -30px color-mix(in oklab, var(--primary) 45%, transparent), 0 10px 30px -15px rgb(0 0 0 / 0.25)",
+                  "0 24px 60px -28px color-mix(in oklab, var(--primary) 38%, transparent), 0 8px 24px -14px rgb(0 0 0 / 0.18)",
               }}
             >
               {slides.map((s, i) => (
@@ -259,38 +272,31 @@ export function HeroSlider() {
                   src={s.image}
                   alt={isAr ? "خبير تسويق رقمي سعودي" : "Saudi digital marketing expert"}
                   className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[900ms] ease-out ${
-                    i === index ? "opacity-100 hs-ken-burns" : "opacity-0"
+                    i === index ? `opacity-100 ${reduceMotion ? "" : "hs-ken-burns"}` : "opacity-0"
                   }`}
                   loading={i === 0 ? "eager" : "lazy"}
                   fetchPriority={i === 0 ? "high" : "low"}
                   decoding="async"
-                  width={1024}
-                  height={1280}
+                  width={800}
+                  height={1000}
+                  sizes="(min-width: 1024px) 28rem, (min-width: 640px) 24rem, 90vw"
                   aria-hidden={i !== index}
                 />
               ))}
-              {/* Cinematic gradient edges — top fade + bottom vignette + side feathering */}
+              {/* Subtle bottom-only vignette — keeps the portrait bright, no overall darkening */}
               <div
                 className="pointer-events-none absolute inset-0"
                 aria-hidden
                 style={{
                   background:
-                    "linear-gradient(to top, rgb(0 0 0 / 0.45) 0%, transparent 35%), linear-gradient(to bottom, rgb(0 0 0 / 0.18) 0%, transparent 25%)",
-                }}
-              />
-              <div
-                className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-60"
-                aria-hidden
-                style={{
-                  background:
-                    "radial-gradient(120% 80% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.55) 100%)",
+                    "linear-gradient(to top, rgb(0 0 0 / 0.32) 0%, transparent 28%)",
                 }}
               />
             </div>
 
-            {/* Floating stat card swaps per slide */}
-            <div className="pointer-events-none absolute inset-x-0 -bottom-20 z-20 flex justify-center md:inset-auto md:-bottom-4 md:-end-6 md:block lg:-bottom-6 lg:-end-10">
-              <div key={`stat-${slide.id}`} className="pointer-events-auto animate-float hs-fade-in">
+            {/* Floating stat card — detached from image, lower-corner placement */}
+            <div className="pointer-events-none absolute inset-x-0 -bottom-28 z-20 flex justify-center md:inset-auto md:-bottom-10 md:-end-16 md:block lg:-bottom-12 lg:-end-24">
+              <div key={`stat-${slide.id}`} className="pointer-events-auto hs-card-rise">
                 <FloatingStatCard
                   title={isAr ? "إحصائيات المشاريع 2025" : "Project Statistic 2025"}
                   stats={slide.stats.map((st) => ({ value: st.value, label: isAr ? st.ar : st.en }))}
@@ -302,13 +308,13 @@ export function HeroSlider() {
       </div>
 
       {/* Controls + indicators */}
-      <div className="container-app relative z-20 -mt-2 flex items-center justify-between pb-6 md:pb-8">
+      <div className="container-app relative z-20 mt-8 flex items-center justify-between pb-6 md:mt-2 md:pb-8">
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={isAr ? next : prev}
             aria-label={isAr ? "الشريحة التالية" : "Previous slide"}
-            className="grid h-10 w-10 place-items-center rounded-full border border-border bg-white/85 text-ink shadow-soft backdrop-blur transition hover:scale-105 hover:bg-white"
+            className="hs-focus grid h-10 w-10 place-items-center rounded-full border border-border bg-white/85 text-ink shadow-soft backdrop-blur transition hover:scale-105 hover:bg-white"
           >
             <ChevronLeft className="h-5 w-5 rtl:hidden" />
             <ChevronRight className="hidden h-5 w-5 rtl:block" />
@@ -317,7 +323,7 @@ export function HeroSlider() {
             type="button"
             onClick={isAr ? prev : next}
             aria-label={isAr ? "الشريحة السابقة" : "Next slide"}
-            className="grid h-10 w-10 place-items-center rounded-full border border-border bg-white/85 text-ink shadow-soft backdrop-blur transition hover:scale-105 hover:bg-white"
+            className="hs-focus grid h-10 w-10 place-items-center rounded-full border border-border bg-white/85 text-ink shadow-soft backdrop-blur transition hover:scale-105 hover:bg-white"
           >
             <ChevronRight className="h-5 w-5 rtl:hidden" />
             <ChevronLeft className="hidden h-5 w-5 rtl:block" />
@@ -327,10 +333,15 @@ export function HeroSlider() {
             onClick={() => setPaused((p) => !p)}
             aria-label={paused ? (isAr ? "تشغيل" : "Play") : (isAr ? "إيقاف" : "Pause")}
             aria-pressed={paused}
-            className="ms-1 grid h-10 w-10 place-items-center rounded-full border border-border bg-white/85 text-ink shadow-soft backdrop-blur transition hover:scale-105 hover:bg-white"
+            className="hs-focus ms-1 grid h-10 w-10 place-items-center rounded-full border border-border bg-white/85 text-ink shadow-soft backdrop-blur transition hover:scale-105 hover:bg-white"
           >
             {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
           </button>
+          {reduceMotion && (
+            <span className="ms-2 hidden text-[11px] font-medium text-muted-foreground sm:inline">
+              {isAr ? "الحركة مُعطّلة" : "Motion reduced"}
+            </span>
+          )}
         </div>
 
         {/* Indicators with progress bar on active */}
@@ -344,7 +355,7 @@ export function HeroSlider() {
                 aria-selected={active}
                 aria-label={`${isAr ? "الشريحة" : "Slide"} ${i + 1}`}
                 onClick={() => setIndex(i)}
-                className={`group relative h-2 overflow-hidden rounded-full bg-border transition-all ${active ? "w-14" : "w-6 hover:w-9"}`}
+                className={`hs-focus group relative h-2 overflow-hidden rounded-full bg-border transition-all ${active ? "w-14" : "w-6 hover:w-9"}`}
               >
                 {active && !paused && !reduceMotion && (
                   <span
