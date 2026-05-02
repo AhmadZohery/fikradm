@@ -638,6 +638,36 @@ export type Database = {
         }
         Relationships: []
       }
+      seo_audit_reports: {
+        Row: {
+          details: Json
+          id: string
+          ran_at: string
+          summary: Json
+          total_errors: number
+          total_pages: number
+          total_warnings: number
+        }
+        Insert: {
+          details?: Json
+          id?: string
+          ran_at?: string
+          summary?: Json
+          total_errors?: number
+          total_pages?: number
+          total_warnings?: number
+        }
+        Update: {
+          details?: Json
+          id?: string
+          ran_at?: string
+          summary?: Json
+          total_errors?: number
+          total_pages?: number
+          total_warnings?: number
+        }
+        Relationships: []
+      }
       services: {
         Row: {
           created_at: string
