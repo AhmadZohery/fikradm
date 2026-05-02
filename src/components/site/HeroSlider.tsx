@@ -305,7 +305,7 @@ export function HeroSlider() {
                 "@context": "https://schema.org",
                 "@type": "Organization",
                 name: isAr ? "فكرة للتسويق الرقمي" : "Fikra Digital Marketing",
-                url: "https://fikra-dm.com",
+                url: "https://fikradm.lovable.app",
                 description: isAr
                   ? "وكالة تسويق رقمي مرخّصة في السعودية — استراتيجيات تسويق وأداء وعلامة تجارية."
                   : "Licensed Saudi digital marketing agency — strategy, performance and brand.",

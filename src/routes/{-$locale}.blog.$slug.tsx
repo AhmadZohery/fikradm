@@ -9,6 +9,15 @@ import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blo
 import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import {
+  buildSeoMeta,
+  buildSeoLinks,
+  jsonLdScript,
+  breadcrumbLd as breadcrumbLdGen,
+  articleLd,
+  faqLd,
+  absUrl,
+} from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/blog/$slug")({
   head: ({ params }) => {
@@ -17,20 +26,61 @@ export const Route = createFileRoute("/{-$locale}/blog/$slug")({
     if (!post) {
       return { meta: [{ title: ar ? "مقال غير موجود | فكرة" : "Article not found | Fikra" }] };
     }
-    const loc = ar ? "ar" : "en";
+    const loc: "ar" | "en" = ar ? "ar" : "en";
+    const path = `/${loc}/blog/${params.slug}`;
+    const cat = getCategoryBySlug(post.categorySlug);
+    const meta = buildSeoMeta({
+      title: post.metaTitle[loc],
+      description: post.metaDescription[loc],
+      path,
+      locale: loc,
+      image: post.image,
+      type: "article",
+      publishedTime: post.publishedAt,
+      modifiedTime: post.publishedAt,
+    });
+    meta.push({ name: "keywords", content: post.keywords[loc].join(", ") });
+    meta.push({ property: "article:author", content: post.author[loc] });
+    if (cat) meta.push({ property: "article:section", content: cat.name[loc] });
+
+    const breadcrumbItems = [
+      { name: ar ? "الرئيسية" : "Home", url: `/${loc}` },
+      { name: ar ? "المدونة" : "Blog", url: `/${loc}/blog` },
+      ...(cat ? [{ name: cat.name[loc], url: `/${loc}/blog/category/${cat.slug}` }] : []),
+      { name: post.title[loc], url: path },
+    ];
+
     return {
-      meta: [
-        { title: post.metaTitle[loc] },
-        { name: "description", content: post.metaDescription[loc] },
-        { name: "keywords", content: post.keywords[loc].join(", ") },
-        { property: "og:title", content: post.metaTitle[loc] },
-        { property: "og:description", content: post.metaDescription[loc] },
-        { property: "og:type", content: "article" },
-        { property: "og:image", content: post.image },
-        { property: "article:published_time", content: post.publishedAt },
-        { property: "article:author", content: post.author[loc] },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:image", content: post.image },
+      meta,
+      links: buildSeoLinks({ path, locale: loc }),
+      scripts: [
+        jsonLdScript({
+          ...articleLd({
+            headline: post.title[loc],
+            description: post.metaDescription[loc],
+            url: path,
+            image: post.image,
+            datePublished: post.publishedAt,
+            dateModified: post.publishedAt,
+            authorName: post.author[loc],
+          }),
+          inLanguage: loc,
+          articleSection: cat?.name[loc],
+          keywords: post.keywords[loc].join(", "),
+        }),
+        jsonLdScript(breadcrumbLdGen(breadcrumbItems)),
+        ...(post.faq && post.faq.length > 0
+          ? [jsonLdScript(faqLd(post.faq.map((f) => ({ question: f.q[loc], answer: f.a[loc] }))))]
+          : []),
+        jsonLdScript({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "@id": absUrl(path),
+          speakable: {
+            "@type": "SpeakableSpecification",
+            cssSelector: ["h1", ".prose-fikra h2", ".prose-fikra p"],
+          },
+        }),
       ],
     };
   },
@@ -86,54 +136,6 @@ function PostPage() {
     day: "numeric",
   });
 
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title[loc],
-    description: post.metaDescription[loc],
-    image: [post.image],
-    datePublished: post.publishedAt,
-    dateModified: post.publishedAt,
-    inLanguage: locale,
-    author: { "@type": "Organization", name: post.author[loc] },
-    publisher: {
-      "@type": "Organization",
-      name: locale === "ar" ? "فكرة للتسويق الرقمي" : "Fikra Digital Marketing",
-    },
-    mainEntityOfPage: { "@type": "WebPage", "@id": `https://fikra.example/${locale}/blog/${slug}` },
-    articleSection: cat?.name[loc],
-    keywords: post.keywords[loc].join(", "),
-  };
-
-  const breadcrumbsJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: locale === "ar" ? "الرئيسية" : "Home", item: `/${locale}` },
-      { "@type": "ListItem", position: 2, name: locale === "ar" ? "المدونة" : "Blog", item: `/${locale}/blog` },
-      ...(cat
-        ? [{ "@type": "ListItem", position: 3, name: cat.name[loc], item: `/${locale}/blog/category/${cat.slug}` }]
-        : []),
-      { "@type": "ListItem", position: cat ? 4 : 3, name: post.title[loc] },
-    ],
-  };
-
-  const faqJsonLd = post.faq && post.faq.length > 0 ? {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: post.faq.map((f) => ({
-      "@type": "Question",
-      name: f.q[loc],
-      acceptedAnswer: { "@type": "Answer", text: f.a[loc] },
-    })),
-  } : null;
-
-  const speakableJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "SpeakableSpecification",
-    cssSelector: ["h1", ".prose-fikra h2", ".prose-fikra p"],
-  };
-
   const encShare = encodeURIComponent(shareUrl);
   const encTitle = encodeURIComponent(post.title[loc]);
   const shareLinks = [
@@ -153,13 +155,6 @@ function PostPage() {
 
   return (
     <SiteLayout>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }} />
-      {faqJsonLd && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-      )}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableJsonLd) }} />
-
       {/* Reading progress bar */}
       <div className="fixed left-0 right-0 top-0 z-40 h-1 bg-transparent">
         <div

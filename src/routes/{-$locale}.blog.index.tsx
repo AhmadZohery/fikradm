@@ -7,21 +7,34 @@ import { Reveal } from "@/components/site/Reveal";
 import { useLocale } from "@/i18n/useLocale";
 import { blogCategories, getAllPostsSorted } from "@/content/blog";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
+import {
+  buildSeoMeta,
+  buildSeoLinks,
+  jsonLdScript,
+  breadcrumbLd,
+  organizationLd,
+  absUrl,
+} from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/blog/")({
   head: ({ params }) => {
-    const ar = (params.locale ?? "ar") === "ar";
-    const title = ar ? "مدونة فكرة | أدلة التسويق الرقمي والسيو" : "Fikra Blog | Digital Marketing & SEO Guides";
-    const desc = ar
-      ? "أدلة عملية وعميقة في السيو، إعلانات Meta وGoogle، نمو المتاجر الإلكترونية، والمحتوى الإبداعي."
-      : "Deep, practical guides on SEO, Meta & Google ads, e-commerce growth, and creative content.";
+    const loc: "ar" | "en" = (params.locale ?? "ar") === "ar" ? "ar" : "en";
+    const ar = loc === "ar";
+    const title = ar
+      ? "مدونة فكرة • أدلة التسويق الرقمي والسيو 2025"
+      : "Fikra Blog • Digital Marketing & SEO Guides 2025";
+    const description = ar
+      ? "أدلة عملية وعميقة في السيو، إعلانات Meta وGoogle، نمو المتاجر الإلكترونية، والمحتوى الإبداعي. حصرياً للسوق السعودي والخليجي."
+      : "Deep, practical guides on SEO, Meta & Google ads, e-commerce growth, and creative content — tailored for KSA & Gulf brands.";
+    const path = `/${loc}/blog`;
     return {
-      meta: [
-        { title },
-        { name: "description", content: desc },
-        { property: "og:title", content: title },
-        { property: "og:description", content: desc },
-        { property: "og:type", content: "website" },
+      meta: buildSeoMeta({ title, description, path, locale: loc }),
+      links: buildSeoLinks({ path, locale: loc }),
+      scripts: [
+        jsonLdScript(breadcrumbLd([
+          { name: ar ? "الرئيسية" : "Home", url: `/${loc}` },
+          { name: ar ? "المدونة" : "Blog", url: path },
+        ])),
       ],
     };
   },
@@ -38,14 +51,18 @@ function BlogIndex() {
   const blogJsonLd = {
     "@context": "https://schema.org",
     "@type": "Blog",
+    "@id": absUrl(`/${loc}/blog#blog`),
+    url: absUrl(`/${loc}/blog`),
     name: locale === "ar" ? "مدونة فكرة" : "Fikra Blog",
     inLanguage: locale,
+    publisher: organizationLd(),
     blogPost: posts.map((p) => ({
       "@type": "BlogPosting",
       headline: p.title[loc],
       datePublished: p.publishedAt,
-      author: { "@type": "Organization", name: p.author[loc] },
-      image: p.image,
+      author: { "@type": "Person", name: p.author[loc] },
+      image: absUrl(p.image),
+      url: absUrl(`/${loc}/blog/${p.slug}`),
     })),
   };
 

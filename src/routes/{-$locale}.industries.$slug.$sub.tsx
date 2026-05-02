@@ -7,6 +7,7 @@ import { CtaBand } from "@/components/site/CtaBand";
 import { Reveal } from "@/components/site/Reveal";
 import { findIndustry, findSubIndustry, getSubIndustriesFor } from "@/content/data";
 import { Check, X, ArrowRight } from "lucide-react";
+import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd as breadcrumbLdGen } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/industries/$slug/$sub")({
   beforeLoad: ({ params }) => {
@@ -15,22 +16,17 @@ export const Route = createFileRoute("/{-$locale}/industries/$slug/$sub")({
   head: ({ params }) => {
     const s = findSubIndustry(params.slug, params.sub);
     if (!s) return { meta: [{ title: "Not found" }] };
-    const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
+    const loc: "ar" | "en" = (params.locale ?? "ar") === "en" ? "en" : "ar";
+    const path = `/${loc}/industries/${params.slug}/${s.slug}`;
     return {
-      meta: [
-        { title: s.metaTitle[loc] },
-        { name: "description", content: s.metaDescription[loc] },
-        { property: "og:title", content: s.metaTitle[loc] },
-        { property: "og:description", content: s.metaDescription[loc] },
-        { property: "og:image", content: s.image },
-        { property: "og:type", content: "website" },
-        { name: "twitter:image", content: s.image },
-      ],
-      links: [
-        { rel: "canonical", href: `https://fikra-dm.com/${(params.locale ?? "ar")}/industries/${params.slug}/${s.slug}` },
-        { rel: "alternate", hrefLang: "ar", href: `https://fikra-dm.com/ar/industries/${params.slug}/${s.slug}` },
-        { rel: "alternate", hrefLang: "en", href: `https://fikra-dm.com/en/industries/${params.slug}/${s.slug}` },
-      ],
+      meta: buildSeoMeta({
+        title: s.metaTitle[loc],
+        description: s.metaDescription[loc],
+        path,
+        locale: loc,
+        image: s.image,
+      }),
+      links: buildSeoLinks({ path, locale: loc }),
     };
   },
   component: SubIndustryPage,
@@ -43,15 +39,12 @@ function SubIndustryPage() {
   const loc = locale === "en" ? "en" : "ar";
   const siblings = getSubIndustriesFor(slug).filter((x) => x.slug !== sub);
 
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: loc === "ar" ? "حلول حسب القطاع" : "Industries", item: `https://fikra-dm.com/${locale}/industries` },
-      { "@type": "ListItem", position: 2, name: parent.title[loc], item: `https://fikra-dm.com/${locale}/industries/${slug}` },
-      { "@type": "ListItem", position: 3, name: s.title[loc] },
-    ],
-  };
+  const breadcrumbLd = breadcrumbLdGen([
+    { name: loc === "ar" ? "الرئيسية" : "Home", url: `/${locale}` },
+    { name: loc === "ar" ? "حلول حسب القطاع" : "Industries", url: `/${locale}/industries` },
+    { name: parent.title[loc], url: `/${locale}/industries/${slug}` },
+    { name: s.title[loc], url: `/${locale}/industries/${slug}/${sub}` },
+  ]);
 
   return (
     <SiteLayout>
