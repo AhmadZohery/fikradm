@@ -20,8 +20,6 @@ import {
   jsonLdScript,
   breadcrumbLd,
   organizationLd,
-  SITE_ORIGIN,
-  SITE_NAME,
   absUrl,
 } from "@/lib/seo";
 
