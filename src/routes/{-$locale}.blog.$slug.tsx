@@ -205,7 +205,13 @@ function PostPage() {
 
           <Reveal delay={120}>
             <div className="mt-8 overflow-hidden rounded-3xl border border-border shadow-elegant">
-              <img src={post.image} alt={post.title[loc]} className="aspect-[16/9] w-full object-cover" />
+              <img
+                src={post.image}
+                alt={post.title[loc]}
+                loading="lazy"
+                decoding="async"
+                className="aspect-[16/9] w-full object-cover"
+              />
             </div>
           </Reveal>
         </div>

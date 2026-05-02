@@ -64,7 +64,7 @@ export function BeforeAfter({
   return (
     <div
       ref={containerRef}
-      className={`relative aspect-video overflow-hidden rounded-3xl border border-border bg-surface-soft shadow-elegant select-none ${className}`}
+      className={`relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-border bg-surface-soft shadow-elegant select-none ${className}`}
       onMouseMove={(e) => dragging.current && move(e.clientX)}
       onMouseUp={stopDrag}
       onMouseLeave={stopDrag}
@@ -76,7 +76,23 @@ export function BeforeAfter({
     >
       {/* After (full) */}
       <div className="absolute inset-0">
-        <MediaSlot src={afterSrc} alt={afterAlt} ratio="video" rounded="3xl" badge={afterLabel} />
+        {afterSrc ? (
+          <>
+            <img
+              src={afterSrc}
+              alt={afterAlt}
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+              className="absolute inset-0 h-full w-full object-cover object-center select-none"
+            />
+            <span className="absolute end-3 top-3 z-[5] rounded-full bg-white/95 px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-soft text-primary">
+              {afterLabel}
+            </span>
+          </>
+        ) : (
+          <MediaSlot src={afterSrc} alt={afterAlt} ratio="video" rounded="3xl" badge={afterLabel} />
+        )}
       </div>
       {/* Before (clipped to pos%). Inner wrapper keeps full container width so
           the image stays perfectly aligned with the "after" layer underneath. */}
@@ -88,7 +104,23 @@ export function BeforeAfter({
           className="absolute inset-y-0 h-full"
           style={{ width: width || "100%", [isRtl ? "right" : "left"]: 0 }}
         >
-          <MediaSlot src={beforeSrc} alt={beforeAlt} ratio="video" rounded="3xl" badge={beforeLabel} />
+          {beforeSrc ? (
+            <>
+              <img
+                src={beforeSrc}
+                alt={beforeAlt}
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+                className="absolute inset-0 h-full w-full object-cover object-center select-none"
+              />
+              <span className="absolute start-3 top-3 z-[5] rounded-full bg-white/95 px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-soft text-ink">
+                {beforeLabel}
+              </span>
+            </>
+          ) : (
+            <MediaSlot src={beforeSrc} alt={beforeAlt} ratio="video" rounded="3xl" badge={beforeLabel} />
+          )}
         </div>
       </div>
       {/* Divider */}
