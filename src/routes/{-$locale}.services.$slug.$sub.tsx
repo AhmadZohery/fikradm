@@ -99,26 +99,6 @@ function SubServicePage() {
   const isAr = loc === "ar";
   const siblings = getSubServicesFor(slug).filter((x) => x.slug !== sub);
 
-  const ld = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: s.title[loc],
-    description: s.metaDescription[loc],
-    serviceType: parent.title[loc],
-    provider: { "@type": "Organization", name: "Fikra Digital Marketing" },
-    offers: s.plans.map((p) => ({ "@type": "Offer", name: p.name[loc], price: p.priceSar, priceCurrency: "SAR" })),
-  };
-
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: isAr ? "خدماتنا" : "Services", item: `https://fikra-dm.com/${locale}/services` },
-      { "@type": "ListItem", position: 2, name: parent.title[loc], item: `https://fikra-dm.com/${locale}/services/${slug}` },
-      { "@type": "ListItem", position: 3, name: s.title[loc] },
-    ],
-  };
-
   return (
     <SiteLayout>
       <div data-accent={variant.accent}>
@@ -261,8 +241,6 @@ function SubServicePage() {
           </section>
         )}
 
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       </div>
     </SiteLayout>
   );
