@@ -228,29 +228,26 @@ export function HeroSlider() {
             className="relative mx-auto aspect-[4/5] w-full max-w-md"
             style={{ contain: "layout paint" }}
           >
-            <Sparkle className="absolute -top-6 -start-2 z-10 animate-glow-pulse" size={36} />
+            {!reduceMotion && (
+              <Sparkle className="absolute -top-6 -start-2 z-10 animate-glow-pulse" size={36} />
+            )}
 
-            {/* Ambient gradient glow — replaces the old hard border */}
+            {/* Subtle ambient halo — single low-cost layer (no heavy blur) */}
             <div
-              className="absolute -inset-10 -z-10 rounded-[3rem] opacity-40 blur-3xl animate-float"
-              style={{ background: "var(--gradient-brand)" }}
-              aria-hidden
-            />
-            <div
-              className="absolute -inset-2 -z-10 rounded-[2.6rem] opacity-60 blur-xl"
+              className="absolute -inset-6 -z-10 rounded-[3rem] opacity-25"
               style={{
                 background:
-                  "radial-gradient(60% 60% at 30% 20%, color-mix(in oklab, var(--primary) 35%, transparent), transparent 70%), radial-gradient(50% 50% at 80% 90%, color-mix(in oklab, var(--accent, var(--primary)) 30%, transparent), transparent 70%)",
+                  "radial-gradient(55% 55% at 50% 50%, color-mix(in oklab, var(--primary) 40%, transparent), transparent 70%)",
               }}
               aria-hidden
             />
 
             {/* Crossfade stack — cinematic crop, no border, soft elevation */}
             <div
-              className="absolute inset-0 overflow-hidden rounded-[2rem] bg-card hs-shimmer"
+              className="absolute inset-0 overflow-hidden rounded-[2rem] bg-card"
               style={{
                 boxShadow:
-                  "0 30px 80px -30px color-mix(in oklab, var(--primary) 45%, transparent), 0 10px 30px -15px rgb(0 0 0 / 0.25)",
+                  "0 24px 60px -28px color-mix(in oklab, var(--primary) 38%, transparent), 0 8px 20px -12px rgb(0 0 0 / 0.18)",
               }}
             >
               {slides.map((s, i) => (
@@ -258,32 +255,25 @@ export function HeroSlider() {
                   key={s.id}
                   src={s.image}
                   alt={isAr ? "خبير تسويق رقمي سعودي" : "Saudi digital marketing expert"}
-                  className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[900ms] ease-out ${
-                    i === index ? "opacity-100 hs-ken-burns" : "opacity-0"
+                  className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[700ms] ease-out ${
+                    i === index ? `opacity-100 ${reduceMotion ? "" : "hs-ken-burns"}` : "opacity-0"
                   }`}
                   loading={i === 0 ? "eager" : "lazy"}
                   fetchPriority={i === 0 ? "high" : "low"}
                   decoding="async"
-                  width={1024}
-                  height={1280}
+                  width={800}
+                  height={1000}
+                  sizes="(min-width: 1024px) 28rem, (min-width: 768px) 22rem, 90vw"
                   aria-hidden={i !== index}
                 />
               ))}
-              {/* Cinematic gradient edges — top fade + bottom vignette + side feathering */}
+              {/* Subtle bottom vignette only — keeps face/colors true */}
               <div
-                className="pointer-events-none absolute inset-0"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
                 aria-hidden
                 style={{
                   background:
-                    "linear-gradient(to top, rgb(0 0 0 / 0.45) 0%, transparent 35%), linear-gradient(to bottom, rgb(0 0 0 / 0.18) 0%, transparent 25%)",
-                }}
-              />
-              <div
-                className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-60"
-                aria-hidden
-                style={{
-                  background:
-                    "radial-gradient(120% 80% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.55) 100%)",
+                    "linear-gradient(to top, rgb(0 0 0 / 0.35) 0%, transparent 100%)",
                 }}
               />
             </div>
