@@ -1427,6 +1427,16 @@ export const blogPosts: BlogPost[] = [
         href: "/contact",
       },
     ],
+    inlineLinks: [
+      { phrase: ls("إدارة الحملات الإعلانية", "campaign management"), href: "/services/paid-ads" },
+      { phrase: ls("صفحة الهبوط", "landing page"), href: "/services/web-development" },
+      { phrase: ls("تهيئة محركات البحث", "search engine optimization"), href: "/services/seo" },
+      { phrase: ls("SEO", "SEO"), href: "/services/seo" },
+      { phrase: ls("تتبع التحويلات", "conversion tracking"), href: "/services/consulting" },
+      { phrase: ls("سلوك العميل", "customer behavior"), href: "/blog/digital-marketing-guide-beginners" },
+      { phrase: ls("جلسة تشخيص مجانية", "free diagnostic"), href: "/contact" },
+      { phrase: ls("سرعة الرد", "response speed"), href: "/services/consulting" },
+    ],
     cta: {
       title: ls(
         "هل تبحث عن حملات إعلانية تواكب تطورات السوق السعودي؟",
