@@ -92,6 +92,8 @@ function ServicePage() {
   const loc = locale === "en" ? "en" : "ar";
   const variant = getServiceVariant(slug);
   const isAr = loc === "ar";
+  const tabs = findServiceTabs(slug);
+  const hasTabs = !!tabs;
 
   return (
     <SiteLayout>
@@ -102,10 +104,7 @@ function ServicePage() {
         <ServiceVariantHero service={s} />
 
         {/* 1b. CONTENT TABS — features / deliverables / methodology / audience / FAQ */}
-        {(() => {
-          const tabs = findServiceTabs(slug);
-          return tabs ? <ServiceTabs content={tabs} /> : null;
-        })()}
+        {tabs ? <ServiceTabs content={tabs} /> : null}
 
         {/* 2. SHOWCASE — service-specific visual storytelling (unique layout per service) */}
         <ServiceShowcase slug={slug} />
@@ -117,6 +116,7 @@ function ServicePage() {
         <ServiceApproach slug={slug} />
 
         {/* 4. PROCESS — methodology */}
+        {!hasTabs && (
         <section className="section bg-surface-soft">
           <div className="container-app">
             <div className="mb-10 max-w-2xl">
@@ -146,11 +146,13 @@ function ServicePage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* 5. RESULTS — proof of work */}
         <ServiceResults slug={slug} />
 
         {/* 6. DELIVERABLES + AUDIENCE */}
+        {!hasTabs && (
         <section className="section">
           <div className="container-app grid gap-8 lg:grid-cols-2">
             <div className="rounded-3xl border border-border bg-card p-8 shadow-card">
@@ -194,9 +196,10 @@ function ServicePage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* 7. FAQ — handle objections before pricing */}
-        <FaqSection items={s.faqs} />
+        {!hasTabs && <FaqSection items={s.faqs} />}
 
         {/* 8. PRICING — moment of decision */}
         <div id="pricing">
