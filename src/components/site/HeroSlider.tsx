@@ -234,23 +234,9 @@ export function HeroSlider() {
               <Sparkle className="absolute -top-6 -start-2 z-10 animate-glow-pulse" size={36} />
             )}
 
-            {/* Subtle ambient halo — single low-cost layer (no heavy blur) */}
+            {/* Crossfade stack — clean frame, minimal elevation */}
             <div
-              className="absolute -inset-6 -z-10 rounded-[3rem] opacity-25"
-              style={{
-                background:
-                  "radial-gradient(55% 55% at 50% 50%, color-mix(in oklab, var(--primary) 40%, transparent), transparent 70%)",
-              }}
-              aria-hidden
-            />
-
-            {/* Crossfade stack — cinematic crop, no border, soft elevation */}
-            <div
-              className="absolute inset-0 overflow-hidden rounded-[2rem] bg-card"
-              style={{
-                boxShadow:
-                  "0 24px 60px -28px color-mix(in oklab, var(--primary) 38%, transparent), 0 8px 20px -12px rgb(0 0 0 / 0.18)",
-              }}
+              className="absolute inset-0 overflow-hidden rounded-[2rem] bg-card shadow-soft"
             >
               {slides.map((s, i) => (
                 <img
@@ -269,15 +255,6 @@ export function HeroSlider() {
                   aria-hidden={i !== index}
                 />
               ))}
-              {/* Subtle bottom vignette only — keeps face/colors true */}
-              <div
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
-                aria-hidden
-                style={{
-                  background:
-                    "linear-gradient(to top, rgb(0 0 0 / 0.35) 0%, transparent 100%)",
-                }}
-              />
             </div>
 
           </div>
