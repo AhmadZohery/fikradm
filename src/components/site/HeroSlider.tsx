@@ -8,6 +8,8 @@ import { SocialRail } from "./cinematic/SocialRail";
 import { PillButton } from "./cinematic/PillButton";
 import { Sparkle } from "./cinematic/Sparkle";
 import heroSaudiMarketer from "@/assets/hero-saudi-marketer.jpg";
+import heroAdsPerformance from "@/assets/hero-ads-performance.jpg";
+import heroBrandCreative from "@/assets/hero-brand-creative.jpg";
 
 type Slide = {
   id: string;
@@ -69,7 +71,7 @@ export function HeroSlider() {
         primary: { ar: "احجز استشارة مجانية", en: "Book a free audit", href: buildHref(locale, "/contact") },
         secondary: { ar: "خدمات الإعلانات", en: "Performance services", href: buildHref(locale, "/services/performance") },
         hugeWord: { ar: "أداء", en: "ADS" },
-        image: heroSaudiMarketer,
+        image: heroAdsPerformance,
         badge: { icon: TrendingUp, ar: "ROAS 4.8x متوسط", en: "Avg. 4.8x ROAS" },
         stats: [
           { value: "4.8", ar: "متوسط ROAS x", en: "Avg ROAS x" },
@@ -90,7 +92,7 @@ export function HeroSlider() {
         primary: { ar: "ابدأ مشروعك", en: "Start your project", href: buildHref(locale, "/contact") },
         secondary: { ar: "أعمالنا", en: "Our work", href: buildHref(locale, "/case-studies") },
         hugeWord: { ar: "إبداع", en: "CREATIVE" },
-        image: heroSaudiMarketer,
+        image: heroBrandCreative,
         badge: { icon: Rocket, ar: "+150 علامة", en: "150+ brands" },
         stats: [
           { value: "150", ar: "علامة تجارية +", en: "Brands +" },
@@ -232,23 +234,9 @@ export function HeroSlider() {
               <Sparkle className="absolute -top-6 -start-2 z-10 animate-glow-pulse" size={36} />
             )}
 
-            {/* Subtle ambient halo — single low-cost layer (no heavy blur) */}
+            {/* Crossfade stack — clean frame, minimal elevation */}
             <div
-              className="absolute -inset-6 -z-10 rounded-[3rem] opacity-25"
-              style={{
-                background:
-                  "radial-gradient(55% 55% at 50% 50%, color-mix(in oklab, var(--primary) 40%, transparent), transparent 70%)",
-              }}
-              aria-hidden
-            />
-
-            {/* Crossfade stack — cinematic crop, no border, soft elevation */}
-            <div
-              className="absolute inset-0 overflow-hidden rounded-[2rem] bg-card"
-              style={{
-                boxShadow:
-                  "0 24px 60px -28px color-mix(in oklab, var(--primary) 38%, transparent), 0 8px 20px -12px rgb(0 0 0 / 0.18)",
-              }}
+              className="absolute inset-0 overflow-hidden rounded-[2rem] bg-card shadow-soft"
             >
               {slides.map((s, i) => (
                 <img
@@ -267,15 +255,6 @@ export function HeroSlider() {
                   aria-hidden={i !== index}
                 />
               ))}
-              {/* Subtle bottom vignette only — keeps face/colors true */}
-              <div
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
-                aria-hidden
-                style={{
-                  background:
-                    "linear-gradient(to top, rgb(0 0 0 / 0.35) 0%, transparent 100%)",
-                }}
-              />
             </div>
 
           </div>
