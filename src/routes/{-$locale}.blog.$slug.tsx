@@ -5,6 +5,7 @@ import { CtaBand } from "@/components/site/CtaBand";
 import { BlogCard } from "@/components/site/BlogCard";
 import { Reveal } from "@/components/site/Reveal";
 import { AutoInternalLinks } from "@/components/site/AutoInternalLinks";
+import { BlogDynamicCta } from "@/components/site/BlogDynamicCta";
 import { findService } from "@/content/cities";
 import { useLocale } from "@/i18n/useLocale";
 import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blog";
@@ -431,6 +432,11 @@ function PostPage() {
                 </section>
               </Reveal>
             )}
+
+            {/* Dynamic, category-aware CTA — High CTR, single action */}
+            <Reveal>
+              <BlogDynamicCta categorySlug={post.categorySlug} />
+            </Reveal>
 
             {/* Social Share Bar (bottom) */}
             <div className="mt-12 rounded-2xl border border-border bg-card p-5">
