@@ -8,7 +8,7 @@ import { AutoInternalLinks } from "@/components/site/AutoInternalLinks";
 import { findService } from "@/content/cities";
 import { useLocale } from "@/i18n/useLocale";
 import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blog";
-import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle } from "lucide-react";
+import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle, Sparkles, ShieldCheck, BookOpen, CheckCircle2, ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -44,6 +44,12 @@ export const Route = createFileRoute("/{-$locale}/blog/$slug")({
     meta.push({ name: "keywords", content: post.keywords[loc].join(", ") });
     meta.push({ property: "article:author", content: post.author[loc] });
     if (cat) meta.push({ property: "article:section", content: cat.name[loc] });
+    if (post.lastReviewed) {
+      // override modified time when an explicit review date exists
+      const idx = meta.findIndex((m) => m.property === "article:modified_time");
+      if (idx >= 0) meta[idx] = { property: "article:modified_time", content: post.lastReviewed };
+      else meta.push({ property: "article:modified_time", content: post.lastReviewed });
+    }
 
     const breadcrumbItems = [
       { name: ar ? "الرئيسية" : "Home", url: `/${loc}` },
@@ -63,12 +69,31 @@ export const Route = createFileRoute("/{-$locale}/blog/$slug")({
             url: path,
             image: post.image,
             datePublished: post.publishedAt,
-            dateModified: post.publishedAt,
+            dateModified: post.lastReviewed ?? post.publishedAt,
             authorName: post.author[loc],
           }),
           inLanguage: loc,
           articleSection: cat?.name[loc],
           keywords: post.keywords[loc].join(", "),
+          ...(post.authorBio
+            ? {
+                author: {
+                  "@type": "Person",
+                  name: post.author[loc],
+                  description: post.authorBio[loc],
+                  ...(post.authorRole ? { jobTitle: post.authorRole[loc] } : {}),
+                },
+              }
+            : {}),
+          ...(post.sources && post.sources.length > 0
+            ? { citation: post.sources.map((s) => ({ "@type": "CreativeWork", name: s.label[loc], url: s.url })) }
+            : {}),
+          ...(post.tldr
+            ? {
+                abstract: post.tldr[loc].join(" • "),
+                description: post.metaDescription[loc],
+              }
+            : {}),
         }),
         jsonLdScript(breadcrumbLdGen(breadcrumbItems)),
         ...(post.faq && post.faq.length > 0
