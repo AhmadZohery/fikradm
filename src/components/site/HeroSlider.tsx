@@ -8,6 +8,8 @@ import { SocialRail } from "./cinematic/SocialRail";
 import { PillButton } from "./cinematic/PillButton";
 import { Sparkle } from "./cinematic/Sparkle";
 import heroSaudiMarketer from "@/assets/hero-saudi-marketer.jpg";
+import heroAdsPerformance from "@/assets/hero-ads-performance.jpg";
+import heroBrandCreative from "@/assets/hero-brand-creative.jpg";
 
 type Slide = {
   id: string;
@@ -69,7 +71,7 @@ export function HeroSlider() {
         primary: { ar: "احجز استشارة مجانية", en: "Book a free audit", href: buildHref(locale, "/contact") },
         secondary: { ar: "خدمات الإعلانات", en: "Performance services", href: buildHref(locale, "/services/performance") },
         hugeWord: { ar: "أداء", en: "ADS" },
-        image: heroSaudiMarketer,
+        image: heroAdsPerformance,
         badge: { icon: TrendingUp, ar: "ROAS 4.8x متوسط", en: "Avg. 4.8x ROAS" },
         stats: [
           { value: "4.8", ar: "متوسط ROAS x", en: "Avg ROAS x" },
@@ -90,7 +92,7 @@ export function HeroSlider() {
         primary: { ar: "ابدأ مشروعك", en: "Start your project", href: buildHref(locale, "/contact") },
         secondary: { ar: "أعمالنا", en: "Our work", href: buildHref(locale, "/case-studies") },
         hugeWord: { ar: "إبداع", en: "CREATIVE" },
-        image: heroSaudiMarketer,
+        image: heroBrandCreative,
         badge: { icon: Rocket, ar: "+150 علامة", en: "150+ brands" },
         stats: [
           { value: "150", ar: "علامة تجارية +", en: "Brands +" },
