@@ -4,14 +4,13 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { CtaBand } from "@/components/site/CtaBand";
 import { BlogCard } from "@/components/site/BlogCard";
 import { Reveal } from "@/components/site/Reveal";
-import { AutoInternalLinks } from "@/components/site/AutoInternalLinks";
 import { BlogDynamicCta } from "@/components/site/BlogDynamicCta";
-import { findService } from "@/content/cities";
 import { useLocale } from "@/i18n/useLocale";
 import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blog";
-import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle, Sparkles, ShieldCheck, BookOpen, CheckCircle2, ExternalLink } from "lucide-react";
+import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle, Sparkles, ShieldCheck, BookOpen, CheckCircle2, ExternalLink, BookOpenCheck, Briefcase, MousePointerClick } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { linkifyParagraph } from "@/lib/inlineLinks";
 import {
   buildSeoMeta,
   buildSeoLinks,
