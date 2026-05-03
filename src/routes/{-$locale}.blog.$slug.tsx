@@ -383,6 +383,55 @@ function PostPage() {
               </Reveal>
             )}
 
+            {/* Sources — EEAT / GEO citations */}
+            {post.sources && post.sources.length > 0 && (
+              <Reveal>
+                <section className="mt-12">
+                  <h2 className="mb-5 flex items-center gap-2 text-2xl font-bold text-foreground md:text-3xl">
+                    <BookOpen className="h-6 w-6 text-primary" />
+                    {locale === "ar" ? "المصادر والمراجع" : "Sources & References"}
+                  </h2>
+                  <ul className="space-y-2">
+                    {post.sources.map((s, i) => (
+                      <li key={i}>
+                        <a
+                          href={s.url}
+                          target="_blank"
+                          rel="noopener noreferrer nofollow"
+                          className="group inline-flex items-start gap-2 text-sm text-foreground/80 hover:text-primary"
+                        >
+                          <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-primary/70 group-hover:text-primary" />
+                          <span className="underline-offset-4 group-hover:underline">{s.label[loc]}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </Reveal>
+            )}
+
+            {/* Author bio — EEAT */}
+            {post.authorBio && (
+              <Reveal>
+                <section className="mt-12 rounded-3xl border border-border bg-card p-6 md:p-7">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground">
+                      <User className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-extrabold text-foreground">{post.author[loc]}</h3>
+                      {post.authorRole && (
+                        <p className="mt-0.5 text-xs font-medium uppercase tracking-wide text-primary">
+                          {post.authorRole[loc]}
+                        </p>
+                      )}
+                      <p className="mt-2 text-sm leading-relaxed text-foreground/75">{post.authorBio[loc]}</p>
+                    </div>
+                  </div>
+                </section>
+              </Reveal>
+            )}
+
             {/* Social Share Bar (bottom) */}
             <div className="mt-12 rounded-2xl border border-border bg-card p-5">
               <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-foreground">
