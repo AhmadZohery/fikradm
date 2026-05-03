@@ -629,6 +629,149 @@ function BlogPostEditorPage() {
               </div>
             ))}
           </Card>
+
+          {/* TL;DR — AEO/AIO/LLMO */}
+          <Card className="p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold">TL;DR — ملخّص سريع</h3>
+              <Badge variant="outline">{(lang === "ar" ? post.tldr_ar : post.tldr_en).length} نقطة</Badge>
+            </div>
+            <Hint text="3 إلى 6 نقاط مختصرة تظهر أعلى المقال — تحسّن ظهورك في AI Overviews وAnswer Engines." />
+            <StringArrayEditor
+              value={lang === "ar" ? post.tldr_ar : post.tldr_en}
+              onChange={(arr) => setField(lang === "ar" ? "tldr_ar" : "tldr_en", arr)}
+              placeholder={t("نقطة TL;DR ثم Enter", "TL;DR bullet then Enter")}
+            />
+          </Card>
+
+          {/* Section summaries */}
+          <Card className="p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold">ملخّصات الأقسام</h3>
+              <Button size="sm" variant="outline" onClick={() => setField("section_summaries", [...post.section_summaries, { ar: "", en: "" }])}>+ ملخّص قسم</Button>
+            </div>
+            <Hint text="جملة واحدة لكل قسم تجاوب على نية المستخدم — ممتازة لـ AEO وSnippets." />
+            {post.section_summaries.length === 0 && <div className="text-xs text-muted-foreground">لا توجد ملخصات بعد.</div>}
+            {post.section_summaries.map((s, i) => (
+              <div key={i} className="space-y-2 border rounded p-3">
+                <div className="text-[11px] text-muted-foreground">القسم #{i + 1}</div>
+                <Textarea
+                  rows={2}
+                  dir="rtl"
+                  placeholder="ملخّص بالعربية"
+                  value={s.ar}
+                  onChange={(e) =>
+                    setField(
+                      "section_summaries",
+                      post.section_summaries.map((x, idx) => (idx === i ? { ...x, ar: e.target.value } : x)),
+                    )
+                  }
+                />
+                <Textarea
+                  rows={2}
+                  dir="ltr"
+                  placeholder="Summary in English"
+                  value={s.en}
+                  onChange={(e) =>
+                    setField(
+                      "section_summaries",
+                      post.section_summaries.map((x, idx) => (idx === i ? { ...x, en: e.target.value } : x)),
+                    )
+                  }
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-destructive"
+                  onClick={() => setField("section_summaries", post.section_summaries.filter((_, idx) => idx !== i))}
+                >
+                  حذف
+                </Button>
+              </div>
+            ))}
+          </Card>
+
+          {/* Author EEAT */}
+          <Card className="p-4 space-y-3">
+            <h3 className="font-semibold">سيرة الكاتب (EEAT)</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <Label>المسمّى الوظيفي (عربي)</Label>
+                <Input dir="rtl" value={post.author_role_ar} onChange={(e) => setField("author_role_ar", e.target.value)} placeholder="مثال: مستشار تسويق رقمي" />
+              </div>
+              <div>
+                <Label>Role (English)</Label>
+                <Input dir="ltr" value={post.author_role_en} onChange={(e) => setField("author_role_en", e.target.value)} placeholder="e.g. Digital Marketing Consultant" />
+              </div>
+            </div>
+            <div>
+              <Label>نبذة الكاتب (عربي)</Label>
+              <Textarea rows={3} dir="rtl" value={post.author_bio_ar} onChange={(e) => setField("author_bio_ar", e.target.value)} placeholder="خبرات الكاتب وتخصّصه باختصار…" />
+            </div>
+            <div>
+              <Label>Author bio (English)</Label>
+              <Textarea rows={3} dir="ltr" value={post.author_bio_en} onChange={(e) => setField("author_bio_en", e.target.value)} placeholder="Short author expertise & focus…" />
+            </div>
+            <div>
+              <Label>تاريخ آخر مراجعة</Label>
+              <Input
+                type="date"
+                dir="ltr"
+                value={post.last_reviewed ? post.last_reviewed.slice(0, 10) : ""}
+                onChange={(e) => setField("last_reviewed", e.target.value ? new Date(e.target.value).toISOString() : null)}
+              />
+              <Hint text="إشارة ثقة مهمة لـ Google EEAT — اضبطها بعد كل تحديث جوهري." />
+            </div>
+          </Card>
+
+          {/* Sources */}
+          <Card className="p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold">المراجع والمصادر</h3>
+              <Button size="sm" variant="outline" onClick={() => setField("sources", [...post.sources, { label_ar: "", label_en: "", url: "" }])}>+ مرجع</Button>
+            </div>
+            <Hint text="مصادر موثّقة ترفع EEAT وGEO وتُذكر في schema citations." />
+            {post.sources.length === 0 && <div className="text-xs text-muted-foreground">لا مراجع بعد.</div>}
+            {post.sources.map((s, i) => (
+              <div key={i} className="space-y-2 border rounded p-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <Input
+                    dir="rtl"
+                    placeholder="اسم المصدر (عربي)"
+                    value={s.label_ar}
+                    onChange={(e) =>
+                      setField("sources", post.sources.map((x, idx) => (idx === i ? { ...x, label_ar: e.target.value } : x)))
+                    }
+                  />
+                  <Input
+                    dir="ltr"
+                    placeholder="Source name (English)"
+                    value={s.label_en}
+                    onChange={(e) =>
+                      setField("sources", post.sources.map((x, idx) => (idx === i ? { ...x, label_en: e.target.value } : x)))
+                    }
+                  />
+                </div>
+                <Input
+                  dir="ltr"
+                  className="font-mono text-xs"
+                  placeholder="https://…"
+                  value={s.url}
+                  onChange={(e) =>
+                    setField("sources", post.sources.map((x, idx) => (idx === i ? { ...x, url: e.target.value } : x)))
+                  }
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-destructive"
+                  onClick={() => setField("sources", post.sources.filter((_, idx) => idx !== i))}
+                >
+                  حذف
+                </Button>
+              </div>
+            ))}
+          </Card>
         </div>
 
         {/* Sidebar: SEO score live */}
