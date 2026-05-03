@@ -22,10 +22,19 @@ export type BlogPost = {
   readingMinutes: number;
   image: string;
   tableOfContents: LocalizedList;
-  body: { heading: LocalizedString; paragraphs: LocalizedList }[];
+  body: { heading: LocalizedString; summary?: LocalizedString; paragraphs: LocalizedList }[];
   faq?: { q: LocalizedString; a: LocalizedString }[];
   internalLinks?: { label: LocalizedString; href: string }[];
   cta?: { title: LocalizedString; description: LocalizedString; buttonLabel: LocalizedString; href: string };
+  /** AEO / AIO / LLMO: 3–6 bullet TL;DR shown at the top + structured for snippets. */
+  tldr?: LocalizedList;
+  /** EEAT: short author bio shown under the article. */
+  authorBio?: LocalizedString;
+  authorRole?: LocalizedString;
+  /** EEAT: last reviewed date (ISO). Distinct from publishedAt. */
+  lastReviewed?: string;
+  /** EEAT / GEO: cited sources used for facts. */
+  sources?: { label: LocalizedString; url: string }[];
 };
 
 export const blogCategories: BlogCategory[] = [
@@ -970,6 +979,35 @@ export const blogPosts: BlogPost[] = [
     ),
     author: ls("فريق فكرة", "Fikra Team"),
     publishedAt: "2026-05-03",
+    lastReviewed: "2026-05-03",
+    authorRole: ls("خبراء إدارة الحملات الإعلانية", "Paid Media & Performance Experts"),
+    authorBio: ls(
+      "فريق فكرة يضم متخصصين في إدارة حملات Google وMeta وTikTok وSnapchat للسوق السعودي والخليجي، مع أكثر من 8 سنوات خبرة في تحسين CPL وROAS عبر قطاعات العيادات والمتاجر والخدمات وB2B.",
+      "Fikra's team specializes in Google, Meta, TikTok and Snapchat campaigns for the Saudi & Gulf markets, with 8+ years optimizing CPL and ROAS across clinics, e-commerce, services and B2B.",
+    ),
+    tldr: ll(
+      [
+        "السوق السعودي: 34.4 مليون مستخدم إنترنت و38.6 مليون هوية على السوشيال ميديا في 2026 — منافسة أعلى وتكلفة إعلان أكبر.",
+        "الحملة المتوافقة مع السوق تتغير وفق البيانات وسلوك العميل، وليس إعلان ثابت يعمل لأشهر.",
+        "اختر المنصة حسب نية العميل: Google للبحث الفوري، Meta/TikTok/Snapchat للوعي وإعادة الاستهداف.",
+        "قِس CPL وCPA وROAS وجودة العميل — لا تقِس النقرات وحدها.",
+        "صفحة هبوط واضحة + سرعة رد على واتساب = الفرق بين حملة ناجحة وميزانية مهدورة.",
+        "راجع أسبوعيًا، حلّل شهريًا، وحدّث الاستراتيجية ربع سنويًا.",
+      ],
+      [
+        "Saudi market: 34.4M internet users and 38.6M social identities in 2026 — higher competition and ad costs.",
+        "A market-aligned campaign evolves with data and behavior — not a static ad that runs for months.",
+        "Pick the platform by intent: Google for active search, Meta/TikTok/Snapchat for awareness and retargeting.",
+        "Measure CPL, CPA, ROAS and lead quality — never clicks alone.",
+        "Clear landing page + fast WhatsApp reply = the difference between profit and waste.",
+        "Review weekly, analyze monthly, update strategy quarterly.",
+      ],
+    ),
+    sources: [
+      { label: ls("DataReportal — Digital 2026 Saudi Arabia", "DataReportal — Digital 2026 Saudi Arabia"), url: "https://datareportal.com/reports/digital-2026-saudi-arabia" },
+      { label: ls("Google Ads — تتبع التحويلات", "Google Ads — Conversion Tracking"), url: "https://support.google.com/google-ads/answer/1722022" },
+      { label: ls("Meta for Business — أفضل الممارسات", "Meta for Business — Best Practices"), url: "https://www.facebook.com/business/help" },
+    ],
     readingMinutes: 12,
     image: "/blog/market-aligned-ad-campaigns.webp",
     tableOfContents: ll(
@@ -1017,6 +1055,7 @@ export const blogPosts: BlogPost[] = [
     body: [
       {
         heading: ls("ما معنى حملات إعلانية متوافقة مع تطورات السوق؟", "What are market-aligned ad campaigns?"),
+        summary: ls('حملة تتغيّر باستمرار وفق بيانات الأداء وسلوك العميل والمنصة، بدل تكرار نفس الإعلان لأشهر.', 'A campaign that continuously evolves with performance data, behavior, and platform — not a static ad repeated for months.'),
         paragraphs: ll(
           [
             "34.4 مليون مستخدم للإنترنت و38.6 مليون هوية لمستخدمي السوشيال ميديا في السعودية خلال 2026. مع هذا الزحام الرقمي، المشكلة لم تعد في وجود العملاء، بل في كيف تصل لهم وسط منافسة أعلى وتكلفة إعلان أكبر.",
@@ -1034,6 +1073,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("لماذا تحتاج الشركات في السعودية إلى حملات إعلانية حديثة؟", "Why Saudi companies need modern campaigns"),
+        summary: ls('تغيّر سلوك العميل وارتفاع التكلفة وتشبّع الجمهور يجبران الشركات السعودية على تحديث طريقة إدارة الإعلانات.', 'Shifting behavior, rising costs, and audience fatigue force Saudi companies to modernize how they run ads.'),
         paragraphs: ll(
           [
             "العميل لم يعد يتخذ قراره من إعلان واحد. القرار أصبح يعتمد على رحلة كاملة تشمل السوشيال ميديا، البحث في جوجل، صفحة الهبوط، سرعة التواصل، والثقة في العلامة.",
@@ -1049,6 +1089,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("كيف تؤثر اتجاهات التسويق الحديثة على الحملات؟", "How modern marketing trends affect campaigns"),
+        summary: ls('البيانات وتخصيص الرسالة وقياس التحويلات صارت أهم من حجم الميزانية.', 'Data, message personalization, and conversion measurement now matter more than budget size.'),
         paragraphs: ll(
           [
             "وفق بيانات DataReportal، السعودية تضم 34.4 مليون مستخدم للإنترنت بمعدل انتشار 99% و48.7 مليون اتصال جوال، مما يوضح قوة الحضور الرقمي والجوال في السوق السعودي. لكن هذا يعني أيضًا أن المنافسة على انتباه العميل أصبحت أعلى.",
@@ -1062,6 +1103,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("رحلة العميل السعودي: لماذا لا تكفي منصة واحدة؟", "The Saudi customer journey: why one platform isn't enough"),
+        summary: ls('العميل السعودي يتنقل بين السوشيال والبحث والموقع والواتساب، فلا يكفي إعلان على منصة واحدة.', 'Saudi buyers hop across social, search, your site and WhatsApp — one platform is never enough.'),
         paragraphs: ll(
           [
             "من أكبر الأخطاء الاعتماد على منصة واحدة. قد يبدأ العميل من إعلان على السوشيال ميديا، ثم يبحث عن اسم الشركة في جوجل، يدخل الموقع، يراجع التقييمات، ثم يتواصل عبر واتساب. أي مرحلة ضعيفة قد تخسرك العميل حتى لو كان الإعلان جيدًا.",
@@ -1077,6 +1119,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("علامات تقول إن حملتك لم تعد مناسبة للسوق الحالي", "Signs your campaign is no longer market-fit"),
+        summary: ls('تكلفة عميل ترتفع، نقرات بدون مبيعات، وعدم تجديد التصاميم — مؤشرات إن الحملة فقدت توافقها مع السوق.', 'Rising CPL, clicks without sales, and stale creatives are signs your campaign is out of sync with the market.'),
         paragraphs: ll(
           [
             "الحملة لا تفشل فجأة. التراجع تدريجي: تكلفة العميل تزيد، جودة الاستفسارات تقل، معدل التحويل ينخفض، ثم تبدأ الشركة برفع الميزانية بدل معالجة السبب الحقيقي.",
@@ -1092,6 +1135,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("الفرق بين الحملة التقليدية وحملات إعلانية متوافقة مع تطورات السوق", "Traditional campaigns vs market-aligned campaigns"),
+        summary: ls('التقليدية: إعلان ثابت وميزانية موزعة بالتساوي. الحديثة: اختبار مستمر وتتبع تحويلات وتعديل وفق الأداء.', 'Traditional: a fixed ad with equal budget split. Modern: continuous testing, conversion tracking, and performance-based shifts.'),
         paragraphs: ll(
           [
             "الحملة التقليدية: إطلاق وانتظار، اختيار المنصة بالشهرة، قياس بالمشاهدات والنقرات، رسالة ثابتة، ميزانية موزعة بنفس الطريقة، صفحة هبوط مجرد رابط، تتبع محدود، وتطوير بعد حدوث المشكلة.",
@@ -1107,6 +1151,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("استراتيجيات بناء حملة متوافقة مع السوق", "Strategies to build a market-aligned campaign"),
+        summary: ls('حدد الهدف، ادرس الجمهور، اختر المنصة، أعدّ الرسالة وصفحة الهبوط، فعّل التتبع، ثم اختبر وحسّن.', 'Set the goal, study the audience, pick the platform, prep message+landing, enable tracking, then test and optimize.'),
         paragraphs: ll(
           [
             "1) حدّد الهدف بدقة: مبيعات، حجوزات، عملاء محتملون، زيارات، أم وعي. كل هدف يحتاج منصة ورسالة وقياسًا مختلفًا.",
@@ -1126,6 +1171,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("حملات السوشيال ميديا أم حملات جوجل الإعلانية؟", "Social media ads vs Google Ads"),
+        summary: ls('Google لمن يبحث الآن، السوشيال للوعي وإعادة الاستهداف. الأفضل دمج المنصات حسب رحلة العميل.', 'Google for active intent, social for awareness and retargeting — the best mix follows the customer journey.'),
         paragraphs: ll(
           [
             "الاختيار يعتمد على نية العميل. حملات جوجل مناسبة عندما يبحث العميل عن خدمة الآن أو نشاط محلي أو طلب فوري. حملات السوشيال ميديا مناسبة عندما تحتاج العلامة انتشارًا، أو يكون المنتج بصريًا، أو يحتاج القرار تكرارًا.",
@@ -1141,6 +1187,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("دور الإعلانات الممولة وإعادة الاستهداف", "Paid ads & retargeting"),
+        summary: ls('الإعلانات الممولة تفتح الباب، وإعادة الاستهداف تكمل البيع برسائل تناسب مرحلة كل زائر.', 'Paid ads open the door; retargeting closes the sale with stage-specific messages.'),
         paragraphs: ll(
           [
             "الإعلانات الممولة تمنح وصولًا سريعًا، وإعادة الاستهداف تجعل هذا الوصول أكثر كفاءة. عندما يتفاعل العميل مع إعلانك أو يزور موقعك دون شراء، يمكن إعادة التواصل برسالة جديدة تناسب مرحلته.",
@@ -1156,6 +1203,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("كيف توزع الميزانية بين المنصات؟", "How to distribute budget across platforms"),
+        summary: ls('وزّع وفق الأداء لا بالتساوي: ابدأ بميزانية اختبارية، ثم وسّع الفائز وأوقف الخاسر تدريجيًا.', 'Allocate by performance, not equally: start with a test budget, then scale winners and pause losers gradually.'),
         paragraphs: ll(
           [
             "الخطأ الشائع تقسيم الميزانية بالتساوي دون النظر إلى الأداء. التوزيع الصحيح يعتمد على الهدف وسلوك العملاء وجودة النتائج.",
@@ -1171,6 +1219,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("كيف تختار مؤشرات الأداء المناسبة؟", "Choosing the right KPIs"),
+        summary: ls('ركّز على CPL وCPA وROAS وجودة العميل — النقرات وحدها قد تخدعك.', 'Focus on CPL, CPA, ROAS and lead quality — clicks alone can mislead you.'),
         paragraphs: ll(
           [
             "إذا كنت تقيس المؤشرات الخطأ، قد تعتقد أن الحملة ناجحة وهي لا تحقق عائدًا فعليًا.",
@@ -1186,6 +1235,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("دور الرسالة الإعلانية وصفحة الهبوط", "The ad message and landing page"),
+        summary: ls('رسالة دقيقة + صفحة هبوط سريعة وواضحة + زر واتساب ظاهر = تحويل أعلى دون رفع الميزانية.', 'Sharp message + fast clear landing page + visible WhatsApp button = higher conversion without raising spend.'),
         paragraphs: ll(
           [
             "الرسالة القوية ليست بالضرورة طويلة، لكنها يجب أن تكون واضحة ومتصلة باحتياج العميل. بدلًا من \"نقدم خدمات إعلانية احترافية\"، قل: \"نساعدك على معرفة أين تُصرف ميزانيتك، وأي قناة تحقق أفضل عائد، وكيف تقلل الهدر\".",
@@ -1201,6 +1251,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("كيف تؤثر سرعة الرد على نتائج الإعلانات؟", "How response speed affects results"),
+        summary: ls('تأخير الرد يحرق الميزانية. جهّز فريق الرد والقوالب قبل تشغيل الحملة.', 'Slow replies burn budget. Prep your response team and templates before launch.'),
         paragraphs: ll(
           [
             "الإعلان قد يجذب العميل المناسب، لكن إذا لم يجد ردًا سريعًا، ينتقل إلى منافس آخر. في السوق السعودي، واتساب والاتصال المباشر يلعبان دورًا حاسمًا في القرار.",
@@ -1216,6 +1267,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("متى تحتاج إلى إدارة حملات إعلانية احترافية؟", "When you need professional campaign management"),
+        summary: ls('حين يصبح الإعلان جزءًا من النمو وتتعدد المنصات، الإدارة الاحترافية تمنع الهدر وتضاعف العائد.', 'When ads drive growth across multiple platforms, pro management prevents waste and multiplies returns.'),
         paragraphs: ll(
           [
             "تحتاج إدارة احترافية عندما تصبح الإعلانات جزءًا أساسيًا من نمو شركتك. مع زيادة الإنفاق وتعدد المنصات وارتفاع المنافسة، تصبح الإدارة غير المتخصصة مخاطرة حقيقية.",
@@ -1231,6 +1283,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("كيف تساعدك فكرة في بناء حملاتك؟", "How Fikra helps you build market-aligned campaigns"),
+        summary: ls('نبدأ من تشخيص مجاني، نبني خطة وفق نشاطك، نضبط التتبع، ونرفع تقارير شهرية واضحة.', 'We start with a free diagnostic, build a plan around your business, set up tracking, and deliver clear monthly reports.'),
         paragraphs: ll(
           [
             "في فكرة نبدأ بفهم القنوات الحالية، أين تُصرف الميزانية، نوع العملاء القادمين، أين يحدث الهدر، وهل صفحة الهبوط تساعد على التحويل، وهل سرعة الرد مناسبة، وهل التتبع يوضح العائد الحقيقي.",
@@ -1246,6 +1299,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("دمج SEO مع الحملات المدفوعة", "Combining SEO with paid ads"),
+        summary: ls('الإعلانات تجلب نتيجة سريعة وSEO يبني نموًا مستدامًا — دمجهما يخفّض تكلفة العميل على المدى الطويل.', 'Ads bring quick results, SEO builds compounding growth — combining them lowers long-term CPL.'),
         paragraphs: ll(
           [
             "الإعلانات تمنحك سرعة، وSEO يمنحك حضورًا طويل المدى. الجمع بينهما يبني منظومة تسويقية أقوى. عندما يرى العميل إعلانك ثم يبحث عن اسم شركتك ويجد موقعك ظاهرًا جيدًا، تزيد الثقة.",
@@ -1261,6 +1315,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("أخطاء شائعة تجعل الحملة تفشل رغم جودة الإعلان", "Common mistakes that fail great-looking ads"),
+        summary: ls('غياب التتبع، صفحة هبوط ضعيفة، استهداف واسع، ورسائل لا تناسب مرحلة العميل — أكثر الأخطاء فتكًا.', 'No tracking, weak landing pages, broad targeting, and stage-mismatched messages — the deadliest mistakes.'),
         paragraphs: ll(
           [
             "غياب التتبع: لا تعرف أي إعلان يحقق نتيجة. ضعف صفحة الهبوط: صفحة بطيئة أو غير واضحة تضيع الفرصة. استهداف واسع جدًا: يزيد الهدر.",
@@ -1275,6 +1330,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         heading: ls("كيف تبني نظام مراجعة دوري للحملات؟", "How to build a periodic review system"),
+        summary: ls('أسبوعيًا للأداء، شهريًا للرسائل والمنصات، ربع سنويًا للاستراتيجية — إيقاع يمنع تراكم الخسائر.', 'Weekly performance, monthly messages and platforms, quarterly strategy — a rhythm that prevents losses from piling up.'),
         paragraphs: ll(
           [
             "أسبوعيًا: متابعة الإنفاق، تكلفة العميل، جودة الاستفسارات، وأداء الإعلانات. شهريًا: تحليل الرسائل والجماهير والمنصات وصفحات الهبوط. ربع سنويًا: مراجعة الاستراتيجية العامة وتغير السوق والمنافسة وسلوك العملاء.",

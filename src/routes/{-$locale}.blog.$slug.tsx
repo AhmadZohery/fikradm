@@ -8,7 +8,7 @@ import { AutoInternalLinks } from "@/components/site/AutoInternalLinks";
 import { findService } from "@/content/cities";
 import { useLocale } from "@/i18n/useLocale";
 import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blog";
-import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle } from "lucide-react";
+import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle, Sparkles, ShieldCheck, BookOpen, CheckCircle2, ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -44,6 +44,12 @@ export const Route = createFileRoute("/{-$locale}/blog/$slug")({
     meta.push({ name: "keywords", content: post.keywords[loc].join(", ") });
     meta.push({ property: "article:author", content: post.author[loc] });
     if (cat) meta.push({ property: "article:section", content: cat.name[loc] });
+    if (post.lastReviewed) {
+      // override modified time when an explicit review date exists
+      const idx = meta.findIndex((m) => m.property === "article:modified_time");
+      if (idx >= 0) meta[idx] = { property: "article:modified_time", content: post.lastReviewed };
+      else meta.push({ property: "article:modified_time", content: post.lastReviewed });
+    }
 
     const breadcrumbItems = [
       { name: ar ? "الرئيسية" : "Home", url: `/${loc}` },
@@ -63,12 +69,31 @@ export const Route = createFileRoute("/{-$locale}/blog/$slug")({
             url: path,
             image: post.image,
             datePublished: post.publishedAt,
-            dateModified: post.publishedAt,
+            dateModified: post.lastReviewed ?? post.publishedAt,
             authorName: post.author[loc],
           }),
           inLanguage: loc,
           articleSection: cat?.name[loc],
           keywords: post.keywords[loc].join(", "),
+          ...(post.authorBio
+            ? {
+                author: {
+                  "@type": "Person",
+                  name: post.author[loc],
+                  description: post.authorBio[loc],
+                  ...(post.authorRole ? { jobTitle: post.authorRole[loc] } : {}),
+                },
+              }
+            : {}),
+          ...(post.sources && post.sources.length > 0
+            ? { citation: post.sources.map((s) => ({ "@type": "CreativeWork", name: s.label[loc], url: s.url })) }
+            : {}),
+          ...(post.tldr
+            ? {
+                abstract: post.tldr[loc].join(" • "),
+                description: post.metaDescription[loc],
+              }
+            : {}),
         }),
         jsonLdScript(breadcrumbLdGen(breadcrumbItems)),
         ...(post.faq && post.faq.length > 0
@@ -137,6 +162,13 @@ function PostPage() {
     month: "long",
     day: "numeric",
   });
+  const reviewedText = post.lastReviewed
+    ? new Date(post.lastReviewed).toLocaleDateString(locale === "ar" ? "ar-SA" : "en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : null;
 
   const encShare = encodeURIComponent(shareUrl);
   const encTitle = encodeURIComponent(post.title[loc]);
@@ -197,6 +229,12 @@ function PostPage() {
               <span className="inline-flex items-center gap-1.5">
                 <Clock className="h-4 w-4" /> {post.readingMinutes} {locale === "ar" ? "دقيقة قراءة" : "min read"}
               </span>
+              {reviewedText && (
+                <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                  <ShieldCheck className="h-4 w-4" />
+                  {locale === "ar" ? `آخر مراجعة: ${reviewedText}` : `Last reviewed: ${reviewedText}`}
+                </span>
+              )}
             </div>
           </Reveal>
 
@@ -218,12 +256,43 @@ function PostPage() {
       <section className="pb-16">
         <div className="container-app grid max-w-6xl gap-10 lg:grid-cols-[1fr_280px]">
           <article className="prose-fikra">
+            {/* TL;DR — AEO/AIO/LLMO snippet block */}
+            {post.tldr && post.tldr[loc].length > 0 && (
+              <Reveal>
+                <aside
+                  aria-label={locale === "ar" ? "ملخص سريع" : "Quick summary"}
+                  className="mb-10 rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.06] via-primary/[0.03] to-transparent p-6 md:p-7"
+                >
+                  <h2 className="m-0 mb-3 flex items-center gap-2 text-lg font-extrabold text-foreground">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                    {locale === "ar" ? "ملخص سريع (TL;DR)" : "Quick summary (TL;DR)"}
+                  </h2>
+                  <ul className="m-0 list-none space-y-2 p-0">
+                    {post.tldr[loc].map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-foreground/85 md:text-base">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
+              </Reveal>
+            )}
+
             {post.body.map((section, i) => (
               <Reveal key={i} delay={i * 60}>
                 <section id={`section-${i}`} className="mb-10 scroll-mt-24">
                   <h2 className="mb-4 text-2xl font-bold text-foreground md:text-3xl">{section.heading[loc]}</h2>
+                  {section.summary && (
+                    <p
+                      className="mb-5 rounded-xl border-s-4 border-primary bg-primary/5 px-4 py-3 text-base font-medium leading-relaxed text-foreground"
+                      data-aeo-answer="true"
+                    >
+                      {section.summary[loc]}
+                    </p>
+                  )}
                   {section.paragraphs[loc].map((p, j) => (
-                    <p key={j} className="mb-4 text-base leading-relaxed text-foreground/80">
+                    <p key={j} className="mb-4 text-[17px] leading-[1.95] text-foreground/85">
                       {p}
                     </p>
                   ))}
@@ -310,6 +379,55 @@ function PostPage() {
                       </li>
                     ))}
                   </ul>
+                </section>
+              </Reveal>
+            )}
+
+            {/* Sources — EEAT / GEO citations */}
+            {post.sources && post.sources.length > 0 && (
+              <Reveal>
+                <section className="mt-12">
+                  <h2 className="mb-5 flex items-center gap-2 text-2xl font-bold text-foreground md:text-3xl">
+                    <BookOpen className="h-6 w-6 text-primary" />
+                    {locale === "ar" ? "المصادر والمراجع" : "Sources & References"}
+                  </h2>
+                  <ul className="space-y-2">
+                    {post.sources.map((s, i) => (
+                      <li key={i}>
+                        <a
+                          href={s.url}
+                          target="_blank"
+                          rel="noopener noreferrer nofollow"
+                          className="group inline-flex items-start gap-2 text-sm text-foreground/80 hover:text-primary"
+                        >
+                          <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-primary/70 group-hover:text-primary" />
+                          <span className="underline-offset-4 group-hover:underline">{s.label[loc]}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </Reveal>
+            )}
+
+            {/* Author bio — EEAT */}
+            {post.authorBio && (
+              <Reveal>
+                <section className="mt-12 rounded-3xl border border-border bg-card p-6 md:p-7">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground">
+                      <User className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-extrabold text-foreground">{post.author[loc]}</h3>
+                      {post.authorRole && (
+                        <p className="mt-0.5 text-xs font-medium uppercase tracking-wide text-primary">
+                          {post.authorRole[loc]}
+                        </p>
+                      )}
+                      <p className="mt-2 text-sm leading-relaxed text-foreground/75">{post.authorBio[loc]}</p>
+                    </div>
+                  </div>
                 </section>
               </Reveal>
             )}
