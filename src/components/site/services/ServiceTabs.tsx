@@ -1,4 +1,4 @@
-import { useState, type ReactElement } from "react";
+import { useState } from "react";
 import { useLocale } from "@/i18n/useLocale";
 import { Link } from "@tanstack/react-router";
 import {
@@ -34,58 +34,20 @@ type Personality = {
   /** chip / badge colors */
   chipBg: string;
   chipText: string;
-  /** decorative motif rendered behind the active tab */
-  Motif: () => ReactElement;
 };
 
-function GridMotif() {
-  return (
-    <svg className="absolute inset-0 h-full w-full opacity-[0.06]" aria-hidden>
-      <defs>
-        <pattern id="gridMotif" width="32" height="32" patternUnits="userSpaceOnUse">
-          <path d="M 32 0 L 0 0 0 32" fill="none" stroke="currentColor" strokeWidth="1" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#gridMotif)" />
-    </svg>
-  );
-}
-
-function DotsMotif() {
-  return (
-    <svg className="absolute inset-0 h-full w-full opacity-[0.08]" aria-hidden>
-      <defs>
-        <pattern id="dotsMotif" width="22" height="22" patternUnits="userSpaceOnUse">
-          <circle cx="2" cy="2" r="1.4" fill="currentColor" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#dotsMotif)" />
-    </svg>
-  );
-}
-
-function WaveMotif() {
-  return (
-    <svg className="absolute inset-0 h-full w-full opacity-[0.10]" aria-hidden viewBox="0 0 400 400" preserveAspectRatio="none">
-      <path d="M0 200 Q 100 100 200 200 T 400 200" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path d="M0 240 Q 100 140 200 240 T 400 240" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path d="M0 280 Q 100 180 200 280 T 400 280" fill="none" stroke="currentColor" strokeWidth="2" />
-    </svg>
-  );
-}
-
 const PERSONALITIES: Record<ServicePersonality, Personality> = {
-  data:         { icon: Search,           panelGradient: "from-violet-600 via-violet-500 to-indigo-500",  chipBg: "bg-violet-50",   chipText: "text-violet-700",   Motif: GridMotif },
-  rocket:       { icon: TrendingUp,       panelGradient: "from-orange-500 via-rose-500 to-pink-500",      chipBg: "bg-orange-50",   chipText: "text-orange-700",   Motif: WaveMotif },
-  palette:      { icon: Palette,          panelGradient: "from-fuchsia-500 via-pink-500 to-rose-500",     chipBg: "bg-pink-50",     chipText: "text-pink-700",     Motif: DotsMotif },
-  frame:        { icon: Film,             panelGradient: "from-amber-500 via-orange-500 to-red-500",      chipBg: "bg-amber-50",    chipText: "text-amber-700",    Motif: GridMotif },
-  code:         { icon: Code2,            panelGradient: "from-emerald-600 via-teal-500 to-cyan-500",     chipBg: "bg-emerald-50",  chipText: "text-emerald-700",  Motif: GridMotif },
-  blueprint:    { icon: Compass,          panelGradient: "from-sky-600 via-blue-500 to-indigo-500",       chipBg: "bg-sky-50",      chipText: "text-sky-700",      Motif: GridMotif },
-  feed:         { icon: MessageCircle,    panelGradient: "from-pink-500 via-fuchsia-500 to-purple-500",   chipBg: "bg-fuchsia-50",  chipText: "text-fuchsia-700",  Motif: DotsMotif },
-  device:       { icon: Smartphone,       panelGradient: "from-indigo-600 via-violet-500 to-purple-500",  chipBg: "bg-indigo-50",   chipText: "text-indigo-700",   Motif: GridMotif },
-  dashboard:    { icon: LayoutDashboard,  panelGradient: "from-slate-700 via-slate-600 to-zinc-600",      chipBg: "bg-slate-100",   chipText: "text-slate-700",    Motif: GridMotif },
-  neural:       { icon: Bot,              panelGradient: "from-cyan-500 via-blue-500 to-violet-600",      chipBg: "bg-cyan-50",     chipText: "text-cyan-700",     Motif: WaveMotif },
-  conversation: { icon: MessageCircle,    panelGradient: "from-emerald-500 via-teal-500 to-sky-500",      chipBg: "bg-teal-50",     chipText: "text-teal-700",     Motif: DotsMotif },
+  data:         { icon: Search,           panelGradient: "from-violet-600 via-violet-500 to-indigo-500",  chipBg: "bg-violet-50",   chipText: "text-violet-700"   },
+  rocket:       { icon: TrendingUp,       panelGradient: "from-orange-500 via-rose-500 to-pink-500",      chipBg: "bg-orange-50",   chipText: "text-orange-700"   },
+  palette:      { icon: Palette,          panelGradient: "from-fuchsia-500 via-pink-500 to-rose-500",     chipBg: "bg-pink-50",     chipText: "text-pink-700"     },
+  frame:        { icon: Film,             panelGradient: "from-amber-500 via-orange-500 to-red-500",      chipBg: "bg-amber-50",    chipText: "text-amber-700"    },
+  code:         { icon: Code2,            panelGradient: "from-emerald-600 via-teal-500 to-cyan-500",     chipBg: "bg-emerald-50",  chipText: "text-emerald-700"  },
+  blueprint:    { icon: Compass,          panelGradient: "from-sky-600 via-blue-500 to-indigo-500",       chipBg: "bg-sky-50",      chipText: "text-sky-700"      },
+  feed:         { icon: MessageCircle,    panelGradient: "from-pink-500 via-fuchsia-500 to-purple-500",   chipBg: "bg-fuchsia-50",  chipText: "text-fuchsia-700"  },
+  device:       { icon: Smartphone,       panelGradient: "from-indigo-600 via-violet-500 to-purple-500",  chipBg: "bg-indigo-50",   chipText: "text-indigo-700"   },
+  dashboard:    { icon: LayoutDashboard,  panelGradient: "from-slate-700 via-slate-600 to-zinc-600",      chipBg: "bg-slate-100",   chipText: "text-slate-700"    },
+  neural:       { icon: Bot,              panelGradient: "from-cyan-500 via-blue-500 to-violet-600",      chipBg: "bg-cyan-50",     chipText: "text-cyan-700"     },
+  conversation: { icon: MessageCircle,    panelGradient: "from-emerald-500 via-teal-500 to-sky-500",      chipBg: "bg-teal-50",     chipText: "text-teal-700"     },
 };
 
 /* ---------- Tabs ---------- */
@@ -123,41 +85,18 @@ export function ServiceTabs({ content }: { content: ServiceTabContent }) {
   return (
     <section className="section">
       <div className="container-app">
-        {/* Hero header */}
-        <div className="mb-10 grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-          <div>
-            <span className={cn("inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold", p.chipBg, p.chipText)}>
-              <Icon className="h-3.5 w-3.5" />
-              {content.hero.eyebrow[locale]}
-            </span>
-            <h1 className="mt-4 text-3xl font-extrabold leading-tight md:text-5xl">
-              {content.hero.title[locale]}
-            </h1>
-            <p className="mt-3 text-lg font-medium text-muted-foreground md:text-xl">
-              {content.hero.tagline[locale]}
-            </p>
-            <p className="mt-4 text-sm leading-7 text-foreground/80 md:text-base">
-              {content.hero.intro[locale]}
-            </p>
-          </div>
-
-          {/* decorative panel */}
-          <div className={cn("relative aspect-[5/4] overflow-hidden rounded-3xl bg-gradient-to-br p-8 text-white shadow-elegant", p.panelGradient)}>
-            <div className="text-current">
-              <p.Motif />
-            </div>
-            <div className="relative flex h-full flex-col justify-between">
-              <Icon className="h-12 w-12 opacity-90" />
-              <div>
-                <div className="text-[11px] font-bold uppercase tracking-[0.2em] opacity-80">
-                  {isAr ? "خدمة فكرة" : "Fikra service"}
-                </div>
-                <div className="mt-1 text-2xl font-extrabold leading-tight">
-                  {content.hero.title[locale]}
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Section header — compact, no hero duplication */}
+        <div className="mx-auto mb-8 max-w-3xl text-center">
+          <span className={cn("inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold", p.chipBg, p.chipText)}>
+            <Icon className="h-3.5 w-3.5" />
+            {content.hero.eyebrow[locale]}
+          </span>
+          <h2 className="mt-3 text-2xl font-extrabold md:text-3xl">
+            {content.hero.tagline[locale]}
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-muted-foreground md:text-base">
+            {content.hero.intro[locale]}
+          </p>
         </div>
 
         {/* Tabs */}
