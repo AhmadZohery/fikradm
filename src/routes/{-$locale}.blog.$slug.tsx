@@ -141,6 +141,39 @@ function PostPage() {
   const post = getPostBySlug(slug)!;
   const cat = getCategoryBySlug(post.categorySlug);
   const related = getRelatedPosts(slug, 3);
+  // Track inline links already used so each phrase appears at most once.
+  const usedInline = new Set<string>();
+  const inlineSpecs = (post.inlineLinks ?? []).map((l) => ({
+    phrase: l.phrase[loc],
+    href: l.href,
+  }));
+
+  // Dynamic "Read also" — category-aware service + post links, ordered for CTR.
+  const categoryServiceMap: Record<string, { ar: string; en: string; href: string }[]> = {
+    seo: [
+      { ar: "خدمة تهيئة محركات البحث (SEO)", en: "SEO Service", href: "/services/seo" },
+      { ar: "تحسين تجربة المستخدم", en: "Web Development & UX", href: "/services/web-development" },
+    ],
+    performance: [
+      { ar: "إدارة الحملات الإعلانية المدفوعة", en: "Paid Ads Management", href: "/services/paid-ads" },
+      { ar: "خدمة الاستشارات التسويقية", en: "Marketing Consulting", href: "/services/consulting" },
+      { ar: "تهيئة محركات البحث (SEO)", en: "SEO Service", href: "/services/seo" },
+    ],
+    ecommerce: [
+      { ar: "نمو المتاجر الإلكترونية", en: "E-commerce Growth", href: "/services/paid-ads" },
+      { ar: "تطوير المتاجر", en: "Web Development", href: "/services/web-development" },
+    ],
+    creative: [
+      { ar: "خدمات المحتوى والتصميم", en: "Content & Creative", href: "/services/social-media" },
+      { ar: "إدارة السوشيال ميديا", en: "Social Media Management", href: "/services/social-media" },
+    ],
+    web: [
+      { ar: "تطوير المواقع", en: "Web Development", href: "/services/web-development" },
+      { ar: "تحسين Core Web Vitals", en: "Performance & SEO", href: "/services/seo" },
+    ],
+  };
+  const dynamicServices = (categoryServiceMap[post.categorySlug] ?? []).slice(0, 3);
+  const dynamicRelatedPosts = related.slice(0, 3);
   const [readingProgress, setReadingProgress] = useState(0);
   const [shareUrl, setShareUrl] = useState("");
 
