@@ -120,3 +120,47 @@ export function trackCtaClick(label: string, meta?: Record<string, string | numb
     /* noop */
   }
 }
+
+/**
+ * Track a lead conversion to GA4 (dataLayer/gtag) and Meta Pixel (fbq) if loaded.
+ * Falls back to dataLayer-only when scripts are absent. Safe in SSR.
+ */
+type GtagWindow = Window & {
+  dataLayer?: Array<Record<string, unknown>>;
+  gtag?: (...args: unknown[]) => void;
+  fbq?: (...args: unknown[]) => void;
+};
+
+export function trackLead(opts: {
+  source: string; // e.g. "service_page"
+  service?: string;
+  value?: number;
+  currency?: string;
+  meta?: Record<string, string | number | boolean | null>;
+}) {
+  if (typeof window === "undefined") return;
+  const w = window as GtagWindow;
+  const payload = {
+    event: "generate_lead",
+    lead_source: opts.source,
+    service: opts.service ?? null,
+    value: opts.value ?? 1,
+    currency: opts.currency ?? "SAR",
+    page_path: window.location.pathname,
+    locale: document.documentElement.lang || "ar",
+    ...opts.meta,
+  };
+  try {
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push(payload);
+    if (typeof w.gtag === "function") {
+      w.gtag("event", "generate_lead", payload);
+    }
+    if (typeof w.fbq === "function") {
+      w.fbq("track", "Lead", { content_name: opts.service, value: opts.value ?? 1, currency: opts.currency ?? "SAR" });
+    }
+    window.dispatchEvent(new CustomEvent("fikra:lead", { detail: payload }));
+  } catch {
+    /* noop */
+  }
+}
