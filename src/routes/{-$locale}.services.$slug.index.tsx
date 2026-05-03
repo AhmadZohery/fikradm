@@ -6,6 +6,8 @@ import { FaqSection } from "@/components/site/FaqSection";
 import { CtaBand } from "@/components/site/CtaBand";
 import { SubServicesGrid } from "@/components/site/SubServicesGrid";
 import { findService } from "@/content/data";
+import { findServiceTabs } from "@/content/serviceTabs";
+import { ServiceTabs } from "@/components/site/services/ServiceTabs";
 import { ServiceVariantHero } from "@/components/site/services/ServiceVariantHero";
 import { ServiceMarketSignals } from "@/components/site/services/ServiceMarketSignals";
 import { ServiceApproach } from "@/components/site/services/ServiceApproach";
@@ -98,6 +100,12 @@ function ServicePage() {
 
         {/* 1. HERO — captures attention with service personality */}
         <ServiceVariantHero service={s} />
+
+        {/* 1b. CONTENT TABS — features / deliverables / methodology / audience / FAQ */}
+        {(() => {
+          const tabs = findServiceTabs(slug);
+          return tabs ? <ServiceTabs content={tabs} /> : null;
+        })()}
 
         {/* 2. SHOWCASE — service-specific visual storytelling (unique layout per service) */}
         <ServiceShowcase slug={slug} />
