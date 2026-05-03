@@ -57,6 +57,7 @@ import {
   stripHtml,
   type BlogTocItem,
 } from "@/cms/admin/blogAnalysis";
+import { validatePostSchema, summarizeIssues } from "@/lib/schemaValidator";
 
 export const Route = createFileRoute("/admin/blog/$postId")({
   component: BlogPostEditorPage,
