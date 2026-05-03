@@ -945,6 +945,443 @@ export const blogPosts: BlogPost[] = [
       href: "/contact",
     },
   }),
+  post({
+    slug: "market-aligned-ad-campaigns-saudi",
+    categorySlug: "performance",
+    title: ls(
+      "حملات إعلانية متوافقة مع تطورات السوق في السعودية: دليل الشركات لنتائج قابلة للقياس",
+      "Market-Aligned Ad Campaigns in Saudi Arabia: A Company Guide to Measurable Results",
+    ),
+    excerpt: ls(
+      "كيف تبني حملات إعلانية حديثة تواكب سلوك العميل السعودي، تقلّل الهدر، وتحوّل الميزانية إلى نتائج قابلة للقياس.",
+      "How to build modern ad campaigns that match Saudi buyer behavior, cut waste, and turn budget into measurable results.",
+    ),
+    metaTitle: ls(
+      "حملات إعلانية متوافقة مع تطورات السوق في السعودية | فكرة",
+      "Market-Aligned Ad Campaigns in Saudi Arabia | Fikra",
+    ),
+    metaDescription: ls(
+      "دليل عملي لبناء حملات إعلانية حديثة في السعودية: اختيار المنصة، صفحة الهبوط، تتبع التحويلات، وقياس العائد بدقة.",
+      "A practical guide to building modern ad campaigns in Saudi Arabia: platform choice, landing pages, conversion tracking, and ROI measurement.",
+    ),
+    keywords: ll(
+      ["حملات إعلانية", "إعلانات السعودية", "إدارة حملات إعلانية", "حملات جوجل", "حملات السوشيال ميديا", "إعادة الاستهداف", "تحسين أداء الحملات"],
+      ["ad campaigns", "saudi ads", "campaign management", "google ads", "social media ads", "retargeting", "campaign optimization"],
+    ),
+    author: ls("فريق فكرة", "Fikra Team"),
+    publishedAt: "2026-05-03",
+    readingMinutes: 12,
+    image: "/blog/market-aligned-ad-campaigns.webp",
+    tableOfContents: ll(
+      [
+        "ما معنى حملات إعلانية متوافقة مع تطورات السوق؟",
+        "لماذا تحتاج الشركات في السعودية إلى حملات حديثة؟",
+        "تأثير اتجاهات التسويق الحديثة على الحملات",
+        "رحلة العميل السعودي عبر أكثر من منصة",
+        "علامات تقول إن حملتك لم تعد مناسبة للسوق",
+        "الفرق بين الحملة التقليدية والحملة المتوافقة مع السوق",
+        "استراتيجيات بناء حملة متوافقة مع السوق",
+        "حملات السوشيال ميديا أم حملات جوجل؟",
+        "الإعلانات الممولة وإعادة الاستهداف",
+        "توزيع الميزانية بين المنصات",
+        "اختيار مؤشرات الأداء المناسبة",
+        "دور الرسالة الإعلانية وصفحة الهبوط",
+        "سرعة الرد وأثرها على النتائج",
+        "متى تحتاج إدارة احترافية؟",
+        "كيف تساعدك فكرة في بناء حملاتك",
+        "دمج SEO مع الحملات المدفوعة",
+        "أخطاء شائعة تُفشل الحملة",
+        "نظام مراجعة دوري للحملات",
+      ],
+      [
+        "What are market-aligned ad campaigns?",
+        "Why Saudi companies need modern campaigns",
+        "How modern marketing trends affect ads",
+        "The Saudi customer journey across platforms",
+        "Signs your campaign is no longer market-fit",
+        "Traditional vs market-aligned campaigns",
+        "Strategies to build a market-aligned campaign",
+        "Social media ads vs Google Ads",
+        "Paid ads & retargeting",
+        "Distributing budget across platforms",
+        "Choosing the right KPIs",
+        "Ad message & landing page",
+        "Response speed and results",
+        "When you need pro campaign management",
+        "How Fikra helps you build campaigns",
+        "Combining SEO with paid ads",
+        "Common mistakes that break campaigns",
+        "Building a periodic review system",
+      ],
+    ),
+    body: [
+      {
+        heading: ls("ما معنى حملات إعلانية متوافقة مع تطورات السوق؟", "What are market-aligned ad campaigns?"),
+        paragraphs: ll(
+          [
+            "34.4 مليون مستخدم للإنترنت و38.6 مليون هوية لمستخدمي السوشيال ميديا في السعودية خلال 2026. مع هذا الزحام الرقمي، المشكلة لم تعد في وجود العملاء، بل في كيف تصل لهم وسط منافسة أعلى وتكلفة إعلان أكبر.",
+            "حملات إعلانية متوافقة مع تطورات السوق هي الحملات التي تتغير وفق البيانات وسلوك العملاء وأداء المنصات واتجاهات المنافسة. لا تعتمد على تكرار نفس الإعلان لفترات طويلة، بل على مراجعة مستمرة للجمهور والرسالة والمنصة وصفحة الهبوط ومؤشرات الأداء.",
+            "هذا النوع من إدارة الحملات الإعلانية يساعد الشركات على تقليل الهدر وتحسين العائد من الميزانية، لأنه لا يتعامل مع الإعلان كتصميم يُنشر، بل كنظام تسويقي كامل يبدأ من فهم العميل وينتهي بقياس النتيجة.",
+            "في السوق السعودي، العميل أصبح أكثر وعيًا ويقارن بين أكثر من خيار قبل التواصل أو الشراء. الحملة الناجحة اليوم تصل إلى الشخص المناسب برسالة مناسبة في التوقيت المناسب، ثم تقوده إلى خطوة واضحة قابلة للقياس.",
+          ],
+          [
+            "With 34.4M internet users and 38.6M social identities in Saudi Arabia in 2026, the challenge isn't finding customers — it's reaching them amid heavier competition and higher ad costs.",
+            "Market-aligned campaigns evolve based on data, customer behavior, platform performance, and competitive trends — not by repeating the same ad for months.",
+            "This approach treats advertising as a full marketing system that starts with understanding the customer and ends with measuring the outcome.",
+            "Saudi buyers compare multiple options before contacting or buying. Winning campaigns reach the right person, with the right message, at the right time, and lead to a measurable next step.",
+          ],
+        ),
+      },
+      {
+        heading: ls("لماذا تحتاج الشركات في السعودية إلى حملات إعلانية حديثة؟", "Why Saudi companies need modern campaigns"),
+        paragraphs: ll(
+          [
+            "العميل لم يعد يتخذ قراره من إعلان واحد. القرار أصبح يعتمد على رحلة كاملة تشمل السوشيال ميديا، البحث في جوجل، صفحة الهبوط، سرعة التواصل، والثقة في العلامة.",
+            "أبرز أسباب الحاجة إلى حملات حديثة: تغير سلوك العملاء، ارتفاع المنافسة في نفس القطاع، تعدد المنصات وتغير أسلوب كل منها، ارتفاع تكلفة الوصول، وتشبّع الجمهور من الرسائل المتكررة، إضافة إلى زيادة أهمية المحتوى القصير والرسائل المباشرة.",
+            "الشركات التي تعتمد على حملات متوافقة مع تطورات السوق تكون أقدر على ضبط الميزانية وتحسين النتائج، بينما الشركات التي تكرر نفس الرسائل لفترة طويلة غالبًا ستدفع أكثر لتحصل على نتائج أقل.",
+          ],
+          [
+            "Customers no longer decide based on a single ad. Their journey spans social, Google search, your landing page, response speed, and brand trust.",
+            "Behavior shifts, competition density, platform fragmentation, rising acquisition costs, and message fatigue all push companies toward modern campaigns.",
+            "Brands that adapt control budgets better; brands that repeat the same messages keep paying more for less.",
+          ],
+        ),
+      },
+      {
+        heading: ls("كيف تؤثر اتجاهات التسويق الحديثة على الحملات؟", "How modern marketing trends affect campaigns"),
+        paragraphs: ll(
+          [
+            "وفق بيانات DataReportal، السعودية تضم 34.4 مليون مستخدم للإنترنت بمعدل انتشار 99% و48.7 مليون اتصال جوال، مما يوضح قوة الحضور الرقمي والجوال في السوق السعودي. لكن هذا يعني أيضًا أن المنافسة على انتباه العميل أصبحت أعلى.",
+            "اتجاهات التسويق الحديثة تجعل الحملات أكثر اعتمادًا على: تحليل البيانات بدل التخمين، تخصيص الرسائل حسب الجمهور، الربط بين الإعلانات الممولة وSEO، استخدام إعادة الاستهداف بذكاء، تحسين تجربة صفحة الهبوط، وقياس التحويلات وليس النقرات فقط.",
+          ],
+          [
+            "DataReportal puts Saudi internet users at 34.4M (99% penetration) with 48.7M mobile connections — a digital-first, mobile-first market with sharper competition for attention.",
+            "Modern campaigns rely on data over guesswork, audience-specific messaging, paid+SEO integration, smart retargeting, landing page UX, and conversion-focused measurement.",
+          ],
+        ),
+      },
+      {
+        heading: ls("رحلة العميل السعودي: لماذا لا تكفي منصة واحدة؟", "The Saudi customer journey: why one platform isn't enough"),
+        paragraphs: ll(
+          [
+            "من أكبر الأخطاء الاعتماد على منصة واحدة. قد يبدأ العميل من إعلان على السوشيال ميديا، ثم يبحث عن اسم الشركة في جوجل، يدخل الموقع، يراجع التقييمات، ثم يتواصل عبر واتساب. أي مرحلة ضعيفة قد تخسرك العميل حتى لو كان الإعلان جيدًا.",
+            "مثال: الإعلان جذب الانتباه، العميل دخل صفحة الهبوط، الصفحة كانت بطيئة أو غير واضحة، فخرج دون تواصل. أو: الإعلان وصل لجمهور مناسب، أرسل العميل رسالة واتساب، تأخر الرد، فتواصل مع منافس أسرع.",
+            "الحملات المتوافقة مع تطورات السوق لا تنظر للإعلان كقطعة منفصلة، بل كجزء من رحلة كاملة، كل نقطة فيها واضحة وسريعة ومبنية على فهم سلوك العملاء.",
+          ],
+          [
+            "Relying on a single platform is a common, expensive mistake. The customer often starts on social, searches your brand on Google, visits your site, reads reviews, then messages on WhatsApp.",
+            "Any weak step — slow landing page, late reply — loses the lead even with a great ad.",
+            "Modern campaigns design the whole journey, not isolated ads.",
+          ],
+        ),
+      },
+      {
+        heading: ls("علامات تقول إن حملتك لم تعد مناسبة للسوق الحالي", "Signs your campaign is no longer market-fit"),
+        paragraphs: ll(
+          [
+            "الحملة لا تفشل فجأة. التراجع تدريجي: تكلفة العميل تزيد، جودة الاستفسارات تقل، معدل التحويل ينخفض، ثم تبدأ الشركة برفع الميزانية بدل معالجة السبب الحقيقي.",
+            "أبرز العلامات: ارتفاع تكلفة العميل المحتمل رغم ثبات الميزانية، زيادة النقرات دون مبيعات، انخفاض جودة العملاء، ضعف التفاعل مع نفس الرسائل القديمة، الاعتماد على منصة واحدة لفترة طويلة، غياب تتبع التحويلات، تكرار نفس التصميم دون اختبار، انخفاض معدل تحويل صفحة الهبوط، عدم وضوح العائد من كل قناة، وشكوى فريق المبيعات من جودة العملاء.",
+            "وجود علامة واحدة لا يعني أن الحملة فاشلة بالكامل، لكنه يعني أنها تحتاج إلى تحليل. تحسين أداء الحملات يبدأ من فهم المشكلة بدقة، وليس من زيادة الميزانية مباشرة.",
+          ],
+          [
+            "Campaigns decline gradually: rising CPL, fewer sales per click, weaker lead quality, less engagement on stale creative.",
+            "Key red flags: single-platform dependency, no conversion tracking, no creative testing, low landing-page conversion, unclear ROI per channel, sales team complaining about lead quality.",
+            "One signal alone isn't failure — it's a prompt to analyze, not to raise the budget.",
+          ],
+        ),
+      },
+      {
+        heading: ls("الفرق بين الحملة التقليدية وحملات إعلانية متوافقة مع تطورات السوق", "Traditional campaigns vs market-aligned campaigns"),
+        paragraphs: ll(
+          [
+            "الحملة التقليدية: إطلاق وانتظار، اختيار المنصة بالشهرة، قياس بالمشاهدات والنقرات، رسالة ثابتة، ميزانية موزعة بنفس الطريقة، صفحة هبوط مجرد رابط، تتبع محدود، وتطوير بعد حدوث المشكلة.",
+            "الحملة المتوافقة مع السوق: اختبار وتحليل وتحسين مستمر، اختيار المنصة بسلوك العملاء، قياس بالتحويلات والعائد، رسالة مرنة، إعادة توزيع الميزانية حسب الأداء، صفحة هبوط جزء أساسي من التحويل، تتبع مضبوط قبل الإطلاق، وتطوير دوري ومنظم.",
+            "كثير من الشركات لا تخسر بسبب ضعف المنتج، بل بسبب طريقة إدارة الإعلان. الحملة التقليدية قد تعطي أرقامًا تبدو جيدة، لكنها لا تضمن نتيجة تجارية واضحة.",
+          ],
+          [
+            "Traditional: launch & wait, pick platforms by familiarity, measure clicks, static creative, fixed budget split, landing page = a link, limited tracking.",
+            "Market-aligned: continuous test/measure/improve, platform chosen by behavior, conversions over clicks, flexible messaging, performance-based budget reallocation, landing page as a conversion engine, tracking set up before launch.",
+            "Many brands lose to ad management — not to product quality.",
+          ],
+        ),
+      },
+      {
+        heading: ls("استراتيجيات بناء حملة متوافقة مع السوق", "Strategies to build a market-aligned campaign"),
+        paragraphs: ll(
+          [
+            "1) حدّد الهدف بدقة: مبيعات، حجوزات، عملاء محتملون، زيارات، أم وعي. كل هدف يحتاج منصة ورسالة وقياسًا مختلفًا.",
+            "2) افهم الجمهور بعمق: ما المشكلة؟ ما الذي يمنعه من الشراء؟ ما الاعتراضات؟ هل في مرحلة وعي أم مقارنة أم قرار؟",
+            "3) اختر القناة المناسبة: حملات جوجل للنية الشرائية العالية، السوشيال ميديا للوعي والتأثير البصري وإعادة الاستهداف.",
+            "4) اكتب رسالة تحل مشكلة، وابتعد عن العبارات العامة كـ \"أفضل جودة\".",
+            "5) اضبط التتبع قبل الإطلاق. توضح Google أن قياس التحويلات يساعد على فهم سلوك المستخدم وتحسين أداء الحملات.",
+          ],
+          [
+            "1) Define the business goal precisely.",
+            "2) Understand the audience deeply: blockers, objections, journey stage.",
+            "3) Choose the right channel: Google for high intent, social for awareness and retargeting.",
+            "4) Write messages that solve a real problem, not generic claims.",
+            "5) Set up tracking before launch — Google emphasizes conversion tracking as the basis of optimization.",
+          ],
+        ),
+      },
+      {
+        heading: ls("حملات السوشيال ميديا أم حملات جوجل الإعلانية؟", "Social media ads vs Google Ads"),
+        paragraphs: ll(
+          [
+            "الاختيار يعتمد على نية العميل. حملات جوجل مناسبة عندما يبحث العميل عن خدمة الآن أو نشاط محلي أو طلب فوري. حملات السوشيال ميديا مناسبة عندما تحتاج العلامة انتشارًا، أو يكون المنتج بصريًا، أو يحتاج القرار تكرارًا.",
+            "العيادات: Google + Meta للحجوزات. المطاعم: Snapchat/Instagram/TikTok للانتشار المحلي. المتاجر: Meta/TikTok/Google للمبيعات. B2B: LinkedIn/Google للعملاء المؤهلين. الخدمات المنزلية: Google Search + WhatsApp. التدريب: Meta/TikTok/Google للتسجيلات.",
+            "غالبًا الأفضل ليس منصة واحدة، بل مزيج إعلاني يخدم رحلة العميل من الوعي إلى القرار.",
+          ],
+          [
+            "Use Google when intent is explicit and purchase is imminent. Use social for awareness, visual products, and decisions that need repetition.",
+            "Clinics: Google+Meta. Restaurants: Snapchat/Instagram/TikTok. E-commerce: Meta/TikTok/Google. B2B: LinkedIn/Google. Home services: Google Search+WhatsApp. Education: Meta/TikTok/Google.",
+            "The best mix supports the entire journey, not a single channel.",
+          ],
+        ),
+      },
+      {
+        heading: ls("دور الإعلانات الممولة وإعادة الاستهداف", "Paid ads & retargeting"),
+        paragraphs: ll(
+          [
+            "الإعلانات الممولة تمنح وصولًا سريعًا، وإعادة الاستهداف تجعل هذا الوصول أكثر كفاءة. عندما يتفاعل العميل مع إعلانك أو يزور موقعك دون شراء، يمكن إعادة التواصل برسالة جديدة تناسب مرحلته.",
+            "تستخدم في: تذكير زائر لم يكمل الطلب، تقديم عرض لمن شاهد الخدمة، توضيح ميزة لمن زار صفحة معينة، إعادة جذب العملاء السابقين، وتحسين تحويل الزيارات القديمة.",
+            "إعادة الاستهداف لا تعني تكرار نفس الإعلان. كل مرحلة تحتاج رسالة مختلفة، وهذا ما يقلّل الهدر ويرفع التحويل.",
+          ],
+          [
+            "Paid ads buy reach; retargeting makes that reach efficient by re-engaging warm visitors with stage-appropriate messages.",
+            "Use it for cart abandoners, service viewers, page-specific upsells, win-back, and CRO on past traffic.",
+            "Don't repeat the same ad — vary by stage to reduce waste and lift conversions.",
+          ],
+        ),
+      },
+      {
+        heading: ls("كيف توزع الميزانية بين المنصات؟", "How to distribute budget across platforms"),
+        paragraphs: ll(
+          [
+            "الخطأ الشائع تقسيم الميزانية بالتساوي دون النظر إلى الأداء. التوزيع الصحيح يعتمد على الهدف وسلوك العملاء وجودة النتائج.",
+            "ابدأ بميزانية اختبارية موزعة بين القنوات الأكثر منطقية لنشاطك. القناة التي تجلب عملاء أفضل بتكلفة أقل تستحق زيادة تدريجية، والقناة الضعيفة تحتاج تعديلًا أو إيقافًا.",
+            "خصص جزءًا لجوجل عند وجود نية شراء واضحة، جزءًا للسوشيال للتوعية، وجزءًا لإعادة الاستهداف. لا تنفق كل الميزانية على إعلان واحد، ولا ترفعها قبل فهم جودة النتائج. قارن تكلفة العميل بهامش الربح وليس بعدد النقرات.",
+          ],
+          [
+            "Splitting budget equally is the most common mistake — let performance, intent, and goal drive allocation.",
+            "Start with a test split, then scale winners and pause losers gradually.",
+            "Compare CPL to your margin — not to clicks. Don't scale before you understand quality.",
+          ],
+        ),
+      },
+      {
+        heading: ls("كيف تختار مؤشرات الأداء المناسبة؟", "Choosing the right KPIs"),
+        paragraphs: ll(
+          [
+            "إذا كنت تقيس المؤشرات الخطأ، قد تعتقد أن الحملة ناجحة وهي لا تحقق عائدًا فعليًا.",
+            "أهم المؤشرات: تكلفة العميل المحتمل CPL، تكلفة الاكتساب CPA، معدل التحويل، العائد على الإنفاق ROAS، جودة العملاء، نسبة الإغلاق، وقيمة العميل على المدى الطويل.",
+            "النقرات وحدها ليست دليلًا على نجاح الحملة. المؤشر الحقيقي هو النتيجة التجارية: استفسار جيد، حجز، بيع، أو عميل مؤهل. توضح Google أن تتبع التحويلات يساعد المعلنين على معرفة الإعلانات التي تقود إلى إجراءات مهمة.",
+          ],
+          [
+            "Wrong KPIs make losing campaigns look successful.",
+            "Track CPL, CPA, conversion rate, ROAS, lead quality, close rate, and LTV.",
+            "Clicks alone don't prove success — the truth is in qualified leads, bookings, and sales. Google highlights conversion tracking as the foundation for ad optimization.",
+          ],
+        ),
+      },
+      {
+        heading: ls("دور الرسالة الإعلانية وصفحة الهبوط", "The ad message and landing page"),
+        paragraphs: ll(
+          [
+            "الرسالة القوية ليست بالضرورة طويلة، لكنها يجب أن تكون واضحة ومتصلة باحتياج العميل. بدلًا من \"نقدم خدمات إعلانية احترافية\"، قل: \"نساعدك على معرفة أين تُصرف ميزانيتك، وأي قناة تحقق أفضل عائد، وكيف تقلل الهدر\".",
+            "صفحة الهبوط تحدد هل الزائر سيتحول إلى عميل أم لا. يجب أن تحتوي على عنوان واضح، وصف مختصر، زر إجراء، وسائل تواصل ظاهرة، زر واتساب، عناصر ثقة، سرعة تحميل جيدة على الجوال، وتصميم بسيط.",
+            "تحسين صفحة الهبوط قد يرفع النتائج دون زيادة الميزانية. أحيانًا لا تحتاج إلى إعلان جديد، بل إلى صفحة أوضح ورسالة أقوى ونموذج أبسط.",
+          ],
+          [
+            "Strong messages aren't long — they're specific to the customer's problem. Replace generic claims with concrete benefits.",
+            "Landing pages decide conversion: clear headline, short value pitch, CTA, visible contact, WhatsApp button, trust signals, mobile speed, simple design.",
+            "Page improvements often beat new ads. Sometimes you need a clearer page, not more spend.",
+          ],
+        ),
+      },
+      {
+        heading: ls("كيف تؤثر سرعة الرد على نتائج الإعلانات؟", "How response speed affects results"),
+        paragraphs: ll(
+          [
+            "الإعلان قد يجذب العميل المناسب، لكن إذا لم يجد ردًا سريعًا، ينتقل إلى منافس آخر. في السوق السعودي، واتساب والاتصال المباشر يلعبان دورًا حاسمًا في القرار.",
+            "تأخير الرد يؤدي إلى انخفاض معدل التحويل، ارتفاع تكلفة العميل، فقدان فرص جاهزة، ضعف تجربة العميل، وإهدار جزء من الميزانية.",
+            "جهّز فريق الرد قبل تشغيل الحملة، وأعدّ ردودًا أولية واضحة، وحدد آلية متابعة، واربط الحملات بقنوات تواصل سهلة.",
+          ],
+          [
+            "Great targeting fails if responses are slow. In Saudi Arabia, WhatsApp and direct calls drive decisions.",
+            "Slow replies hurt conversion rate, raise CPL, waste hot leads, and burn budget.",
+            "Prepare your response team before launch, with templates, follow-up SOPs, and easy contact channels.",
+          ],
+        ),
+      },
+      {
+        heading: ls("متى تحتاج إلى إدارة حملات إعلانية احترافية؟", "When you need professional campaign management"),
+        paragraphs: ll(
+          [
+            "تحتاج إدارة احترافية عندما تصبح الإعلانات جزءًا أساسيًا من نمو شركتك. مع زيادة الإنفاق وتعدد المنصات وارتفاع المنافسة، تصبح الإدارة غير المتخصصة مخاطرة حقيقية.",
+            "أبرز المؤشرات: الإنفاق دون معرفة العائد الحقيقي، العمل على أكثر من منصة دون استراتيجية موحدة، نقرات كثيرة ومبيعات قليلة، ارتفاع تكلفة العميل تدريجيًا، غياب تتبع تحويلات دقيق، عدم وجود تقارير شهرية مفهومة، شكوى فريق المبيعات، وعدم اختبار الإعلانات بانتظام.",
+            "الوكالة الجيدة لا تبدأ بسؤال \"كم الميزانية؟\" فقط، بل تفهم نشاطك وهامش الربح وطبيعة العميل ودورة البيع والقنوات التي جربتها سابقًا.",
+          ],
+          [
+            "You need pro management once ads become a primary growth channel and the cost of mistakes scales.",
+            "Watch for: spending without ROI clarity, multi-platform without strategy, clicks without sales, rising CPL, no tracking, no monthly reports, sales-team friction, no creative testing.",
+            "A good agency starts with your business model, margins, sales cycle, and past channels — not with budget alone.",
+          ],
+        ),
+      },
+      {
+        heading: ls("كيف تساعدك فكرة في بناء حملاتك؟", "How Fikra helps you build market-aligned campaigns"),
+        paragraphs: ll(
+          [
+            "في فكرة نبدأ بفهم القنوات الحالية، أين تُصرف الميزانية، نوع العملاء القادمين، أين يحدث الهدر، وهل صفحة الهبوط تساعد على التحويل، وهل سرعة الرد مناسبة، وهل التتبع يوضح العائد الحقيقي.",
+            "بعدها نعمل على: تحديد القنوات الأنسب، تطوير الرسائل، تحسين الاستهداف، مراجعة صفحات الهبوط، ضبط تتبع التحويلات، تحليل النتائج بشكل دوري، تقليل الهدر، وتحسين جودة العملاء المحتملين.",
+            "الهدف بناء نظام إعلاني واضح يساعدك على معرفة أين تُنفق، ماذا تحقق، وما الذي يحتاج تطويرًا. يمكنك حجز جلسة تشخيص مجانية لمعرفة وضع حملاتك الحالي وفرص التحسين قبل أي إنفاق إضافي.",
+          ],
+          [
+            "We start by auditing channels, spend, lead quality, waste sources, landing page performance, response speed, and tracking accuracy.",
+            "Then we refine channel mix, messaging, targeting, landing pages, conversion tracking, reporting cadence, and lead quality.",
+            "The goal is a transparent ad system: know what's spent, what's earned, and what to improve next. Book a free diagnostic to see where your campaigns stand today.",
+          ],
+        ),
+      },
+      {
+        heading: ls("دمج SEO مع الحملات المدفوعة", "Combining SEO with paid ads"),
+        paragraphs: ll(
+          [
+            "الإعلانات تمنحك سرعة، وSEO يمنحك حضورًا طويل المدى. الجمع بينهما يبني منظومة تسويقية أقوى. عندما يرى العميل إعلانك ثم يبحث عن اسم شركتك ويجد موقعك ظاهرًا جيدًا، تزيد الثقة.",
+            "التكامل يظهر في: الإعلانات تكشف الكلمات التي تحقق تحويلات، SEO يحوّلها إلى محتوى مستمر، صفحات الموقع المحسّنة ترفع التحويل، الظهور العضوي يقلّل الاعتماد الكامل على الإعلان، والمحتوى التعليمي يساعد العميل قبل القرار.",
+            "الشركات التي تجمع بين الإعلانات وSEO تبني حضورًا رقميًا أكثر استقرارًا، وهذا من أهم اتجاهات التسويق الحديثة للنمو المستدام.",
+          ],
+          [
+            "Ads bring speed; SEO builds long-term presence. Combined, they form a stronger growth system.",
+            "Ads reveal high-converting keywords; SEO converts them into evergreen content; optimized pages lift conversions; organic visibility reduces ad dependency.",
+            "Brands that combine both build more stable digital presence — a core trend in modern marketing.",
+          ],
+        ),
+      },
+      {
+        heading: ls("أخطاء شائعة تجعل الحملة تفشل رغم جودة الإعلان", "Common mistakes that fail great-looking ads"),
+        paragraphs: ll(
+          [
+            "غياب التتبع: لا تعرف أي إعلان يحقق نتيجة. ضعف صفحة الهبوط: صفحة بطيئة أو غير واضحة تضيع الفرصة. استهداف واسع جدًا: يزيد الهدر.",
+            "رسالة لا تناسب مرحلة العميل، تأخير الرد، عدم اختبار بدائل، والحكم المبكر على الحملة قبل جمع بيانات كافية — كلها أسباب تُسقط حملات تبدو ممتازة على الورق.",
+            "تجنب هذه الأخطاء يحسّن النتائج دون الحاجة دائمًا إلى زيادة الميزانية.",
+          ],
+          [
+            "No tracking, weak landing pages, overly broad targeting, message-stage mismatch, slow replies, no A/B testing, and judging campaigns too early — all sink otherwise great ads.",
+            "Fixing these often improves results without raising spend.",
+          ],
+        ),
+      },
+      {
+        heading: ls("كيف تبني نظام مراجعة دوري للحملات؟", "How to build a periodic review system"),
+        paragraphs: ll(
+          [
+            "أسبوعيًا: متابعة الإنفاق، تكلفة العميل، جودة الاستفسارات، وأداء الإعلانات. شهريًا: تحليل الرسائل والجماهير والمنصات وصفحات الهبوط. ربع سنويًا: مراجعة الاستراتيجية العامة وتغير السوق والمنافسة وسلوك العملاء.",
+            "هذا النظام يمنع تراكم الأخطاء. بدل أن تكتشف بعد أشهر أن الحملة تهدر الميزانية، تستطيع ملاحظة التراجع مبكرًا واتخاذ قرار سريع.",
+            "السوق السعودي يتغير بسرعة، والشركات التي تعتمد على حملات إعلانية متوافقة مع تطورات السوق تكون أقدر على فهم العملاء وتقليل الهدر. النجاح لا يعتمد على حجم الميزانية فقط، بل على دقة الاستهداف ووضوح الرسالة وجودة صفحة الهبوط وسرعة الرد وقوة التتبع.",
+          ],
+          [
+            "Weekly: spend, CPL, lead quality, ad performance. Monthly: messages, audiences, platforms, landing pages. Quarterly: strategy, market shifts, competition, behavior.",
+            "This rhythm catches problems early instead of months later.",
+            "Saudi markets move fast — adaptive campaigns win on targeting accuracy, message clarity, landing page quality, response speed, and tracking strength, not just budget size.",
+          ],
+        ),
+      },
+    ],
+    faq: [
+      {
+        q: ls("ما المقصود بحملات إعلانية متوافقة مع تطورات السوق؟", "What are market-aligned ad campaigns?"),
+        a: ls(
+          "هي حملات يتم تحديثها باستمرار وفق تغير سلوك العملاء وأداء المنصات والمنافسة ونتائج القياس، بدل الاعتماد على نفس الإعلان لفترة طويلة.",
+          "Campaigns continuously updated based on customer behavior, platform performance, competition, and measured results — not a static ad running for months.",
+        ),
+      },
+      {
+        q: ls("ما الفرق بين الحملات الحديثة والتقليدية؟", "How are modern campaigns different from traditional ones?"),
+        a: ls(
+          "الحملات الحديثة تعتمد على البيانات والاختبار والتتبع وإعادة توزيع الميزانية، بينما التقليدية تعتمد على إعلان ثابت وقياس محدود.",
+          "Modern campaigns rely on data, testing, tracking, and budget reallocation; traditional ones rely on a fixed ad and limited measurement.",
+        ),
+      },
+      {
+        q: ls("كيف تساعد استراتيجيات الحملات على تقليل الهدر؟", "How do strategies reduce ad waste?"),
+        a: ls(
+          "باختيار الجمهور الصحيح وتحديد المنصة المناسبة وتحسين الرسالة وقياس النتائج بدقة بدل الاعتماد على التخمين.",
+          "By choosing the right audience and platform, refining the message, and measuring precisely instead of guessing.",
+        ),
+      },
+      {
+        q: ls("الأفضل: حملات السوشيال أم حملات جوجل؟", "Social ads or Google Ads — which is better?"),
+        a: ls(
+          "يعتمد على نية العميل. جوجل مناسبة لمن يبحث عن خدمة الآن، والسوشيال ميديا مناسبة لبناء الوعي وإعادة الاستهداف وتحفيز الاهتمام.",
+          "It depends on intent: Google for active searches, social for awareness, retargeting, and demand creation.",
+        ),
+      },
+      {
+        q: ls("متى أحتاج إدارة حملات إعلانية احترافية؟", "When do I need professional campaign management?"),
+        a: ls(
+          "إذا كنت تنفق دون معرفة العائد، أو تعمل على أكثر من منصة، أو تعاني من ارتفاع تكلفة العميل وضعف الجودة.",
+          "When you spend without knowing ROI, run multiple platforms, or face rising CPL and weak lead quality.",
+        ),
+      },
+      {
+        q: ls("كيف أعرف أن حملتي تهدر الميزانية؟", "How do I know my campaign is wasting budget?"),
+        a: ls(
+          "نقرات كثيرة دون مبيعات، تكلفة عميل ترتفع، عدم معرفة مصدر العملاء، أو غياب بيانات تحويل واضحة.",
+          "Lots of clicks but no sales, rising CPL, unclear lead sources, or missing conversion data.",
+        ),
+      },
+      {
+        q: ls("هل إعادة الاستهداف مهمة لكل نشاط؟", "Is retargeting necessary for every business?"),
+        a: ls(
+          "مهمة لمعظم الأنشطة، خاصة عندما يحتاج العميل وقتًا للمقارنة. لكن يجب أن تختلف الرسائل حسب مرحلة العميل.",
+          "Important for most businesses — especially when buyers compare options. Vary the message by customer stage.",
+        ),
+      },
+      {
+        q: ls("ما أهم عنصر في تحسين أداء الحملات؟", "What's the most important factor in campaign performance?"),
+        a: ls(
+          "لا يوجد عنصر واحد. الأداء يعتمد على تكامل الاستهداف والرسالة والمنصة وصفحة الهبوط وسرعة الرد والتتبع.",
+          "There's no single factor — performance depends on the integration of targeting, message, platform, landing page, response speed, and tracking.",
+        ),
+      },
+    ],
+    internalLinks: [
+      {
+        label: ls("خدمات إدارة الحملات الإعلانية المدفوعة", "Paid Ads Management Service"),
+        href: "/services/paid-ads",
+      },
+      {
+        label: ls("خدمة تهيئة محركات البحث (SEO)", "SEO Service"),
+        href: "/services/seo",
+      },
+      {
+        label: ls("خدمة الاستشارات التسويقية", "Marketing Consulting"),
+        href: "/services/consulting",
+      },
+      {
+        label: ls("دليل التسويق الرقمي للمبتدئين", "Beginner's Digital Marketing Guide"),
+        href: "/blog/digital-marketing-guide-beginners",
+      },
+      {
+        label: ls("احجز جلسة تشخيص مجانية", "Book a Free Diagnostic"),
+        href: "/contact",
+      },
+    ],
+    cta: {
+      title: ls(
+        "هل تبحث عن حملات إعلانية تواكب تطورات السوق السعودي؟",
+        "Looking for ad campaigns that match the Saudi market?",
+      ),
+      description: ls(
+        "احجز جلسة تشخيص مجانية مع فكرة لمعرفة أين تقف حملاتك الآن، وما الفرص التي يمكن تطويرها قبل أي إنفاق إضافي.",
+        "Book a free diagnostic with Fikra to see where your campaigns stand and what to improve before spending more.",
+      ),
+      buttonLabel: ls("احجز جلسة تشخيص مجانية", "Book Free Diagnostic"),
+      href: "/contact",
+    },
+  }),
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
