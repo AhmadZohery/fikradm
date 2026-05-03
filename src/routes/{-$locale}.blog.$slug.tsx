@@ -324,11 +324,22 @@ function PostPage() {
                       {section.summary[loc]}
                     </p>
                   )}
-                  {section.paragraphs[loc].map((p, j) => (
-                    <p key={j} className="mb-4 text-[17px] leading-[1.95] text-foreground/85">
-                      {p}
-                    </p>
-                  ))}
+                  {section.paragraphs[loc].map((p, j) => {
+                    const nodes = linkifyParagraph(p, inlineSpecs, usedInline, (href, label, key) => (
+                      <Link
+                        key={key}
+                        to={buildHref(locale, href)}
+                        className="font-semibold text-primary underline decoration-primary/30 underline-offset-4 transition hover:decoration-primary"
+                      >
+                        {label}
+                      </Link>
+                    ));
+                    return (
+                      <p key={j} className="mb-4 text-[17px] leading-[1.95] text-foreground/85">
+                        {nodes}
+                      </p>
+                    );
+                  })}
                 </section>
               </Reveal>
             ))}
