@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale } from "@/i18n/useLocale";
 import { Link } from "@tanstack/react-router";
 import {
@@ -70,6 +70,49 @@ export function ServiceTabs({ content }: { content: ServiceTabContent }) {
   const p = PERSONALITIES[content.personality];
   const Icon = p.icon;
   const tabKeys: TabKey[] = ["features", "deliverables", "process", "audience", "faq"];
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  const HASH_TO_TAB: Record<string, TabKey> = {
+    "#features": "features",
+    "#deliverables": "deliverables",
+    "#methodology": "process",
+    "#process": "process",
+    "#audience": "audience",
+    "#faq": "faq",
+  };
+  const TAB_TO_HASH: Record<TabKey, string> = {
+    features: "#features",
+    deliverables: "#deliverables",
+    process: "#methodology",
+    audience: "#audience",
+    faq: "#faq",
+  };
+
+  // Sync tab with URL hash so /services/seo#methodology opens the right tab.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const apply = () => {
+      const k = HASH_TO_TAB[window.location.hash];
+      if (k) {
+        setTab(k);
+        requestAnimationFrame(() => {
+          sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+    };
+    apply();
+    window.addEventListener("hashchange", apply);
+    return () => window.removeEventListener("hashchange", apply);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const selectTab = (k: TabKey) => {
+    setTab(k);
+    if (typeof window !== "undefined") {
+      const newUrl = `${window.location.pathname}${window.location.search}${TAB_TO_HASH[k]}`;
+      window.history.replaceState(null, "", newUrl);
+    }
+  };
 
   // FAQ JSON-LD
   const faqLd = {
@@ -83,7 +126,7 @@ export function ServiceTabs({ content }: { content: ServiceTabContent }) {
   };
 
   return (
-    <section className="section">
+    <section ref={sectionRef} id="service-tabs" className="section scroll-mt-24">
       <div className="container-app">
         {/* Section header — compact, no hero duplication */}
         <div className="mx-auto mb-8 max-w-3xl text-center">
@@ -109,7 +152,7 @@ export function ServiceTabs({ content }: { content: ServiceTabContent }) {
               return (
                 <button
                   key={k}
-                  onClick={() => setTab(k)}
+                  onClick={() => selectTab(k)}
                   className={cn(
                     "group relative inline-flex flex-1 items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold transition-all min-w-[120px]",
                     active
