@@ -979,6 +979,35 @@ export const blogPosts: BlogPost[] = [
     ),
     author: ls("فريق فكرة", "Fikra Team"),
     publishedAt: "2026-05-03",
+    lastReviewed: "2026-05-03",
+    authorRole: ls("خبراء إدارة الحملات الإعلانية", "Paid Media & Performance Experts"),
+    authorBio: ls(
+      "فريق فكرة يضم متخصصين في إدارة حملات Google وMeta وTikTok وSnapchat للسوق السعودي والخليجي، مع أكثر من 8 سنوات خبرة في تحسين CPL وROAS عبر قطاعات العيادات والمتاجر والخدمات وB2B.",
+      "Fikra's team specializes in Google, Meta, TikTok and Snapchat campaigns for the Saudi & Gulf markets, with 8+ years optimizing CPL and ROAS across clinics, e-commerce, services and B2B.",
+    ),
+    tldr: ll(
+      [
+        "السوق السعودي: 34.4 مليون مستخدم إنترنت و38.6 مليون هوية على السوشيال ميديا في 2026 — منافسة أعلى وتكلفة إعلان أكبر.",
+        "الحملة المتوافقة مع السوق تتغير وفق البيانات وسلوك العميل، وليس إعلان ثابت يعمل لأشهر.",
+        "اختر المنصة حسب نية العميل: Google للبحث الفوري، Meta/TikTok/Snapchat للوعي وإعادة الاستهداف.",
+        "قِس CPL وCPA وROAS وجودة العميل — لا تقِس النقرات وحدها.",
+        "صفحة هبوط واضحة + سرعة رد على واتساب = الفرق بين حملة ناجحة وميزانية مهدورة.",
+        "راجع أسبوعيًا، حلّل شهريًا، وحدّث الاستراتيجية ربع سنويًا.",
+      ],
+      [
+        "Saudi market: 34.4M internet users and 38.6M social identities in 2026 — higher competition and ad costs.",
+        "A market-aligned campaign evolves with data and behavior — not a static ad that runs for months.",
+        "Pick the platform by intent: Google for active search, Meta/TikTok/Snapchat for awareness and retargeting.",
+        "Measure CPL, CPA, ROAS and lead quality — never clicks alone.",
+        "Clear landing page + fast WhatsApp reply = the difference between profit and waste.",
+        "Review weekly, analyze monthly, update strategy quarterly.",
+      ],
+    ),
+    sources: [
+      { label: ls("DataReportal — Digital 2026 Saudi Arabia", "DataReportal — Digital 2026 Saudi Arabia"), url: "https://datareportal.com/reports/digital-2026-saudi-arabia" },
+      { label: ls("Google Ads — تتبع التحويلات", "Google Ads — Conversion Tracking"), url: "https://support.google.com/google-ads/answer/1722022" },
+      { label: ls("Meta for Business — أفضل الممارسات", "Meta for Business — Best Practices"), url: "https://www.facebook.com/business/help" },
+    ],
     readingMinutes: 12,
     image: "/blog/market-aligned-ad-campaigns.webp",
     tableOfContents: ll(
