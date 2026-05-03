@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactElement } from "react";
 import { useLocale } from "@/i18n/useLocale";
 import { Link } from "@tanstack/react-router";
 import {
@@ -35,7 +35,7 @@ type Personality = {
   chipBg: string;
   chipText: string;
   /** decorative motif rendered behind the active tab */
-  Motif: () => JSX.Element;
+  Motif: () => ReactElement;
 };
 
 function GridMotif() {
