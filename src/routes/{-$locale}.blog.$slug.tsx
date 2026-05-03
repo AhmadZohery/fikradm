@@ -162,6 +162,13 @@ function PostPage() {
     month: "long",
     day: "numeric",
   });
+  const reviewedText = post.lastReviewed
+    ? new Date(post.lastReviewed).toLocaleDateString(locale === "ar" ? "ar-SA" : "en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : null;
 
   const encShare = encodeURIComponent(shareUrl);
   const encTitle = encodeURIComponent(post.title[loc]);
@@ -222,6 +229,12 @@ function PostPage() {
               <span className="inline-flex items-center gap-1.5">
                 <Clock className="h-4 w-4" /> {post.readingMinutes} {locale === "ar" ? "دقيقة قراءة" : "min read"}
               </span>
+              {reviewedText && (
+                <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                  <ShieldCheck className="h-4 w-4" />
+                  {locale === "ar" ? `آخر مراجعة: ${reviewedText}` : `Last reviewed: ${reviewedText}`}
+                </span>
+              )}
             </div>
           </Reveal>
 
@@ -243,12 +256,43 @@ function PostPage() {
       <section className="pb-16">
         <div className="container-app grid max-w-6xl gap-10 lg:grid-cols-[1fr_280px]">
           <article className="prose-fikra">
+            {/* TL;DR — AEO/AIO/LLMO snippet block */}
+            {post.tldr && post.tldr[loc].length > 0 && (
+              <Reveal>
+                <aside
+                  aria-label={locale === "ar" ? "ملخص سريع" : "Quick summary"}
+                  className="mb-10 rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.06] via-primary/[0.03] to-transparent p-6 md:p-7"
+                >
+                  <h2 className="m-0 mb-3 flex items-center gap-2 text-lg font-extrabold text-foreground">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                    {locale === "ar" ? "ملخص سريع (TL;DR)" : "Quick summary (TL;DR)"}
+                  </h2>
+                  <ul className="m-0 list-none space-y-2 p-0">
+                    {post.tldr[loc].map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-foreground/85 md:text-base">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
+              </Reveal>
+            )}
+
             {post.body.map((section, i) => (
               <Reveal key={i} delay={i * 60}>
                 <section id={`section-${i}`} className="mb-10 scroll-mt-24">
                   <h2 className="mb-4 text-2xl font-bold text-foreground md:text-3xl">{section.heading[loc]}</h2>
+                  {section.summary && (
+                    <p
+                      className="mb-5 rounded-xl border-s-4 border-primary bg-primary/5 px-4 py-3 text-base font-medium leading-relaxed text-foreground"
+                      data-aeo-answer="true"
+                    >
+                      {section.summary[loc]}
+                    </p>
+                  )}
                   {section.paragraphs[loc].map((p, j) => (
-                    <p key={j} className="mb-4 text-base leading-relaxed text-foreground/80">
+                    <p key={j} className="mb-4 text-[17px] leading-[1.95] text-foreground/85">
                       {p}
                     </p>
                   ))}
