@@ -97,9 +97,12 @@ export const Route = createFileRoute("/{-$locale}/blog/$slug")({
             : {}),
         }),
         jsonLdScript(breadcrumbLdGen(breadcrumbItems)),
-        ...(post.faq && post.faq.length > 0
-          ? [jsonLdScript(faqLd(post.faq.map((f) => ({ question: f.q[loc], answer: f.a[loc] }))))]
-          : []),
+        ...(() => {
+          const eff = getEffectiveFaq(post);
+          return eff.items.length > 0
+            ? [jsonLdScript(faqLd(eff.items.map((f) => ({ question: f.q[loc], answer: f.a[loc] }))))]
+            : [];
+        })(),
         jsonLdScript({
           "@context": "https://schema.org",
           "@type": "WebPage",
