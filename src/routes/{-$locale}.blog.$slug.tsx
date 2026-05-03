@@ -10,7 +10,8 @@ import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blo
 import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle, Sparkles, ShieldCheck, BookOpen, CheckCircle2, ExternalLink, BookOpenCheck, Briefcase, MousePointerClick } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { linkifyParagraph } from "@/lib/inlineLinks";
+import { linkifyParagraph, makeBudget, type LinkBudget } from "@/lib/inlineLinks";
+import { getEffectiveFaq } from "@/lib/dynamicFaq";
 import {
   buildSeoMeta,
   buildSeoLinks,
@@ -141,12 +142,15 @@ function PostPage() {
   const post = getPostBySlug(slug)!;
   const cat = getCategoryBySlug(post.categorySlug);
   const related = getRelatedPosts(slug, 3);
-  // Track inline links already used so each phrase appears at most once.
-  const usedInline = new Set<string>();
+  // Centralized anchor budget — dedupes phrases & hrefs, distributes per section.
+  const inlineBudget: LinkBudget = makeBudget({ perSection: 2, total: 8 });
   const inlineSpecs = (post.inlineLinks ?? []).map((l) => ({
     phrase: l.phrase[loc],
     href: l.href,
   }));
+  // Effective FAQ — auto-generated from sections/TL;DR if none authored.
+  const effectiveFaq = getEffectiveFaq(post);
+  const faqForRender = effectiveFaq.items.map((f) => ({ q: f.q, a: f.a }));
 
   // Dynamic "Read also" — category-aware service + post links, ordered for CTR.
   const categoryServiceMap: Record<string, { ar: string; en: string; href: string }[]> = {
