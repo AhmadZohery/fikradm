@@ -22,10 +22,19 @@ export type BlogPost = {
   readingMinutes: number;
   image: string;
   tableOfContents: LocalizedList;
-  body: { heading: LocalizedString; paragraphs: LocalizedList }[];
+  body: { heading: LocalizedString; summary?: LocalizedString; paragraphs: LocalizedList }[];
   faq?: { q: LocalizedString; a: LocalizedString }[];
   internalLinks?: { label: LocalizedString; href: string }[];
   cta?: { title: LocalizedString; description: LocalizedString; buttonLabel: LocalizedString; href: string };
+  /** AEO / AIO / LLMO: 3–6 bullet TL;DR shown at the top + structured for snippets. */
+  tldr?: LocalizedList;
+  /** EEAT: short author bio shown under the article. */
+  authorBio?: LocalizedString;
+  authorRole?: LocalizedString;
+  /** EEAT: last reviewed date (ISO). Distinct from publishedAt. */
+  lastReviewed?: string;
+  /** EEAT / GEO: cited sources used for facts. */
+  sources?: { label: LocalizedString; url: string }[];
 };
 
 export const blogCategories: BlogCategory[] = [
