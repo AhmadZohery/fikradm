@@ -56,7 +56,11 @@ export type Database = {
       blog_posts: {
         Row: {
           author_ar: string | null
+          author_bio_ar: string | null
+          author_bio_en: string | null
           author_en: string | null
+          author_role_ar: string | null
+          author_role_en: string | null
           body: Json
           category_id: string | null
           cover_image_url: string | null
@@ -69,6 +73,7 @@ export type Database = {
           internal_links: Json
           keywords_ar: string[] | null
           keywords_en: string[] | null
+          last_reviewed: string | null
           meta_description_ar: string | null
           meta_description_en: string | null
           meta_title_ar: string | null
@@ -76,17 +81,25 @@ export type Database = {
           published_at: string | null
           reading_minutes: number
           scheduled_unpublish_at: string | null
+          section_summaries: Json
           slug: string
+          sources: Json
           status: string
           table_of_contents_ar: Json
           table_of_contents_en: Json
           title_ar: string
           title_en: string
+          tldr_ar: string[]
+          tldr_en: string[]
           updated_at: string
         }
         Insert: {
           author_ar?: string | null
+          author_bio_ar?: string | null
+          author_bio_en?: string | null
           author_en?: string | null
+          author_role_ar?: string | null
+          author_role_en?: string | null
           body?: Json
           category_id?: string | null
           cover_image_url?: string | null
@@ -99,6 +112,7 @@ export type Database = {
           internal_links?: Json
           keywords_ar?: string[] | null
           keywords_en?: string[] | null
+          last_reviewed?: string | null
           meta_description_ar?: string | null
           meta_description_en?: string | null
           meta_title_ar?: string | null
@@ -106,17 +120,25 @@ export type Database = {
           published_at?: string | null
           reading_minutes?: number
           scheduled_unpublish_at?: string | null
+          section_summaries?: Json
           slug: string
+          sources?: Json
           status?: string
           table_of_contents_ar?: Json
           table_of_contents_en?: Json
           title_ar: string
           title_en: string
+          tldr_ar?: string[]
+          tldr_en?: string[]
           updated_at?: string
         }
         Update: {
           author_ar?: string | null
+          author_bio_ar?: string | null
+          author_bio_en?: string | null
           author_en?: string | null
+          author_role_ar?: string | null
+          author_role_en?: string | null
           body?: Json
           category_id?: string | null
           cover_image_url?: string | null
@@ -129,6 +151,7 @@ export type Database = {
           internal_links?: Json
           keywords_ar?: string[] | null
           keywords_en?: string[] | null
+          last_reviewed?: string | null
           meta_description_ar?: string | null
           meta_description_en?: string | null
           meta_title_ar?: string | null
@@ -136,12 +159,16 @@ export type Database = {
           published_at?: string | null
           reading_minutes?: number
           scheduled_unpublish_at?: string | null
+          section_summaries?: Json
           slug?: string
+          sources?: Json
           status?: string
           table_of_contents_ar?: Json
           table_of_contents_en?: Json
           title_ar?: string
           title_en?: string
+          tldr_ar?: string[]
+          tldr_en?: string[]
           updated_at?: string
         }
         Relationships: [
