@@ -316,7 +316,10 @@ function PostPage() {
               </Reveal>
             )}
 
-            {post.body.map((section, i) => (
+            {post.body.map((section, i) => {
+              // Reset per-section budget so links spread across the article.
+              inlineBudget.perSection = 2;
+              return (
               <Reveal key={i} delay={i * 60}>
                 <section id={`section-${i}`} className="mb-10 scroll-mt-24">
                   <h2 className="mb-4 text-2xl font-bold text-foreground md:text-3xl">{section.heading[loc]}</h2>
@@ -329,7 +332,9 @@ function PostPage() {
                     </p>
                   )}
                   {section.paragraphs[loc].map((p, j) => {
-                    const nodes = linkifyParagraph(p, inlineSpecs, usedInline, (href, label, key) => (
+                    // Skip the first paragraph of each section to keep reading flow at the top.
+                    const allow = j > 0;
+                    const nodes = linkifyParagraph(p, inlineSpecs, inlineBudget, (href, label, key) => (
                       <Link
                         key={key}
                         to={buildHref(locale, href)}
@@ -337,7 +342,7 @@ function PostPage() {
                       >
                         {label}
                       </Link>
-                    ));
+                    ), { allowReplace: allow });
                     return (
                       <p key={j} className="mb-4 text-[17px] leading-[1.95] text-foreground/85">
                         {nodes}
@@ -346,7 +351,8 @@ function PostPage() {
                   })}
                 </section>
               </Reveal>
-            ))}
+              );
+            })}
 
             {/* Tags */}
             <div className="mt-10 flex flex-wrap items-center gap-2 border-t border-border pt-6">
