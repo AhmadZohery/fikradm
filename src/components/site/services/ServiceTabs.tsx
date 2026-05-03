@@ -126,7 +126,7 @@ export function ServiceTabs({ content }: { content: ServiceTabContent }) {
   };
 
   return (
-    <section ref={sectionRef} id="service-tabs" className="section scroll-mt-24">
+    <section ref={sectionRef} id="service-tabs" dir={isAr ? "rtl" : "ltr"} className="section scroll-mt-24">
       <div className="container-app">
         {/* Section header — compact, no hero duplication */}
         <div className="mx-auto mb-8 max-w-3xl text-center">
@@ -145,7 +145,7 @@ export function ServiceTabs({ content }: { content: ServiceTabContent }) {
         {/* Tabs */}
         <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-card">
           {/* Tab headers */}
-          <div className="flex flex-wrap gap-1 border-b border-border bg-surface-soft p-2">
+          <div role="tablist" className="flex flex-wrap gap-1 border-b border-border bg-surface-soft p-2">
             {tabKeys.map((k) => {
               const T = TAB_LABELS[k].icon;
               const active = tab === k;
@@ -169,8 +169,8 @@ export function ServiceTabs({ content }: { content: ServiceTabContent }) {
             })}
           </div>
 
-          {/* Tab body */}
-          <div className="relative p-6 md:p-10">
+          {/* Tab body — min-height stabilizes CLS as tab content swaps */}
+          <div className="relative min-h-[420px] p-6 md:p-10">
             {tab === "features" && (
               <div className="grid gap-3 sm:grid-cols-2">
                 {content.features[locale].map((f, i) => (

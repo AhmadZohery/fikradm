@@ -129,6 +129,14 @@ export function SiteHeader() {
 
   const otherLocale: Locale = locale === "ar" ? "en" : "ar";
 
+  // Preserve URL hash (e.g. #methodology) when switching language so the user
+  // lands on the same tab/section in the other locale.
+  const switchLocaleHref = (() => {
+    const base = buildHref(otherLocale);
+    if (typeof window === "undefined") return base;
+    return `${base}${window.location.hash || ""}`;
+  })();
+
   return (
     <>
       {/* Mega menu backdrop */}
@@ -310,7 +318,7 @@ export function SiteHeader() {
             </button>
             {/* Language toggle — icon only on mobile */}
             <Link
-              to={buildHref(otherLocale)}
+              to={switchLocaleHref}
               className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/60 text-foreground/80 backdrop-blur transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 hover:text-primary md:h-9 md:w-auto md:gap-1.5 md:px-3 md:text-xs md:font-bold"
               aria-label={`Switch to ${LOCALE_LABELS[otherLocale]}`}
             >
@@ -490,7 +498,7 @@ export function SiteHeader() {
               <ArrowUpRight className="cta-arrow" aria-hidden />
             </Link>
             <Link
-              to={buildHref(otherLocale)}
+              to={switchLocaleHref}
               onClick={() => setMobileOpen(false)}
               className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-border text-xs font-bold text-foreground/80"
             >
