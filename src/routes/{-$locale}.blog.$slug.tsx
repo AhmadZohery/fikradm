@@ -401,28 +401,64 @@ function PostPage() {
               </Reveal>
             )}
 
-            {/* Internal links */}
-            {post.internalLinks && post.internalLinks.length > 0 && (
+            {/* Dynamic Read also — services first (higher CTR), then related posts */}
+            {(dynamicServices.length > 0 || dynamicRelatedPosts.length > 0) && (
               <Reveal>
                 <section className="mt-12">
                   <h2 className="mb-5 text-2xl font-bold text-foreground md:text-3xl">
-                    {locale === "ar" ? "اقرأ أيضاً" : "Read also"}
+                    {locale === "ar" ? "اقرأ أيضاً وخدمات قد تهمك" : "Read also & relevant services"}
                   </h2>
-                  <ul className="grid gap-3 sm:grid-cols-2">
-                    {post.internalLinks.map((l, i) => (
-                      <li key={i}>
-                        <Link
-                          to={buildHref(locale, l.href)}
-                          className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-medium text-foreground transition-all hover:border-primary hover:bg-primary/5 hover:shadow-soft"
-                        >
-                          <span className="line-clamp-2">{l.label[loc]}</span>
-                          <span className="shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                            {locale === "ar" ? "←" : "→"}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+
+                  {dynamicServices.length > 0 && (
+                    <div className="mb-5">
+                      <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-primary">
+                        <Briefcase className="h-3.5 w-3.5" />
+                        {locale === "ar" ? "خدمات مرتبطة بالمقال" : "Services related to this article"}
+                      </div>
+                      <ul className="grid gap-3 sm:grid-cols-2">
+                        {dynamicServices.map((s, i) => (
+                          <li key={i}>
+                            <Link
+                              to={buildHref(locale, s.href)}
+                              className="group flex items-center justify-between gap-3 rounded-xl border border-primary/30 bg-primary/[0.04] px-4 py-3 text-sm font-semibold text-foreground transition-all hover:border-primary hover:bg-primary/10 hover:shadow-soft"
+                            >
+                              <span className="inline-flex items-center gap-2">
+                                <MousePointerClick className="h-4 w-4 text-primary" />
+                                <span className="line-clamp-2">{locale === "ar" ? s.ar : s.en}</span>
+                              </span>
+                              <span className="shrink-0 text-primary">
+                                {locale === "ar" ? "←" : "→"}
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {dynamicRelatedPosts.length > 0 && (
+                    <div>
+                      <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                        <BookOpenCheck className="h-3.5 w-3.5" />
+                        {locale === "ar" ? "مقالات ذات صلة" : "Related articles"}
+                      </div>
+                      <ul className="grid gap-3 sm:grid-cols-2">
+                        {dynamicRelatedPosts.map((p, i) => (
+                          <li key={i}>
+                            <Link
+                              to={buildHref(locale, `/blog/${p.slug}`)}
+                              className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-medium text-foreground transition-all hover:border-primary hover:bg-primary/5 hover:shadow-soft"
+                            >
+                              <span className="line-clamp-2">{p.title[loc]}</span>
+                              <span className="shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                                {locale === "ar" ? "←" : "→"}
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </section>
               </Reveal>
             )}
