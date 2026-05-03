@@ -2,24 +2,54 @@ import type { ReactNode } from "react";
 
 export type InlineLinkSpec = { phrase: string; href: string };
 
+export type LinkBudget = {
+  /** phrases already used (deduped across the article). */
+  used: Set<string>;
+  /** hrefs already used (avoid pointing to the same URL twice). */
+  usedHref: Set<string>;
+  /** how many links remain to place in the current section. */
+  perSection: number;
+  /** absolute cap to avoid spammy linking. */
+  remainingTotal: number;
+};
+
+export function makeBudget(opts: { perSection?: number; total?: number } = {}): LinkBudget {
+  return {
+    used: new Set(),
+    usedHref: new Set(),
+    perSection: opts.perSection ?? 2,
+    remainingTotal: opts.total ?? 8,
+  };
+}
+
 /**
- * Replace the first occurrence of each phrase in `text` with a React link node.
- * Mutates a shared `used` set so each phrase only links once across the article.
+ * Distribute and inject inline anchor links across the article.
+ *
+ * Rules (UX + SEO):
+ * - Each phrase appears at most once globally.
+ * - Each href is used at most once (no duplicate links to same URL).
+ * - Max `perSection` links per section, max `total` overall.
+ * - Skips first paragraph of a section so reading flow isn't broken at the top.
+ * - Longest phrases match first (more specific anchors).
  */
 export function linkifyParagraph(
   text: string,
   links: InlineLinkSpec[],
-  used: Set<string>,
+  budget: LinkBudget,
   renderLink: (href: string, label: string, key: string) => ReactNode,
+  opts: { allowReplace?: boolean } = {},
 ): ReactNode[] {
-  if (!links.length) return [text];
-  // sort by length desc to match longest phrases first
+  if (!links.length || budget.remainingTotal <= 0 || budget.perSection <= 0) return [text];
+  const allowReplace = opts.allowReplace ?? true;
+  if (!allowReplace) return [text];
+
   const candidates = [...links]
-    .filter((l) => l.phrase && !used.has(l.phrase))
+    .filter((l) => l.phrase && !budget.used.has(l.phrase) && !budget.usedHref.has(l.href))
     .sort((a, b) => b.phrase.length - a.phrase.length);
 
   let parts: ReactNode[] = [text];
   for (const { phrase, href } of candidates) {
+    if (budget.perSection <= 0 || budget.remainingTotal <= 0) break;
     let replaced = false;
     const next: ReactNode[] = [];
     for (const part of parts) {
@@ -39,7 +69,10 @@ export function linkifyParagraph(
       next.push(renderLink(href, match, `${phrase}-${idx}`));
       if (after) next.push(after);
       replaced = true;
-      used.add(phrase);
+      budget.used.add(phrase);
+      budget.usedHref.add(href);
+      budget.perSection -= 1;
+      budget.remainingTotal -= 1;
     }
     parts = next;
   }

@@ -57,6 +57,7 @@ import {
   stripHtml,
   type BlogTocItem,
 } from "@/cms/admin/blogAnalysis";
+import { validatePostSchema, summarizeIssues } from "@/lib/schemaValidator";
 
 export const Route = createFileRoute("/admin/blog/$postId")({
   component: BlogPostEditorPage,
@@ -829,6 +830,64 @@ function BlogPostEditorPage() {
               })}
             </div>
           </Card>
+
+          {/* Schema.org validation — Article + FAQ + EEAT */}
+          {(() => {
+            const issues = validatePostSchema({
+              slug: post.slug,
+              title_ar: post.title_ar,
+              title_en: post.title_en,
+              meta_title_ar: post.meta_title_ar,
+              meta_title_en: post.meta_title_en,
+              meta_description_ar: post.meta_description_ar,
+              meta_description_en: post.meta_description_en,
+              cover_image_url: post.cover_image_url,
+              author_ar: post.author_ar,
+              author_en: post.author_en,
+              published_at: post.published_at,
+              last_reviewed: post.last_reviewed,
+              tldr_ar: post.tldr_ar,
+              tldr_en: post.tldr_en,
+              faq: post.faq,
+              author_bio_ar: post.author_bio_ar,
+              author_bio_en: post.author_bio_en,
+              sources: post.sources.map((s) => ({ url: s.url })),
+              keywords_ar: post.keywords_ar,
+              keywords_en: post.keywords_en,
+            });
+            const sum = summarizeIssues(issues);
+            return (
+              <Card className="p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-sm">Schema.org & EEAT</h3>
+                  <div className="flex gap-1">
+                    {sum.errors > 0 && <Badge variant="destructive">{sum.errors} خطأ</Badge>}
+                    {sum.warnings > 0 && <Badge className="bg-amber-500/15 text-amber-700 hover:bg-amber-500/20">{sum.warnings} تنبيه</Badge>}
+                    {sum.errors === 0 && sum.warnings === 0 && <Badge className="bg-emerald-500/15 text-emerald-700">سليم ✓</Badge>}
+                  </div>
+                </div>
+                {issues.length === 0 ? (
+                  <div className="text-xs text-emerald-700">كل حقول Article + FAQ + EEAT مكتملة.</div>
+                ) : (
+                  <ul className="space-y-1.5 max-h-[40vh] overflow-y-auto">
+                    {issues.map((iss, i) => {
+                      const Icon = iss.level === "error" ? XCircle : iss.level === "warning" ? AlertTriangle : CheckCircle2;
+                      const color = iss.level === "error" ? "text-rose-600" : iss.level === "warning" ? "text-amber-600" : "text-sky-600";
+                      return (
+                        <li key={i} className="flex items-start gap-2 text-xs">
+                          <Icon className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${color}`} />
+                          <div className="min-w-0">
+                            <div className="font-medium leading-tight">{iss.message}</div>
+                            <div className="text-[10px] text-muted-foreground">{iss.field}</div>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </Card>
+            );
+          })()}
         </div>
       </div>
 

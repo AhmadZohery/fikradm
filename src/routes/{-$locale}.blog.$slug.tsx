@@ -10,7 +10,8 @@ import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blo
 import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle, Sparkles, ShieldCheck, BookOpen, CheckCircle2, ExternalLink, BookOpenCheck, Briefcase, MousePointerClick } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { linkifyParagraph } from "@/lib/inlineLinks";
+import { linkifyParagraph, makeBudget, type LinkBudget } from "@/lib/inlineLinks";
+import { getEffectiveFaq } from "@/lib/dynamicFaq";
 import {
   buildSeoMeta,
   buildSeoLinks,
@@ -96,9 +97,12 @@ export const Route = createFileRoute("/{-$locale}/blog/$slug")({
             : {}),
         }),
         jsonLdScript(breadcrumbLdGen(breadcrumbItems)),
-        ...(post.faq && post.faq.length > 0
-          ? [jsonLdScript(faqLd(post.faq.map((f) => ({ question: f.q[loc], answer: f.a[loc] }))))]
-          : []),
+        ...(() => {
+          const eff = getEffectiveFaq(post);
+          return eff.items.length > 0
+            ? [jsonLdScript(faqLd(eff.items.map((f) => ({ question: f.q[loc], answer: f.a[loc] }))))]
+            : [];
+        })(),
         jsonLdScript({
           "@context": "https://schema.org",
           "@type": "WebPage",
@@ -141,12 +145,15 @@ function PostPage() {
   const post = getPostBySlug(slug)!;
   const cat = getCategoryBySlug(post.categorySlug);
   const related = getRelatedPosts(slug, 3);
-  // Track inline links already used so each phrase appears at most once.
-  const usedInline = new Set<string>();
+  // Centralized anchor budget — dedupes phrases & hrefs, distributes per section.
+  const inlineBudget: LinkBudget = makeBudget({ perSection: 2, total: 8 });
   const inlineSpecs = (post.inlineLinks ?? []).map((l) => ({
     phrase: l.phrase[loc],
     href: l.href,
   }));
+  // Effective FAQ — auto-generated from sections/TL;DR if none authored.
+  const effectiveFaq = getEffectiveFaq(post);
+  const faqForRender = effectiveFaq.items.map((f) => ({ q: f.q, a: f.a }));
 
   // Dynamic "Read also" — category-aware service + post links, ordered for CTR.
   const categoryServiceMap: Record<string, { ar: string; en: string; href: string }[]> = {
@@ -312,7 +319,10 @@ function PostPage() {
               </Reveal>
             )}
 
-            {post.body.map((section, i) => (
+            {post.body.map((section, i) => {
+              // Reset per-section budget so links spread across the article.
+              inlineBudget.perSection = 2;
+              return (
               <Reveal key={i} delay={i * 60}>
                 <section id={`section-${i}`} className="mb-10 scroll-mt-24">
                   <h2 className="mb-4 text-2xl font-bold text-foreground md:text-3xl">{section.heading[loc]}</h2>
@@ -325,7 +335,9 @@ function PostPage() {
                     </p>
                   )}
                   {section.paragraphs[loc].map((p, j) => {
-                    const nodes = linkifyParagraph(p, inlineSpecs, usedInline, (href, label, key) => (
+                    // Skip the first paragraph of each section to keep reading flow at the top.
+                    const allow = j > 0;
+                    const nodes = linkifyParagraph(p, inlineSpecs, inlineBudget, (href, label, key) => (
                       <Link
                         key={key}
                         to={buildHref(locale, href)}
@@ -333,7 +345,7 @@ function PostPage() {
                       >
                         {label}
                       </Link>
-                    ));
+                    ), { allowReplace: allow });
                     return (
                       <p key={j} className="mb-4 text-[17px] leading-[1.95] text-foreground/85">
                         {nodes}
@@ -342,7 +354,8 @@ function PostPage() {
                   })}
                 </section>
               </Reveal>
-            ))}
+              );
+            })}
 
             {/* Tags */}
             <div className="mt-10 flex flex-wrap items-center gap-2 border-t border-border pt-6">
@@ -373,16 +386,21 @@ function PostPage() {
               </Reveal>
             )}
 
-            {/* FAQ Section */}
-            {post.faq && post.faq.length > 0 && (
+            {/* FAQ Section — uses authored FAQ or auto-generated from sections/TL;DR */}
+            {faqForRender.length > 0 && (
               <Reveal>
                 <section id="faq" className="mt-12 scroll-mt-24">
-                  <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-foreground md:text-3xl">
+                  <h2 className="mb-6 flex flex-wrap items-center gap-2 text-2xl font-bold text-foreground md:text-3xl">
                     <HelpCircle className="h-6 w-6 text-primary" />
                     {locale === "ar" ? "الأسئلة الشائعة" : "Frequently Asked Questions"}
+                    {effectiveFaq.auto && !post.faq?.length && (
+                      <span className="ms-2 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                        {locale === "ar" ? "تلقائي" : "Auto"}
+                      </span>
+                    )}
                   </h2>
                   <div className="space-y-3">
-                    {post.faq.map((f, i) => (
+                    {faqForRender.map((f, i) => (
                       <details
                         key={i}
                         className="group rounded-2xl border border-border bg-card p-5 transition-shadow hover:shadow-soft open:shadow-elegant"
