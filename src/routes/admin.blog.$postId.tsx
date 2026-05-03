@@ -65,6 +65,8 @@ export const Route = createFileRoute("/admin/blog/$postId")({
 type Lang = "ar" | "en";
 
 type Faq = { q: string; a: string };
+type SourceItem = { label_ar: string; label_en: string; url: string };
+type SectionSummary = { ar: string; en: string };
 type CategoryRow = { id: string; name_ar: string; name_en: string };
 
 type PostState = {
@@ -97,6 +99,15 @@ type PostState = {
   faq: Faq[];
   author_ar: string;
   author_en: string;
+  tldr_ar: string[];
+  tldr_en: string[];
+  section_summaries: SectionSummary[];
+  author_bio_ar: string;
+  author_bio_en: string;
+  author_role_ar: string;
+  author_role_en: string;
+  last_reviewed: string | null;
+  sources: SourceItem[];
 };
 
 function htmlFromBody(body: unknown, lang: Lang): string {
@@ -188,6 +199,15 @@ function BlogPostEditorPage() {
         faq: Array.isArray(r.faq) ? (r.faq as Faq[]) : [],
         author_ar: String(r.author_ar ?? ""),
         author_en: String(r.author_en ?? ""),
+        tldr_ar: Array.isArray(r.tldr_ar) ? (r.tldr_ar as string[]) : [],
+        tldr_en: Array.isArray(r.tldr_en) ? (r.tldr_en as string[]) : [],
+        section_summaries: Array.isArray(r.section_summaries) ? (r.section_summaries as SectionSummary[]) : [],
+        author_bio_ar: String(r.author_bio_ar ?? ""),
+        author_bio_en: String(r.author_bio_en ?? ""),
+        author_role_ar: String(r.author_role_ar ?? ""),
+        author_role_en: String(r.author_role_en ?? ""),
+        last_reviewed: (r.last_reviewed as string) ?? null,
+        sources: Array.isArray(r.sources) ? (r.sources as SourceItem[]) : [],
       });
       setCats((catsRes.data ?? []) as CategoryRow[]);
       setLoading(false);
@@ -265,6 +285,15 @@ function BlogPostEditorPage() {
         table_of_contents_ar: post.toc_ar as never,
         table_of_contents_en: post.toc_en as never,
         faq: post.faq as never,
+        tldr_ar: post.tldr_ar as never,
+        tldr_en: post.tldr_en as never,
+        section_summaries: post.section_summaries as never,
+        author_bio_ar: post.author_bio_ar,
+        author_bio_en: post.author_bio_en,
+        author_role_ar: post.author_role_ar,
+        author_role_en: post.author_role_en,
+        last_reviewed: post.last_reviewed as never,
+        sources: post.sources as never,
       })
       .eq("id", post.id);
     setSaving(false);
