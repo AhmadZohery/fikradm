@@ -123,41 +123,18 @@ export function ServiceTabs({ content }: { content: ServiceTabContent }) {
   return (
     <section className="section">
       <div className="container-app">
-        {/* Hero header */}
-        <div className="mb-10 grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-          <div>
-            <span className={cn("inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold", p.chipBg, p.chipText)}>
-              <Icon className="h-3.5 w-3.5" />
-              {content.hero.eyebrow[locale]}
-            </span>
-            <h1 className="mt-4 text-3xl font-extrabold leading-tight md:text-5xl">
-              {content.hero.title[locale]}
-            </h1>
-            <p className="mt-3 text-lg font-medium text-muted-foreground md:text-xl">
-              {content.hero.tagline[locale]}
-            </p>
-            <p className="mt-4 text-sm leading-7 text-foreground/80 md:text-base">
-              {content.hero.intro[locale]}
-            </p>
-          </div>
-
-          {/* decorative panel */}
-          <div className={cn("relative aspect-[5/4] overflow-hidden rounded-3xl bg-gradient-to-br p-8 text-white shadow-elegant", p.panelGradient)}>
-            <div className="text-current">
-              <p.Motif />
-            </div>
-            <div className="relative flex h-full flex-col justify-between">
-              <Icon className="h-12 w-12 opacity-90" />
-              <div>
-                <div className="text-[11px] font-bold uppercase tracking-[0.2em] opacity-80">
-                  {isAr ? "خدمة فكرة" : "Fikra service"}
-                </div>
-                <div className="mt-1 text-2xl font-extrabold leading-tight">
-                  {content.hero.title[locale]}
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Section header — compact, no hero duplication */}
+        <div className="mx-auto mb-8 max-w-3xl text-center">
+          <span className={cn("inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold", p.chipBg, p.chipText)}>
+            <Icon className="h-3.5 w-3.5" />
+            {content.hero.eyebrow[locale]}
+          </span>
+          <h2 className="mt-3 text-2xl font-extrabold md:text-3xl">
+            {content.hero.tagline[locale]}
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-muted-foreground md:text-base">
+            {content.hero.intro[locale]}
+          </p>
         </div>
 
         {/* Tabs */}
