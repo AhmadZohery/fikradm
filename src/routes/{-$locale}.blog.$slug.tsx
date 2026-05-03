@@ -386,16 +386,21 @@ function PostPage() {
               </Reveal>
             )}
 
-            {/* FAQ Section */}
-            {post.faq && post.faq.length > 0 && (
+            {/* FAQ Section — uses authored FAQ or auto-generated from sections/TL;DR */}
+            {faqForRender.length > 0 && (
               <Reveal>
                 <section id="faq" className="mt-12 scroll-mt-24">
-                  <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-foreground md:text-3xl">
+                  <h2 className="mb-6 flex flex-wrap items-center gap-2 text-2xl font-bold text-foreground md:text-3xl">
                     <HelpCircle className="h-6 w-6 text-primary" />
                     {locale === "ar" ? "الأسئلة الشائعة" : "Frequently Asked Questions"}
+                    {effectiveFaq.auto && !post.faq?.length && (
+                      <span className="ms-2 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                        {locale === "ar" ? "تلقائي" : "Auto"}
+                      </span>
+                    )}
                   </h2>
                   <div className="space-y-3">
-                    {post.faq.map((f, i) => (
+                    {faqForRender.map((f, i) => (
                       <details
                         key={i}
                         className="group rounded-2xl border border-border bg-card p-5 transition-shadow hover:shadow-soft open:shadow-elegant"
