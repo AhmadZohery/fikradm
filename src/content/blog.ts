@@ -25,6 +25,8 @@ export type BlogPost = {
   body: { heading: LocalizedString; summary?: LocalizedString; paragraphs: LocalizedList }[];
   faq?: { q: LocalizedString; a: LocalizedString }[];
   internalLinks?: { label: LocalizedString; href: string }[];
+  /** Inline anchor links woven into paragraph text (first occurrence replaced). */
+  inlineLinks?: { phrase: LocalizedString; href: string }[];
   cta?: { title: LocalizedString; description: LocalizedString; buttonLabel: LocalizedString; href: string };
   /** AEO / AIO / LLMO: 3–6 bullet TL;DR shown at the top + structured for snippets. */
   tldr?: LocalizedList;
@@ -1424,6 +1426,16 @@ export const blogPosts: BlogPost[] = [
         label: ls("احجز جلسة تشخيص مجانية", "Book a Free Diagnostic"),
         href: "/contact",
       },
+    ],
+    inlineLinks: [
+      { phrase: ls("إدارة الحملات الإعلانية", "campaign management"), href: "/services/paid-ads" },
+      { phrase: ls("صفحة الهبوط", "landing page"), href: "/services/web-development" },
+      { phrase: ls("تهيئة محركات البحث", "search engine optimization"), href: "/services/seo" },
+      { phrase: ls("SEO", "SEO"), href: "/services/seo" },
+      { phrase: ls("تتبع التحويلات", "conversion tracking"), href: "/services/consulting" },
+      { phrase: ls("سلوك العميل", "customer behavior"), href: "/blog/digital-marketing-guide-beginners" },
+      { phrase: ls("جلسة تشخيص مجانية", "free diagnostic"), href: "/contact" },
+      { phrase: ls("سرعة الرد", "response speed"), href: "/services/consulting" },
     ],
     cta: {
       title: ls(

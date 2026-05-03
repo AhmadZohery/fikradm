@@ -4,14 +4,13 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { CtaBand } from "@/components/site/CtaBand";
 import { BlogCard } from "@/components/site/BlogCard";
 import { Reveal } from "@/components/site/Reveal";
-import { AutoInternalLinks } from "@/components/site/AutoInternalLinks";
 import { BlogDynamicCta } from "@/components/site/BlogDynamicCta";
-import { findService } from "@/content/cities";
 import { useLocale } from "@/i18n/useLocale";
 import { getPostBySlug, getCategoryBySlug, getRelatedPosts } from "@/content/blog";
-import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle, Sparkles, ShieldCheck, BookOpen, CheckCircle2, ExternalLink } from "lucide-react";
+import { Calendar, Clock, User, Share2, Twitter, Facebook, Linkedin, MessageCircle, Send, Link2, ArrowLeft, ArrowRight, HelpCircle, Sparkles, ShieldCheck, BookOpen, CheckCircle2, ExternalLink, BookOpenCheck, Briefcase, MousePointerClick } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { linkifyParagraph } from "@/lib/inlineLinks";
 import {
   buildSeoMeta,
   buildSeoLinks,
@@ -142,6 +141,39 @@ function PostPage() {
   const post = getPostBySlug(slug)!;
   const cat = getCategoryBySlug(post.categorySlug);
   const related = getRelatedPosts(slug, 3);
+  // Track inline links already used so each phrase appears at most once.
+  const usedInline = new Set<string>();
+  const inlineSpecs = (post.inlineLinks ?? []).map((l) => ({
+    phrase: l.phrase[loc],
+    href: l.href,
+  }));
+
+  // Dynamic "Read also" — category-aware service + post links, ordered for CTR.
+  const categoryServiceMap: Record<string, { ar: string; en: string; href: string }[]> = {
+    seo: [
+      { ar: "خدمة تهيئة محركات البحث (SEO)", en: "SEO Service", href: "/services/seo" },
+      { ar: "تحسين تجربة المستخدم", en: "Web Development & UX", href: "/services/web-development" },
+    ],
+    performance: [
+      { ar: "إدارة الحملات الإعلانية المدفوعة", en: "Paid Ads Management", href: "/services/paid-ads" },
+      { ar: "خدمة الاستشارات التسويقية", en: "Marketing Consulting", href: "/services/consulting" },
+      { ar: "تهيئة محركات البحث (SEO)", en: "SEO Service", href: "/services/seo" },
+    ],
+    ecommerce: [
+      { ar: "نمو المتاجر الإلكترونية", en: "E-commerce Growth", href: "/services/paid-ads" },
+      { ar: "تطوير المتاجر", en: "Web Development", href: "/services/web-development" },
+    ],
+    creative: [
+      { ar: "خدمات المحتوى والتصميم", en: "Content & Creative", href: "/services/social-media" },
+      { ar: "إدارة السوشيال ميديا", en: "Social Media Management", href: "/services/social-media" },
+    ],
+    web: [
+      { ar: "تطوير المواقع", en: "Web Development", href: "/services/web-development" },
+      { ar: "تحسين Core Web Vitals", en: "Performance & SEO", href: "/services/seo" },
+    ],
+  };
+  const dynamicServices = (categoryServiceMap[post.categorySlug] ?? []).slice(0, 3);
+  const dynamicRelatedPosts = related.slice(0, 3);
   const [readingProgress, setReadingProgress] = useState(0);
   const [shareUrl, setShareUrl] = useState("");
 
@@ -292,11 +324,22 @@ function PostPage() {
                       {section.summary[loc]}
                     </p>
                   )}
-                  {section.paragraphs[loc].map((p, j) => (
-                    <p key={j} className="mb-4 text-[17px] leading-[1.95] text-foreground/85">
-                      {p}
-                    </p>
-                  ))}
+                  {section.paragraphs[loc].map((p, j) => {
+                    const nodes = linkifyParagraph(p, inlineSpecs, usedInline, (href, label, key) => (
+                      <Link
+                        key={key}
+                        to={buildHref(locale, href)}
+                        className="font-semibold text-primary underline decoration-primary/30 underline-offset-4 transition hover:decoration-primary"
+                      >
+                        {label}
+                      </Link>
+                    ));
+                    return (
+                      <p key={j} className="mb-4 text-[17px] leading-[1.95] text-foreground/85">
+                        {nodes}
+                      </p>
+                    );
+                  })}
                 </section>
               </Reveal>
             ))}
@@ -358,28 +401,64 @@ function PostPage() {
               </Reveal>
             )}
 
-            {/* Internal links */}
-            {post.internalLinks && post.internalLinks.length > 0 && (
+            {/* Dynamic Read also — services first (higher CTR), then related posts */}
+            {(dynamicServices.length > 0 || dynamicRelatedPosts.length > 0) && (
               <Reveal>
                 <section className="mt-12">
                   <h2 className="mb-5 text-2xl font-bold text-foreground md:text-3xl">
-                    {locale === "ar" ? "اقرأ أيضاً" : "Read also"}
+                    {locale === "ar" ? "اقرأ أيضاً وخدمات قد تهمك" : "Read also & relevant services"}
                   </h2>
-                  <ul className="grid gap-3 sm:grid-cols-2">
-                    {post.internalLinks.map((l, i) => (
-                      <li key={i}>
-                        <Link
-                          to={buildHref(locale, l.href)}
-                          className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-medium text-foreground transition-all hover:border-primary hover:bg-primary/5 hover:shadow-soft"
-                        >
-                          <span className="line-clamp-2">{l.label[loc]}</span>
-                          <span className="shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                            {locale === "ar" ? "←" : "→"}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+
+                  {dynamicServices.length > 0 && (
+                    <div className="mb-5">
+                      <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-primary">
+                        <Briefcase className="h-3.5 w-3.5" />
+                        {locale === "ar" ? "خدمات مرتبطة بالمقال" : "Services related to this article"}
+                      </div>
+                      <ul className="grid gap-3 sm:grid-cols-2">
+                        {dynamicServices.map((s, i) => (
+                          <li key={i}>
+                            <Link
+                              to={buildHref(locale, s.href)}
+                              className="group flex items-center justify-between gap-3 rounded-xl border border-primary/30 bg-primary/[0.04] px-4 py-3 text-sm font-semibold text-foreground transition-all hover:border-primary hover:bg-primary/10 hover:shadow-soft"
+                            >
+                              <span className="inline-flex items-center gap-2">
+                                <MousePointerClick className="h-4 w-4 text-primary" />
+                                <span className="line-clamp-2">{locale === "ar" ? s.ar : s.en}</span>
+                              </span>
+                              <span className="shrink-0 text-primary">
+                                {locale === "ar" ? "←" : "→"}
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {dynamicRelatedPosts.length > 0 && (
+                    <div>
+                      <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                        <BookOpenCheck className="h-3.5 w-3.5" />
+                        {locale === "ar" ? "مقالات ذات صلة" : "Related articles"}
+                      </div>
+                      <ul className="grid gap-3 sm:grid-cols-2">
+                        {dynamicRelatedPosts.map((p, i) => (
+                          <li key={i}>
+                            <Link
+                              to={buildHref(locale, `/blog/${p.slug}`)}
+                              className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-medium text-foreground transition-all hover:border-primary hover:bg-primary/5 hover:shadow-soft"
+                            >
+                              <span className="line-clamp-2">{p.title[loc]}</span>
+                              <span className="shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                                {locale === "ar" ? "←" : "→"}
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </section>
               </Reveal>
             )}
