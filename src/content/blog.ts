@@ -25,6 +25,8 @@ export type BlogPost = {
   body: { heading: LocalizedString; summary?: LocalizedString; paragraphs: LocalizedList }[];
   faq?: { q: LocalizedString; a: LocalizedString }[];
   internalLinks?: { label: LocalizedString; href: string }[];
+  /** Inline anchor links woven into paragraph text (first occurrence replaced). */
+  inlineLinks?: { phrase: LocalizedString; href: string }[];
   cta?: { title: LocalizedString; description: LocalizedString; buttonLabel: LocalizedString; href: string };
   /** AEO / AIO / LLMO: 3–6 bullet TL;DR shown at the top + structured for snippets. */
   tldr?: LocalizedList;
