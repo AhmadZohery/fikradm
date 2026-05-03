@@ -8,6 +8,7 @@ import { SubServicesGrid } from "@/components/site/SubServicesGrid";
 import { findService } from "@/content/data";
 import { findServiceTabs } from "@/content/serviceTabs";
 import { ServiceTabs } from "@/components/site/services/ServiceTabs";
+import { ServiceLeadForm } from "@/components/site/services/ServiceLeadForm";
 import { ServiceVariantHero } from "@/components/site/services/ServiceVariantHero";
 import { ServiceMarketSignals } from "@/components/site/services/ServiceMarketSignals";
 import { ServiceApproach } from "@/components/site/services/ServiceApproach";
@@ -206,7 +207,18 @@ function ServicePage() {
           <PricingPlans plans={s.plans} />
         </div>
 
-        {/* 9. CTA — close the deal */}
+        {/* 9. SHORT LEAD FORM — capture before exit */}
+        <section className="section">
+          <div className="container-app mx-auto max-w-3xl">
+            <ServiceLeadForm
+              serviceSlug={s.slug}
+              serviceName={s.title[loc]}
+              gradient="from-primary via-primary to-primary"
+            />
+          </div>
+        </section>
+
+        {/* 10. CTA — close the deal */}
         <CtaBand />
 
         {/* 10. SUB-SERVICES — last (suggestion if not ready) */}
