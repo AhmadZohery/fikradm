@@ -44,6 +44,29 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  // One-time client redirect honoring the visitor's saved language preference.
+  // SSR still serves the URL as-is (so hreflang/canonical stay correct); we
+  // only redirect on the client when the user previously chose the *other*
+  // locale and has not been redirected this session yet.
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem("fikra:locale:redirected") === "1") return;
+      const saved = localStorage.getItem("fikra:locale");
+      if (saved !== "ar" && saved !== "en") return;
+      const path = window.location.pathname;
+      const segs = path.split("/").filter(Boolean);
+      const current = segs[0] === "en" ? "en" : "ar";
+      if (current === saved) return;
+      const rest = current === "en" ? segs.slice(1) : segs;
+      const restPath = rest.length ? `/${rest.join("/")}` : "";
+      const target = saved === "ar" ? restPath || "/" : `/en${restPath}`;
+      sessionStorage.setItem("fikra:locale:redirected", "1");
+      window.location.replace(`${target}${window.location.search}${window.location.hash}`);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <PageViewTracker />
