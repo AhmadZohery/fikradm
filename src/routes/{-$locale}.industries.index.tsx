@@ -5,14 +5,26 @@ import { CtaBand } from "@/components/site/CtaBand";
 import { industries } from "@/content/data";
 import { ArrowRight } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
+import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/industries/")({
   head: ({ params }) => {
     const isAr = (params.locale ?? "ar") === "ar";
+    const locale = (params.locale ?? "ar") as "ar" | "en";
+    const title = isAr ? "حلول حسب القطاع | فكرة" : "Industry Solutions | Fikra";
+    const description = isAr
+      ? "حلول تسويقية متخصصة لكل قطاع: التجارة، اللوجستيات، الصحة، العقار."
+      : "Tailored solutions per industry: e-commerce, logistics, healthcare, real estate.";
     return {
-      meta: [
-        { title: isAr ? "حلول حسب القطاع | فكرة" : "Industry Solutions | Fikra" },
-        { name: "description", content: isAr ? "حلول تسويقية متخصصة لكل قطاع: التجارة، اللوجستيات، الصحة، العقار." : "Tailored solutions per industry: e-commerce, logistics, healthcare, real estate." },
+      meta: buildSeoMeta({ title, description, path: `/${locale}/industries`, locale }),
+      links: buildSeoLinks({ path: `/${locale}/industries`, locale }),
+      scripts: [
+        jsonLdScript(
+          breadcrumbLd([
+            { name: isAr ? "الرئيسية" : "Home", url: `/${locale}` },
+            { name: isAr ? "حلول حسب القطاع" : "Industries", url: `/${locale}/industries` },
+          ]),
+        ),
       ],
     };
   },
