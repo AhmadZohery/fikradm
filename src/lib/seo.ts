@@ -129,6 +129,27 @@ export function organizationLd() {
   return ORG_NODE;
 }
 
+export function websiteLd(locale: Locale = "ar") {
+  const isAr = locale === "ar";
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_ORIGIN}#website`,
+    url: SITE_ORIGIN,
+    name: isAr ? SITE_NAME_AR : SITE_NAME,
+    inLanguage: isAr ? "ar-SA" : "en",
+    publisher: { "@id": `${SITE_ORIGIN}#organization` },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${SITE_ORIGIN}/${locale}/search?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
 export function localBusinessLd(opts?: { city?: string; country?: string }) {
   return {
     "@context": "https://schema.org",
