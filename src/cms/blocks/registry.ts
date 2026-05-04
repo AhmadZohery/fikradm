@@ -49,6 +49,8 @@ type BlockEntry = {
   icon?: string;
   /** Category for the block library grouping */
   category: "hero" | "content" | "social" | "conversion" | "layout";
+  /** When true, renderer wraps the block in <Suspense> for lazy loading */
+  lazy?: boolean;
 };
 
 export const BLOCK_REGISTRY = {
