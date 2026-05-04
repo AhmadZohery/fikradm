@@ -436,6 +436,16 @@
   .animate-float { animation: floatY 6s ease-in-out infinite; }
   .animate-spin-slow { animation: spinSlow 22s linear infinite; }
   .animate-marquee { animation: marquee 38s linear infinite; }
+  /* Pause-on-hover and pause-on-touch for marquee (UX improvement) */
+  .animate-marquee.pause-on-hover:hover,
+  .animate-marquee.pause-on-hover:focus-within { animation-play-state: paused; }
+  @media (hover: none) {
+    .animate-marquee.pause-on-hover:active { animation-play-state: paused; }
+  }
+  /* Respect reduced-motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee { animation-duration: 90s; }
+  }
   .animate-glow-pulse { animation: glowPulse 4s ease-in-out infinite; }
   .animate-orbit { animation: orbit 12s linear infinite; }
   .animate-blink { animation: blink 1.1s steps(2) infinite; }
