@@ -137,6 +137,30 @@ export function SiteHeader() {
     return `${base}${window.location.hash || ""}`;
   })();
 
+  // Persist current locale so first-time visitors land on their preferred
+  // language on subsequent visits to "/".
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    try {
+      window.localStorage.setItem("fikra:locale", locale);
+      // 1 year cookie, available to SSR-side handlers if ever needed.
+      document.cookie = `fikra_locale=${locale};path=/;max-age=31536000;samesite=lax`;
+    } catch {
+      /* ignore */
+    }
+  }, [locale]);
+
+  // Save explicit user choice immediately on click (before navigation),
+  // then let TanStack handle the route change.
+  const persistLocaleChoice = () => {
+    try {
+      window.localStorage.setItem("fikra:locale", otherLocale);
+      document.cookie = `fikra_locale=${otherLocale};path=/;max-age=31536000;samesite=lax`;
+    } catch {
+      /* ignore */
+    }
+  };
+
   return (
     <>
       {/* Mega menu backdrop */}
@@ -319,6 +343,7 @@ export function SiteHeader() {
             {/* Language toggle — icon only on mobile */}
             <Link
               to={switchLocaleHref}
+              onClick={persistLocaleChoice}
               className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/60 text-foreground/80 backdrop-blur transition-all duration-300 hover:border-primary/40 hover:bg-primary/5 hover:text-primary md:h-9 md:w-auto md:gap-1.5 md:px-3 md:text-xs md:font-bold"
               aria-label={`Switch to ${LOCALE_LABELS[otherLocale]}`}
             >

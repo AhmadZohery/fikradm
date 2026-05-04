@@ -6,6 +6,7 @@ import { BlogCard, CategoryChip } from "@/components/site/BlogCard";
 import { Reveal } from "@/components/site/Reveal";
 import { useLocale } from "@/i18n/useLocale";
 import { blogCategories, getCategoryBySlug, getPostsByCategory } from "@/content/blog";
+import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/blog/category/$slug")({
   head: ({ params }) => {
@@ -16,12 +17,18 @@ export const Route = createFileRoute("/{-$locale}/blog/category/$slug")({
       return { meta: [{ title: ar ? "تصنيف غير موجود | فكرة" : "Category not found | Fikra" }] };
     }
     const title = ar ? `${cat.name.ar} | مدونة فكرة` : `${cat.name.en} | Fikra Blog`;
+    const path = `/${loc}/blog/category/${params.slug}`;
     return {
-      meta: [
-        { title },
-        { name: "description", content: cat.description[loc] },
-        { property: "og:title", content: title },
-        { property: "og:description", content: cat.description[loc] },
+      meta: buildSeoMeta({ title, description: cat.description[loc], path, locale: loc }),
+      links: buildSeoLinks({ path, locale: loc }),
+      scripts: [
+        jsonLdScript(
+          breadcrumbLd([
+            { name: ar ? "الرئيسية" : "Home", url: `/${loc}` },
+            { name: ar ? "المدونة" : "Blog", url: `/${loc}/blog` },
+            { name: cat.name[loc], url: path },
+          ]),
+        ),
       ],
     };
   },

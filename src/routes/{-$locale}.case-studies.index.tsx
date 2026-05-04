@@ -6,14 +6,27 @@ import { useLocale } from "@/i18n/useLocale";
 import { Reveal } from "@/components/site/Reveal";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
 import { ArrowUpRight, TrendingUp, ShoppingBag, Heart, Building2, GraduationCap, Utensils, Plane, Sparkles, Quote } from "lucide-react";
+import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/case-studies/")({
   head: ({ params }) => {
     const ar = (params.locale ?? "ar") === "ar";
+    const locale = (params.locale ?? "ar") as "ar" | "en";
+    const title = ar ? "قصص النجاح والبورتفوليو | فكرة" : "Case Studies & Portfolio | Fikra";
+    const description = ar
+      ? "أعمال حقيقية ونتائج موثّقة لأكثر من 200 علامة تجارية في الخليج."
+      : "Real work and verified results from 200+ Gulf brands.";
+    const path = `/${locale}/case-studies`;
     return {
-      meta: [
-        { title: ar ? "قصص النجاح والبورتفوليو | فكرة" : "Case Studies & Portfolio | Fikra" },
-        { name: "description", content: ar ? "أعمال حقيقية ونتائج موثّقة لأكثر من 200 علامة تجارية في الخليج." : "Real work and verified results from 200+ Gulf brands." },
+      meta: buildSeoMeta({ title, description, path, locale }),
+      links: buildSeoLinks({ path, locale }),
+      scripts: [
+        jsonLdScript(
+          breadcrumbLd([
+            { name: ar ? "الرئيسية" : "Home", url: `/${locale}` },
+            { name: ar ? "قصص النجاح" : "Case Studies", url: path },
+          ]),
+        ),
       ],
     };
   },
