@@ -213,7 +213,7 @@ export function HeroSlider() {
                   ))}
                   <span className="ms-1 text-sm font-bold text-foreground">4.9</span>
                 </div>
-                <p className="text-xs text-muted-foreground">{isAr ? "+150 عميل سعيد" : "150+ happy clients"}</p>
+                <p className="text-xs text-muted-foreground">{isAr ? "+30 علامة سعيدة" : "30+ happy brands"}</p>
               </div>
             </div>
             <div className="hidden h-10 w-px bg-border sm:block" />
