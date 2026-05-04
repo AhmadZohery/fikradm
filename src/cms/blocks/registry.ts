@@ -18,6 +18,7 @@ import { FaqSection } from "@/components/site/FaqSection";
 import { HomeVideoTestimonials } from "@/components/site/HomeVideoTestimonials";
 import { RichTextBlock } from "@/components/site/RichTextBlock";
 import { HomeExpertiseTrust } from "@/components/site/HomeExpertiseTrust";
+import { ClientsWall } from "@/components/site/ClientsWall";
 
 /**
  * BlockInstance — the unit stored inside `pages.blocks` JSONB array.
@@ -149,6 +150,13 @@ export const BLOCK_REGISTRY = {
     icon: "Tag",
     category: "social",
   },
+  clients_wall: {
+    component: ClientsWall,
+    label: "جدار العملاء",
+    description: "شبكة شعارات حقيقية + فلترة بالقطاع + رابط لكل العملاء",
+    icon: "LayoutGrid",
+    category: "social",
+  },
   blog_teaser: {
     component: HomeBlogTeaser,
     label: "مقالات المدونة",
@@ -207,7 +215,8 @@ export const DEFAULT_HOME_BLOCKS: BlockInstance[] = [
   { id: "b11", type: "expertise_trust" },
   { id: "b12", type: "testimonials" },
   { id: "b13", type: "industries_showcase" },
-  { id: "b14", type: "logos_strip" },
-  { id: "b15", type: "blog_teaser" },
-  { id: "b16", type: "cta_band" },
+  { id: "b14", type: "clients_wall" },
+  { id: "b15", type: "logos_strip" },
+  { id: "b16", type: "blog_teaser" },
+  { id: "b17", type: "cta_band" },
 ];
