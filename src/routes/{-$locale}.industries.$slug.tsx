@@ -7,6 +7,7 @@ import { CtaBand } from "@/components/site/CtaBand";
 import { Reveal } from "@/components/site/Reveal";
 import { findIndustry } from "@/content/data";
 import { Check, X, ArrowRight } from "lucide-react";
+import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$locale}/industries/$slug")({
   beforeLoad: ({ params }) => {
@@ -16,13 +17,25 @@ export const Route = createFileRoute("/{-$locale}/industries/$slug")({
     const ind = findIndustry(params.slug);
     if (!ind) return { meta: [{ title: "Not found" }] };
     const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
+    const isAr = loc === "ar";
+    const path = `/${loc}/industries/${params.slug}`;
     return {
-      meta: [
-        { title: ind.metaTitle[loc] },
-        { name: "description", content: ind.metaDescription[loc] },
-        { property: "og:title", content: ind.metaTitle[loc] },
-        { property: "og:description", content: ind.metaDescription[loc] },
-        { property: "og:image", content: ind.image },
+      meta: buildSeoMeta({
+        title: ind.metaTitle[loc],
+        description: ind.metaDescription[loc],
+        path,
+        locale: loc,
+        image: ind.image,
+      }),
+      links: buildSeoLinks({ path, locale: loc }),
+      scripts: [
+        jsonLdScript(
+          breadcrumbLd([
+            { name: isAr ? "الرئيسية" : "Home", url: `/${loc}` },
+            { name: isAr ? "حلول حسب القطاع" : "Industries", url: `/${loc}/industries` },
+            { name: ind.title[loc], url: path },
+          ]),
+        ),
       ],
     };
   },
