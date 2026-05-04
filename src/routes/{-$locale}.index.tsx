@@ -12,6 +12,7 @@ import {
   localBusinessLd,
   breadcrumbLd,
   serviceLd,
+  websiteLd,
   SITE_ORIGIN,
 } from "@/lib/seo";
 
@@ -72,7 +73,7 @@ export const Route = createFileRoute("/{-$locale}/")({
       scripts: [
         jsonLdScript({
           "@context": "https://schema.org",
-          "@graph": [organizationLd(), localBusinessLd(), serviceSchema],
+          "@graph": [organizationLd(), websiteLd(locale), localBusinessLd(), serviceSchema],
         }),
         jsonLdScript(breadcrumbs),
       ],
