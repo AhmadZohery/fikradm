@@ -1,24 +1,27 @@
-import type { ComponentType } from "react";
+import { lazy, type ComponentType } from "react";
 import { HeroSlider } from "@/components/site/HeroSlider";
 import { TrustStrip } from "@/components/site/cinematic/TrustStrip";
 import { StatsBand } from "@/components/site/StatsBand";
-import { LogosStrip } from "@/components/site/LogosStrip";
 import { ServicesGrid } from "@/components/site/ServicesGrid";
-import { ProcessSection } from "@/components/site/ProcessSection";
-import { HomePackages } from "@/components/site/HomePackages";
-import { PackageBuilder } from "@/components/site/PackageBuilder";
-import { HomeBeforeAfter } from "@/components/site/HomeBeforeAfter";
-import { HomeGuarantees } from "@/components/site/HomeGuarantees";
-import { HomeResultsShowcase } from "@/components/site/HomeResultsShowcase";
-import { IndustriesShowcase } from "@/components/site/IndustriesShowcase";
-import { Testimonials } from "@/components/site/Testimonials";
-import { HomeBlogTeaser } from "@/components/site/HomeBlogTeaser";
-import { CtaBand } from "@/components/site/CtaBand";
-import { FaqSection } from "@/components/site/FaqSection";
-import { HomeVideoTestimonials } from "@/components/site/HomeVideoTestimonials";
-import { RichTextBlock } from "@/components/site/RichTextBlock";
-import { HomeExpertiseTrust } from "@/components/site/HomeExpertiseTrust";
-import { ClientsWall } from "@/components/site/ClientsWall";
+
+// Below-the-fold blocks are code-split with React.lazy to improve LCP/TBT.
+// Each lazy import resolves the named export to a default export Vite expects.
+const LogosStrip = lazy(() => import("@/components/site/LogosStrip").then(m => ({ default: m.LogosStrip })));
+const ProcessSection = lazy(() => import("@/components/site/ProcessSection").then(m => ({ default: m.ProcessSection })));
+const HomePackages = lazy(() => import("@/components/site/HomePackages").then(m => ({ default: m.HomePackages })));
+const PackageBuilder = lazy(() => import("@/components/site/PackageBuilder").then(m => ({ default: m.PackageBuilder })));
+const HomeBeforeAfter = lazy(() => import("@/components/site/HomeBeforeAfter").then(m => ({ default: m.HomeBeforeAfter })));
+const HomeGuarantees = lazy(() => import("@/components/site/HomeGuarantees").then(m => ({ default: m.HomeGuarantees })));
+const HomeResultsShowcase = lazy(() => import("@/components/site/HomeResultsShowcase").then(m => ({ default: m.HomeResultsShowcase })));
+const IndustriesShowcase = lazy(() => import("@/components/site/IndustriesShowcase").then(m => ({ default: m.IndustriesShowcase })));
+const Testimonials = lazy(() => import("@/components/site/Testimonials").then(m => ({ default: m.Testimonials })));
+const HomeBlogTeaser = lazy(() => import("@/components/site/HomeBlogTeaser").then(m => ({ default: m.HomeBlogTeaser })));
+const CtaBand = lazy(() => import("@/components/site/CtaBand").then(m => ({ default: m.CtaBand })));
+const FaqSection = lazy(() => import("@/components/site/FaqSection").then(m => ({ default: m.FaqSection })));
+const HomeVideoTestimonials = lazy(() => import("@/components/site/HomeVideoTestimonials").then(m => ({ default: m.HomeVideoTestimonials })));
+const RichTextBlock = lazy(() => import("@/components/site/RichTextBlock").then(m => ({ default: m.RichTextBlock })));
+const HomeExpertiseTrust = lazy(() => import("@/components/site/HomeExpertiseTrust").then(m => ({ default: m.HomeExpertiseTrust })));
+const ClientsWall = lazy(() => import("@/components/site/ClientsWall").then(m => ({ default: m.ClientsWall })));
 
 /**
  * BlockInstance — the unit stored inside `pages.blocks` JSONB array.
