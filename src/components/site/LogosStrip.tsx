@@ -103,6 +103,10 @@ function LogoCard({ logo }: { logo: ClientLogo }) {
 export function LogosStrip() {
   const { locale } = useLocale();
   const isAr = locale === "ar";
+  // RTL-aware speed: Arabic users read right-to-left, so the reversed
+  // direction of the marquee feels slightly faster perceptually. We slow
+  // it down a touch in RTL to keep the perceived motion identical.
+  const durationSec = isAr ? 60 : 48;
 
   return (
     <section
@@ -126,7 +130,10 @@ export function LogosStrip() {
           }
         >
           {/* Track is duplicated so the -50% translate produces a seamless loop */}
-          <div className="flex w-max items-center gap-4 animate-marquee sm:gap-6">
+          <div
+            className="flex w-max items-center gap-4 animate-marquee pause-on-hover sm:gap-6"
+            style={{ animationDuration: `${durationSec}s` }}
+          >
             {[...CLIENTS, ...CLIENTS].map((c, i) => (
               <LogoCard key={`${c.name}-${i}`} logo={c} />
             ))}
