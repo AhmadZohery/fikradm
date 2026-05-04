@@ -3,6 +3,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { CtaBand } from "@/components/site/CtaBand";
 import { useLocale } from "@/i18n/useLocale";
+import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd } from "@/lib/seo";
 
 const titles: Record<string, { ar: string; en: string }> = {
   "digital-marketing-dubai": { ar: "تسويق رقمي في دبي", en: "Digital Marketing in Dubai" },
@@ -15,7 +16,22 @@ export const Route = createFileRoute("/{-$locale}/locations/$slug")({
     const t = titles[params.slug];
     if (!t) return { meta: [{ title: "Location" }] };
     const loc = (params.locale ?? "ar") === "en" ? "en" : "ar";
-    return { meta: [{ title: `${t[loc]} | Fikra` }, { name: "description", content: t[loc] }] };
+    const isAr = loc === "ar";
+    const path = `/${loc}/locations/${params.slug}`;
+    const title = `${t[loc]} | Fikra`;
+    return {
+      meta: buildSeoMeta({ title, description: t[loc], path, locale: loc }),
+      links: buildSeoLinks({ path, locale: loc }),
+      scripts: [
+        jsonLdScript(
+          breadcrumbLd([
+            { name: isAr ? "الرئيسية" : "Home", url: `/${loc}` },
+            { name: isAr ? "المواقع" : "Locations", url: `/${loc}/locations` },
+            { name: t[loc], url: path },
+          ]),
+        ),
+      ],
+    };
   },
   component: () => {
     const { locale } = useLocale();
