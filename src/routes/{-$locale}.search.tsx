@@ -6,6 +6,7 @@ import { buildIndex, searchIndex, type SearchHit } from "@/lib/searchIndex";
 import { Input } from "@/components/ui/input";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Reveal } from "@/components/site/Reveal";
+import { buildSeoLinks } from "@/lib/seo";
 
 type SearchParams = { q?: string; type?: string };
 
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/{-$locale}/search")({
       { name: "description", content: "ابحث في خدمات، صناعات، ومقالات وكالة فكرة." },
       { name: "robots", content: "noindex,follow" },
     ],
+    links: buildSeoLinks({ path: "/search", locale: "ar" }),
   }),
   component: SearchPage,
 });
