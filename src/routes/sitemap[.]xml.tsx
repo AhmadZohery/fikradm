@@ -14,6 +14,8 @@ const STATIC_PATHS = [
   "/contact",
   "/team-and-licensing",
   "/locations",
+  "/privacy",
+  "/terms",
 ];
 
 type SitemapEntry = {
@@ -93,10 +95,9 @@ function escapeXml(s: string): string {
 
 function buildSitemapXml(entries: SitemapEntry[]): string {
   const urls = entries.map((e) => {
-    const arUrl = `${SITE_ORIGIN}/ar${e.path === "/" ? "" : e.path}`;
-    const enUrl = `${SITE_ORIGIN}/en${e.path === "/" ? "" : e.path}`;
-    // Emit one <url> per locale, with full hreflang alternates so Google
-    // understands the language pair without duplicate content.
+    // Arabic is DEFAULT (no prefix). English uses /en/ prefix.
+    const arUrl = `${SITE_ORIGIN}${e.path}`;
+    const enUrl = `${SITE_ORIGIN}${e.path === "/" ? "/en" : `/en${e.path}`}`;
     return [arUrl, enUrl]
       .map(
         (loc) => `  <url>
