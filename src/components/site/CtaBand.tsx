@@ -106,7 +106,7 @@ export function CtaBand() {
                     ))}
                   </div>
                   <div className="text-xs text-white/85">
-                    <div className="font-bold">+30 {isAr ? "علامة" : "brands"}</div>
+                    <div className="font-bold">{isAr ? "علامات سعودية وخليجية" : "Saudi & Gulf brands"}</div>
                     <div className="text-white/60">
                       {isAr ? "اختاروا فكرة شريكاً للنمو" : "chose Fikra as their growth partner"}
                     </div>
