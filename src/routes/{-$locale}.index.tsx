@@ -34,8 +34,8 @@ export const Route = createFileRoute("/{-$locale}/")({
     const description =
       page?.meta_description ??
       (isAr
-        ? "نمو حقيقي بأرقام واضحة: سيو، إعلانات Google/Meta/TikTok، تصميم وتطوير مواقع. ضمان نتائج خلال ٩٠ يوم. احجز استشارتك المجانية الآن."
-        : "Real growth, clear numbers: SEO, Google/Meta/TikTok ads, web design & dev. 90-day results guarantee. Book your free strategy call today.");
+        ? "نربط التسويق بالمبيعات: SEO، حملات Google/Meta/TikTok، صفحات هبوط، وتتبّع. خطة واضحة، KPIs متفق عليها، وتقارير دورية. احجز تشخيصاً مجانياً."
+        : "We connect marketing to sales: SEO, Google/Meta/TikTok ads, landing pages, and tracking. Clear plan, agreed KPIs, and regular reports. Book a free diagnosis.");
 
     const meta = buildSeoMeta({
       title,

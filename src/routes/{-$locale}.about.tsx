@@ -80,7 +80,7 @@ function AboutPage() {
         "Transparent weekly reports — real numbers, no fluff",
         "Saudi & Arab team that understands local culture and dialect",
         "Flexible contracts with no hidden long lock-ins",
-        "30-day money-back or rework guarantee",
+        "30-day rework commitment if agreed KPIs aren't met",
         "Client data handled per Saudi PDPL regulations",
         "Direct WhatsApp line with your account manager",
       ];

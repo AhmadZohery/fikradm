@@ -85,10 +85,10 @@ export function HomeExpertiseTrust() {
   const policies = [
     {
       icon: CheckCircle2,
-      title: isAr ? "ضمان الأداء" : "Performance guarantee",
+      title: isAr ? "التزام أداء قابل للقياس" : "Measurable performance commitment",
       body: isAr
-        ? "نتائج محددة كتابياً قبل بدء المشروع — أو نُعيد الفارق على شكل خدمة إضافية."
-        : "KPIs agreed in writing before kickoff — or we make up the gap with extra service.",
+        ? "نحدد KPIs كتابياً قبل بدء المشروع (تكلفة الفرصة، جودة الليدز، معدل التحويل)، ونراجعها بتقارير دورية شفافة."
+        : "We define KPIs in writing before kickoff (cost per opportunity, lead quality, conversion rate) and review them in transparent recurring reports.",
     },
     {
       icon: Lock,
