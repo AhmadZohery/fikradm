@@ -152,7 +152,7 @@ export function SiteFooter() {
           <div className="mt-7 grid grid-cols-2 gap-2">
             <div className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-[11px] text-white/80">
               <Shield className="h-4 w-4 text-success" />
-              {isAr ? "وكالة مرخّصة" : "Licensed agency"}
+              {isAr ? "وكالة سعودية" : "Saudi agency"}
             </div>
             <div className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-[11px] text-white/80">
               <Award className="h-4 w-4 text-gold" />

@@ -286,8 +286,8 @@ export function HeroSlider() {
                 name: isAr ? "فكرة للتسويق الرقمي" : "Fikra Digital Marketing",
                 url: "https://fikradm.lovable.app",
                 description: isAr
-                  ? "وكالة تسويق رقمي مرخّصة في السعودية — استراتيجيات تسويق وأداء وعلامة تجارية."
-                  : "Licensed Saudi digital marketing agency — strategy, performance and brand.",
+                  ? "وكالة تسويق رقمي سعودية — استراتيجية، أداء، وعلامة تجارية بمنهجية قياس واضحة."
+                  : "A Saudi digital marketing agency — strategy, performance and brand, with a clear measurement methodology.",
                 aggregateRating: {
                   "@type": "AggregateRating",
                   ratingValue: "4.9",

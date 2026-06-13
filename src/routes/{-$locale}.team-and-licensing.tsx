@@ -178,7 +178,7 @@ function TeamAndLicensingPage() {
     : [
         { t: "Full Account Ownership", d: "Google Ads, Meta, GA4 are registered in your name and remain yours forever." },
         { t: "Transparent Verified Reporting", d: "Weekly reports pulled directly from Google/Meta APIs — zero edits." },
-        { t: "90-day Results Guarantee", d: "If we miss agreed KPIs in 90 days, we rework or refund." },
+        { t: "90-day plan with agreed KPIs", d: "KPIs defined in writing before kickoff, reviewed in weekly transparent reports — with a clear adjustment path if targets aren't met." },
         { t: "Client Data Protection", d: "Encrypted at rest, never shared with third parties, deleted on contract end." },
         { t: "Flexible Contracts", d: "Month-to-month with only 30-day notice. No long-term lock-ins." },
         { t: "Direct Communication", d: "Direct WhatsApp line with your account manager. <4h response on weekdays." },

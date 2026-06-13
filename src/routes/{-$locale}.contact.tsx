@@ -195,7 +195,7 @@ function ContactPage() {
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-primary" />{isAr ? "أقل من دقيقتين" : "Under 2 minutes"}</span>
-            <span className="inline-flex items-center gap-1.5"><Award className="h-3.5 w-3.5 text-primary" />{isAr ? "وكالة مرخّصة بالسعودية" : "Licensed in KSA"}</span>
+            <span className="inline-flex items-center gap-1.5"><Award className="h-3.5 w-3.5 text-primary" />{isAr ? "فريق سعودي بخبرة خليجية" : "Saudi team with Gulf expertise"}</span>
             <span className="inline-flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-primary" />{isAr ? "+150 عميل خليجي" : "150+ Gulf clients"}</span>
           </div>
         </div>
