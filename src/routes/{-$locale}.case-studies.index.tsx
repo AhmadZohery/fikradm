@@ -49,15 +49,34 @@ export const Route = createFileRoute("/{-$locale}/case-studies/")({
 
 const STUDIES: CaseStudy[] = CASE_STUDIES;
 
-const INDUSTRY_ICONS: Record<Industry, typeof TrendingUp> = {
-  ecommerce: ShoppingBag,
+const INDUSTRY_ICONS: Record<ClientIndustry, typeof TrendingUp> = {
+  automotive: TrendingUp,
+  retail: ShoppingBag,
   healthcare: Heart,
-  "real-estate": Building2,
-  education: GraduationCap,
-  fnb: Utensils,
-  travel: Plane,
-  saas: TrendingUp,
+  real_estate: Building2,
+  services: GraduationCap,
+  fb: Utensils,
+  fashion: Sparkles,
+  tech: Briefcase,
 };
+
+/** Branded placeholder used when a case study has no cover image yet. */
+function CoverPlaceholder({ accent, label }: { accent: string; label: string }) {
+  return (
+    <div
+      className={`flex h-full w-full items-center justify-center bg-gradient-to-tr ${accent} text-white`}
+      aria-label={label}
+      role="img"
+    >
+      <div className="flex flex-col items-center gap-2 px-6 text-center">
+        <ImageIcon className="h-10 w-10 opacity-80" />
+        <span className="text-xs font-bold uppercase tracking-[0.25em] opacity-90">
+          {label}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 function CaseStudiesIndex() {
   const { locale } = useLocale();
@@ -129,15 +148,24 @@ function CaseStudiesIndex() {
               className="group relative grid overflow-hidden rounded-[2.5rem] border border-border bg-card shadow-elegant lg:grid-cols-[1.2fr_1fr]"
             >
               <div className="relative aspect-[16/10] overflow-hidden lg:aspect-auto">
-                <img
-                  src={featured.cover}
-                  alt={featured.client[locale]}
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                />
+                {featured.cover ? (
+                  <img
+                    src={featured.cover}
+                    alt={featured.client[locale]}
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                  />
+                ) : (
+                  <CoverPlaceholder accent={featured.accent} label={isAr ? "غلاف قريباً" : "Cover coming soon"} />
+                )}
                 <span className={`pointer-events-none absolute inset-0 bg-gradient-to-tr ${featured.accent} opacity-30 mix-blend-multiply`} />
                 <span className="absolute start-5 top-5 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-primary backdrop-blur">
                   <Sparkles className="h-3 w-3" /> {isAr ? "قصة مميّزة" : "Featured"}
                 </span>
+                {featured.pendingApproval && (
+                  <span className="absolute end-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-ink/80 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
+                    {isAr ? "بانتظار موافقة العميل" : "Awaiting client approval"}
+                  </span>
+                )}
               </div>
               <div className="flex flex-col justify-center p-8 md:p-12">
                 <div className="text-xs font-bold uppercase tracking-widest text-primary">
@@ -148,14 +176,16 @@ function CaseStudiesIndex() {
                 </h2>
                 <p className="mt-4 text-muted-foreground">{featured.summary[locale]}</p>
 
-                <div className="mt-6 grid grid-cols-3 gap-3">
-                  {featured.metrics.map((m, i) => (
-                    <div key={i} className="rounded-2xl border border-border bg-surface-soft p-3 text-center">
-                      <div className="text-2xl font-black tabular-nums text-gradient">{m.value}</div>
-                      <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{m.label[locale]}</div>
-                    </div>
-                  ))}
-                </div>
+                {featured.metrics.length > 0 && (
+                  <div className="mt-6 grid grid-cols-3 gap-3">
+                    {featured.metrics.map((m, i) => (
+                      <div key={i} className="rounded-2xl border border-border bg-surface-soft p-3 text-center">
+                        <div className="text-2xl font-black tabular-nums text-gradient">{m.value}</div>
+                        <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{m.label[locale]}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
                   <div className="flex flex-wrap gap-1.5">
@@ -201,25 +231,31 @@ function CaseStudiesIndex() {
                     className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-card transition duration-500 hover:-translate-y-2 hover:border-primary/30 hover:shadow-elegant"
                   >
                     <div className="relative aspect-[16/10] overflow-hidden">
-                      <img
-                        src={c.cover}
-                        alt={c.client[locale]}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
-                      />
+                      {c.cover ? (
+                        <img
+                          src={c.cover}
+                          alt={c.client[locale]}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                        />
+                      ) : (
+                        <CoverPlaceholder accent={c.accent} label={isAr ? "غلاف قريباً" : "Cover coming soon"} />
+                      )}
                       <span className={`pointer-events-none absolute inset-0 bg-gradient-to-tr ${c.accent} opacity-25 transition duration-500 group-hover:opacity-40 mix-blend-multiply`} />
                       <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink/70 to-transparent" />
                       <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary backdrop-blur">
                         <Icon className="h-3 w-3" /> {c.industryLabel[locale]}
                       </span>
-                      <div className="absolute inset-x-4 bottom-4 grid grid-cols-2 gap-2">
-                        {c.metrics.slice(0, 2).map((m, mi) => (
-                          <div key={mi} className="rounded-xl border border-white/20 bg-white/10 p-2 text-center backdrop-blur-md">
-                            <div className="text-xl font-black tabular-nums text-white">{m.value}</div>
-                            <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-wider text-white/80">{m.label[locale]}</div>
-                          </div>
-                        ))}
-                      </div>
+                      {c.metrics.length > 0 && (
+                        <div className="absolute inset-x-4 bottom-4 grid grid-cols-2 gap-2">
+                          {c.metrics.slice(0, 2).map((m, mi) => (
+                            <div key={mi} className="rounded-xl border border-white/20 bg-white/10 p-2 text-center backdrop-blur-md">
+                              <div className="text-xl font-black tabular-nums text-white">{m.value}</div>
+                              <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-wider text-white/80">{m.label[locale]}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-1 flex-col p-6">
