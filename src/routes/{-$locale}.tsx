@@ -7,7 +7,7 @@ export const Route = createFileRoute("/{-$locale}")({
     // Arabic is the default URL with NO prefix. 301 any /ar/* to /*
     if (params.locale === "ar") {
       const restPath = location.pathname.replace(/^\/ar(?=\/|$)/, "") || "/";
-      throw redirect({ href: restPath + (location.search ? "" : ""), replace: true, statusCode: 301 });
+      throw redirect({ href: restPath, replace: true, statusCode: 301 });
     }
   },
   component: () => <Outlet />,
