@@ -9,7 +9,7 @@ function buildLlmsTxt(): string {
   lines.push("# Fikra Digital Marketing (فكرة للتسويق الرقمي)");
   lines.push("");
   lines.push(
-    "> Licensed Saudi digital marketing agency serving the GCC and Egypt — SEO, performance marketing, creative production, and web development with measurable results within 90 days.",
+    "> A Saudi digital marketing agency serving the GCC and Egypt — SEO, performance marketing, creative production, and web development. We work with agreed KPIs and transparent recurring reports, not guaranteed outcomes.",
   );
   lines.push("");
   lines.push("Fikra is a bilingual (Arabic / English) agency. Every page is available under `/ar/...` and `/en/...`. The links below default to Arabic — swap `/ar/` for `/en/` for the English version.");

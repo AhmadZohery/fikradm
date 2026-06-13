@@ -17,10 +17,10 @@ export const Route = createFileRoute("/{-$locale}/about")({
     const locale = (params.locale ?? "ar") as "ar" | "en";
     const isAr = locale === "ar";
     const title = isAr
-      ? "من نحن • قصة فكرة، فريق سعودي مرخّص منذ 2019"
-      : "About Us • Fikra story — Licensed Saudi team since 2019";
+      ? "من نحن • قصة فكرة، فريق سعودي منذ 2019"
+      : "About Us • Fikra story — Saudi team since 2019";
     const description = isAr
-      ? "وكالة تسويق رقمي سعودية مرخّصة منذ 2019. +100 علامة تجارية خليجية، فريق متخصص، شراكات معتمدة Google/Meta/TikTok."
+      ? "وكالة تسويق رقمي سعودية منذ 2019. عملنا مع علامات خليجية متعددة بفريق متخصص ومنهجية واضحة عبر SEO والإعلانات والكرييتيف والتطوير."
       : "Saudi licensed digital marketing agency since 2019. 100+ Gulf brands, expert team, certified Google/Meta/TikTok partnerships.";
     return {
       meta: buildSeoMeta({ title, description, path: `/${locale}/about`, locale, image: heroSaudiMarketer }),
@@ -54,17 +54,17 @@ function AboutPage() {
   ];
 
   const credentials = [
-    { icon: ShieldCheck, ar: "سجل تجاري سعودي مرخّص", en: "Licensed Saudi commercial registration" },
-    { icon: BadgeCheck, ar: "شريك Meta و Google و TikTok معتمد", en: "Certified Meta, Google & TikTok Partner" },
-    { icon: MapPin, ar: "مكاتب في الرياض ودبي", en: "Offices in Riyadh & Dubai" },
-    { icon: Sparkles, ar: "متوافقون مع رؤية 2030", en: "Aligned with Vision 2030" },
+    { icon: ShieldCheck, ar: "فريق سعودي يعمل عن قرب مع علامتك", en: "A Saudi team working closely with your brand" },
+    { icon: BadgeCheck, ar: "خبرة عملية في Meta و Google و TikTok", en: "Hands-on experience with Meta, Google & TikTok" },
+    { icon: MapPin, ar: "حضور في الرياض وخدمة دول الخليج", en: "Based in Riyadh, serving the Gulf" },
+    { icon: Sparkles, ar: "متوافقون مع توجهات رؤية 2030", en: "Aligned with Vision 2030 direction" },
   ];
 
   const milestones = [
     { y: "2019", ar: "انطلاق فكرة في الرياض", en: "Fikra launches in Riyadh" },
-    { y: "2021", ar: "توسّع في دول الخليج (الإمارات والكويت)", en: "Expansion across the Gulf (UAE & Kuwait)" },
-    { y: "2023", ar: "أكثر من 100 علامة تجارية خليجية", en: "100+ Gulf brands trust Fikra" },
-    { y: "2025", ar: "إدارة +12 مليون ريال ميزانيات إعلانية", en: "SAR 12M+ ad budgets under management" },
+    { y: "2021", ar: "أول مشاريع خارج السعودية في دول الخليج", en: "First cross-border projects in the Gulf" },
+    { y: "2023", ar: "توسّع الفريق وخدمات SEO والأداء", en: "Team expansion across SEO and performance" },
+    { y: "2025", ar: "إطار قياس موحّد للتسويق والمبيعات", en: "Unified marketing-to-sales measurement framework" },
   ];
 
   const promises = isAr
@@ -96,7 +96,7 @@ function AboutPage() {
           <div className="animate-fade-up">
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-white/90 px-4 py-1.5 text-xs font-semibold text-primary shadow-soft backdrop-blur">
               <ShieldCheck className="h-3.5 w-3.5" />
-              {isAr ? "وكالة سعودية مرخّصة • منذ 2019" : "Licensed Saudi agency • Since 2019"}
+              {isAr ? "وكالة سعودية • منذ 2019" : "Saudi agency • Since 2019"}
             </span>
             <h1 className="display-1 mt-5 text-[2.4rem] text-ink md:text-[3.2rem] lg:text-[3.8rem]">
               {isAr ? (
@@ -115,8 +115,8 @@ function AboutPage() {
             </h1>
             <p className="mt-5 max-w-xl text-base leading-8 text-muted-foreground md:text-lg">
               {isAr
-                ? "فكرة وكالة تسويق رقمي مرخّصة في المملكة العربية السعودية، نخدم أكثر من 150 علامة تجارية في السعودية والإمارات والكويت بحلول متكاملة من السيو والإعلانات إلى الكرييتيف والتطوير — بفهم عميق للسوق الخليجي وثقافته."
-                : "Fikra is a licensed Saudi digital marketing agency serving 150+ brands across KSA, UAE and Kuwait with integrated solutions — from SEO and ads to creative and development — built on deep Gulf market expertise."}
+                ? "فكرة وكالة تسويق رقمي سعودية، نعمل مع علامات في السعودية والخليج على حلول متكاملة: SEO، إعلانات الأداء، الكرييتيف، وتطوير المواقع — بفهم عميق للسوق المحلي ومنهجية قياس واضحة."
+                : "Fikra is a Saudi digital marketing agency working with brands across KSA and the Gulf on integrated solutions — SEO, performance ads, creative, and web development — with deep local market expertise and a clear measurement methodology."}
             </p>
             <div className="mt-6 grid grid-cols-1 gap-2 stagger-children sm:grid-cols-2">
               {credentials.map((c, i) => {

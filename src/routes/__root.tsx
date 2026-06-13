@@ -86,7 +86,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "وكالة تسويق رقمي مرخّصة في السعودية. سيو، إعلانات، تصميم، تطوير مواقع وحلول نمو متكاملة لشركات الخليج.",
+          "وكالة تسويق رقمي سعودية. SEO، إعلانات، تصميم، تطوير مواقع وحلول نمو متكاملة لشركات الخليج بمنهجية قياس واضحة.",
       },
       { name: "author", content: "Fikra Digital Marketing" },
       { name: "theme-color", content: "#5b4fe0" },

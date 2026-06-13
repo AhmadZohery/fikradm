@@ -136,23 +136,23 @@ function TeamAndLicensingPage() {
   const credentials = [
     {
       icon: FileCheck2,
-      title: { ar: "سجل تجاري سعودي مرخّص", en: "Licensed Saudi Commercial Registration" },
-      detail: { ar: "رقم 1010XXXXXX • وزارة التجارة", en: "No. 1010XXXXXX • Ministry of Commerce" },
+      title: { ar: "كيان قانوني سعودي", en: "Saudi legal entity" },
+      detail: { ar: "تفاصيل السجل التجاري تُرسل عند الطلب", en: "Commercial registration details available on request" },
     },
     {
       icon: BadgeCheck,
-      title: { ar: "شريك Google Premier", en: "Google Premier Partner" },
-      detail: { ar: "أعلى مستوى شراكة Google Ads", en: "Top-tier Google Ads partnership" },
+      title: { ar: "خبرة عملية بـ Google Ads", en: "Hands-on Google Ads experience" },
+      detail: { ar: "حملات بحث وأداء وفيديو متعددة الأسواق", en: "Search, performance and video campaigns across markets" },
     },
     {
       icon: Award,
-      title: { ar: "Meta Business Partner", en: "Meta Business Partner" },
-      detail: { ar: "شريك معتمد لإعلانات فيسبوك وانستجرام", en: "Certified for Facebook & Instagram ads" },
+      title: { ar: "خبرة عملية بـ Meta Business", en: "Hands-on Meta Business experience" },
+      detail: { ar: "حملات Facebook و Instagram و WhatsApp", en: "Facebook, Instagram and WhatsApp campaigns" },
     },
     {
       icon: Globe2,
-      title: { ar: "TikTok Marketing Partner", en: "TikTok Marketing Partner" },
-      detail: { ar: "شريك رسمي معتمد", en: "Official certified partner" },
+      title: { ar: "خبرة عملية بـ TikTok Ads", en: "Hands-on TikTok Ads experience" },
+      detail: { ar: "محتوى UGC وحملات أداء للسوق الخليجي", en: "UGC content and performance campaigns for the Gulf" },
     },
     {
       icon: ShieldCheck,
@@ -178,7 +178,7 @@ function TeamAndLicensingPage() {
     : [
         { t: "Full Account Ownership", d: "Google Ads, Meta, GA4 are registered in your name and remain yours forever." },
         { t: "Transparent Verified Reporting", d: "Weekly reports pulled directly from Google/Meta APIs — zero edits." },
-        { t: "90-day Results Guarantee", d: "If we miss agreed KPIs in 90 days, we rework or refund." },
+        { t: "90-day plan with agreed KPIs", d: "KPIs defined in writing before kickoff, reviewed in weekly transparent reports — with a clear adjustment path if targets aren't met." },
         { t: "Client Data Protection", d: "Encrypted at rest, never shared with third parties, deleted on contract end." },
         { t: "Flexible Contracts", d: "Month-to-month with only 30-day notice. No long-term lock-ins." },
         { t: "Direct Communication", d: "Direct WhatsApp line with your account manager. <4h response on weekdays." },
@@ -307,7 +307,7 @@ function TeamAndLicensingPage() {
         <div className="container-app">
           <div className="rounded-3xl bg-gradient-to-br from-primary to-primary/80 p-10 text-center text-primary-foreground shadow-elegant md:p-14">
             <h2 className="text-3xl font-extrabold md:text-4xl">
-              {isAr ? "جاهز تشتغل مع فريق موثّق ومرخّص؟" : "Ready to work with a verified, licensed team?"}
+              {isAr ? "جاهز تشتغل مع فريق سعودي بمنهجية واضحة؟" : "Ready to work with a Saudi team with a clear methodology?"}
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-primary-foreground/85">
               {isAr

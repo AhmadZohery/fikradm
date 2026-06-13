@@ -3,7 +3,7 @@ import { useLocale } from "@/i18n/useLocale";
 import { SectionEyebrow } from "./SectionEyebrow";
 
 const BADGES = [
-  { icon: ShieldCheck, ar: "وكالة مرخّصة", en: "Licensed agency" },
+  { icon: ShieldCheck, ar: "فريق سعودي", en: "Saudi team" },
   { icon: BadgeCheck, ar: "Meta Business Partner", en: "Meta Business Partner" },
   { icon: Verified, ar: "Google Partner", en: "Google Partner" },
   { icon: Award, ar: "TikTok Marketing Partner", en: "TikTok Marketing Partner" },

@@ -37,8 +37,8 @@ export const Route = createFileRoute("/{-$locale}/locations/$city/$service")({
         : `${service.name.en} in ${city.name.en} | ${SITE_NAME}`;
     const description =
       loc === "ar"
-        ? `وكالة ${service.name.ar} في ${city.name.ar}: ${service.shortDesc.ar} ✓ استشارة مجانية ✓ نتائج خلال 90 يوم.`
-        : `${service.name.en} agency in ${city.name.en}: ${service.shortDesc.en} ✓ Free consultation ✓ Results in 90 days.`;
+        ? `${service.name.ar} في ${city.name.ar}: ${service.shortDesc.ar} ✓ تشخيص مجاني ✓ خطة 90 يوم بمؤشرات متفق عليها.`
+        : `${service.name.en} in ${city.name.en}: ${service.shortDesc.en} ✓ Free diagnosis ✓ 90-day plan with agreed KPIs.`;
 
     const localBusinessNode = {
       "@context": "https://schema.org",

@@ -62,23 +62,23 @@ export function HomeExpertiseTrust() {
   const credentials = [
     {
       icon: FileBadge,
-      title: isAr ? "سجل تجاري سعودي" : "Saudi Commercial Registration",
-      meta: isAr ? "رقم 1010XXXXXX — الرياض" : "CR No. 1010XXXXXX — Riyadh",
+      title: isAr ? "كيان قانوني سعودي" : "Saudi legal entity",
+      meta: isAr ? "مقرّنا الرياض — تفاصيل السجل عند الطلب" : "Based in Riyadh — registration details on request",
     },
     {
       icon: ShieldCheck,
-      title: isAr ? "ترخيص هيئة الإعلام والاتصالات" : "MCIT/CITC Licensed",
-      meta: isAr ? "موفّر خدمات رقمية معتمد" : "Authorized digital service provider",
+      title: isAr ? "التزام بمعايير PDPL السعودي" : "Compliant with Saudi PDPL",
+      meta: isAr ? "حماية بيانات العميل والحسابات" : "Client data and account protection",
     },
     {
       icon: Award,
-      title: isAr ? "شريك Google Premier" : "Google Premier Partner",
-      meta: isAr ? "ضمن أعلى 3% من شركاء جوجل بالمنطقة" : "Top 3% of Google Partners in MENA",
+      title: isAr ? "خبرة عملية بمنصة Google Ads" : "Hands-on Google Ads experience",
+      meta: isAr ? "إدارة حملات بحث وأداء وفيديو" : "Search, performance and video campaigns",
     },
     {
       icon: GraduationCap,
-      title: isAr ? "شريك Meta Business" : "Meta Business Partner",
-      meta: isAr ? "معتمد رسمياً من Meta" : "Officially badged by Meta",
+      title: isAr ? "خبرة عملية بمنصة Meta Business" : "Hands-on Meta Business experience",
+      meta: isAr ? "حملات Facebook و Instagram و WhatsApp" : "Facebook, Instagram and WhatsApp campaigns",
     },
   ];
 

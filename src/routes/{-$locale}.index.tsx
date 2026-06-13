@@ -29,8 +29,8 @@ export const Route = createFileRoute("/{-$locale}/")({
     const title =
       page?.meta_title ??
       (isAr
-        ? "فكرة • وكالة تسويق رقمي مرخّصة في السعودية ٢٠٢٥"
-        : "Fikra • Licensed Digital Marketing Agency in KSA 2025");
+        ? "فكرة • وكالة تسويق رقمي سعودية تربط التسويق بالمبيعات"
+        : "Fikra • A Saudi digital marketing agency that connects marketing to sales");
     const description =
       page?.meta_description ??
       (isAr
