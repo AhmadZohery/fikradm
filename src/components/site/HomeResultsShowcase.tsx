@@ -16,10 +16,10 @@ type Story = {
 const STORIES: Story[] = [
   {
     industry: { ar: "تجارة إلكترونية", en: "E-commerce" },
-    client: { ar: "متجر Luxe & Co", en: "Luxe & Co Store" },
+    client: { ar: "سيناريو توضيحي", en: "Illustrative scenario" },
     icon: ShoppingBag,
-    metric: "+240%",
-    metricLabel: { ar: "نمو مبيعات في 6 شهور", en: "Sales growth in 6 months" },
+    metric: "Playbook",
+    metricLabel: { ar: "إعلانات + CRO + ولاء", en: "Ads + CRO + loyalty" },
     summary: {
       ar: "إعادة هيكلة الإعلانات + تحسين CRO للصفحات + إطلاق برنامج ولاء.",
       en: "Ads restructure + CRO on key pages + a loyalty program launch.",
@@ -29,10 +29,10 @@ const STORIES: Story[] = [
   },
   {
     industry: { ar: "قطاع طبي", en: "Healthcare" },
-    client: { ar: "شبكة عيادات Smile+", en: "Smile+ Clinics" },
+    client: { ar: "سيناريو توضيحي", en: "Illustrative scenario" },
     icon: Heart,
-    metric: "5.8x",
-    metricLabel: { ar: "ROAS عبر منصات Meta و Google", en: "ROAS across Meta & Google" },
+    metric: "Playbook",
+    metricLabel: { ar: "قمع كامل + Conversions API", en: "Full-funnel + Conversions API" },
     summary: {
       ar: "بناء قمع إعلاني كامل + كرييتيف يومي + Conversions API.",
       en: "Full-funnel ads + daily creative + Conversions API setup.",
@@ -42,10 +42,10 @@ const STORIES: Story[] = [
   },
   {
     industry: { ar: "عقاري", en: "Real Estate" },
-    client: { ar: "مجموعة Reside KSA", en: "Reside KSA Group" },
+    client: { ar: "سيناريو توضيحي", en: "Illustrative scenario" },
     icon: Building2,
-    metric: "x3",
-    metricLabel: { ar: "ليدز مؤهّلة شهرياً", en: "Qualified monthly leads" },
+    metric: "Playbook",
+    metricLabel: { ar: "صفحات هبوط + Google + سيو محلي", en: "Landing + Google + local SEO" },
     summary: {
       ar: "صفحات هبوط مخصصة + حملات Google + سيو محلي للمشاريع.",
       en: "Custom landing pages + Google Ads + local SEO per project.",
@@ -55,10 +55,10 @@ const STORIES: Story[] = [
   },
   {
     industry: { ar: "أكاديمي", en: "Education" },
-    client: { ar: "أكاديمية Riseed", en: "Riseed Academy" },
+    client: { ar: "سيناريو توضيحي", en: "Illustrative scenario" },
     icon: GraduationCap,
-    metric: "−63%",
-    metricLabel: { ar: "انخفاض كلفة اكتساب الطالب", en: "Drop in cost per student" },
+    metric: "Playbook",
+    metricLabel: { ar: "قمع تسجيل + فيديو + TikTok", en: "Enrolment funnel + video + TikTok" },
     summary: {
       ar: "إعادة بناء قمع التسجيل + كرييتيف فيديو + إعلانات تيك توك.",
       en: "Funnel rebuild + video creative + TikTok ads.",
@@ -68,10 +68,10 @@ const STORIES: Story[] = [
   },
   {
     industry: { ar: "مطاعم وضيافة", en: "F&B" },
-    client: { ar: "سلسلة مطاعم Olea", en: "Olea Restaurants" },
+    client: { ar: "سيناريو توضيحي", en: "Illustrative scenario" },
     icon: Utensils,
-    metric: "+820%",
-    metricLabel: { ar: "متابعون جدد على إنستجرام", en: "New Instagram followers" },
+    metric: "Playbook",
+    metricLabel: { ar: "هوية + محتوى + شراكات مؤثرين", en: "Identity + content + creator partnerships" },
     summary: {
       ar: "هوية بصرية محدّثة + إنتاج محتوى أسبوعي + شراكات مؤثرين.",
       en: "Refreshed identity + weekly content production + creator partnerships.",
@@ -81,10 +81,10 @@ const STORIES: Story[] = [
   },
   {
     industry: { ar: "B2B / SaaS", en: "B2B / SaaS" },
-    client: { ar: "منصة FlowOps", en: "FlowOps Platform" },
+    client: { ar: "سيناريو توضيحي", en: "Illustrative scenario" },
     icon: TrendingUp,
-    metric: "+412%",
-    metricLabel: { ar: "زيارات عضوية في 9 شهور", en: "Organic traffic in 9 months" },
+    metric: "Playbook",
+    metricLabel: { ar: "محتوى + سيو تقني + روابط", en: "Content + technical SEO + links" },
     summary: {
       ar: "استراتيجية محتوى Topical Authority + سيو تقني + بناء روابط آمن.",
       en: "Topical authority content + technical SEO + safe link building.",
@@ -104,22 +104,22 @@ export function HomeResultsShowcase() {
       <div className="container-app relative">
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
-            <SectionEyebrow>{isAr ? "نتائج بالأرقام" : "Results, by the numbers"}</SectionEyebrow>
+            <SectionEyebrow>{isAr ? "Playbooks توضيحية" : "Illustrative playbooks"}</SectionEyebrow>
             <h2 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">
               {isAr ? (
                 <>
-                  أرقام <span className="marker-line px-2">حقيقية</span> من عملاء حقيقيين
+                  كيف نشتغل عادة في <span className="marker-line px-2">كل قطاع</span>
                 </>
               ) : (
                 <>
-                  <span className="marker-line px-2">Real numbers</span> from real clients
+                  How we typically <span className="marker-line px-2">work per sector</span>
                 </>
               )}
             </h2>
             <p className="mt-4 max-w-xl text-base text-muted-foreground">
               {isAr
-                ? "ست قصص مختصرة من قطاعات مختلفة — ما الذي فعلناه، وكم استغرق، وما النتيجة الفعلية."
-                : "Six short stories across different industries — what we did, how long it took, and the actual outcome."}
+                ? "ست خطط عمل توضيحية لقطاعات مختلفة — ما الذي ننفذه عادة، وكم يستغرق الإطار الزمني المتوقع."
+                : "Six illustrative playbooks across different industries — what we typically run and the expected timeframe."}
             </p>
           </div>
         </div>
