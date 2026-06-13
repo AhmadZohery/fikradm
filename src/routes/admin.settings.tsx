@@ -110,8 +110,8 @@ function ContactTab({ data, update, onSave, saving }: { data: Record<string, unk
   return (
     <Card className="p-6 space-y-4">
       <div className="grid md:grid-cols-2 gap-4">
-        <Field label="رقم الواتساب (مع +)" value={v.whatsapp || ""} onChange={(x) => update({ whatsapp: x })} placeholder="+966500000000" />
-        <Field label="رقم الهاتف (مع +)" value={v.phone || ""} onChange={(x) => update({ phone: x })} placeholder="+966500000000" />
+        <Field label="رقم الواتساب (مع +)" value={v.whatsapp || ""} onChange={(x) => update({ whatsapp: x })} placeholder="+966569629773" />
+        <Field label="رقم الهاتف (مع +)" value={v.phone || ""} onChange={(x) => update({ phone: x })} placeholder="+966569629773" />
         <Field label="البريد الإلكتروني" value={v.email || ""} onChange={(x) => update({ email: x })} placeholder="hello@fikra.sa" />
         <div />
         <Field label="العنوان (عربي)" value={v.address_ar || ""} onChange={(x) => update({ address_ar: x })} />

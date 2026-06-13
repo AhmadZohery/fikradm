@@ -158,7 +158,7 @@ export function localBusinessLd(opts?: { city?: string; country?: string }) {
     name: SITE_NAME,
     image: DEFAULT_OG_IMAGE,
     url: SITE_ORIGIN,
-    telephone: "+966-50-000-0000",
+    telephone: "+966-56-962-9773",
     priceRange: "$$",
     address: {
       "@type": "PostalAddress",
