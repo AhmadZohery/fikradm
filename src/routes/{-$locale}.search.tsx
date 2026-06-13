@@ -15,14 +15,29 @@ export const Route = createFileRoute("/{-$locale}/search")({
     q: typeof s.q === "string" ? s.q : "",
     type: typeof s.type === "string" ? s.type : "all",
   }),
-  head: () => ({
-    meta: [
-      { title: "البحث في فكرة | Search" },
-      { name: "description", content: "ابحث في خدمات، صناعات، ومقالات وكالة فكرة." },
-      { name: "robots", content: "noindex,follow" },
-    ],
-    links: buildSeoLinks({ path: "/search", locale: "ar" }),
-  }),
+  head: ({ params }) => {
+    const loc: "ar" | "en" = (params?.locale ?? "ar") === "en" ? "en" : "ar";
+    const isAr = loc === "ar";
+    const title = isAr
+      ? "البحث في فكرة — خدمات وصناعات ومقالات"
+      : "Search Fikra — Services, Industries & Articles";
+    const description = isAr
+      ? "ابحث في خدمات وصناعات ومقالات وكالة فكرة للتسويق الرقمي في مكان واحد."
+      : "Search across Fikra's digital marketing services, industries, and articles in one place.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: `https://fikradm.lovable.app/${loc}/search` },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "robots", content: "noindex,follow" },
+      ],
+      links: buildSeoLinks({ path: "/search", locale: loc }),
+    };
+  },
   component: SearchPage,
 });
 
