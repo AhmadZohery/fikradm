@@ -86,8 +86,8 @@ export function HeroSlider() {
         kineticAr: ["نبني", "علامتك", "من", "الأساس", "حتى", "الإطلاق"],
         kineticEn: ["From", "brand", "to", "website", "to", "launch"],
         body: {
-          ar: "شعار وهوية بصرية، موقع إلكتروني سريع ومتوافق مع كل الأجهزة، ومحتوى يعبّر عن قيمك — كل ذلك تحت سقف وكالة واحدة بمنهجية واضحة وضمان جودة.",
-          en: "Logo and visual identity, a fast responsive website, and content that reflects your values — all under one roof with a clear methodology and quality guarantee.",
+          ar: "شعار وهوية بصرية، موقع إلكتروني سريع ومتوافق مع كل الأجهزة، ومحتوى يعبّر عن قيمك — كل ذلك تحت سقف وكالة واحدة بمنهجية واضحة ومراجعات جودة موثقة.",
+          en: "Logo and visual identity, a fast responsive website, and content that reflects your values — all under one roof with a clear methodology and documented QA reviews.",
         },
         primary: { ar: "ابدأ مشروعك", en: "Start your project", href: buildHref(locale, "/contact") },
         secondary: { ar: "أعمالنا", en: "Our work", href: buildHref(locale, "/case-studies") },

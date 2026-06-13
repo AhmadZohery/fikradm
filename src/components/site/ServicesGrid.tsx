@@ -86,12 +86,12 @@ export function ServicesGrid() {
               {isAr ? (
                 <>
                   منظومة خدمات متكاملة بـ
-                  <span className="marker-line px-2"> جودة مضمونة</span>
+                  <span className="marker-line px-2"> منهجية واضحة</span>
                 </>
               ) : (
                 <>
                   An integrated stack with{" "}
-                  <span className="marker-line px-2">guaranteed quality</span>
+                  <span className="marker-line px-2">a clear methodology</span>
                 </>
               )}
             </h2>

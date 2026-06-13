@@ -5,10 +5,10 @@ import { SectionEyebrow } from "./cinematic/SectionEyebrow";
 const ITEMS = [
   {
     icon: ShieldCheck,
-    titleAr: "ضمان النتائج أو نُكمل مجاناً",
-    titleEn: "Results guarantee — or we work free",
-    descAr: "إذا لم نحقق المؤشرات المُتفق عليها خلال أول 90 يوم، نُكمل بدون تكلفة حتى نصل.",
-    descEn: "If we miss the agreed KPIs in the first 90 days, we keep working at no cost until we hit them.",
+    titleAr: "خطة واضحة ومؤشرات أداء متفق عليها",
+    titleEn: "Clear plan with agreed KPIs",
+    descAr: "نحدد مع البداية المؤشرات المهمة (تكلفة الفرصة، جودة الليدز، معدل التحويل)، ونراجعها أسبوعياً بتقارير شفافة.",
+    descEn: "We define the KPIs that matter at kickoff (cost per opportunity, lead quality, conversion rate) and review them weekly with transparent reports.",
   },
   {
     icon: Clock,
@@ -21,8 +21,8 @@ const ITEMS = [
     icon: RotateCcw,
     titleAr: "بلا التزام طويل الأمد",
     titleEn: "No long-term lock-in",
-    descAr: "اشتراك شهري مرن — تستمر معنا لأن النتائج تستحق، لا لأن العقد يجبرك.",
-    descEn: "Flexible monthly plans — you stay because results deserve it, not because a contract forces you.",
+    descAr: "اشتراك شهري مرن — تستمر معنا لأن العمل يستحق، لا لأن العقد يجبرك.",
+    descEn: "Flexible monthly plans — you stay because the work earns it, not because a contract forces you.",
   },
   {
     icon: Lock,
@@ -41,23 +41,23 @@ export function HomeGuarantees() {
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.18] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" aria-hidden />
       <div className="container-app relative">
         <div className="mx-auto max-w-3xl text-center">
-          <SectionEyebrow>{isAr ? "ضماناتنا لك" : "Our promises"}</SectionEyebrow>
+          <SectionEyebrow>{isAr ? "التزاماتنا لك" : "Our commitments"}</SectionEyebrow>
           <h2 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">
             {isAr ? (
               <>
-                نعمل بضمانات
+                نعمل بالتزامات
                 <span className="marker-line px-2"> صريحة</span> — لأنّ ثقتك ليست شعاراً
               </>
             ) : (
               <>
-                We work with <span className="marker-line px-2">explicit guarantees</span> — your trust isn't a tagline
+                We work with <span className="marker-line px-2">explicit commitments</span> — your trust isn't a tagline
               </>
             )}
           </h2>
           <p className="mt-4 text-base text-muted-foreground md:text-lg">
             {isAr
-              ? "كل عميل يستحق التزاماً واضحاً. هذه ضماناتنا الموثقة في كل عقد."
-              : "Every client deserves a clear commitment. These are the guarantees written into every contract."}
+              ? "كل عميل يستحق التزاماً واضحاً. هذه التزاماتنا الموثقة في كل عقد."
+              : "Every client deserves a clear commitment. These are written into every contract."}
           </p>
         </div>
 
