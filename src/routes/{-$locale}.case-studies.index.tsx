@@ -115,8 +115,8 @@ function CaseStudiesIndex() {
               </h1>
               <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground md:text-lg">
                 {isAr
-                  ? "+200 علامة تجارية في الخليج اختارت فكرة. هذه عيّنة من النتائج الحقيقية في قطاعات مختلفة."
-                  : "200+ Gulf brands chose Fikra. Below is a sample of real, measurable outcomes across industries."}
+                  ? "نشارك Playbooks عملية من عمليات حقيقية. الأرقام التفصيلية تُضاف بمجرد موافقة العميل."
+                  : "Practical playbooks from real engagements. Detailed numbers are added as soon as each client approves disclosure."}
               </p>
 
               {/* Honest scope band — replaces fabricated stats */}
