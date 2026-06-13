@@ -119,13 +119,13 @@ function CaseStudiesIndex() {
                   : "200+ Gulf brands chose Fikra. Below is a sample of real, measurable outcomes across industries."}
               </p>
 
-              {/* Big stats */}
+              {/* Honest scope band — replaces fabricated stats */}
               <div className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-6 md:grid-cols-4">
                 {[
-                  { v: "+200", l: { ar: "علامة تجارية", en: "Brands" } },
-                  { v: "+28M", l: { ar: "ريال إعلانات مدارة", en: "Managed ad spend" } },
-                  { v: "4.9/5", l: { ar: "تقييم العملاء", en: "Client rating" } },
-                  { v: "97%", l: { ar: "نسبة الاحتفاظ", en: "Retention" } },
+                  { v: "8", l: { ar: "قطاعات نخدمها", en: "Sectors served" } },
+                  { v: "3", l: { ar: "أسواق رئيسية", en: "Core markets" } },
+                  { v: "4", l: { ar: "منصات إعلانية", en: "Ad platforms" } },
+                  { v: "1w", l: { ar: "وتيرة التقارير", en: "Reporting cadence" } },
                 ].map((s, i) => (
                   <div key={i} className="rounded-2xl border border-border bg-card/70 p-4 backdrop-blur">
                     <div className="text-2xl font-black text-gradient md:text-3xl">{s.v}</div>
