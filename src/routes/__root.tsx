@@ -4,7 +4,6 @@ import {
   HeadContent,
   Scripts,
   useLocation,
-  Link,
 } from "@tanstack/react-router";
 import { useMemo } from "react";
 
