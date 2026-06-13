@@ -64,7 +64,7 @@ export const Route = createFileRoute("/{-$locale}/team-and-licensing")({
               { "@type": "EducationalOccupationalCredential", name: "Google Ads Certified Partner" },
               { "@type": "EducationalOccupationalCredential", name: "Meta Business Partner" },
               { "@type": "EducationalOccupationalCredential", name: "TikTok Marketing Partner" },
-              { "@type": "EducationalOccupationalCredential", name: "Saudi Commercial Registration #1010xxxxxx" },
+              { "@type": "EducationalOccupationalCredential", name: "Saudi Commercial Registration #7053118076" },
             ],
           },
         }),
@@ -136,8 +136,11 @@ function TeamAndLicensingPage() {
   const credentials = [
     {
       icon: FileCheck2,
-      title: { ar: "كيان قانوني سعودي", en: "Saudi legal entity" },
-      detail: { ar: "تفاصيل السجل التجاري تُرسل عند الطلب", en: "Commercial registration details available on request" },
+      title: { ar: "سجل تجاري سعودي رسمي", en: "Official Saudi Commercial Registration" },
+      detail: {
+        ar: "فكرة للتسويق الرقمي • س.ت 7053118076 • صادر 25/12/2025 • الحالة: نشط",
+        en: "Fikra Digital Marketing • CR 7053118076 • Issued 25/12/2025 • Status: Active",
+      },
     },
     {
       icon: BadgeCheck,
