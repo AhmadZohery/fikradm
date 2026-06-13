@@ -273,7 +273,11 @@ export function SiteFooter() {
       {/* Bottom bar */}
       <div className="container-app relative mt-10 border-t border-white/10 py-6">
         <div className="flex flex-col items-center justify-between gap-4 text-xs text-white/55 md:flex-row">
-          <p>© {year} {t("footer.rights")}</p>
+          <p>
+            © {year} {t("footer.rights")}
+            <span className="mx-2 opacity-40">·</span>
+            {isAr ? "س.ت" : "CR"} 7053118076
+          </p>
           <div className="flex items-center gap-3">
             {[
               { label: "Twitter", icon: Twitter, href: "https://twitter.com/" },
