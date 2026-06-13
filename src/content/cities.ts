@@ -55,7 +55,7 @@ export const CITIES: City[] = [
     countryCode: "SA",
     region: { ar: "منطقة الرياض", en: "Riyadh Province" },
     latitude: 24.7136, longitude: 46.6753,
-    phone: "+966-50-000-0000", currency: "SAR",
+    phone: "+966-56-962-9773", currency: "SAR",
     tagline: {
       ar: "وكالتك الرقمية في قلب الرياض — نتائج محلية بمعايير عالمية.",
       en: "Your digital agency in the heart of Riyadh — local results, global standards.",
@@ -80,7 +80,7 @@ export const CITIES: City[] = [
     countryCode: "SA",
     region: { ar: "منطقة مكة المكرمة", en: "Makkah Region" },
     latitude: 21.4858, longitude: 39.1925,
-    phone: "+966-50-000-0000", currency: "SAR",
+    phone: "+966-56-962-9773", currency: "SAR",
     tagline: {
       ar: "تسويق رقمي في جدة بفهم عميق لسوق الساحل الغربي.",
       en: "Digital marketing in Jeddah with deep understanding of the West Coast market.",
@@ -105,7 +105,7 @@ export const CITIES: City[] = [
     countryCode: "SA",
     region: { ar: "المنطقة الشرقية", en: "Eastern Province" },
     latitude: 26.4207, longitude: 50.0888,
-    phone: "+966-50-000-0000", currency: "SAR",
+    phone: "+966-56-962-9773", currency: "SAR",
     tagline: {
       ar: "خدمات تسويق رقمي للشركات في المنطقة الشرقية وقطاع الطاقة.",
       en: "Digital marketing for Eastern Province businesses and the energy sector.",

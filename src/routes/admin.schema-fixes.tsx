@@ -130,7 +130,7 @@ const FIX_DEFS: FixDef[] = [
     fields: [
       { key: "name", label: "اسم الفرع", default: "Fikra — SEO Riyadh" },
       { key: "url", label: "رابط الصفحة", default: "/ar/locations/riyadh/seo" },
-      { key: "phone", label: "الهاتف", default: "+966-50-000-0000" },
+      { key: "phone", label: "الهاتف", default: "+966-56-962-9773" },
       { key: "city", label: "المدينة (إنجليزي)", default: "Riyadh" },
       { key: "region", label: "المنطقة", default: "Riyadh Province" },
       { key: "country", label: "كود الدولة (ISO2)", default: "SA" },

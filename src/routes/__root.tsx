@@ -4,7 +4,6 @@ import {
   HeadContent,
   Scripts,
   useLocation,
-  Link,
 } from "@tanstack/react-router";
 import { useMemo } from "react";
 
@@ -14,24 +13,64 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { SITE_ORIGIN, SITE_NAME, organizationLd, localBusinessLd, siteNavigationLd } from "@/lib/seo";
 
 function NotFoundComponent() {
+  const quickLinks: Array<{ href: string; label: string }> = [
+    { href: "/services", label: "الخدمات" },
+    { href: "/industries", label: "القطاعات" },
+    { href: "/case-studies", label: "قصص النجاح" },
+    { href: "/blog", label: "المدونة" },
+    { href: "/about", label: "من نحن" },
+    { href: "/contact", label: "تواصل معنا" },
+  ];
   return (
     <SiteLayout>
-      <div className="container-app section text-center">
-        <p className="text-sm font-semibold text-primary">404</p>
-        <h1 className="mt-2 text-4xl font-bold tracking-tight md:text-6xl">
-          الصفحة غير موجودة / Page not found
+      <div className="container-app section text-center" dir="rtl">
+        <p className="text-sm font-semibold text-primary">404 — الصفحة غير موجودة</p>
+        <h1 className="mt-3 text-3xl font-bold tracking-tight md:text-5xl">
+          الصفحة غير موجودة أو تم نقلها
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          الرابط الذي تبحث عنه غير متاح. عُد إلى الرئيسية لاكتشاف خدماتنا.
+          الرابط الذي حاولت فتحه لم نتمكن من الوصول إليه. قد يكون قديمًا أو
+          مكتوبًا بشكل غير صحيح. اختر من الأقسام التالية، أو ابدأ بتشخيص نمو مجاني لعملك.
         </p>
-        <div className="mt-8">
-          <Link
-            to="/{-$locale}"
-            params={{ locale: undefined }}
+
+        <form action="/search" method="get" className="mx-auto mt-6 flex max-w-md gap-2">
+          <input
+            name="q"
+            type="search"
+            placeholder="ابحث في الموقع…"
+            aria-label="ابحث في الموقع"
+            className="h-11 flex-1 rounded-full border border-border bg-surface px-4 text-sm outline-none focus:border-primary"
+          />
+          <button type="submit" className="h-11 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+            بحث
+          </button>
+        </form>
+
+        <div className="mx-auto mt-8 flex max-w-2xl flex-wrap justify-center gap-2 text-sm">
+          {quickLinks.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              className="rounded-full border border-border bg-surface px-4 py-2 transition hover:border-primary hover:text-primary"
+            >
+              {l.label}
+            </a>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href="/contact"
             className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition hover:bg-primary/90"
           >
-            الرئيسية / Home
-          </Link>
+            احجز تشخيص نمو مجاني
+          </a>
+          <a
+            href="/"
+            className="inline-flex items-center justify-center rounded-full border border-border bg-surface px-6 py-3 text-sm font-semibold transition hover:border-primary hover:text-primary"
+          >
+            العودة للرئيسية
+          </a>
         </div>
       </div>
     </SiteLayout>

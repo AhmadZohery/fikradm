@@ -79,13 +79,13 @@ export function CtaBand() {
                     </span>
                   </Link>
                   <a
-                    href="tel:+966500000000"
+                    href="tel:+966569629773"
                     className="group inline-flex items-center justify-between gap-2 rounded-2xl border border-white/30 bg-white/5 py-4 ps-5 pe-5 text-sm font-bold text-white transition hover:bg-white/15"
                     dir="ltr"
                   >
                     <span className="inline-flex items-center gap-2">
                       <Phone className="h-4 w-4" />
-                      +966 50 000 0000
+                      +966 56 962 9773
                     </span>
                     <span className="text-[10px] font-semibold uppercase tracking-wider text-white/60">
                       {isAr ? "اتصال مباشر" : "Direct call"}

@@ -11,16 +11,16 @@ export function WhatsAppButton() {
   const { locale } = useLocale();
   const isAr = locale === "ar";
   const contact = useSiteSetting("contact", {
-    whatsapp: "+966500000000",
-    phone: "+966500000000",
+    whatsapp: "+966569629773",
+    phone: "+966569629773",
     email: "hello@fikra.sa",
   });
   const text = isAr
     ? "مرحباً، أرغب في استشارة مع فكرة للتسويق الرقمي"
     : "Hi, I'd like a consultation with Fikra Digital Marketing";
-  const waNumber = (contact.whatsapp || "+966500000000").replace(/[^\d+]/g, "").replace(/^\+/, "");
+  const waNumber = (contact.whatsapp || "+966569629773").replace(/[^\d+]/g, "").replace(/^\+/, "");
   const waHref = `https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`;
-  const telHref = `tel:${contact.phone || "+966500000000"}`;
+  const telHref = `tel:${contact.phone || "+966569629773"}`;
 
   return (
     <div

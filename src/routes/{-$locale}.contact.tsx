@@ -490,7 +490,7 @@ function ContactPage() {
               <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <Phone className="h-4 w-4 shrink-0 text-primary" />
-                  <a href="tel:+966500000000" dir="ltr" className="hover:text-primary">+966 50 000 0000</a>
+                  <a href="tel:+966569629773" dir="ltr" className="hover:text-primary">+966 56 962 9773</a>
                 </li>
                 <li className="flex items-center gap-2">
                   <Mail className="h-4 w-4 shrink-0 text-primary" />

@@ -85,7 +85,7 @@ export function SiteFooter() {
                 <ArrowUpRight className="h-4 w-4 transition group-hover:rotate-45 rtl:rotate-90 rtl:group-hover:rotate-[135deg]" />
               </Link>
               <a
-                href="https://wa.me/966500000000"
+                href="https://wa.me/966569629773"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-success/40 bg-success/10 px-6 text-sm font-semibold text-success transition hover:bg-success/20"
@@ -224,7 +224,7 @@ export function SiteFooter() {
               </span>
               <div>
                 <div className="text-[11px] uppercase tracking-widest text-white/50">{isAr ? "اتصل" : "Call"}</div>
-                <a href="tel:+966500000000" className="text-white/85 transition hover:text-white" dir="ltr">+966 50 000 0000</a>
+                <a href="tel:+966569629773" className="text-white/85 transition hover:text-white" dir="ltr">+966 56 962 9773</a>
               </div>
             </li>
             <li className="flex items-start gap-3">
