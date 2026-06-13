@@ -23,6 +23,7 @@ import {
   jsonLdScript,
   breadcrumbLd,
   organizationLd,
+  faqLd,
   absUrl,
 } from "@/lib/seo";
 
@@ -81,6 +82,9 @@ export const Route = createFileRoute("/{-$locale}/services/$slug/")({
           { name: isAr ? "خدماتنا" : "Services", url: `/${loc}/services` },
           { name: s.title[loc], url: path },
         ])),
+        ...(s.faqs && s.faqs.length
+          ? [jsonLdScript(faqLd(s.faqs.map((f) => ({ question: f.q[loc], answer: f.a[loc] }))))]
+          : []),
       ],
     };
   },
