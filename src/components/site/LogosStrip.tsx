@@ -119,8 +119,8 @@ export function LogosStrip() {
           className="text-center text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground sm:text-sm"
         >
           {isAr
-            ? "موثوقون من +30 علامة سعودية ومصرية"
-            : "Trusted by 30+ Saudi & Egyptian brands"}
+            ? "نعمل مع علامات سعودية وخليجية ومصرية"
+            : "Working with Saudi, Gulf and Egyptian brands"}
         </p>
 
         <div

@@ -44,8 +44,8 @@ export function HeroSlider() {
         kineticAr: ["نحوّل", "طموحك", "إلى", "نمو", "قابل", "للقياس"],
         kineticEn: ["We", "turn", "ambition", "into", "measurable", "growth"],
         body: {
-          ar: "لسنا مجرد وكالة تسويق — نحن شركاؤك الاستراتيجيون: نبني الهوية، نطوّر الموقع، ونُدير حملاتك على Google و Meta و TikTok بأرقام واضحة وتقارير شفّافة لأكثر من 30 علامة في السعودية ومصر.",
-          en: "More than an agency — we're your strategic partners: building your brand, developing your site, and running Google, Meta and TikTok campaigns with transparent reports for 30+ brands across KSA and Egypt.",
+          ar: "لسنا مجرد وكالة تسويق — نحن شركاؤك الاستراتيجيون: نبني الهوية، نطوّر الموقع، ونُدير حملاتك على Google و Meta و TikTok بأرقام واضحة وتقارير شفّافة ومنهجية قياس متفق عليها.",
+          en: "More than an agency — we're your strategic partners: building your brand, developing your site, and running Google, Meta and TikTok campaigns with transparent reports and an agreed measurement methodology.",
         },
         primary: { ar: "احجز استشارة تشخيص مجانية", en: "Book a free diagnostic call", href: buildHref(locale, "/contact") },
         secondary: { ar: "شاهد قصص نجاحنا", en: "See our success stories", href: buildHref(locale, "/case-studies") },
@@ -53,8 +53,8 @@ export function HeroSlider() {
         image: heroSaudiMarketer,
         badge: { icon: Sparkles, ar: "وكالة متكاملة الخدمات", en: "Full-stack growth partner" },
         stats: [
-          { value: "30", ar: "علامة تجارية +", en: "Brands +" },
-          { value: "94", ar: "رضا العملاء %", en: "Client satisfaction %" },
+          { value: "6", ar: "خدمات متكاملة", en: "Integrated services" },
+          { value: "3", ar: "أسواق رئيسية SA·AE·EG", en: "Core markets SA·AE·EG" },
         ],
       },
       {
@@ -65,17 +65,17 @@ export function HeroSlider() {
         kineticAr: ["إعلانات", "مدروسة", "تجلب", "عملاء", "حقيقيين"],
         kineticEn: ["Smart", "ads", "that", "convert"],
         body: {
-          ar: "نستهدف الفئة الصحيحة على Meta و Google و TikTok بأكثر الطرق فعالية — تتبّع دقيق للتحويلات وتحسين أسبوعي يضمن أعلى عائد على الاستثمار (ROI).",
-          en: "We reach the right audience on Meta, Google and TikTok with precise conversion tracking and weekly optimization for maximum ROI.",
+          ar: "نستهدف الفئة الصحيحة على Meta و Google و TikTok بتتبّع دقيق للتحويلات وتحسين أسبوعي لرفع جودة الليدز وتقليل تكلفة الفرصة.",
+          en: "We reach the right audience on Meta, Google and TikTok with precise conversion tracking and weekly optimization to improve lead quality and lower cost per opportunity.",
         },
         primary: { ar: "احجز استشارة مجانية", en: "Book a free audit", href: buildHref(locale, "/contact") },
         secondary: { ar: "خدمات الإعلانات", en: "Performance services", href: buildHref(locale, "/services/performance") },
         hugeWord: { ar: "أداء", en: "ADS" },
         image: heroAdsPerformance,
-        badge: { icon: TrendingUp, ar: "ROAS 4.8x متوسط", en: "Avg. 4.8x ROAS" },
+        badge: { icon: TrendingUp, ar: "تحسين أسبوعي مبني على بيانات", en: "Weekly data-driven optimization" },
         stats: [
-          { value: "4.8", ar: "متوسط ROAS x", en: "Avg ROAS x" },
-          { value: "62", ar: "خفض كلفة الاكتساب %", en: "Lower CPA %" },
+          { value: "4", ar: "منصات إعلانية", en: "Ad platforms" },
+          { value: "1w", ar: "وتيرة التحسين", en: "Optimization cadence" },
         ],
       },
       {
@@ -93,10 +93,10 @@ export function HeroSlider() {
         secondary: { ar: "أعمالنا", en: "Our work", href: buildHref(locale, "/case-studies") },
         hugeWord: { ar: "إبداع", en: "CREATIVE" },
         image: heroBrandCreative,
-        badge: { icon: Rocket, ar: "+30 علامة موثوقة", en: "30+ trusted brands" },
+        badge: { icon: Rocket, ar: "هوية وموقع ومحتوى تحت سقف واحد", en: "Brand, web and content under one roof" },
         stats: [
-          { value: "30", ar: "علامة تجارية +", en: "Brands +" },
           { value: "8", ar: "قطاعات نخدمها", en: "Industries served" },
+          { value: "AR·EN", ar: "محتوى ثنائي اللغة", en: "Bilingual production" },
         ],
       },
     ],
@@ -213,7 +213,7 @@ export function HeroSlider() {
                   ))}
                   <span className="ms-1 text-sm font-bold text-foreground">4.9</span>
                 </div>
-                <p className="text-xs text-muted-foreground">{isAr ? "+30 علامة سعيدة" : "30+ happy brands"}</p>
+                <p className="text-xs text-muted-foreground">{isAr ? "تقييمات عملاء موثقة" : "Verified client reviews"}</p>
               </div>
             </div>
             <div className="hidden h-10 w-px bg-border sm:block" />
