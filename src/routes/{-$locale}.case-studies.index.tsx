@@ -5,8 +5,22 @@ import { CtaBand } from "@/components/site/CtaBand";
 import { useLocale } from "@/i18n/useLocale";
 import { Reveal } from "@/components/site/Reveal";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
-import { ArrowUpRight, TrendingUp, ShoppingBag, Heart, Building2, GraduationCap, Utensils, Plane, Sparkles, Quote } from "lucide-react";
+import {
+  ArrowUpRight,
+  TrendingUp,
+  ShoppingBag,
+  Heart,
+  Building2,
+  GraduationCap,
+  Utensils,
+  Sparkles,
+  Quote,
+  ImageIcon,
+  Briefcase,
+} from "lucide-react";
 import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd } from "@/lib/seo";
+import { CASE_STUDIES, type CaseStudy } from "@/content/caseStudies";
+import type { ClientIndustry } from "@/content/clients";
 
 export const Route = createFileRoute("/{-$locale}/case-studies/")({
   head: ({ params }) => {
@@ -14,8 +28,8 @@ export const Route = createFileRoute("/{-$locale}/case-studies/")({
     const locale = (params.locale ?? "ar") as "ar" | "en";
     const title = ar ? "قصص النجاح والبورتفوليو | فكرة" : "Case Studies & Portfolio | Fikra";
     const description = ar
-      ? "أعمال حقيقية ونتائج موثّقة لأكثر من 200 علامة تجارية في الخليج."
-      : "Real work and verified results from 200+ Gulf brands.";
+      ? "Playbooks عملية وقصص أعمال نعمل بها مع علامات سعودية وخليجية ومصرية في قطاعات مختلفة."
+      : "Practical playbooks and real engagements with Saudi, Gulf and Egyptian brands across sectors.";
     const path = `/${locale}/case-studies`;
     return {
       meta: buildSeoMeta({ title, description, path, locale }),
@@ -33,24 +47,7 @@ export const Route = createFileRoute("/{-$locale}/case-studies/")({
   component: CaseStudiesIndex,
 });
 
-type Industry = "ecommerce" | "healthcare" | "real-estate" | "education" | "fnb" | "travel" | "saas";
-
-type CaseStudy = {
-  slug: string;
-  industry: Industry;
-  industryLabel: { ar: string; en: string };
-  client: { ar: string; en: string };
-  title: { ar: string; en: string };
-  summary: { ar: string; en: string };
-  cover: string;
-  accent: string; // gradient
-  metrics: { value: string; label: { ar: string; en: string } }[];
-  services: string[];
-  duration: { ar: string; en: string };
-  featured?: boolean;
-};
-
-const STUDIES: CaseStudy[] = [
+const STUDIES: CaseStudy[] = CASE_STUDIES;
   {
     slug: "luxe-co",
     industry: "ecommerce",
