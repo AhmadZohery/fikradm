@@ -505,7 +505,7 @@ function ContactPage() {
             <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6">
               <h4 className="text-sm font-bold text-primary">{isAr ? "ليش تختار فكرة؟" : "Why Fikra?"}</h4>
               <ul className="mt-3 space-y-2.5 text-sm text-foreground/85">
-                <li className="flex gap-2"><Check className="h-4 w-4 shrink-0 text-primary" />{isAr ? "وكالة مرخّصة بالسعودية" : "Licensed agency in KSA"}</li>
+                <li className="flex gap-2"><Check className="h-4 w-4 shrink-0 text-primary" />{isAr ? "فريق سعودي يعمل بقُرب" : "Saudi team working closely with you"}</li>
                 <li className="flex gap-2"><Check className="h-4 w-4 shrink-0 text-primary" />{isAr ? "تقارير شفافة شهرية" : "Transparent monthly reports"}</li>
                 <li className="flex gap-2"><Check className="h-4 w-4 shrink-0 text-primary" />{isAr ? "مدير حساب مخصّص لك" : "Dedicated account manager"}</li>
                 <li className="flex gap-2"><Check className="h-4 w-4 shrink-0 text-primary" />{isAr ? "خبرة بالسوق السعودي والخليجي" : "Saudi & Gulf market expertise"}</li>
