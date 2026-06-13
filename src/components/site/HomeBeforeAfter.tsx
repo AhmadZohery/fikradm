@@ -29,21 +29,21 @@ export function HomeBeforeAfter() {
             </h2>
             <p className="mt-5 max-w-md text-base leading-8 text-muted-foreground">
               {isAr
-                ? "اسحب الشريط لترى تحوّل موقع عميل حقيقي قبل وبعد إعادة التصميم. كل بكسل مدروس لرفع التحويلات."
-                : "Drag the slider to see a real client website before and after our redesign. Every pixel engineered to lift conversions."}
+                ? "اسحب الشريط لترى نموذجاً توضيحياً لتحوّل موقع قبل وبعد إعادة التصميم. كل بكسل مدروس لرفع التحويلات."
+                : "Drag the slider to see an illustrative website transformation before and after a redesign. Every pixel engineered to lift conversions."}
             </p>
 
             <div className="mt-8 grid grid-cols-2 gap-5">
               <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
-                <div className="text-3xl font-black text-ink"><CountUp to={3} suffix=".4x" /></div>
+                <div className="text-3xl font-black text-ink">KPI</div>
                 <p className="mt-1 text-xs font-semibold text-muted-foreground">
-                  {isAr ? "زيادة في معدل التحويل" : "Conversion rate lift"}
+                  {isAr ? "هدف رفع معدل التحويل بحسب الاتفاق" : "Conversion lift per engagement"}
                 </p>
               </div>
               <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
-                <div className="text-3xl font-black text-ink"><CountUp to={68} suffix="%" /></div>
+                <div className="text-3xl font-black text-ink">Core Web Vitals</div>
                 <p className="mt-1 text-xs font-semibold text-muted-foreground">
-                  {isAr ? "أسرع في التحميل" : "Faster load time"}
+                  {isAr ? "هدف اجتياز معايير الأداء على الموبايل" : "Mobile performance targets"}
                 </p>
               </div>
             </div>
