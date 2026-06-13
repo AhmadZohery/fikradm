@@ -86,13 +86,18 @@ export function buildSeoMeta(input: SeoMetaInput): Array<Record<string, string>>
  */
 export function buildSeoLinks(input: { path: string; locale?: Locale; canonical?: string }) {
   const locale: Locale = input.locale ?? "ar";
-  // Strip locale prefix from path so we can build alternates.
+  // Strip any locale prefix from path so we can build alternates.
+  // Arabic is the DEFAULT site language and has NO URL prefix.
+  // English uses `/en/...`. Canonicals self-reference accordingly.
   const cleanPath = input.path.replace(/^\/(ar|en)(?=\/|$)/, "") || "/";
+  const arHref = absUrl(cleanPath);
+  const enHref = absUrl(cleanPath === "/" ? "/en" : `/en${cleanPath}`);
+  const selfHref = locale === "ar" ? arHref : enHref;
   return [
-    { rel: "canonical", href: input.canonical ?? absUrl(`/${locale}${cleanPath === "/" ? "" : cleanPath}`) },
-    { rel: "alternate", hrefLang: "ar", href: absUrl(`/ar${cleanPath === "/" ? "" : cleanPath}`) },
-    { rel: "alternate", hrefLang: "en", href: absUrl(`/en${cleanPath === "/" ? "" : cleanPath}`) },
-    { rel: "alternate", hrefLang: "x-default", href: absUrl(`/ar${cleanPath === "/" ? "" : cleanPath}`) },
+    { rel: "canonical", href: input.canonical ?? selfHref },
+    { rel: "alternate", hrefLang: "ar", href: arHref },
+    { rel: "alternate", hrefLang: "en", href: enHref },
+    { rel: "alternate", hrefLang: "x-default", href: arHref },
   ];
 }
 
