@@ -12,34 +12,34 @@ type Result = {
 
 const RESULTS: Record<string, Result[]> = {
   seo: [
-    { client: { ar: "متجر تجزئة سعودي", en: "Saudi retail brand" }, industry: { ar: "تجارة إلكترونية", en: "E-commerce" }, metric: { value: 412, suffix: "%", label: { ar: "زيادة في الزيارات العضوية", en: "organic traffic growth" } }, duration: { ar: "خلال 8 شهور", en: "in 8 months" } },
-    { client: { ar: "عيادة طبية بالرياض", en: "Riyadh medical clinic" }, industry: { ar: "صحة", en: "Healthcare" }, metric: { value: 28, suffix: "x", label: { ar: "ضعف في الحجوزات الشهرية", en: "monthly bookings increase" } }, duration: { ar: "خلال 6 شهور", en: "in 6 months" } },
-    { client: { ar: "منصة B2B تقنية", en: "B2B tech platform" }, industry: { ar: "تقنية", en: "Tech" }, metric: { value: 156, suffix: "%", label: { ar: "نمو في الـ Demo Requests", en: "demo requests growth" } }, duration: { ar: "خلال سنة", en: "within a year" } },
+    { client: { ar: "سيناريو: تجارة إلكترونية", en: "Scenario: E-commerce" }, industry: { ar: "تجزئة", en: "Retail" }, metric: { value: 150, suffix: "%+", label: { ar: "هدف نمو الزيارات العضوية", en: "target organic traffic growth" } }, duration: { ar: "خلال 6–9 شهور", en: "over 6–9 months" } },
+    { client: { ar: "سيناريو: قطاع صحي", en: "Scenario: Healthcare" }, industry: { ar: "صحة", en: "Healthcare" }, metric: { value: 3, suffix: "x", label: { ar: "هدف نمو الحجوزات العضوية", en: "target organic bookings lift" } }, duration: { ar: "خلال 6 شهور", en: "over 6 months" } },
+    { client: { ar: "سيناريو: منصة B2B", en: "Scenario: B2B platform" }, industry: { ar: "تقنية", en: "Tech" }, metric: { value: 80, suffix: "%+", label: { ar: "هدف نمو طلبات العرض", en: "target demo requests growth" } }, duration: { ar: "خلال 9–12 شهر", en: "over 9–12 months" } },
   ],
   performance: [
-    { client: { ar: "متجر أزياء", en: "Fashion brand" }, industry: { ar: "أزياء", en: "Fashion" }, metric: { value: 7, suffix: ".2x", label: { ar: "ROAS على ميزانية 80 ألف ر.س", en: "ROAS on SAR 80K spend" } }, duration: { ar: "في الشهر الأول", en: "in month one" } },
-    { client: { ar: "شركة عقارات", en: "Real estate firm" }, industry: { ar: "عقار", en: "Real estate" }, metric: { value: 64, suffix: "%", label: { ar: "انخفاض في تكلفة الـ Lead", en: "drop in cost per lead" } }, duration: { ar: "خلال 3 شهور", en: "in 3 months" } },
-    { client: { ar: "تطبيق توصيل", en: "Delivery app" }, industry: { ar: "تطبيقات", en: "Apps" }, metric: { value: 240, suffix: "K", label: { ar: "تنزيل بتكلفة 2.8 ر.س فقط", en: "installs at SAR 2.8 each" } }, duration: { ar: "خلال 90 يوم", en: "in 90 days" } },
+    { client: { ar: "سيناريو: تجارة إلكترونية", en: "Scenario: E-commerce" }, industry: { ar: "أزياء/تجزئة", en: "Fashion/Retail" }, metric: { value: 3, suffix: "x+", label: { ar: "هدف ROAS بعد التحسين", en: "target ROAS after optimisation" } }, duration: { ar: "خلال 60–90 يوم", en: "within 60–90 days" } },
+    { client: { ar: "سيناريو: توليد عملاء", en: "Scenario: Lead generation" }, industry: { ar: "عقار/خدمات", en: "Real estate / Services" }, metric: { value: 30, suffix: "%+", label: { ar: "هدف خفض تكلفة العميل المحتمل", en: "target drop in cost per lead" } }, duration: { ar: "خلال 90 يوم", en: "within 90 days" } },
+    { client: { ar: "سيناريو: تطبيقات", en: "Scenario: Mobile apps" }, industry: { ar: "تطبيقات", en: "Apps" }, metric: { value: 25, suffix: "%+", label: { ar: "هدف خفض تكلفة التنزيل", en: "target drop in cost per install" } }, duration: { ar: "خلال 90 يوم", en: "within 90 days" } },
   ],
   creative: [
-    { client: { ar: "علامة تجميل", en: "Beauty brand" }, industry: { ar: "تجميل", en: "Beauty" }, metric: { value: 312, suffix: "%", label: { ar: "زيادة في تفاعل السوشيال", en: "social engagement lift" } }, duration: { ar: "بعد إعادة الهوية", en: "post rebrand" } },
-    { client: { ar: "سلسلة مطاعم", en: "Restaurant chain" }, industry: { ar: "مطاعم", en: "F&B" }, metric: { value: 4, suffix: "M", label: { ar: "مشاهدة لحملة فيديو واحدة", en: "views on one video campaign" } }, duration: { ar: "في 30 يوم", en: "in 30 days" } },
-    { client: { ar: "تطبيق فينتك", en: "Fintech app" }, industry: { ar: "فينتك", en: "Fintech" }, metric: { value: 86, suffix: "%", label: { ar: "ارتفاع نسبة النقر للإعلان", en: "ad CTR uplift" } }, duration: { ar: "بعد إعادة الكرييتيف", en: "post-creative refresh" } },
+    { client: { ar: "سيناريو: إعادة هوية", en: "Scenario: Rebrand" }, industry: { ar: "علامات استهلاكية", en: "Consumer brands" }, metric: { value: 2, suffix: "x+", label: { ar: "هدف تفاعل السوشيال", en: "target social engagement" } }, duration: { ar: "بعد إعادة الهوية", en: "post rebrand" } },
+    { client: { ar: "سيناريو: حملة فيديو", en: "Scenario: Video campaign" }, industry: { ar: "مطاعم/تجزئة", en: "F&B / Retail" }, metric: { value: 1, suffix: "M+", label: { ar: "هدف مشاهدات لحملة فيديو واحدة", en: "target views per video campaign" } }, duration: { ar: "في 30 يوم", en: "in 30 days" } },
+    { client: { ar: "سيناريو: تحديث الكرييتيف", en: "Scenario: Creative refresh" }, industry: { ar: "خدمات رقمية", en: "Digital services" }, metric: { value: 30, suffix: "%+", label: { ar: "هدف رفع نسبة النقر للإعلان", en: "target ad CTR uplift" } }, duration: { ar: "بعد التحديث", en: "post refresh" } },
   ],
   web: [
-    { client: { ar: "متجر مجوهرات", en: "Jewelry store" }, industry: { ar: "تجزئة فاخرة", en: "Luxury retail" }, metric: { value: 47, suffix: "%", label: { ar: "زيادة في معدل التحويل", en: "conversion rate lift" } }, duration: { ar: "بعد إعادة التصميم", en: "post redesign" } },
-    { client: { ar: "منصة تعليمية", en: "EdTech platform" }, industry: { ar: "تعليم", en: "Education" }, metric: { value: 99, suffix: "/100", label: { ar: "Lighthouse Score على الموبايل", en: "mobile Lighthouse score" } }, duration: { ar: "في الإطلاق", en: "at launch" } },
-    { client: { ar: "متجر إلكتروني", en: "E-commerce store" }, industry: { ar: "تجارة", en: "Retail" }, metric: { value: 1, suffix: ".4s", label: { ar: "متوسط وقت تحميل الصفحة", en: "avg page load time" } }, duration: { ar: "بعد التحسين", en: "post optimization" } },
+    { client: { ar: "سيناريو: إعادة تصميم متجر", en: "Scenario: Store redesign" }, industry: { ar: "تجزئة", en: "Retail" }, metric: { value: 25, suffix: "%+", label: { ar: "هدف رفع معدل التحويل", en: "target conversion rate lift" } }, duration: { ar: "بعد إعادة التصميم", en: "post redesign" } },
+    { client: { ar: "سيناريو: موقع مؤسسي", en: "Scenario: Corporate site" }, industry: { ar: "تعليم/خدمات", en: "Education / Services" }, metric: { value: 90, suffix: "+/100", label: { ar: "هدف Lighthouse على الموبايل", en: "target mobile Lighthouse score" } }, duration: { ar: "في الإطلاق", en: "at launch" } },
+    { client: { ar: "سيناريو: تحسين الأداء", en: "Scenario: Performance tuning" }, industry: { ar: "تجارة إلكترونية", en: "E-commerce" }, metric: { value: 2, suffix: "s−", label: { ar: "هدف وقت تحميل الصفحة", en: "target page load time" } }, duration: { ar: "بعد التحسين", en: "post optimisation" } },
   ],
   social: [
-    { client: { ar: "علامة عربية", en: "Arabic brand" }, industry: { ar: "FMCG", en: "FMCG" }, metric: { value: 280, suffix: "K", label: { ar: "متابع جديد عضوياً", en: "new organic followers" } }, duration: { ar: "خلال 6 شهور", en: "in 6 months" } },
-    { client: { ar: "علامة موضة", en: "Fashion brand" }, industry: { ar: "أزياء", en: "Fashion" }, metric: { value: 18, suffix: "%", label: { ar: "Engagement Rate (الصناعة 2%)", en: "engagement rate (industry 2%)" } }, duration: { ar: "ثابت لـ 4 شهور", en: "sustained 4 months" } },
-    { client: { ar: "تطبيق محلي", en: "Local app" }, industry: { ar: "تطبيقات", en: "Apps" }, metric: { value: 12, suffix: "M", label: { ar: "Reach عضوي شهري", en: "monthly organic reach" } }, duration: { ar: "بعد عام واحد", en: "after one year" } },
+    { client: { ar: "سيناريو: نمو عضوي", en: "Scenario: Organic growth" }, industry: { ar: "FMCG", en: "FMCG" }, metric: { value: 50, suffix: "K+", label: { ar: "هدف متابعين جدد عضوياً", en: "target new organic followers" } }, duration: { ar: "خلال 6 شهور", en: "over 6 months" } },
+    { client: { ar: "سيناريو: تفاعل أعلى", en: "Scenario: Higher engagement" }, industry: { ar: "أزياء", en: "Fashion" }, metric: { value: 3, suffix: "x", label: { ar: "هدف Engagement Rate مقابل القطاع", en: "target engagement vs industry" } }, duration: { ar: "خلال 3–4 شهور", en: "over 3–4 months" } },
+    { client: { ar: "سيناريو: وصول عضوي", en: "Scenario: Organic reach" }, industry: { ar: "تطبيقات", en: "Apps" }, metric: { value: 1, suffix: "M+", label: { ar: "هدف Reach عضوي شهري", en: "target monthly organic reach" } }, duration: { ar: "خلال 6–12 شهر", en: "over 6–12 months" } },
   ],
   content: [
-    { client: { ar: "منصة B2B", en: "B2B platform" }, industry: { ar: "SaaS", en: "SaaS" }, metric: { value: 340, suffix: "%", label: { ar: "نمو في الزوار من المحتوى", en: "content-driven traffic growth" } }, duration: { ar: "خلال 9 شهور", en: "in 9 months" } },
-    { client: { ar: "علامة استشارية", en: "Consulting brand" }, industry: { ar: "خدمات", en: "Services" }, metric: { value: 5, suffix: "x", label: { ar: "ليدز شهرية بدون ميزانية إعلان", en: "monthly leads with zero ad spend" } }, duration: { ar: "بعد سنة", en: "after one year" } },
-    { client: { ar: "متجر إلكتروني", en: "Online store" }, industry: { ar: "تجزئة", en: "Retail" }, metric: { value: 62, suffix: "%", label: { ar: "زيادة AOV عبر دلائل المنتجات", en: "AOV lift via product guides" } }, duration: { ar: "خلال 4 شهور", en: "in 4 months" } },
+    { client: { ar: "سيناريو: محتوى B2B", en: "Scenario: B2B content" }, industry: { ar: "SaaS", en: "SaaS" }, metric: { value: 100, suffix: "%+", label: { ar: "هدف نمو زوار المحتوى", en: "target content traffic growth" } }, duration: { ar: "خلال 9–12 شهر", en: "over 9–12 months" } },
+    { client: { ar: "سيناريو: محتوى استشاري", en: "Scenario: Thought leadership" }, industry: { ar: "خدمات", en: "Services" }, metric: { value: 2, suffix: "x+", label: { ar: "هدف عملاء محتملين عضوياً", en: "target organic monthly leads" } }, duration: { ar: "بعد عام", en: "after one year" } },
+    { client: { ar: "سيناريو: دلائل منتجات", en: "Scenario: Product guides" }, industry: { ar: "تجزئة", en: "Retail" }, metric: { value: 15, suffix: "%+", label: { ar: "هدف رفع متوسط قيمة الطلب", en: "target AOV lift" } }, duration: { ar: "خلال 4–6 شهور", en: "over 4–6 months" } },
   ],
 };
 
@@ -53,23 +53,25 @@ export function ServiceResults({ slug }: { slug: string }) {
       <div className="container-app">
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
-            <SectionEyebrow>{isAr ? "نتائج حقيقية" : "Real results"}</SectionEyebrow>
+            <SectionEyebrow>{isAr ? "نطاقات أداء توضيحية" : "Illustrative performance ranges"}</SectionEyebrow>
             <h2 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">
               {isAr ? (
                 <>
-                  أرقام نفخر بها لـ
-                  <span className="marker-line px-2"> عملائنا</span>
+                  ما الذي نستهدفه عادة في
+                  <span className="marker-line px-2"> هذه الخدمة</span>
                 </>
               ) : (
                 <>
-                  Numbers we delivered for{" "}
-                  <span className="marker-line px-2">our clients</span>
+                  What we typically{" "}
+                  <span className="marker-line px-2">target</span> here
                 </>
               )}
             </h2>
           </div>
           <p className="text-sm text-muted-foreground md:max-w-xs md:text-end">
-            {isAr ? "كل رقم مُوثق بتقارير وحملات حقيقية." : "Every number is backed by real reports and campaigns."}
+            {isAr
+              ? "نماذج توضيحية وفق معدلات الصناعة ومنهجية عملنا — وليست التزامًا بنتائج محددة."
+              : "Illustrative benchmarks based on industry data and our methodology — not a guarantee of specific outcomes."}
           </p>
         </div>
 

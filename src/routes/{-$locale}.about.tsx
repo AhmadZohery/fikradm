@@ -4,7 +4,6 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { StatsBand } from "@/components/site/StatsBand";
 import { CtaBand } from "@/components/site/CtaBand";
-import { Testimonials } from "@/components/site/Testimonials";
 import { TrustStrip } from "@/components/site/cinematic/TrustStrip";
 import { LogosStrip } from "@/components/site/LogosStrip";
 import { useLocale } from "@/i18n/useLocale";
@@ -20,8 +19,8 @@ export const Route = createFileRoute("/{-$locale}/about")({
       ? "من نحن • قصة فكرة، فريق سعودي منذ 2019"
       : "About Us • Fikra story — Saudi team since 2019";
     const description = isAr
-      ? "وكالة تسويق رقمي سعودية منذ 2019. عملنا مع علامات خليجية متعددة بفريق متخصص ومنهجية واضحة عبر SEO والإعلانات والكرييتيف والتطوير."
-      : "Saudi licensed digital marketing agency since 2019. 100+ Gulf brands, expert team, certified Google/Meta/TikTok partnerships.";
+      ? "وكالة تسويق رقمي سعودية بفريق متخصص ومنهجية واضحة عبر SEO والإعلانات والكرييتيف وتطوير الويب — بمؤشرات أداء متفق عليها."
+      : "Saudi digital marketing agency with a specialised team and a clear methodology across SEO, ads, creative and web — driven by agreed KPIs.";
     return {
       meta: buildSeoMeta({ title, description, path: `/${locale}/about`, locale, image: heroSaudiMarketer }),
       links: buildSeoLinks({ path: `/${locale}/about`, locale }),
@@ -270,7 +269,6 @@ function AboutPage() {
       </section>
 
       <LogosStrip />
-      <Testimonials />
       <CtaBand />
     </SiteLayout>
   );
