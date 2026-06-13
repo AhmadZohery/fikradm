@@ -5,8 +5,22 @@ import { CtaBand } from "@/components/site/CtaBand";
 import { useLocale } from "@/i18n/useLocale";
 import { Reveal } from "@/components/site/Reveal";
 import { SectionEyebrow } from "@/components/site/cinematic/SectionEyebrow";
-import { ArrowUpRight, TrendingUp, ShoppingBag, Heart, Building2, GraduationCap, Utensils, Plane, Sparkles, Quote } from "lucide-react";
+import {
+  ArrowUpRight,
+  TrendingUp,
+  ShoppingBag,
+  Heart,
+  Building2,
+  GraduationCap,
+  Utensils,
+  Sparkles,
+  Quote,
+  ImageIcon,
+  Briefcase,
+} from "lucide-react";
 import { buildSeoMeta, buildSeoLinks, jsonLdScript, breadcrumbLd } from "@/lib/seo";
+import { CASE_STUDIES, type CaseStudy } from "@/content/caseStudies";
+import type { ClientIndustry } from "@/content/clients";
 
 export const Route = createFileRoute("/{-$locale}/case-studies/")({
   head: ({ params }) => {
@@ -14,8 +28,8 @@ export const Route = createFileRoute("/{-$locale}/case-studies/")({
     const locale = (params.locale ?? "ar") as "ar" | "en";
     const title = ar ? "قصص النجاح والبورتفوليو | فكرة" : "Case Studies & Portfolio | Fikra";
     const description = ar
-      ? "أعمال حقيقية ونتائج موثّقة لأكثر من 200 علامة تجارية في الخليج."
-      : "Real work and verified results from 200+ Gulf brands.";
+      ? "Playbooks عملية وقصص أعمال نعمل بها مع علامات سعودية وخليجية ومصرية في قطاعات مختلفة."
+      : "Practical playbooks and real engagements with Saudi, Gulf and Egyptian brands across sectors.";
     const path = `/${locale}/case-studies`;
     return {
       meta: buildSeoMeta({ title, description, path, locale }),
@@ -33,161 +47,36 @@ export const Route = createFileRoute("/{-$locale}/case-studies/")({
   component: CaseStudiesIndex,
 });
 
-type Industry = "ecommerce" | "healthcare" | "real-estate" | "education" | "fnb" | "travel" | "saas";
+const STUDIES: CaseStudy[] = CASE_STUDIES;
 
-type CaseStudy = {
-  slug: string;
-  industry: Industry;
-  industryLabel: { ar: string; en: string };
-  client: { ar: string; en: string };
-  title: { ar: string; en: string };
-  summary: { ar: string; en: string };
-  cover: string;
-  accent: string; // gradient
-  metrics: { value: string; label: { ar: string; en: string } }[];
-  services: string[];
-  duration: { ar: string; en: string };
-  featured?: boolean;
-};
-
-const STUDIES: CaseStudy[] = [
-  {
-    slug: "luxe-co",
-    industry: "ecommerce",
-    industryLabel: { ar: "تجارة إلكترونية", en: "E-commerce" },
-    client: { ar: "متجر Luxe & Co", en: "Luxe & Co" },
-    title: {
-      ar: "كيف ضاعفنا مبيعات متجر فاخر 2.4× في 6 شهور",
-      en: "How we 2.4×’d a luxury store’s sales in 6 months",
-    },
-    summary: {
-      ar: "إعادة هيكلة كاملة للحملات + تحسين CRO على صفحات المنتج + برنامج ولاء.",
-      en: "Full ad restructure + CRO on product pages + a loyalty program.",
-    },
-    cover: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80",
-    accent: "from-fuchsia-500 to-violet-600",
-    metrics: [
-      { value: "+240%", label: { ar: "نمو المبيعات", en: "Sales growth" } },
-      { value: "−68%", label: { ar: "كلفة الاكتساب", en: "CAC drop" } },
-      { value: "4.6×", label: { ar: "ROAS", en: "ROAS" } },
-    ],
-    services: ["Meta Ads", "CRO", "Email"],
-    duration: { ar: "6 أشهر", en: "6 months" },
-    featured: true,
-  },
-  {
-    slug: "smile-clinics",
-    industry: "healthcare",
-    industryLabel: { ar: "قطاع طبي", en: "Healthcare" },
-    client: { ar: "شبكة عيادات Smile+", en: "Smile+ Clinics" },
-    title: {
-      ar: "ROAS 5.8× لشبكة عيادات أسنان عبر قمع متكامل",
-      en: "5.8× ROAS for a dental network via a full funnel",
-    },
-    summary: { ar: "بناء قمع كامل + كرييتيف يومي + Conversions API.", en: "Full funnel + daily creative + Conversions API." },
-    cover: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1600&q=80",
-    accent: "from-rose-500 to-pink-600",
-    metrics: [
-      { value: "5.8×", label: { ar: "ROAS", en: "ROAS" } },
-      { value: "+312%", label: { ar: "حجوزات", en: "Bookings" } },
-    ],
-    services: ["Performance", "Creative"],
-    duration: { ar: "4 أشهر", en: "4 months" },
-  },
-  {
-    slug: "reside-ksa",
-    industry: "real-estate",
-    industryLabel: { ar: "عقاري", en: "Real Estate" },
-    client: { ar: "Reside KSA", en: "Reside KSA" },
-    title: {
-      ar: "3× ليدز عقارية شهرياً عبر سيو محلي وحملات Google",
-      en: "3× monthly real-estate leads via local SEO + Google",
-    },
-    summary: { ar: "صفحات هبوط لكل مشروع + سيو محلي + حملات Google.", en: "Per-project landing pages + local SEO + Google campaigns." },
-    cover: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1600&q=80",
-    accent: "from-blue-500 to-cyan-600",
-    metrics: [
-      { value: "x3", label: { ar: "ليدز شهرية", en: "Monthly leads" } },
-      { value: "−42%", label: { ar: "كلفة الليد", en: "Cost per lead" } },
-    ],
-    services: ["SEO", "Landing", "Google"],
-    duration: { ar: "9 أشهر", en: "9 months" },
-  },
-  {
-    slug: "riseed",
-    industry: "education",
-    industryLabel: { ar: "أكاديمي", en: "Education" },
-    client: { ar: "أكاديمية Riseed", en: "Riseed Academy" },
-    title: { ar: "−63% كلفة اكتساب الطالب عبر تيك توك", en: "−63% cost per student via TikTok" },
-    summary: { ar: "إعادة بناء قمع التسجيل + كرييتيف فيديو + إعلانات تيك توك.", en: "Funnel rebuild + video creative + TikTok ads." },
-    cover: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1600&q=80",
-    accent: "from-amber-500 to-orange-600",
-    metrics: [
-      { value: "−63%", label: { ar: "كلفة الطالب", en: "Cost per student" } },
-      { value: "+186%", label: { ar: "تسجيلات", en: "Sign-ups" } },
-    ],
-    services: ["TikTok", "Funnel"],
-    duration: { ar: "5 أشهر", en: "5 months" },
-  },
-  {
-    slug: "olea",
-    industry: "fnb",
-    industryLabel: { ar: "مطاعم وضيافة", en: "F&B" },
-    client: { ar: "سلسلة Olea", en: "Olea Restaurants" },
-    title: { ar: "+820% متابعون جدد بإنتاج محتوى أسبوعي", en: "+820% follower growth with weekly content" },
-    summary: { ar: "هوية بصرية محدّثة + إنتاج محتوى أسبوعي + شراكات مؤثرين.", en: "Refreshed identity + weekly content + creator partnerships." },
-    cover: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=80",
-    accent: "from-emerald-500 to-teal-600",
-    metrics: [
-      { value: "+820%", label: { ar: "متابعون", en: "Followers" } },
-      { value: "12M+", label: { ar: "مشاهدات", en: "Views" } },
-    ],
-    services: ["Branding", "Social"],
-    duration: { ar: "8 أشهر", en: "8 months" },
-  },
-  {
-    slug: "flowops",
-    industry: "saas",
-    industryLabel: { ar: "B2B / SaaS", en: "B2B / SaaS" },
-    client: { ar: "منصة FlowOps", en: "FlowOps" },
-    title: { ar: "+412% زيارات عضوية في 9 شهور", en: "+412% organic traffic in 9 months" },
-    summary: { ar: "محتوى Topical Authority + سيو تقني + بناء روابط آمن.", en: "Topical authority content + technical SEO + safe link building." },
-    cover: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1600&q=80",
-    accent: "from-indigo-500 to-purple-600",
-    metrics: [
-      { value: "+412%", label: { ar: "زيارات عضوية", en: "Organic traffic" } },
-      { value: "#1", label: { ar: "كلمات تنافسية", en: "Top rankings" } },
-    ],
-    services: ["SEO", "Content"],
-    duration: { ar: "9 أشهر", en: "9 months" },
-  },
-  {
-    slug: "horizon-travel",
-    industry: "travel",
-    industryLabel: { ar: "سياحة", en: "Travel" },
-    client: { ar: "Horizon Travel", en: "Horizon Travel" },
-    title: { ar: "−51% كلفة الحجز عبر إعادة بناء صفحات الهبوط", en: "−51% cost per booking via landing page rebuild" },
-    summary: { ar: "صفحات هبوط محسنة + سيو دولي + Email automation.", en: "Optimized landings + international SEO + email automation." },
-    cover: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1600&q=80",
-    accent: "from-sky-500 to-blue-600",
-    metrics: [
-      { value: "−51%", label: { ar: "كلفة الحجز", en: "Cost per booking" } },
-      { value: "x2.7", label: { ar: "حجوزات", en: "Bookings" } },
-    ],
-    services: ["CRO", "SEO", "Email"],
-    duration: { ar: "7 أشهر", en: "7 months" },
-  },
-];
-
-const INDUSTRY_ICONS: Record<Industry, typeof TrendingUp> = {
-  ecommerce: ShoppingBag,
+const INDUSTRY_ICONS: Record<ClientIndustry, typeof TrendingUp> = {
+  automotive: TrendingUp,
+  retail: ShoppingBag,
   healthcare: Heart,
-  "real-estate": Building2,
-  education: GraduationCap,
-  fnb: Utensils,
-  travel: Plane,
-  saas: TrendingUp,
+  real_estate: Building2,
+  services: GraduationCap,
+  fb: Utensils,
+  fashion: Sparkles,
+  tech: Briefcase,
 };
+
+/** Branded placeholder used when a case study has no cover image yet. */
+function CoverPlaceholder({ accent, label }: { accent: string; label: string }) {
+  return (
+    <div
+      className={`flex h-full w-full items-center justify-center bg-gradient-to-tr ${accent} text-white`}
+      aria-label={label}
+      role="img"
+    >
+      <div className="flex flex-col items-center gap-2 px-6 text-center">
+        <ImageIcon className="h-10 w-10 opacity-80" />
+        <span className="text-xs font-bold uppercase tracking-[0.25em] opacity-90">
+          {label}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 function CaseStudiesIndex() {
   const { locale } = useLocale();
@@ -226,17 +115,17 @@ function CaseStudiesIndex() {
               </h1>
               <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground md:text-lg">
                 {isAr
-                  ? "+200 علامة تجارية في الخليج اختارت فكرة. هذه عيّنة من النتائج الحقيقية في قطاعات مختلفة."
-                  : "200+ Gulf brands chose Fikra. Below is a sample of real, measurable outcomes across industries."}
+                  ? "نشارك Playbooks عملية من عمليات حقيقية. الأرقام التفصيلية تُضاف بمجرد موافقة العميل."
+                  : "Practical playbooks from real engagements. Detailed numbers are added as soon as each client approves disclosure."}
               </p>
 
-              {/* Big stats */}
+              {/* Honest scope band — replaces fabricated stats */}
               <div className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-6 md:grid-cols-4">
                 {[
-                  { v: "+200", l: { ar: "علامة تجارية", en: "Brands" } },
-                  { v: "+28M", l: { ar: "ريال إعلانات مدارة", en: "Managed ad spend" } },
-                  { v: "4.9/5", l: { ar: "تقييم العملاء", en: "Client rating" } },
-                  { v: "97%", l: { ar: "نسبة الاحتفاظ", en: "Retention" } },
+                  { v: "8", l: { ar: "قطاعات نخدمها", en: "Sectors served" } },
+                  { v: "3", l: { ar: "أسواق رئيسية", en: "Core markets" } },
+                  { v: "4", l: { ar: "منصات إعلانية", en: "Ad platforms" } },
+                  { v: "1w", l: { ar: "وتيرة التقارير", en: "Reporting cadence" } },
                 ].map((s, i) => (
                   <div key={i} className="rounded-2xl border border-border bg-card/70 p-4 backdrop-blur">
                     <div className="text-2xl font-black text-gradient md:text-3xl">{s.v}</div>
@@ -259,15 +148,24 @@ function CaseStudiesIndex() {
               className="group relative grid overflow-hidden rounded-[2.5rem] border border-border bg-card shadow-elegant lg:grid-cols-[1.2fr_1fr]"
             >
               <div className="relative aspect-[16/10] overflow-hidden lg:aspect-auto">
-                <img
-                  src={featured.cover}
-                  alt={featured.client[locale]}
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                />
+                {featured.cover ? (
+                  <img
+                    src={featured.cover}
+                    alt={featured.client[locale]}
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                  />
+                ) : (
+                  <CoverPlaceholder accent={featured.accent} label={isAr ? "غلاف قريباً" : "Cover coming soon"} />
+                )}
                 <span className={`pointer-events-none absolute inset-0 bg-gradient-to-tr ${featured.accent} opacity-30 mix-blend-multiply`} />
                 <span className="absolute start-5 top-5 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-primary backdrop-blur">
                   <Sparkles className="h-3 w-3" /> {isAr ? "قصة مميّزة" : "Featured"}
                 </span>
+                {featured.pendingApproval && (
+                  <span className="absolute end-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-ink/80 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
+                    {isAr ? "بانتظار موافقة العميل" : "Awaiting client approval"}
+                  </span>
+                )}
               </div>
               <div className="flex flex-col justify-center p-8 md:p-12">
                 <div className="text-xs font-bold uppercase tracking-widest text-primary">
@@ -278,14 +176,16 @@ function CaseStudiesIndex() {
                 </h2>
                 <p className="mt-4 text-muted-foreground">{featured.summary[locale]}</p>
 
-                <div className="mt-6 grid grid-cols-3 gap-3">
-                  {featured.metrics.map((m, i) => (
-                    <div key={i} className="rounded-2xl border border-border bg-surface-soft p-3 text-center">
-                      <div className="text-2xl font-black tabular-nums text-gradient">{m.value}</div>
-                      <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{m.label[locale]}</div>
-                    </div>
-                  ))}
-                </div>
+                {featured.metrics.length > 0 && (
+                  <div className="mt-6 grid grid-cols-3 gap-3">
+                    {featured.metrics.map((m, i) => (
+                      <div key={i} className="rounded-2xl border border-border bg-surface-soft p-3 text-center">
+                        <div className="text-2xl font-black tabular-nums text-gradient">{m.value}</div>
+                        <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{m.label[locale]}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
                   <div className="flex flex-wrap gap-1.5">
@@ -331,25 +231,31 @@ function CaseStudiesIndex() {
                     className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-card transition duration-500 hover:-translate-y-2 hover:border-primary/30 hover:shadow-elegant"
                   >
                     <div className="relative aspect-[16/10] overflow-hidden">
-                      <img
-                        src={c.cover}
-                        alt={c.client[locale]}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
-                      />
+                      {c.cover ? (
+                        <img
+                          src={c.cover}
+                          alt={c.client[locale]}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                        />
+                      ) : (
+                        <CoverPlaceholder accent={c.accent} label={isAr ? "غلاف قريباً" : "Cover coming soon"} />
+                      )}
                       <span className={`pointer-events-none absolute inset-0 bg-gradient-to-tr ${c.accent} opacity-25 transition duration-500 group-hover:opacity-40 mix-blend-multiply`} />
                       <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink/70 to-transparent" />
                       <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary backdrop-blur">
                         <Icon className="h-3 w-3" /> {c.industryLabel[locale]}
                       </span>
-                      <div className="absolute inset-x-4 bottom-4 grid grid-cols-2 gap-2">
-                        {c.metrics.slice(0, 2).map((m, mi) => (
-                          <div key={mi} className="rounded-xl border border-white/20 bg-white/10 p-2 text-center backdrop-blur-md">
-                            <div className="text-xl font-black tabular-nums text-white">{m.value}</div>
-                            <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-wider text-white/80">{m.label[locale]}</div>
-                          </div>
-                        ))}
-                      </div>
+                      {c.metrics.length > 0 && (
+                        <div className="absolute inset-x-4 bottom-4 grid grid-cols-2 gap-2">
+                          {c.metrics.slice(0, 2).map((m, mi) => (
+                            <div key={mi} className="rounded-xl border border-white/20 bg-white/10 p-2 text-center backdrop-blur-md">
+                              <div className="text-xl font-black tabular-nums text-white">{m.value}</div>
+                              <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-wider text-white/80">{m.label[locale]}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-1 flex-col p-6">

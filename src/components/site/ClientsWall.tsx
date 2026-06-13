@@ -4,58 +4,12 @@ import { ArrowUpRight, Building2 } from "lucide-react";
 import { useLocale } from "@/i18n/useLocale";
 import { SectionEyebrow } from "./cinematic/SectionEyebrow";
 import clientsWall from "@/assets/clients-wall.webp";
-
-/**
- * Real client list extracted from the 2025 Fikra agency portfolio PDF.
- * Each entry is tagged with one or more industries so visitors can filter
- * the wall to find work relevant to their own sector — a common B2B sales
- * pattern that shortens the path from "social proof" to "qualified lead".
- */
-type Industry =
-  | "automotive"
-  | "real_estate"
-  | "healthcare"
-  | "retail"
-  | "fb"
-  | "services"
-  | "fashion"
-  | "tech";
-
-type Client = {
-  name: string;
-  industries: Industry[];
-  /** Visual treatment for the wordmark */
-  style?: "serif" | "sans" | "italic" | "wide" | "ar";
-};
-
-const CLIENTS: Client[] = [
-  { name: "MaTicAuto", industries: ["automotive"], style: "sans" },
-  { name: "GARAGE 90", industries: ["automotive"], style: "wide" },
-  { name: "AL AMIN", industries: ["automotive"], style: "sans" },
-  { name: "KSR Motors", industries: ["automotive"], style: "sans" },
-  { name: "FIX IT", industries: ["automotive"], style: "wide" },
-  { name: "Car Care", industries: ["automotive"], style: "italic" },
-  { name: "PartTech", industries: ["automotive"], style: "sans" },
-  { name: "cardoO", industries: ["automotive", "tech"], style: "sans" },
-  { name: "التميّز العقارية", industries: ["real_estate"], style: "ar" },
-  { name: "NEW CITY", industries: ["real_estate"], style: "wide" },
-  { name: "SHS", industries: ["real_estate", "services"], style: "serif" },
-  { name: "Artistry Living", industries: ["real_estate"], style: "serif" },
-  { name: "Crystal Dental", industries: ["healthcare"], style: "sans" },
-  { name: "د. رفا القاضي", industries: ["healthcare"], style: "ar" },
-  { name: "La Béauté", industries: ["healthcare"], style: "italic" },
-  { name: "Dr. Amir Magdy", industries: ["healthcare"], style: "serif" },
-  { name: "TULIP", industries: ["fashion", "retail"], style: "wide" },
-  { name: "KERVANO", industries: ["retail", "fashion"], style: "wide" },
-  { name: "BASSANT", industries: ["fashion", "retail"], style: "wide" },
-  { name: "NBA Outlet", industries: ["retail"], style: "sans" },
-  { name: "ECO CLEAN", industries: ["services"], style: "sans" },
-  { name: "Egypt Career", industries: ["services"], style: "sans" },
-  { name: "MCC", industries: ["services", "tech"], style: "serif" },
-  { name: "YShot", industries: ["tech"], style: "italic" },
-  { name: "النادي", industries: ["fb", "services"], style: "ar" },
-  { name: "الكبة الشامية", industries: ["fb"], style: "ar" },
-];
+import {
+  CLIENTS,
+  CLIENT_INDUSTRIES,
+  type Client,
+  type ClientIndustry,
+} from "@/content/clients";
 
 const STYLE_CLASS: Record<NonNullable<Client["style"]>, string> = {
   serif: "font-serif italic font-bold tracking-tight",
@@ -65,22 +19,10 @@ const STYLE_CLASS: Record<NonNullable<Client["style"]>, string> = {
   ar: "font-sans font-extrabold tracking-tight",
 };
 
-const INDUSTRIES: { id: Industry | "all"; ar: string; en: string }[] = [
-  { id: "all", ar: "كل القطاعات", en: "All industries" },
-  { id: "automotive", ar: "السيارات والصيانة", en: "Automotive" },
-  { id: "real_estate", ar: "العقارات", en: "Real estate" },
-  { id: "healthcare", ar: "الرعاية الصحية", en: "Healthcare" },
-  { id: "retail", ar: "التجزئة", en: "Retail" },
-  { id: "fashion", ar: "الأزياء", en: "Fashion" },
-  { id: "fb", ar: "المطاعم والأغذية", en: "F&B" },
-  { id: "services", ar: "خدمات الأعمال", en: "Business services" },
-  { id: "tech", ar: "التقنية", en: "Tech" },
-];
-
 export function ClientsWall() {
-  const { locale, buildHref } = useLocale();
+  const { locale } = useLocale();
   const isAr = locale === "ar";
-  const [filter, setFilter] = useState<Industry | "all">("all");
+  const [filter, setFilter] = useState<ClientIndustry | "all">("all");
 
   const filtered = useMemo(
     () =>
@@ -141,11 +83,11 @@ export function ClientsWall() {
           aria-label={isAr ? "تصفية حسب القطاع" : "Filter by industry"}
           className="mt-8 flex flex-wrap gap-2"
         >
-          {INDUSTRIES.map((ind) => {
+          {CLIENT_INDUSTRIES.map((ind) => {
             const count =
               ind.id === "all"
                 ? CLIENTS.length
-                : CLIENTS.filter((c) => c.industries.includes(ind.id as Industry)).length;
+                : CLIENTS.filter((c) => c.industries.includes(ind.id as ClientIndustry)).length;
             const active = filter === ind.id;
             return (
               <button
@@ -179,20 +121,34 @@ export function ClientsWall() {
           className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
           aria-live="polite"
         >
-          {filtered.map((c) => (
-            <li
-              key={c.name}
-              className="group flex h-20 items-center justify-center rounded-2xl border border-border bg-card px-3 text-center text-muted-foreground/80 shadow-card transition hover:-translate-y-0.5 hover:border-primary/30 hover:text-primary hover:shadow-soft"
-              title={c.name}
-            >
-              <span
-                className={`text-lg leading-tight md:text-xl ${STYLE_CLASS[c.style ?? "sans"]}`}
-                dir={c.style === "ar" ? "rtl" : "ltr"}
+          {filtered.map((c) => {
+            const displayName = !isAr && c.nameEn ? c.nameEn : c.name;
+            return (
+              <li
+                key={c.slug}
+                className="group flex h-20 items-center justify-center rounded-2xl border border-border bg-card px-3 text-center text-muted-foreground/80 shadow-card transition hover:-translate-y-0.5 hover:border-primary/30 hover:text-primary hover:shadow-soft"
+                title={displayName}
               >
-                {c.name}
-              </span>
-            </li>
-          ))}
+                {c.logo ? (
+                  <img
+                    src={c.logo}
+                    alt={displayName}
+                    loading="lazy"
+                    decoding="async"
+                    className="max-h-12 w-auto max-w-full object-contain opacity-80 transition group-hover:opacity-100"
+                  />
+                ) : (
+                  <span
+                    className={`text-lg leading-tight md:text-xl ${STYLE_CLASS[c.style ?? "sans"]}`}
+                    dir={c.style === "ar" ? "rtl" : "ltr"}
+                    style={c.color ? { color: c.color } : undefined}
+                  >
+                    {displayName}
+                  </span>
+                )}
+              </li>
+            );
+          })}
           {filtered.length === 0 && (
             <li className="col-span-full rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
               {isAr ? "لا يوجد عملاء في هذا القطاع بعد." : "No clients in this industry yet."}
