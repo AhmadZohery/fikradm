@@ -198,15 +198,11 @@ function AdminLayout() {
       setUnread(count ?? 0);
     };
     fetchCount();
-    const channel = supabase
-      .channel("admin_unread_badge")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "form_submissions" },
-        () => { fetchCount(); },
-      )
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
+    // Poll instead of Realtime: form_submissions is no longer in the
+    // realtime publication to prevent signed-in users from subscribing
+    // to lead data.
+    const interval = setInterval(fetchCount, 30_000);
+    return () => { clearInterval(interval); };
   }, [user, isStaff]);
 
   // Login page is rendered standalone (no sidebar / no auth gate).
