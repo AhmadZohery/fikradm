@@ -183,30 +183,35 @@ function AdminLeadsPage() {
 
   useEffect(() => { load(); }, []);
 
-  // Realtime
+  // Poll for new submissions. Realtime was removed from form_submissions
+  // so that signed-in non-staff users cannot subscribe to lead data.
   useEffect(() => {
-    const channel = supabase
-      .channel("form_submissions_admin")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "form_submissions" },
-        (payload) => {
-          const row = payload.new as Submission;
-          setItems((prev) => [row, ...prev]);
-          const name = getName(row.payload);
-          toast.success(`${t("newLeadFrom")}${name}`, {
-            description: row.source_page ?? row.form_name,
-            action: { label: t("view"), onClick: () => setActive(row) },
-          });
-          // Optional: subtle sound
-          try {
-            const a = new Audio("data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAAA");
-            a.volume = 0.3; a.play().catch(() => {});
-          } catch { /* noop */ }
-        },
-      )
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
+    const seen = new Set(items.map((i) => i.id));
+    const tick = async () => {
+      const { data } = await supabase
+        .from("form_submissions")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (!data) return;
+      const fresh = (data as Submission[]).filter((r) => !seen.has(r.id));
+      if (fresh.length === 0) return;
+      fresh.forEach((row) => seen.add(row.id));
+      setItems((prev) => {
+        const ids = new Set(prev.map((p) => p.id));
+        const merged = [...fresh.filter((r) => !ids.has(r.id)), ...prev];
+        return merged;
+      });
+      const newest = fresh[0];
+      const name = getName(newest.payload);
+      toast.success(`${t("newLeadFrom")}${name}`, {
+        description: newest.source_page ?? newest.form_name,
+        action: { label: t("view"), onClick: () => setActive(newest) },
+      });
+    };
+    const interval = setInterval(tick, 20_000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filtered = useMemo(() => {
