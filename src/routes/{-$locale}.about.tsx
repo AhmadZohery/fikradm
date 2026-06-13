@@ -18,9 +18,9 @@ export const Route = createFileRoute("/{-$locale}/about")({
     const isAr = locale === "ar";
     const title = isAr
       ? "من نحن • قصة فكرة، فريق سعودي مرخّص منذ 2019"
-      : "About Us • Fikra story — Licensed Saudi team since 2019";
+      : "About Us • Fikra story — Saudi team since 2019";
     const description = isAr
-      ? "وكالة تسويق رقمي سعودية مرخّصة منذ 2019. +100 علامة تجارية خليجية، فريق متخصص، شراكات معتمدة Google/Meta/TikTok."
+      ? "وكالة تسويق رقمي سعودية منذ 2019. عملنا مع علامات خليجية متعددة بفريق متخصص ومنهجية واضحة عبر SEO والإعلانات والكرييتيف والتطوير."
       : "Saudi licensed digital marketing agency since 2019. 100+ Gulf brands, expert team, certified Google/Meta/TikTok partnerships.";
     return {
       meta: buildSeoMeta({ title, description, path: `/${locale}/about`, locale, image: heroSaudiMarketer }),

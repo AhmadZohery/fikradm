@@ -42,8 +42,8 @@ export const Route = createFileRoute("/{-$locale}/services/$slug/")({
     const title = baseTitle.length < 50 ? `${baseTitle} ${ctaSuffix}` : baseTitle;
     const baseDesc = s.metaDescription[loc];
     const descSuffix = isAr
-      ? " ✓ نتائج خلال 90 يوم ✓ وكالة سعودية مرخّصة. احجز جلستك الآن."
-      : " ✓ Results in 90 days ✓ Licensed Saudi agency. Book your call now.";
+      ? " ✓ خطة 90 يوم بمؤشرات أداء متفق عليها ✓ تقارير شفافة دورية. احجز تشخيصاً مجانياً."
+      : " ✓ 90-day plan with agreed KPIs ✓ transparent recurring reports. Book a free diagnosis.";
     const description = (baseDesc + descSuffix).slice(0, 158);
     const path = `/${loc}/services/${s.slug}`;
 

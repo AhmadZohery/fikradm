@@ -16,8 +16,8 @@ export const Route = createFileRoute("/{-$locale}/services/")({
       ? "خدماتنا • سيو، إعلانات، تصميم وتطوير مواقع 2025"
       : "Services • SEO, Ads, Creative & Web Development 2025";
     const description = isAr
-      ? "ترسانة خدمات تسويق رقمي متكاملة: سيو، Google/Meta/TikTok ads، تصميم هويات، تطوير مواقع وتطبيقات. فريق سعودي مرخّص."
-      : "End-to-end digital services: SEO, Google/Meta/TikTok ads, brand design, web & app development. Licensed Saudi team.";
+      ? "خدمات تسويق رقمي متكاملة: سيو، Google/Meta/TikTok ads، تصميم هويات، تطوير مواقع وتطبيقات. فريق سعودي بمنهجية وخطة قياس واضحة."
+      : "End-to-end digital services: SEO, Google/Meta/TikTok ads, brand design, web & app development. Saudi team with a clear methodology and measurement plan.";
     return {
       meta: buildSeoMeta({ title, description, path: `/${locale}/services`, locale }),
       links: buildSeoLinks({ path: `/${locale}/services`, locale }),
