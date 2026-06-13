@@ -17,7 +17,7 @@ export const Route = createFileRoute("/{-$locale}/about")({
     const locale = (params.locale ?? "ar") as "ar" | "en";
     const isAr = locale === "ar";
     const title = isAr
-      ? "من نحن • قصة فكرة، فريق سعودي مرخّص منذ 2019"
+      ? "من نحن • قصة فكرة، فريق سعودي منذ 2019"
       : "About Us • Fikra story — Saudi team since 2019";
     const description = isAr
       ? "وكالة تسويق رقمي سعودية منذ 2019. عملنا مع علامات خليجية متعددة بفريق متخصص ومنهجية واضحة عبر SEO والإعلانات والكرييتيف والتطوير."
