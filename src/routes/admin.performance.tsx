@@ -103,6 +103,76 @@ function PerformancePage() {
       .slice(0, 10);
   }, [vitals]);
 
+  // ---- Before/After comparison ----
+  const [cmpA, setCmpA] = useState<string>("");
+  const [cmpB, setCmpB] = useState<string>("");
+  const [affected, setAffected] = useState<{ url: string; before: number; after: number; delta: number; n: number }[]>([]);
+
+  useEffect(() => {
+    if (snaps.length >= 2 && !cmpA && !cmpB) {
+      setCmpB(snaps[0].id);
+      setCmpA(snaps[1].id);
+    }
+  }, [snaps, cmpA, cmpB]);
+
+  // Auto-snapshot if last snapshot is older than 24h and enough data exists
+  useEffect(() => {
+    if (loading || vitals.length < 20) return;
+    const latest = snaps[0];
+    const tooOld = !latest || (Date.now() - new Date(latest.created_at).getTime()) > 24 * 60 * 60 * 1000;
+    if (!tooOld) return;
+    const metrics = Object.fromEntries(METRICS.map((m) => [m, summary[m]]));
+    void supabase
+      .from("performance_snapshots")
+      .insert({ label: `auto-baseline ${new Date().toISOString().slice(0, 16).replace("T", " ")}`, notes: "تم إنشاؤها تلقائياً", metrics })
+      .then(({ error }) => { if (!error) load(); });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
+
+  const computeAffected = async () => {
+    const a = snaps.find((s) => s.id === cmpA);
+    const b = snaps.find((s) => s.id === cmpB);
+    if (!a || !b) return toast.error("اختر لقطتين للمقارنة");
+    const t1 = new Date(Math.min(new Date(a.created_at).getTime(), new Date(b.created_at).getTime()));
+    const t2 = new Date(Math.max(new Date(a.created_at).getTime(), new Date(b.created_at).getTime()));
+    const windowMs = Math.max(2 * 60 * 60 * 1000, t2.getTime() - t1.getTime());
+    const beforeStart = new Date(t1.getTime() - windowMs).toISOString();
+    const [beforeRes, afterRes] = await Promise.all([
+      supabase.from("web_vitals").select("url,value").eq("metric", "LCP").gte("created_at", beforeStart).lte("created_at", t1.toISOString()).limit(10000),
+      supabase.from("web_vitals").select("url,value").eq("metric", "LCP").gte("created_at", t2.toISOString()).limit(10000),
+    ]);
+    const groupP75 = (rows: { url: string; value: number }[]) => {
+      const m = new Map<string, number[]>();
+      for (const r of rows) { const arr = m.get(r.url) || []; arr.push(Number(r.value)); m.set(r.url, arr); }
+      return new Map([...m.entries()].map(([u, arr]) => [u, { p75: percentile(arr, 75), n: arr.length }]));
+    };
+    const beforeMap = groupP75((beforeRes.data || []) as { url: string; value: number }[]);
+    const afterMap = groupP75((afterRes.data || []) as { url: string; value: number }[]);
+    const urls = new Set([...beforeMap.keys(), ...afterMap.keys()]);
+    const rows: { url: string; before: number; after: number; delta: number; n: number }[] = [];
+    for (const u of urls) {
+      const bef = beforeMap.get(u); const aft = afterMap.get(u);
+      if (!bef || !aft || bef.n < 2 || aft.n < 2) continue;
+      const delta = bef.p75 ? ((aft.p75 - bef.p75) / bef.p75) * 100 : 0;
+      rows.push({ url: u, before: bef.p75, after: aft.p75, delta, n: bef.n + aft.n });
+    }
+    rows.sort((x, y) => Math.abs(y.delta) - Math.abs(x.delta));
+    setAffected(rows.slice(0, 12));
+    if (!rows.length) toast.message("لا توجد صفحات بعينات كافية في الفترتين");
+  };
+
+  const cmpDiff = useMemo(() => {
+    const a = snaps.find((s) => s.id === cmpA);
+    const b = snaps.find((s) => s.id === cmpB);
+    if (!a || !b) return null;
+    return METRICS.map((m) => {
+      const va = Number(a.metrics?.[m]?.p75 ?? 0);
+      const vb = Number(b.metrics?.[m]?.p75 ?? 0);
+      const delta = va ? ((vb - va) / va) * 100 : 0;
+      return { metric: m, before: va, after: vb, delta };
+    });
+  }, [cmpA, cmpB, snaps]);
+
   const takeSnapshot = async () => {
     if (!label.trim()) return toast.error("اكتب اسم اللقطة");
     const metrics = Object.fromEntries(METRICS.map((m) => [m, summary[m]]));
