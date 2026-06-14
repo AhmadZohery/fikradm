@@ -11,13 +11,14 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { Gauge, Camera, RefreshCw } from "lucide-react";
+import { Gauge, Camera, RefreshCw, GitCompareArrows, TrendingDown, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/admin/performance")({
   head: () => ({ meta: [{ name: "robots", content: "noindex" }] }),
