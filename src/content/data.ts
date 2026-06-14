@@ -245,7 +245,7 @@ export const services: ServiceMeta[] = [
     ),
     faqs: [
       { q: ls("متى تظهر نتائج السيو؟", "When will SEO results show?"), a: ls("النتائج الأولى تظهر خلال 3 شهور، والنمو الواضح بعد 6-9 شهور حسب المنافسة.", "First results appear within 3 months; significant growth after 6-9 months depending on competition.") },
-      { q: ls("هل تضمنون المركز الأول؟", "Do you guarantee #1 rankings?"), a: ls("لا أحد يضمن جوجل بشكل مطلق، لكن منهجيتنا أوصلت عملاءنا للصفحة الأولى لمئات الكلمات.", "No one can absolutely guarantee Google. Our methodology has driven clients to page one for hundreds of keywords.") },
+      { q: ls("هل تضمنون المركز الأول؟", "Do you guarantee #1 rankings?"), a: ls("لا أحد يضمن جوجل بشكل مطلق. نلتزم بمنهجية واضحة ومؤشرات أداء متفق عليها مسبقاً، ونعرض عليك تقارير شفافة كل شهر تقيس التقدّم بدقة.", "No one can absolutely guarantee Google. We commit to a clear methodology and KPIs agreed upfront, with transparent monthly reports tracking real progress.") },
       { q: ls("هل تشمل الخدمة كتابة المحتوى؟", "Does the service include content writing?"), a: ls("نعم، باقاتنا الاحترافية والمؤسسية تشمل محتوى سيو شهري بقلم متخصصين.", "Yes — our Pro and Enterprise plans include monthly SEO content by specialists.") },
     ],
     plans: seoPlans,
@@ -288,7 +288,7 @@ export const services: ServiceMeta[] = [
     faqs: [
       { q: ls("ما الحد الأدنى للميزانية الإعلانية؟", "Minimum ad spend?"), a: ls("ننصح بـ 3000 ر.س شهرياً كحد أدنى لمنصة واحدة لتحقيق نتائج مدروسة.", "We recommend SAR 3,000/month minimum per platform for measurable results.") },
       { q: ls("هل تكتفون بالإدارة أم تنتجون الكرييتيف؟", "Do you also produce creatives?"), a: ls("ننتج الكرييتيف ضمن الباقات المتقدمة (تصاميم وفيديوهات قصيرة).", "Yes — Pro plans include creative (designs and short videos).") },
-      { q: ls("متى أرى نتائج؟", "When will I see results?"), a: ls("نتائج البيع المباشر تظهر من الأسبوع الأول، وتستقر بعد 30-45 يوم.", "Direct sales typically start in week 1 and stabilize after 30-45 days.") },
+      { q: ls("متى أرى نتائج؟", "When will I see results?"), a: ls("بيانات أولية وتحسينات تبدأ من الأسبوع الأول، والاستقرار وتحسين CAC/ROAS يحتاج عادةً 30-60 يوم حسب القطاع وحجم الميزانية.", "Initial data and optimizations begin in week 1; CAC/ROAS typically stabilize after 30–60 days depending on category and budget.") },
     ],
     plans: performancePlans,
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80",
@@ -401,9 +401,9 @@ export const industries: IndustryMeta[] = [
       ["Multi-channel strategy (SEO + ads + email)", "CRO and pro landing pages", "Sales-driven creative and optimized catalog", "Unit economics and LTV reporting"],
     ),
     outcomes: [
-      { value: "+220%", label: ls("متوسط نمو المبيعات", "Avg sales growth") },
-      { value: "-38%", label: ls("تكلفة اكتساب العميل", "Customer acquisition cost") },
-      { value: "x4.5", label: ls("عائد الإعلان", "Return on ad spend") },
+      { value: "GMV", label: ls("نمو الإيراد كهدف رئيسي", "Revenue growth as a north star") },
+      { value: "CAC", label: ls("خفض تكلفة الاكتساب", "Reducing acquisition cost") },
+      { value: "ROAS", label: ls("رفع عائد الإعلان", "Lifting return on ad spend") },
     ],
     faqs: [
       { q: ls("هل تعملون مع متاجر سلة وZid؟", "Do you work with Salla & Zid?"), a: ls("نعم، نمتلك خبرة قوية في سلة، Zid، Shopify وWooCommerce.", "Yes — strong experience with Salla, Zid, Shopify and WooCommerce.") },
@@ -433,9 +433,9 @@ export const industries: IndustryMeta[] = [
       ["Targeted LinkedIn + Google B2B ads", "Service-specific landing pages", "Authority content (blog + case studies)", "CRM lead management"],
     ),
     outcomes: [
-      { value: "+180%", label: ls("نمو الليدز المؤهلة", "Qualified leads growth") },
-      { value: "-42%", label: ls("تكلفة الليد المؤهل", "Cost per qualified lead") },
-      { value: "12+", label: ls("عقود B2B/شهر", "B2B contracts/month") },
+      { value: "MQL", label: ls("جودة الليدز المؤهلة", "Qualified-lead quality") },
+      { value: "CPL", label: ls("خفض تكلفة الليد", "Lowering cost per lead") },
+      { value: "SQL", label: ls("ليدز جاهزة للمبيعات", "Sales-ready leads") },
     ],
     faqs: [
       { q: ls("هل تخدمون السوق الخليجي بالكامل؟", "Do you serve the entire Gulf?"), a: ls("نعم، خبرتنا تشمل السعودية، الإمارات، الكويت ومصر.", "Yes — KSA, UAE, Kuwait and Egypt.") },
@@ -464,9 +464,9 @@ export const industries: IndustryMeta[] = [
       ["GBP optimization for bookings", "Targeted local search campaigns", "Policy-compliant ad copy", "Per-specialty landing pages + WhatsApp booking"],
     ),
     outcomes: [
-      { value: "+340%", label: ls("نمو الحجوزات", "Bookings growth") },
-      { value: "+5x", label: ls("ظهور خرائط جوجل", "Google Maps visibility") },
-      { value: "<48h", label: ls("متوسط الإطلاق", "Avg time to launch") },
+      { value: "Bookings", label: ls("تركيز كامل على الحجوزات", "Bookings-first focus") },
+      { value: "Local", label: ls("ظهور قوي في جوجل وخرائطه", "Strong Google & Maps visibility") },
+      { value: "Compliance", label: ls("التزام كامل بأنظمة الإعلان الصحي", "Healthcare ad compliance") },
     ],
     faqs: [
       { q: ls("هل لديكم خبرة بأنظمة الإعلان الصحي؟", "Healthcare ad compliance experience?"), a: ls("نعم، نلتزم بأنظمة هيئة الصحة وسياسات Meta وGoogle الطبية.", "Yes — fully aligned with health authority rules and Meta/Google medical policies.") },
@@ -495,9 +495,9 @@ export const industries: IndustryMeta[] = [
       ["Precise budget & interest targeting", "Project page with video + virtual tour", "Lead scoring with instant sales alerts", "Pro visual retargeting"],
     ),
     outcomes: [
-      { value: "+260%", label: ls("ليدز مؤهلة", "Qualified leads") },
-      { value: "-31%", label: ls("تكلفة الليد", "Cost per lead") },
-      { value: "x3", label: ls("نسبة الإغلاق", "Close rate") },
+      { value: "Qualified", label: ls("ليدز عقارية مؤهلة", "Qualified real-estate leads") },
+      { value: "Speed", label: ls("ردّ مبيعات سريع", "Fast sales response") },
+      { value: "Close", label: ls("منهجية ترفع نسبة الإغلاق", "Methodology that lifts close rate") },
     ],
     faqs: [
       { q: ls("هل تعملون مع المطورين الكبار؟", "Do you work with major developers?"), a: ls("نعم، عملنا يشمل المطورين والوسطاء وشركات الإدارة.", "Yes — we work with developers, brokers and management firms.") },
