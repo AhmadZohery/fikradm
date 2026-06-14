@@ -155,7 +155,7 @@ export function invalidationStats(events: CacheInvalidationEvent[]) {
 }
 
 /** Lazy import to avoid SSR / circular issues. */
-async function exportEvent(type: "cache_invalidation" | "publish_guard", payload: unknown) {
+async function exportEvent(type: "cache_invalidation" | "publish_guard", payload: Record<string, unknown>) {
   try {
     const mod = await import("./metricsExporter");
     mod.exportMetric(type, payload);
