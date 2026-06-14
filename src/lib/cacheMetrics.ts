@@ -94,7 +94,7 @@ export function recordInvalidation(e: Omit<CacheInvalidationEvent, "id" | "at">)
   );
   invListeners.forEach((l) => l(next));
   // Fire-and-forget Sentry/Prometheus
-  void exportEvent("cache_invalidation", event);
+  void exportEvent("cache_invalidation", event as unknown as Record<string, unknown>);
   return event;
 }
 
@@ -109,7 +109,7 @@ export function recordPublishGuard(e: Omit<PublishGuardEvent, "id" | "at">): Pub
   // eslint-disable-next-line no-console
   console.info(`[publish:${event.phase} cid=${event.correlationId}] ${event.kind}/${event.slug} score=${event.score}`);
   pubListeners.forEach((l) => l(next));
-  void exportEvent("publish_guard", event);
+  void exportEvent("publish_guard", event as unknown as Record<string, unknown>);
   return event;
 }
 
