@@ -13,6 +13,7 @@
  */
 import type { QueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { recordInvalidation } from "./cacheMetrics";
 
 export type InvalidateTarget =
   | { kind: "blog"; slug: string; id?: string }
@@ -82,16 +83,35 @@ async function softPurge(urls: string[]) {
 
 /** Invalidate everything related to a target after Save/Publish. */
 export async function invalidateAfterSave(target: InvalidateTarget, queryClient?: QueryClient) {
-  await bumpEntityTimestamp(target);
-
-  if (queryClient) {
-    for (const key of RELATED_QUERY_KEYS[target.kind]) {
-      queryClient.invalidateQueries({ queryKey: key });
+  const t0 = typeof performance !== "undefined" ? performance.now() : Date.now();
+  const keys = RELATED_QUERY_KEYS[target.kind];
+  const urls = affectedUrls(target);
+  let ok = true;
+  let error: string | undefined;
+  try {
+    await bumpEntityTimestamp(target);
+    if (queryClient) {
+      for (const key of keys) {
+        queryClient.invalidateQueries({ queryKey: key });
+      }
     }
+    // Fire-and-forget — don't block UI
+    void softPurge(urls);
+  } catch (e) {
+    ok = false;
+    error = e instanceof Error ? e.message : String(e);
+  } finally {
+    const t1 = typeof performance !== "undefined" ? performance.now() : Date.now();
+    recordInvalidation({
+      kind: target.kind,
+      slug: target.slug,
+      urlsPurged: urls,
+      queryKeysInvalidated: keys.map((k) => k.join(":")),
+      durationMs: Math.round(t1 - t0),
+      ok,
+      error,
+    });
   }
-
-  // Fire-and-forget — don't block UI
-  void softPurge(affectedUrls(target));
 }
 
 /** Convenience for blog posts. */
