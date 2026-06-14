@@ -368,6 +368,43 @@ function BlogPostEditorPage() {
   const togglePublish = async () => {
     if (!post) return;
     const next = post.status === "published" ? "draft" : "published";
+    if (next === "published") {
+      const guard = evaluatePublishGuard({
+        slug: post.slug,
+        title_ar: post.title_ar,
+        title_en: post.title_en,
+        meta_title_ar: post.meta_title_ar,
+        meta_title_en: post.meta_title_en,
+        meta_description_ar: post.meta_description_ar,
+        meta_description_en: post.meta_description_en,
+        cover_image_url: post.cover_image_url,
+        author_ar: post.author_ar,
+        author_en: post.author_en,
+        published_at: post.published_at,
+        last_reviewed: (post as any).last_reviewed,
+        tldr_ar: (post as any).tldr_ar,
+        tldr_en: (post as any).tldr_en,
+        faq: (post as any).faq,
+        author_bio_ar: (post as any).author_bio_ar,
+        author_bio_en: (post as any).author_bio_en,
+        sources: (post as any).sources,
+        body_html_ar: (post as any).body_html_ar,
+        body_html_en: (post as any).body_html_en,
+      } as any);
+      if (!guard.ok) {
+        toast.error(`نشر متعذّر: ${guard.blockers[0]?.message ?? "عناصر إلزامية ناقصة"}`, {
+          description: guard.blockers.slice(1, 4).map((b) => `• ${b.message}`).join("\n"),
+        });
+        return;
+      }
+      if (guard.warnings.length > 0) {
+        const confirmed = typeof window !== "undefined" && window.confirm(
+          `جودة المحتوى ${guard.score}/100 مع ${guard.warnings.length} تحذير. متابعة النشر؟\n\n` +
+          guard.warnings.slice(0, 5).map((w) => `• ${w.message}`).join("\n"),
+        );
+        if (!confirmed) return;
+      }
+    }
     const published_at = next === "published" ? new Date().toISOString() : null;
     const { error } = await supabase
       .from("blog_posts")
