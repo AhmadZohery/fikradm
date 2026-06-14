@@ -77,6 +77,12 @@ export function RichTextEditor({
     extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3, 4] },
+        // Tiptap v3 bundles these inside StarterKit. We register richer
+        // configurations below, so disable the built-ins to avoid the
+        // "Duplicate extension names" error that prevents the editor
+        // from initializing (blank editor on post open / create).
+        underline: false,
+        link: false,
       }),
       Underline,
       Link.configure({
