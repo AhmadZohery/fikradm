@@ -21,6 +21,7 @@ import {
   Wand2,
   Shield,
   FileBarChart2,
+  Bug,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
@@ -83,6 +84,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: "/admin/spam-queue", label: "طابور Spam", icon: Shield, group: "system" },
   { to: "/admin/reports", label: "تقارير شهرية", icon: FileBarChart2, group: "system" },
   { to: "/admin/users", label: "المستخدمين", icon: Users, group: "system" },
+  { to: "/admin/debug", label: "Debug / Cache", icon: Bug, group: "system" },
   { to: "/admin/settings", label: "الإعدادات", icon: Settings, group: "system" },
 ];
 
