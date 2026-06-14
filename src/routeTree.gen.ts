@@ -24,6 +24,7 @@ import { Route as Char123LocaleChar125PrivacyRouteImport } from './routes/{-$loc
 import { Route as Char123LocaleChar125ContactRouteImport } from './routes/{-$locale}.contact'
 import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$locale}.about'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminSpamQueueRouteImport } from './routes/admin.spam-queue'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminSeoReportsRouteImport } from './routes/admin.seo-reports'
@@ -139,6 +140,11 @@ const Char123LocaleChar125AboutRoute =
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSpamQueueRoute = AdminSpamQueueRouteImport.update({
+  id: '/spam-queue',
+  path: '/spam-queue',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
@@ -342,6 +348,7 @@ export interface FileRoutesByFullPath {
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/spam-queue': typeof AdminSpamQueueRoute
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
@@ -390,6 +397,7 @@ export interface FileRoutesByTo {
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/spam-queue': typeof AdminSpamQueueRoute
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
@@ -441,6 +449,7 @@ export interface FileRoutesById {
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/spam-queue': typeof AdminSpamQueueRoute
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
@@ -493,6 +502,7 @@ export interface FileRouteTypes {
     | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
+    | '/admin/spam-queue'
     | '/admin/users'
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
@@ -541,6 +551,7 @@ export interface FileRouteTypes {
     | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
+    | '/admin/spam-queue'
     | '/admin/users'
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
@@ -591,6 +602,7 @@ export interface FileRouteTypes {
     | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
+    | '/admin/spam-queue'
     | '/admin/users'
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
@@ -735,6 +747,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/spam-queue': {
+      id: '/admin/spam-queue'
+      path: '/spam-queue'
+      fullPath: '/admin/spam-queue'
+      preLoaderRoute: typeof AdminSpamQueueRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/settings': {
@@ -1012,6 +1031,7 @@ interface AdminRouteChildren {
   AdminSeoReportsRoute: typeof AdminSeoReportsRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSpamQueueRoute: typeof AdminSpamQueueRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -1033,6 +1053,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminSeoReportsRoute: AdminSeoReportsRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminSpamQueueRoute: AdminSpamQueueRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
