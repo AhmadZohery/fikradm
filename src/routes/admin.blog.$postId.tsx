@@ -133,6 +133,7 @@ function htmlFromBody(body: unknown, lang: Lang): string {
 function BlogPostEditorPage() {
   const { postId } = Route.useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [cats, setCats] = useState<CategoryRow[]>([]);
