@@ -19,6 +19,8 @@ import {
   Sparkles,
   FileJson,
   Wand2,
+  Shield,
+  FileBarChart2,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
