@@ -82,11 +82,12 @@ export const deliverReport = createServerFn({ method: "POST" })
       } else {
         // Enqueue via the email queue if available; otherwise mark as queued
         try {
-          const { error: qErr } = await context.supabase.rpc("enqueue_email", {
+          const payload: any = report.payload || {};
+          const { error: qErr } = await (context.supabase as any).rpc("enqueue_email", {
             queue: "transactional_emails",
             payload: {
               to,
-              subject: `📊 ${report.payload?.label || "Monthly Report"}`,
+              subject: `📊 ${payload.label || "Monthly Report"}`,
               html: formatEmailHtml(report),
               template_name: "monthly_report",
               message_id: `report-${report.id}`,
@@ -119,7 +120,7 @@ export const saveNotificationSettings = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertStaff(context);
     const { data: existing } = await context.supabase.from("site_settings").select("data").eq("key", "admin_notifications").maybeSingle();
-    const merged = { ...(existing?.data || {}), ...data };
+    const merged = { ...((existing?.data as Record<string, unknown>) || {}), ...data };
     const { error } = await context.supabase.from("site_settings").upsert({
       key: "admin_notifications",
       label: "Admin Notifications",
