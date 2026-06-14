@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -102,12 +102,8 @@ function AdminDebugPage() {
               </TableRow>
             )}
             {events.map((e) => (
-              <>
-                <TableRow
-                  key={e.id}
-                  className="cursor-pointer"
-                  onClick={() => setExpanded(expanded === e.id ? null : e.id)}
-                >
+              <Fragment key={e.id}>
+                <TableRow className="cursor-pointer" onClick={() => setExpanded(expanded === e.id ? null : e.id)}>
                   <TableCell className="font-mono text-xs">{new Date(e.at).toLocaleTimeString()}</TableCell>
                   <TableCell><Badge variant="outline">{e.kind}</Badge></TableCell>
                   <TableCell className="font-mono text-xs">{e.slug}</TableCell>
@@ -119,7 +115,7 @@ function AdminDebugPage() {
                   </TableCell>
                 </TableRow>
                 {expanded === e.id && (
-                  <TableRow key={`${e.id}-detail`} className="bg-muted/30">
+                  <TableRow className="bg-muted/30">
                     <TableCell colSpan={7} className="space-y-2 p-3 text-xs">
                       <div>
                         <div className="mb-1 font-semibold">URLs المخدومة (soft purge):</div>
@@ -137,7 +133,7 @@ function AdminDebugPage() {
                     </TableCell>
                   </TableRow>
                 )}
-              </>
+              </Fragment>
             ))}
           </TableBody>
         </Table>
