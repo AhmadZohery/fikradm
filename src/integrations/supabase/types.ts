@@ -665,6 +665,72 @@ export type Database = {
         }
         Relationships: []
       }
+      performance_snapshots: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          label: string
+          metrics: Json
+          notes: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          label: string
+          metrics?: Json
+          notes?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          label?: string
+          metrics?: Json
+          notes?: string | null
+        }
+        Relationships: []
+      }
+      seo_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string
+          details: Json
+          id: string
+          resolved_at: string | null
+          severity: string
+          status: string
+          title: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string
+          details?: Json
+          id?: string
+          resolved_at?: string | null
+          severity?: string
+          status?: string
+          title: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string
+          details?: Json
+          id?: string
+          resolved_at?: string | null
+          severity?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       seo_audit_reports: {
         Row: {
           details: Json
@@ -692,6 +758,45 @@ export type Database = {
           total_errors?: number
           total_pages?: number
           total_warnings?: number
+        }
+        Relationships: []
+      }
+      seo_metrics: {
+        Row: {
+          captured_at: string
+          clicks: number
+          ctr: number
+          date: string
+          id: string
+          impressions: number
+          position: number
+          query: string
+          source: string
+          url: string
+        }
+        Insert: {
+          captured_at?: string
+          clicks?: number
+          ctr?: number
+          date: string
+          id?: string
+          impressions?: number
+          position?: number
+          query?: string
+          source?: string
+          url: string
+        }
+        Update: {
+          captured_at?: string
+          clicks?: number
+          ctr?: number
+          date?: string
+          id?: string
+          impressions?: number
+          position?: number
+          query?: string
+          source?: string
+          url?: string
         }
         Relationships: []
       }
@@ -1008,6 +1113,42 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      web_vitals: {
+        Row: {
+          created_at: string
+          device: string | null
+          id: number
+          metric: string
+          navigation_type: string | null
+          rating: string | null
+          session_id: string | null
+          url: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          device?: string | null
+          id?: number
+          metric: string
+          navigation_type?: string | null
+          rating?: string | null
+          session_id?: string | null
+          url: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          device?: string | null
+          id?: number
+          metric?: string
+          navigation_type?: string | null
+          rating?: string | null
+          session_id?: string | null
+          url?: string
+          value?: number
         }
         Relationships: []
       }

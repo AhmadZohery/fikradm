@@ -19,6 +19,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as Char123LocaleChar125TermsRouteImport } from './routes/{-$locale}.terms'
 import { Route as Char123LocaleChar125TeamAndLicensingRouteImport } from './routes/{-$locale}.team-and-licensing'
 import { Route as Char123LocaleChar125SearchRouteImport } from './routes/{-$locale}.search'
+import { Route as Char123LocaleChar125QuoteRouteImport } from './routes/{-$locale}.quote'
 import { Route as Char123LocaleChar125PrivacyRouteImport } from './routes/{-$locale}.privacy'
 import { Route as Char123LocaleChar125ContactRouteImport } from './routes/{-$locale}.contact'
 import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$locale}.about'
@@ -26,8 +27,10 @@ import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminSeoReportsRouteImport } from './routes/admin.seo-reports'
+import { Route as AdminSeoDecayRouteImport } from './routes/admin.seo-decay'
 import { Route as AdminSeoAuditRouteImport } from './routes/admin.seo-audit'
 import { Route as AdminSchemaFixesRouteImport } from './routes/admin.schema-fixes'
+import { Route as AdminPerformanceRouteImport } from './routes/admin.performance'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
@@ -35,6 +38,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminLocationsRouteImport } from './routes/admin.locations'
 import { Route as AdminIndustriesRouteImport } from './routes/admin.industries'
 import { Route as AdminFormsRouteImport } from './routes/admin.forms'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as Char123LocaleChar125ServicesIndexRouteImport } from './routes/{-$locale}.services.index'
 import { Route as Char123LocaleChar125LocationsIndexRouteImport } from './routes/{-$locale}.locations.index'
@@ -108,6 +112,12 @@ const Char123LocaleChar125SearchRoute =
     path: '/search',
     getParentRoute: () => Char123LocaleChar125Route,
   } as any)
+const Char123LocaleChar125QuoteRoute =
+  Char123LocaleChar125QuoteRouteImport.update({
+    id: '/quote',
+    path: '/quote',
+    getParentRoute: () => Char123LocaleChar125Route,
+  } as any)
 const Char123LocaleChar125PrivacyRoute =
   Char123LocaleChar125PrivacyRouteImport.update({
     id: '/privacy',
@@ -146,6 +156,11 @@ const AdminSeoReportsRoute = AdminSeoReportsRouteImport.update({
   path: '/seo-reports',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSeoDecayRoute = AdminSeoDecayRouteImport.update({
+  id: '/seo-decay',
+  path: '/seo-decay',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSeoAuditRoute = AdminSeoAuditRouteImport.update({
   id: '/seo-audit',
   path: '/seo-audit',
@@ -154,6 +169,11 @@ const AdminSeoAuditRoute = AdminSeoAuditRouteImport.update({
 const AdminSchemaFixesRoute = AdminSchemaFixesRouteImport.update({
   id: '/schema-fixes',
   path: '/schema-fixes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPerformanceRoute = AdminPerformanceRouteImport.update({
+  id: '/performance',
+  path: '/performance',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminPagesRoute = AdminPagesRouteImport.update({
@@ -189,6 +209,11 @@ const AdminIndustriesRoute = AdminIndustriesRouteImport.update({
 const AdminFormsRoute = AdminFormsRouteImport.update({
   id: '/forms',
   path: '/forms',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminBlogRoute = AdminBlogRouteImport.update({
@@ -302,6 +327,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
   '/admin/blog': typeof AdminBlogRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -309,8 +335,10 @@ export interface FileRoutesByFullPath {
   '/admin/media': typeof AdminMediaRoute
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/performance': typeof AdminPerformanceRoute
   '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
+  '/admin/seo-decay': typeof AdminSeoDecayRoute
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -318,6 +346,7 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
   '/{-$locale}/privacy': typeof Char123LocaleChar125PrivacyRoute
+  '/{-$locale}/quote': typeof Char123LocaleChar125QuoteRoute
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/{-$locale}/team-and-licensing': typeof Char123LocaleChar125TeamAndLicensingRoute
   '/{-$locale}/terms': typeof Char123LocaleChar125TermsRoute
@@ -346,6 +375,7 @@ export interface FileRoutesByTo {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/blog': typeof AdminBlogRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -353,8 +383,10 @@ export interface FileRoutesByTo {
   '/admin/media': typeof AdminMediaRoute
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/performance': typeof AdminPerformanceRoute
   '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
+  '/admin/seo-decay': typeof AdminSeoDecayRoute
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -362,6 +394,7 @@ export interface FileRoutesByTo {
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
   '/{-$locale}/privacy': typeof Char123LocaleChar125PrivacyRoute
+  '/{-$locale}/quote': typeof Char123LocaleChar125QuoteRoute
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/{-$locale}/team-and-licensing': typeof Char123LocaleChar125TeamAndLicensingRoute
   '/{-$locale}/terms': typeof Char123LocaleChar125TermsRoute
@@ -393,6 +426,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
   '/admin/blog': typeof AdminBlogRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -400,8 +434,10 @@ export interface FileRoutesById {
   '/admin/media': typeof AdminMediaRoute
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
+  '/admin/performance': typeof AdminPerformanceRoute
   '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
+  '/admin/seo-decay': typeof AdminSeoDecayRoute
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -409,6 +445,7 @@ export interface FileRoutesById {
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
   '/{-$locale}/privacy': typeof Char123LocaleChar125PrivacyRoute
+  '/{-$locale}/quote': typeof Char123LocaleChar125QuoteRoute
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/{-$locale}/team-and-licensing': typeof Char123LocaleChar125TeamAndLicensingRoute
   '/{-$locale}/terms': typeof Char123LocaleChar125TermsRoute
@@ -441,6 +478,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/{-$locale}'
     | '/admin/blog'
+    | '/admin/dashboard'
     | '/admin/forms'
     | '/admin/industries'
     | '/admin/locations'
@@ -448,8 +486,10 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/packages'
     | '/admin/pages'
+    | '/admin/performance'
     | '/admin/schema-fixes'
     | '/admin/seo-audit'
+    | '/admin/seo-decay'
     | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
@@ -457,6 +497,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
     | '/{-$locale}/privacy'
+    | '/{-$locale}/quote'
     | '/{-$locale}/search'
     | '/{-$locale}/team-and-licensing'
     | '/{-$locale}/terms'
@@ -485,6 +526,7 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/admin/blog'
+    | '/admin/dashboard'
     | '/admin/forms'
     | '/admin/industries'
     | '/admin/locations'
@@ -492,8 +534,10 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/packages'
     | '/admin/pages'
+    | '/admin/performance'
     | '/admin/schema-fixes'
     | '/admin/seo-audit'
+    | '/admin/seo-decay'
     | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
@@ -501,6 +545,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
     | '/{-$locale}/privacy'
+    | '/{-$locale}/quote'
     | '/{-$locale}/search'
     | '/{-$locale}/team-and-licensing'
     | '/{-$locale}/terms'
@@ -531,6 +576,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/{-$locale}'
     | '/admin/blog'
+    | '/admin/dashboard'
     | '/admin/forms'
     | '/admin/industries'
     | '/admin/locations'
@@ -538,8 +584,10 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/packages'
     | '/admin/pages'
+    | '/admin/performance'
     | '/admin/schema-fixes'
     | '/admin/seo-audit'
+    | '/admin/seo-decay'
     | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
@@ -547,6 +595,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
     | '/{-$locale}/privacy'
+    | '/{-$locale}/quote'
     | '/{-$locale}/search'
     | '/{-$locale}/team-and-licensing'
     | '/{-$locale}/terms'
@@ -653,6 +702,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char123LocaleChar125SearchRouteImport
       parentRoute: typeof Char123LocaleChar125Route
     }
+    '/{-$locale}/quote': {
+      id: '/{-$locale}/quote'
+      path: '/quote'
+      fullPath: '/{-$locale}/quote'
+      preLoaderRoute: typeof Char123LocaleChar125QuoteRouteImport
+      parentRoute: typeof Char123LocaleChar125Route
+    }
     '/{-$locale}/privacy': {
       id: '/{-$locale}/privacy'
       path: '/privacy'
@@ -702,6 +758,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSeoReportsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/seo-decay': {
+      id: '/admin/seo-decay'
+      path: '/seo-decay'
+      fullPath: '/admin/seo-decay'
+      preLoaderRoute: typeof AdminSeoDecayRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/seo-audit': {
       id: '/admin/seo-audit'
       path: '/seo-audit'
@@ -714,6 +777,13 @@ declare module '@tanstack/react-router' {
       path: '/schema-fixes'
       fullPath: '/admin/schema-fixes'
       preLoaderRoute: typeof AdminSchemaFixesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/performance': {
+      id: '/admin/performance'
+      path: '/performance'
+      fullPath: '/admin/performance'
+      preLoaderRoute: typeof AdminPerformanceRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/pages': {
@@ -763,6 +833,13 @@ declare module '@tanstack/react-router' {
       path: '/forms'
       fullPath: '/admin/forms'
       preLoaderRoute: typeof AdminFormsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/blog': {
@@ -920,6 +997,7 @@ const AdminPagesRouteWithChildren = AdminPagesRoute._addFileChildren(
 
 interface AdminRouteChildren {
   AdminBlogRoute: typeof AdminBlogRouteWithChildren
+  AdminDashboardRoute: typeof AdminDashboardRoute
   AdminFormsRoute: typeof AdminFormsRoute
   AdminIndustriesRoute: typeof AdminIndustriesRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
@@ -927,8 +1005,10 @@ interface AdminRouteChildren {
   AdminMediaRoute: typeof AdminMediaRoute
   AdminPackagesRoute: typeof AdminPackagesRoute
   AdminPagesRoute: typeof AdminPagesRouteWithChildren
+  AdminPerformanceRoute: typeof AdminPerformanceRoute
   AdminSchemaFixesRoute: typeof AdminSchemaFixesRoute
   AdminSeoAuditRoute: typeof AdminSeoAuditRoute
+  AdminSeoDecayRoute: typeof AdminSeoDecayRoute
   AdminSeoReportsRoute: typeof AdminSeoReportsRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
@@ -938,6 +1018,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBlogRoute: AdminBlogRouteWithChildren,
+  AdminDashboardRoute: AdminDashboardRoute,
   AdminFormsRoute: AdminFormsRoute,
   AdminIndustriesRoute: AdminIndustriesRoute,
   AdminLocationsRoute: AdminLocationsRoute,
@@ -945,8 +1026,10 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMediaRoute: AdminMediaRoute,
   AdminPackagesRoute: AdminPackagesRoute,
   AdminPagesRoute: AdminPagesRouteWithChildren,
+  AdminPerformanceRoute: AdminPerformanceRoute,
   AdminSchemaFixesRoute: AdminSchemaFixesRoute,
   AdminSeoAuditRoute: AdminSeoAuditRoute,
+  AdminSeoDecayRoute: AdminSeoDecayRoute,
   AdminSeoReportsRoute: AdminSeoReportsRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
@@ -975,6 +1058,7 @@ interface Char123LocaleChar125RouteChildren {
   Char123LocaleChar125AboutRoute: typeof Char123LocaleChar125AboutRoute
   Char123LocaleChar125ContactRoute: typeof Char123LocaleChar125ContactRoute
   Char123LocaleChar125PrivacyRoute: typeof Char123LocaleChar125PrivacyRoute
+  Char123LocaleChar125QuoteRoute: typeof Char123LocaleChar125QuoteRoute
   Char123LocaleChar125SearchRoute: typeof Char123LocaleChar125SearchRoute
   Char123LocaleChar125TeamAndLicensingRoute: typeof Char123LocaleChar125TeamAndLicensingRoute
   Char123LocaleChar125TermsRoute: typeof Char123LocaleChar125TermsRoute
@@ -997,6 +1081,7 @@ const Char123LocaleChar125RouteChildren: Char123LocaleChar125RouteChildren = {
   Char123LocaleChar125AboutRoute: Char123LocaleChar125AboutRoute,
   Char123LocaleChar125ContactRoute: Char123LocaleChar125ContactRoute,
   Char123LocaleChar125PrivacyRoute: Char123LocaleChar125PrivacyRoute,
+  Char123LocaleChar125QuoteRoute: Char123LocaleChar125QuoteRoute,
   Char123LocaleChar125SearchRoute: Char123LocaleChar125SearchRoute,
   Char123LocaleChar125TeamAndLicensingRoute:
     Char123LocaleChar125TeamAndLicensingRoute,

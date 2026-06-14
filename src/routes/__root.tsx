@@ -11,6 +11,7 @@ import appCss from "@/styles.css?url";
 import { isLocale, DEFAULT_LOCALE } from "@/i18n/types";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { SITE_ORIGIN, SITE_NAME, organizationLd, localBusinessLd, siteNavigationLd } from "@/lib/seo";
+import { WebVitalsReporter } from "@/components/site/WebVitalsReporter";
 
 function NotFoundComponent() {
   const quickLinks: Array<{ href: string; label: string }> = [
@@ -191,5 +192,10 @@ function RootComponent() {
     document.documentElement.dir = localeInfo.dir;
   }
 
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <WebVitalsReporter />
+    </>
+  );
 }
