@@ -282,3 +282,100 @@ function SeoDecayPage() {
     </div>
   );
 }
+
+function AlertCard({
+  alert: a,
+  Meta,
+  onStatus,
+  onResolve,
+}: {
+  alert: Alert;
+  Meta: { label: string; icon: any; color: string };
+  onStatus: (id: string, s: Alert["status"]) => void;
+  onResolve: (id: string) => void;
+}) {
+  const Icon = Meta.icon;
+  const [open, setOpen] = useState(false);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [draft, setDraft] = useState("");
+  const [kind, setKind] = useState<"note" | "task">("note");
+
+  const loadNotes = async () => {
+    const { data } = await supabase.from("seo_alert_notes").select("*").eq("alert_id", a.id).order("created_at", { ascending: false });
+    setNotes((data as any) || []);
+  };
+
+  useEffect(() => { if (open) loadNotes(); }, [open]);
+
+  const addNote = async () => {
+    if (!draft.trim()) return;
+    await supabase.from("seo_alert_notes").insert({ alert_id: a.id, body: draft, kind } as any);
+    setDraft("");
+    loadNotes();
+  };
+
+  const toggleDone = async (n: Note) => {
+    await supabase.from("seo_alert_notes").update({ is_done: !n.is_done } as any).eq("id", n.id);
+    loadNotes();
+  };
+
+  return (
+    <Card className="p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <Icon className={`h-4 w-4 ${Meta.color}`} />
+            <Badge className={SEV_COLOR[a.severity]}>{a.severity}</Badge>
+            <Badge variant="outline">{STATUS_LABEL[a.status] || a.status}</Badge>
+            <a href={a.url} target="_blank" rel="noreferrer" className="font-mono text-xs text-primary hover:underline">{a.url}</a>
+          </div>
+          <h4 className="mt-2 font-semibold">{a.title}</h4>
+          <p className="mt-1 text-xs text-muted-foreground">{new Date(a.created_at).toLocaleString("ar-SA")}</p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Select value={a.status} onValueChange={(v) => onStatus(a.id, v as Alert["status"])}>
+            <SelectTrigger className="h-8 w-36 text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="open">جديد</SelectItem>
+              <SelectItem value="in_progress">قيد المعالجة</SelectItem>
+              <SelectItem value="resolved">تم الحل</SelectItem>
+              <SelectItem value="dismissed">تجاهل</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button size="sm" variant="ghost" onClick={() => setOpen((o) => !o)} className="text-xs">
+            {open ? "إخفاء" : "ملاحظات/مهام"}
+          </Button>
+        </div>
+      </div>
+      {open && (
+        <div className="mt-4 space-y-2 border-t pt-3">
+          <div className="flex gap-2">
+            <Select value={kind} onValueChange={(v) => setKind(v as any)}>
+              <SelectTrigger className="h-8 w-24 text-xs"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="note">ملاحظة</SelectItem>
+                <SelectItem value="task">مهمة</SelectItem>
+              </SelectContent>
+            </Select>
+            <Textarea rows={2} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="اكتب..." className="flex-1 text-xs" />
+            <Button size="sm" onClick={addNote}>إضافة</Button>
+          </div>
+          {notes.length === 0 ? (
+            <p className="text-xs text-muted-foreground">لا توجد ملاحظات</p>
+          ) : (
+            notes.map((n) => (
+              <div key={n.id} className={`flex items-start gap-2 rounded border p-2 text-xs ${n.is_done ? "opacity-50 line-through" : ""}`}>
+                <Badge variant="outline" className="text-[10px]">{n.kind}</Badge>
+                <span className="flex-1">{n.body}</span>
+                <span className="text-muted-foreground">{new Date(n.created_at).toLocaleDateString("ar-SA")}</span>
+                {n.kind === "task" && (
+                  <button onClick={() => toggleDone(n)} className="text-primary">{n.is_done ? "إعادة" : "تم"}</button>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </Card>
+  );
+}
