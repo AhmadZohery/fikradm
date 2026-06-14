@@ -1,11 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { CalendarRange, FileBarChart2, Mail, MessageSquare, Send, RefreshCw } from "lucide-react";
+import { CalendarRange, FileBarChart2, Mail, MessageSquare, Send, RefreshCw, Settings2, Save } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useServerFn } from "@tanstack/react-start";
+import { deliverReport, saveNotificationSettings } from "@/lib/reports-delivery.functions";
 
 export const Route = createFileRoute("/admin/reports")({
   head: () => ({ meta: [{ name: "robots", content: "noindex" }] }),
@@ -35,10 +39,19 @@ type Report = {
 function MonthlyReportsPage() {
   const [reports, setReports] = useState<Report[]>([]);
   const [busy, setBusy] = useState(false);
+  const [slack, setSlack] = useState("");
+  const [email, setEmail] = useState("");
+  const [sending, setSending] = useState<string | null>(null);
+  const callDeliver = useServerFn(deliverReport);
+  const callSaveCfg = useServerFn(saveNotificationSettings);
 
   const load = async () => {
     const { data } = await supabase.from("monthly_reports").select("*").order("period_start", { ascending: false }).limit(24);
     setReports((data as any) || []);
+    const { data: cfg } = await supabase.from("site_settings").select("data").eq("key", "admin_notifications").maybeSingle();
+    const d: any = cfg?.data || {};
+    setSlack(d.slack_webhook_url || "");
+    setEmail(d.report_email || "");
   };
   useEffect(() => { load(); }, []);
 
@@ -104,15 +117,22 @@ function MonthlyReportsPage() {
     } finally { setBusy(false); }
   };
 
-  const queueSend = async (r: Report, channel: "email" | "slack") => {
-    const channels = Array.isArray(r.delivery_channels) ? r.delivery_channels : [];
-    if (!channels.includes(channel)) channels.push(channel);
-    await supabase.from("monthly_reports").update({
-      delivery_status: "queued",
-      delivery_channels: channels,
-    } as any).eq("id", r.id);
-    toast.info(`تم وضع التقرير في قائمة الإرسال (${channel}). الـ adapter جاهز للربط لاحقاً.`);
-    load();
+  const send = async (r: Report, channel: "email" | "slack") => {
+    setSending(r.id + channel);
+    try {
+      const res: any = await callDeliver({ data: { reportId: r.id, channels: [channel] } });
+      const msg = res?.results?.[channel]?.message || (res?.allOk ? "تم الإرسال" : "فشل");
+      res?.results?.[channel]?.ok ? toast.success(msg) : toast.error(msg);
+      load();
+    } catch (e: any) { toast.error(e?.message || "فشل الإرسال"); }
+    finally { setSending(null); }
+  };
+
+  const saveCfg = async () => {
+    try {
+      await callSaveCfg({ data: { slack_webhook_url: slack, report_email: email } });
+      toast.success("تم حفظ إعدادات الإشعارات");
+    } catch (e: any) { toast.error(e?.message || "فشل الحفظ"); }
   };
 
   const months = useMemo(() => [0, 1, 2].map((o) => monthRange(o)), []);
@@ -136,6 +156,22 @@ function MonthlyReportsPage() {
         </div>
       </Card>
 
+      <Card className="space-y-3 p-4">
+        <div className="flex items-center gap-2 text-sm font-semibold"><Settings2 className="h-4 w-4" /> إعدادات قنوات التقارير</div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <Label className="text-xs">Slack Incoming Webhook URL</Label>
+            <Input value={slack} onChange={(e) => setSlack(e.target.value)} placeholder="https://hooks.slack.com/services/..." className="font-mono text-xs" dir="ltr" />
+          </div>
+          <div>
+            <Label className="text-xs">Report Email</Label>
+            <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="reports@yourcompany.com" dir="ltr" />
+          </div>
+        </div>
+        <Button size="sm" onClick={saveCfg}><Save className="me-1 h-3.5 w-3.5" /> حفظ الإعدادات</Button>
+        <p className="text-[11px] text-muted-foreground">Slack: يُرسل فوراً عبر Webhook. Email: يُوضع في طابور Lovable Emails (يتطلب تفعيل البريد).</p>
+      </Card>
+
       <div className="space-y-3">
         {reports.length === 0 && <Card className="p-8 text-center text-sm text-muted-foreground">لا توجد تقارير بعد — ولّد أول تقرير</Card>}
         {reports.map((r) => (
@@ -155,8 +191,12 @@ function MonthlyReportsPage() {
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <Button size="sm" variant="outline" onClick={() => queueSend(r, "email")}><Mail className="me-1 h-4 w-4" /> Email</Button>
-                <Button size="sm" variant="outline" onClick={() => queueSend(r, "slack")}><MessageSquare className="me-1 h-4 w-4" /> Slack</Button>
+                <Button size="sm" variant="outline" disabled={sending === r.id + "email"} onClick={() => send(r, "email")}>
+                  {sending === r.id + "email" ? <RefreshCw className="me-1 h-4 w-4 animate-spin" /> : <Mail className="me-1 h-4 w-4" />} Email
+                </Button>
+                <Button size="sm" variant="outline" disabled={sending === r.id + "slack"} onClick={() => send(r, "slack")}>
+                  {sending === r.id + "slack" ? <RefreshCw className="me-1 h-4 w-4 animate-spin" /> : <MessageSquare className="me-1 h-4 w-4" />} Slack
+                </Button>
               </div>
             </div>
           </Card>
@@ -165,7 +205,7 @@ function MonthlyReportsPage() {
 
       <Card className="border-dashed p-4 text-xs text-muted-foreground">
         <Send className="me-1 inline h-3.5 w-3.5" />
-        الـ adapter الحالي يضع التقرير في قائمة الإرسال فقط. لربط الإرسال الفعلي ضع SLACK_WEBHOOK_URL أو فعّل Lovable Emails وسنوصل التقرير تلقائياً.
+        الإرسال يعمل الآن عبر Slack Webhook مباشرة، ولـ Email عبر طابور Lovable Emails بعد تفعيله.
       </Card>
     </div>
   );

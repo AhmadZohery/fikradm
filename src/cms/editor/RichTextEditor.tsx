@@ -43,9 +43,14 @@ import {
   Eraser,
   Table as TableIcon,
   ListChecks,
+  Sparkles,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useServerFn } from "@tanstack/react-start";
+import { improveText } from "@/lib/seo-ai.functions";
+import { toast } from "sonner";
 
 type Props = {
   value: string;
@@ -133,6 +138,28 @@ export function RichTextEditor({
 }
 function Toolbar({ editor }: { editor: Editor }) {
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [aiBusy, setAiBusy] = useState(false);
+  const runImprove = useServerFn(improveText);
+
+  const askAI = async (instruction: string) => {
+    const { from, to } = editor.state.selection;
+    let selected = editor.state.doc.textBetween(from, to, "\n");
+    let replaceWhole = false;
+    if (!selected) {
+      selected = editor.getText();
+      replaceWhole = true;
+    }
+    if (!selected.trim()) { toast.error("لا يوجد نص للمعالجة"); return; }
+    setAiBusy(true);
+    try {
+      const r: any = await runImprove({ data: { text: selected, instruction } });
+      if (!r?.text) throw new Error("AI returned empty");
+      if (replaceWhole) editor.chain().focus().setContent(r.text).run();
+      else editor.chain().focus().insertContentAt({ from, to }, r.text).run();
+      toast.success("تم تطبيق AI");
+    } catch (e: any) { toast.error(e?.message || "خطأ AI"); }
+    finally { setAiBusy(false); }
+  };
 
   const Btn = ({
     onClick,
@@ -203,6 +230,13 @@ function Toolbar({ editor }: { editor: Editor }) {
         <Separator orientation="vertical" className="h-5 mx-0.5" />
         <Btn onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} title="تراجع"><Undo2 className="w-3.5 h-3.5" /></Btn>
         <Btn onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} title="إعادة"><Redo2 className="w-3.5 h-3.5" /></Btn>
+        <Separator orientation="vertical" className="h-5 mx-0.5" />
+        <Btn onClick={() => askAI("حسّن صياغة النص ليكون أكثر وضوحاً وجاذبية مع الحفاظ على المعنى")} disabled={aiBusy} title="AI: حسّن النص">
+          {aiBusy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 text-primary" />}
+        </Btn>
+        <Btn onClick={() => askAI("اختصر النص في نقاط أوضح")} disabled={aiBusy} title="AI: اختصر"><span className="text-[10px] font-bold">↧</span></Btn>
+        <Btn onClick={() => askAI("وسّع النص بأمثلة عملية وحقائق مفيدة")} disabled={aiBusy} title="AI: وسّع"><span className="text-[10px] font-bold">↥</span></Btn>
+        <Btn onClick={() => askAI("صحّح الأخطاء الإملائية والنحوية")} disabled={aiBusy} title="AI: صحّح"><span className="text-[10px] font-bold">✓</span></Btn>
       </div>
       <MediaPickerDialog
         open={pickerOpen}
