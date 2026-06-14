@@ -40,7 +40,6 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminLocationsRouteImport } from './routes/admin.locations'
 import { Route as AdminIndustriesRouteImport } from './routes/admin.industries'
 import { Route as AdminFormsRouteImport } from './routes/admin.forms'
-import { Route as AdminDebugRouteImport } from './routes/admin.debug'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as Char123LocaleChar125ServicesIndexRouteImport } from './routes/{-$locale}.services.index'
@@ -225,11 +224,6 @@ const AdminFormsRoute = AdminFormsRouteImport.update({
   path: '/forms',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminDebugRoute = AdminDebugRouteImport.update({
-  id: '/debug',
-  path: '/debug',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -352,7 +346,6 @@ export interface FileRoutesByFullPath {
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
   '/admin/blog': typeof AdminBlogRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/debug': typeof AdminDebugRoute
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -404,7 +397,6 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/blog': typeof AdminBlogRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/debug': typeof AdminDebugRoute
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -459,7 +451,6 @@ export interface FileRoutesById {
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
   '/admin/blog': typeof AdminBlogRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/debug': typeof AdminDebugRoute
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -515,7 +506,6 @@ export interface FileRouteTypes {
     | '/{-$locale}'
     | '/admin/blog'
     | '/admin/dashboard'
-    | '/admin/debug'
     | '/admin/forms'
     | '/admin/industries'
     | '/admin/locations'
@@ -567,7 +557,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/blog'
     | '/admin/dashboard'
-    | '/admin/debug'
     | '/admin/forms'
     | '/admin/industries'
     | '/admin/locations'
@@ -621,7 +610,6 @@ export interface FileRouteTypes {
     | '/{-$locale}'
     | '/admin/blog'
     | '/admin/dashboard'
-    | '/admin/debug'
     | '/admin/forms'
     | '/admin/industries'
     | '/admin/locations'
@@ -898,13 +886,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFormsRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/debug': {
-      id: '/admin/debug'
-      path: '/debug'
-      fullPath: '/admin/debug'
-      preLoaderRoute: typeof AdminDebugRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/dashboard'
@@ -1075,7 +1056,6 @@ const AdminPagesRouteWithChildren = AdminPagesRoute._addFileChildren(
 interface AdminRouteChildren {
   AdminBlogRoute: typeof AdminBlogRouteWithChildren
   AdminDashboardRoute: typeof AdminDashboardRoute
-  AdminDebugRoute: typeof AdminDebugRoute
   AdminFormsRoute: typeof AdminFormsRoute
   AdminIndustriesRoute: typeof AdminIndustriesRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
@@ -1099,7 +1079,6 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBlogRoute: AdminBlogRouteWithChildren,
   AdminDashboardRoute: AdminDashboardRoute,
-  AdminDebugRoute: AdminDebugRoute,
   AdminFormsRoute: AdminFormsRoute,
   AdminIndustriesRoute: AdminIndustriesRoute,
   AdminLocationsRoute: AdminLocationsRoute,
