@@ -19,6 +19,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as Char123LocaleChar125TermsRouteImport } from './routes/{-$locale}.terms'
 import { Route as Char123LocaleChar125TeamAndLicensingRouteImport } from './routes/{-$locale}.team-and-licensing'
 import { Route as Char123LocaleChar125SearchRouteImport } from './routes/{-$locale}.search'
+import { Route as Char123LocaleChar125QuoteRouteImport } from './routes/{-$locale}.quote'
 import { Route as Char123LocaleChar125PrivacyRouteImport } from './routes/{-$locale}.privacy'
 import { Route as Char123LocaleChar125ContactRouteImport } from './routes/{-$locale}.contact'
 import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$locale}.about'
@@ -106,6 +107,12 @@ const Char123LocaleChar125SearchRoute =
   Char123LocaleChar125SearchRouteImport.update({
     id: '/search',
     path: '/search',
+    getParentRoute: () => Char123LocaleChar125Route,
+  } as any)
+const Char123LocaleChar125QuoteRoute =
+  Char123LocaleChar125QuoteRouteImport.update({
+    id: '/quote',
+    path: '/quote',
     getParentRoute: () => Char123LocaleChar125Route,
   } as any)
 const Char123LocaleChar125PrivacyRoute =
@@ -318,6 +325,7 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
   '/{-$locale}/privacy': typeof Char123LocaleChar125PrivacyRoute
+  '/{-$locale}/quote': typeof Char123LocaleChar125QuoteRoute
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/{-$locale}/team-and-licensing': typeof Char123LocaleChar125TeamAndLicensingRoute
   '/{-$locale}/terms': typeof Char123LocaleChar125TermsRoute
@@ -362,6 +370,7 @@ export interface FileRoutesByTo {
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
   '/{-$locale}/privacy': typeof Char123LocaleChar125PrivacyRoute
+  '/{-$locale}/quote': typeof Char123LocaleChar125QuoteRoute
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/{-$locale}/team-and-licensing': typeof Char123LocaleChar125TeamAndLicensingRoute
   '/{-$locale}/terms': typeof Char123LocaleChar125TermsRoute
@@ -409,6 +418,7 @@ export interface FileRoutesById {
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
   '/{-$locale}/privacy': typeof Char123LocaleChar125PrivacyRoute
+  '/{-$locale}/quote': typeof Char123LocaleChar125QuoteRoute
   '/{-$locale}/search': typeof Char123LocaleChar125SearchRoute
   '/{-$locale}/team-and-licensing': typeof Char123LocaleChar125TeamAndLicensingRoute
   '/{-$locale}/terms': typeof Char123LocaleChar125TermsRoute
@@ -457,6 +467,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
     | '/{-$locale}/privacy'
+    | '/{-$locale}/quote'
     | '/{-$locale}/search'
     | '/{-$locale}/team-and-licensing'
     | '/{-$locale}/terms'
@@ -501,6 +512,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
     | '/{-$locale}/privacy'
+    | '/{-$locale}/quote'
     | '/{-$locale}/search'
     | '/{-$locale}/team-and-licensing'
     | '/{-$locale}/terms'
@@ -547,6 +559,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
     | '/{-$locale}/privacy'
+    | '/{-$locale}/quote'
     | '/{-$locale}/search'
     | '/{-$locale}/team-and-licensing'
     | '/{-$locale}/terms'
@@ -651,6 +664,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/{-$locale}/search'
       preLoaderRoute: typeof Char123LocaleChar125SearchRouteImport
+      parentRoute: typeof Char123LocaleChar125Route
+    }
+    '/{-$locale}/quote': {
+      id: '/{-$locale}/quote'
+      path: '/quote'
+      fullPath: '/{-$locale}/quote'
+      preLoaderRoute: typeof Char123LocaleChar125QuoteRouteImport
       parentRoute: typeof Char123LocaleChar125Route
     }
     '/{-$locale}/privacy': {
@@ -975,6 +995,7 @@ interface Char123LocaleChar125RouteChildren {
   Char123LocaleChar125AboutRoute: typeof Char123LocaleChar125AboutRoute
   Char123LocaleChar125ContactRoute: typeof Char123LocaleChar125ContactRoute
   Char123LocaleChar125PrivacyRoute: typeof Char123LocaleChar125PrivacyRoute
+  Char123LocaleChar125QuoteRoute: typeof Char123LocaleChar125QuoteRoute
   Char123LocaleChar125SearchRoute: typeof Char123LocaleChar125SearchRoute
   Char123LocaleChar125TeamAndLicensingRoute: typeof Char123LocaleChar125TeamAndLicensingRoute
   Char123LocaleChar125TermsRoute: typeof Char123LocaleChar125TermsRoute
@@ -997,6 +1018,7 @@ const Char123LocaleChar125RouteChildren: Char123LocaleChar125RouteChildren = {
   Char123LocaleChar125AboutRoute: Char123LocaleChar125AboutRoute,
   Char123LocaleChar125ContactRoute: Char123LocaleChar125ContactRoute,
   Char123LocaleChar125PrivacyRoute: Char123LocaleChar125PrivacyRoute,
+  Char123LocaleChar125QuoteRoute: Char123LocaleChar125QuoteRoute,
   Char123LocaleChar125SearchRoute: Char123LocaleChar125SearchRoute,
   Char123LocaleChar125TeamAndLicensingRoute:
     Char123LocaleChar125TeamAndLicensingRoute,
