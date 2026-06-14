@@ -418,6 +418,7 @@ function BlogPostEditorPage() {
     if (error) return toast.error(error.message);
     setPost({ ...post, status: next, published_at });
     toast.success(next === "published" ? "تم النشر" : "أصبح مسودة");
+    void invalidateBlogPost(post.slug, post.id, queryClient);
   };
 
   const inferKw = () => {
