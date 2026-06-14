@@ -41,6 +41,10 @@ import { LocaleSwitcher } from "@/cms/admin/LocaleSwitcher";
 import { SchedulePublishField } from "@/cms/admin/SchedulePublishField";
 import { BlogRevisionsDialog, type BlogSnapshot } from "@/cms/admin/BlogRevisionsDialog";
 import { evaluatePublishGuard } from "@/lib/publishGuard";
+import { PublishGuardPanel } from "@/components/admin/PublishGuardPanel";
+import { JsonLdPreview } from "@/components/admin/JsonLdPreview";
+import { invalidateBlogPost } from "@/lib/cacheInvalidation";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertDialog,
   AlertDialogAction,
