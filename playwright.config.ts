@@ -14,7 +14,7 @@ export default defineConfig({
   fullyParallel: false,
   reporter: [["list"]],
   use: {
-    baseURL: process.env.BASE_URL ?? "http://localhost:5173",
+    baseURL: process.env.BASE_URL ?? "https://fikradm.com",
     locale: "ar-EG",
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
