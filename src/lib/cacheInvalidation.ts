@@ -13,13 +13,20 @@
  */
 import type { QueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { recordInvalidation } from "./cacheMetrics";
+import { recordInvalidation, type PurgeResult, type Phase } from "./cacheMetrics";
 
 export type InvalidateTarget =
   | { kind: "blog"; slug: string; id?: string }
   | { kind: "service"; slug: string; id?: string }
   | { kind: "page"; slug: string; locale?: string; id?: string }
   | { kind: "industry"; slug: string; id?: string };
+
+export type InvalidateOptions = {
+  correlationId?: string;
+  phase?: Phase;
+  /** Max retry attempts per URL purge (default 3). */
+  maxRetries?: number;
+};
 
 const RELATED_QUERY_KEYS: Record<InvalidateTarget["kind"], string[][]> = {
   blog: [["blog-posts"], ["blog-post"], ["sitemap"], ["llms-txt"]],
@@ -63,51 +70,93 @@ function affectedUrls(t: InvalidateTarget): string[] {
 }
 
 /**
- * Soft-purge affected URLs by issuing a `?_=ts` HEAD fetch with
- * `Cache-Control: max-age=0`. This nudges the edge to revalidate without
- * invalidating siblings (respects ISR).
+ * Soft-purge affected URLs with retry/backoff. Captures per-URL status and
+ * CDN cache hints (cf-cache-status / x-vercel-cache / age) so the admin
+ * debug page can show whether the edge revalidated.
  */
-async function softPurge(urls: string[]) {
-  if (typeof fetch === "undefined") return;
+async function softPurge(urls: string[], maxRetries: number): Promise<PurgeResult[]> {
+  if (typeof fetch === "undefined") return urls.map((u) => ({ url: u, ok: false, attempts: 0 }));
   const ts = Date.now();
-  await Promise.allSettled(
-    urls.map((u) =>
-      fetch(`${u}?_cb=${ts}`, {
-        method: "HEAD",
-        cache: "reload",
-        headers: { "Cache-Control": "max-age=0" },
-      }).catch(() => null),
-    ),
-  );
+  const one = async (u: string): Promise<PurgeResult> => {
+    let attempts = 0;
+    let lastErr: string | undefined;
+    let status: number | undefined;
+    let cacheHint: string | undefined;
+    while (attempts < maxRetries) {
+      attempts++;
+      try {
+        const r = await fetch(`${u}?_cb=${ts}`, {
+          method: "HEAD",
+          cache: "reload",
+          headers: { "Cache-Control": "max-age=0" },
+        });
+        status = r.status;
+        cacheHint =
+          r.headers.get("cf-cache-status") ||
+          r.headers.get("x-vercel-cache") ||
+          (r.headers.get("age") ? `age=${r.headers.get("age")}` : undefined) ||
+          undefined;
+        if (r.ok || r.status === 304) {
+          return { url: u, ok: true, status, cacheHint, attempts };
+        }
+        lastErr = `HTTP ${r.status}`;
+      } catch (e) {
+        lastErr = e instanceof Error ? e.message : String(e);
+      }
+      // Exponential backoff: 100ms, 300ms, 700ms
+      await new Promise((r) => setTimeout(r, 100 * (3 ** (attempts - 1))));
+    }
+    return { url: u, ok: false, status, cacheHint, attempts, error: lastErr };
+  };
+  return Promise.all(urls.map(one));
 }
 
 /** Invalidate everything related to a target after Save/Publish. */
-export async function invalidateAfterSave(target: InvalidateTarget, queryClient?: QueryClient) {
+export async function invalidateAfterSave(
+  target: InvalidateTarget,
+  queryClient?: QueryClient,
+  opts: InvalidateOptions = {},
+) {
   const t0 = typeof performance !== "undefined" ? performance.now() : Date.now();
   const keys = RELATED_QUERY_KEYS[target.kind];
   const urls = affectedUrls(target);
+  const maxRetries = opts.maxRetries ?? 3;
   let ok = true;
   let error: string | undefined;
+  let purgeResults: PurgeResult[] = [];
   try {
     await bumpEntityTimestamp(target);
     if (queryClient) {
-      for (const key of keys) {
-        queryClient.invalidateQueries({ queryKey: key });
-      }
+      for (const key of keys) queryClient.invalidateQueries({ queryKey: key });
     }
-    // Fire-and-forget — don't block UI
-    void softPurge(urls);
+    // Await purge so retries + hints are captured in the same event.
+    purgeResults = await softPurge(urls, maxRetries);
+    if (purgeResults.some((p) => !p.ok)) {
+      ok = false;
+      const failed = purgeResults.filter((p) => !p.ok);
+      error = `${failed.length}/${purgeResults.length} URLs failed after ${maxRetries} retries`;
+    }
   } catch (e) {
     ok = false;
     error = e instanceof Error ? e.message : String(e);
   } finally {
     const t1 = typeof performance !== "undefined" ? performance.now() : Date.now();
+    const totalRetries = purgeResults.reduce((s, p) => s + Math.max(0, p.attempts - 1), 0);
+    // Pick the most common CDN cache hint as the aggregate ISR signal.
+    const hintCounts: Record<string, number> = {};
+    for (const p of purgeResults) if (p.cacheHint) hintCounts[p.cacheHint] = (hintCounts[p.cacheHint] ?? 0) + 1;
+    const isrHint = Object.entries(hintCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
     recordInvalidation({
+      correlationId: opts.correlationId,
+      phase: opts.phase,
       kind: target.kind,
       slug: target.slug,
       urlsPurged: urls,
       queryKeysInvalidated: keys.map((k) => k.join(":")),
       durationMs: Math.round(t1 - t0),
+      retries: totalRetries,
+      purgeResults,
+      isrHint,
       ok,
       error,
     });
@@ -115,16 +164,12 @@ export async function invalidateAfterSave(target: InvalidateTarget, queryClient?
 }
 
 /** Convenience for blog posts. */
-export function invalidateBlogPost(slug: string, id: string | undefined, qc?: QueryClient) {
-  return invalidateAfterSave({ kind: "blog", slug, id }, qc);
+export function invalidateBlogPost(slug: string, id: string | undefined, qc?: QueryClient, opts?: InvalidateOptions) {
+  return invalidateAfterSave({ kind: "blog", slug, id }, qc, opts);
 }
-
-/** Convenience for services. */
-export function invalidateService(slug: string, id: string | undefined, qc?: QueryClient) {
-  return invalidateAfterSave({ kind: "service", slug, id }, qc);
+export function invalidateService(slug: string, id: string | undefined, qc?: QueryClient, opts?: InvalidateOptions) {
+  return invalidateAfterSave({ kind: "service", slug, id }, qc, opts);
 }
-
-/** Convenience for pages. */
-export function invalidatePage(slug: string, locale: string | undefined, id: string | undefined, qc?: QueryClient) {
-  return invalidateAfterSave({ kind: "page", slug, locale, id }, qc);
+export function invalidatePage(slug: string, locale: string | undefined, id: string | undefined, qc?: QueryClient, opts?: InvalidateOptions) {
+  return invalidateAfterSave({ kind: "page", slug, locale, id }, qc, opts);
 }
