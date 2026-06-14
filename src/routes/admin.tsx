@@ -19,6 +19,8 @@ import {
   Sparkles,
   FileJson,
   Wand2,
+  Shield,
+  FileBarChart2,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
@@ -78,6 +80,8 @@ const NAV_ITEMS: NavItem[] = [
   { to: "/admin/seo-decay", label: "مراقبة SEO Decay", icon: SearchCheck, group: "system" },
   { to: "/admin/performance", label: "Core Web Vitals", icon: Sparkles, group: "system" },
   { to: "/admin/forms", label: "الرسائل", icon: Inbox, group: "system" },
+  { to: "/admin/spam-queue", label: "طابور Spam", icon: Shield, group: "system" },
+  { to: "/admin/reports", label: "تقارير شهرية", icon: FileBarChart2, group: "system" },
   { to: "/admin/users", label: "المستخدمين", icon: Users, group: "system" },
   { to: "/admin/settings", label: "الإعدادات", icon: Settings, group: "system" },
 ];

@@ -218,34 +218,70 @@ export type Database = {
       }
       form_submissions: {
         Row: {
+          attribution: Json
+          attribution_campaign: string | null
+          attribution_medium: string | null
+          attribution_source: string | null
+          click_id: string | null
           created_at: string
+          first_touch_at: string | null
           form_name: string
           id: string
           is_archived: boolean
           is_read: boolean
+          last_touch_at: string | null
           locale: string | null
           payload: Json
+          reviewed_at: string | null
+          reviewed_by: string | null
           source_page: string | null
+          spam_reasons: Json
+          spam_score: number
+          spam_status: string
         }
         Insert: {
+          attribution?: Json
+          attribution_campaign?: string | null
+          attribution_medium?: string | null
+          attribution_source?: string | null
+          click_id?: string | null
           created_at?: string
+          first_touch_at?: string | null
           form_name: string
           id?: string
           is_archived?: boolean
           is_read?: boolean
+          last_touch_at?: string | null
           locale?: string | null
           payload: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           source_page?: string | null
+          spam_reasons?: Json
+          spam_score?: number
+          spam_status?: string
         }
         Update: {
+          attribution?: Json
+          attribution_campaign?: string | null
+          attribution_medium?: string | null
+          attribution_source?: string | null
+          click_id?: string | null
           created_at?: string
+          first_touch_at?: string | null
           form_name?: string
           id?: string
           is_archived?: boolean
           is_read?: boolean
+          last_touch_at?: string | null
           locale?: string | null
           payload?: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           source_page?: string | null
+          spam_reasons?: Json
+          spam_score?: number
+          spam_status?: string
         }
         Relationships: []
       }
@@ -447,6 +483,45 @@ export type Database = {
           storage_path?: string
           uploaded_by?: string | null
           width?: number | null
+        }
+        Relationships: []
+      }
+      monthly_reports: {
+        Row: {
+          created_at: string
+          delivered_at: string | null
+          delivery_channels: Json
+          delivery_status: string
+          id: string
+          payload: Json
+          period_end: string
+          period_start: string
+          summary: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          delivered_at?: string | null
+          delivery_channels?: Json
+          delivery_status?: string
+          id?: string
+          payload?: Json
+          period_end: string
+          period_start: string
+          summary?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          delivered_at?: string | null
+          delivery_channels?: Json
+          delivery_status?: string
+          id?: string
+          payload?: Json
+          period_end?: string
+          period_start?: string
+          summary?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -692,39 +767,89 @@ export type Database = {
         }
         Relationships: []
       }
+      seo_alert_notes: {
+        Row: {
+          alert_id: string
+          author_id: string | null
+          body: string
+          created_at: string
+          id: string
+          is_done: boolean
+          kind: string
+        }
+        Insert: {
+          alert_id: string
+          author_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          is_done?: boolean
+          kind?: string
+        }
+        Update: {
+          alert_id?: string
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          is_done?: boolean
+          kind?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seo_alert_notes_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "seo_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seo_alerts: {
         Row: {
           alert_type: string
+          assigned_to: string | null
           created_at: string
           details: Json
           id: string
+          owner_note: string | null
           resolved_at: string | null
           severity: string
+          started_at: string | null
           status: string
+          task_url: string | null
           title: string
           updated_at: string
           url: string
         }
         Insert: {
           alert_type: string
+          assigned_to?: string | null
           created_at?: string
           details?: Json
           id?: string
+          owner_note?: string | null
           resolved_at?: string | null
           severity?: string
+          started_at?: string | null
           status?: string
+          task_url?: string | null
           title: string
           updated_at?: string
           url: string
         }
         Update: {
           alert_type?: string
+          assigned_to?: string | null
           created_at?: string
           details?: Json
           id?: string
+          owner_note?: string | null
           resolved_at?: string | null
           severity?: string
+          started_at?: string | null
           status?: string
+          task_url?: string | null
           title?: string
           updated_at?: string
           url?: string
@@ -938,6 +1063,45 @@ export type Database = {
           label?: string
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      spam_rules: {
+        Row: {
+          created_at: string
+          field: string
+          id: string
+          is_active: boolean
+          name: string
+          notes: string | null
+          pattern: string
+          rule_type: string
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          field?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          notes?: string | null
+          pattern: string
+          rule_type: string
+          updated_at?: string
+          weight?: number
+        }
+        Update: {
+          created_at?: string
+          field?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          notes?: string | null
+          pattern?: string
+          rule_type?: string
+          updated_at?: string
+          weight?: number
         }
         Relationships: []
       }

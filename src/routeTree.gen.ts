@@ -24,12 +24,14 @@ import { Route as Char123LocaleChar125PrivacyRouteImport } from './routes/{-$loc
 import { Route as Char123LocaleChar125ContactRouteImport } from './routes/{-$locale}.contact'
 import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$locale}.about'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminSpamQueueRouteImport } from './routes/admin.spam-queue'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminSeoReportsRouteImport } from './routes/admin.seo-reports'
 import { Route as AdminSeoDecayRouteImport } from './routes/admin.seo-decay'
 import { Route as AdminSeoAuditRouteImport } from './routes/admin.seo-audit'
 import { Route as AdminSchemaFixesRouteImport } from './routes/admin.schema-fixes'
+import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminPerformanceRouteImport } from './routes/admin.performance'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
@@ -141,6 +143,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSpamQueueRoute = AdminSpamQueueRouteImport.update({
+  id: '/spam-queue',
+  path: '/spam-queue',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -169,6 +176,11 @@ const AdminSeoAuditRoute = AdminSeoAuditRouteImport.update({
 const AdminSchemaFixesRoute = AdminSchemaFixesRouteImport.update({
   id: '/schema-fixes',
   path: '/schema-fixes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReportsRoute = AdminReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminPerformanceRoute = AdminPerformanceRouteImport.update({
@@ -336,12 +348,14 @@ export interface FileRoutesByFullPath {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/performance': typeof AdminPerformanceRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/seo-decay': typeof AdminSeoDecayRoute
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/spam-queue': typeof AdminSpamQueueRoute
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
@@ -384,12 +398,14 @@ export interface FileRoutesByTo {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/performance': typeof AdminPerformanceRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/seo-decay': typeof AdminSeoDecayRoute
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/spam-queue': typeof AdminSpamQueueRoute
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
@@ -435,12 +451,14 @@ export interface FileRoutesById {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/performance': typeof AdminPerformanceRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/seo-decay': typeof AdminSeoDecayRoute
   '/admin/seo-reports': typeof AdminSeoReportsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/spam-queue': typeof AdminSpamQueueRoute
   '/admin/users': typeof AdminUsersRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/contact': typeof Char123LocaleChar125ContactRoute
@@ -487,12 +505,14 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/performance'
+    | '/admin/reports'
     | '/admin/schema-fixes'
     | '/admin/seo-audit'
     | '/admin/seo-decay'
     | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
+    | '/admin/spam-queue'
     | '/admin/users'
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
@@ -535,12 +555,14 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/performance'
+    | '/admin/reports'
     | '/admin/schema-fixes'
     | '/admin/seo-audit'
     | '/admin/seo-decay'
     | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
+    | '/admin/spam-queue'
     | '/admin/users'
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
@@ -585,12 +607,14 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/performance'
+    | '/admin/reports'
     | '/admin/schema-fixes'
     | '/admin/seo-audit'
     | '/admin/seo-decay'
     | '/admin/seo-reports'
     | '/admin/services'
     | '/admin/settings'
+    | '/admin/spam-queue'
     | '/admin/users'
     | '/{-$locale}/about'
     | '/{-$locale}/contact'
@@ -737,6 +761,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/spam-queue': {
+      id: '/admin/spam-queue'
+      path: '/spam-queue'
+      fullPath: '/admin/spam-queue'
+      preLoaderRoute: typeof AdminSpamQueueRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/settings': {
       id: '/admin/settings'
       path: '/settings'
@@ -777,6 +808,13 @@ declare module '@tanstack/react-router' {
       path: '/schema-fixes'
       fullPath: '/admin/schema-fixes'
       preLoaderRoute: typeof AdminSchemaFixesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reports': {
+      id: '/admin/reports'
+      path: '/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AdminReportsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/performance': {
@@ -1006,12 +1044,14 @@ interface AdminRouteChildren {
   AdminPackagesRoute: typeof AdminPackagesRoute
   AdminPagesRoute: typeof AdminPagesRouteWithChildren
   AdminPerformanceRoute: typeof AdminPerformanceRoute
+  AdminReportsRoute: typeof AdminReportsRoute
   AdminSchemaFixesRoute: typeof AdminSchemaFixesRoute
   AdminSeoAuditRoute: typeof AdminSeoAuditRoute
   AdminSeoDecayRoute: typeof AdminSeoDecayRoute
   AdminSeoReportsRoute: typeof AdminSeoReportsRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSpamQueueRoute: typeof AdminSpamQueueRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -1027,12 +1067,14 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPackagesRoute: AdminPackagesRoute,
   AdminPagesRoute: AdminPagesRouteWithChildren,
   AdminPerformanceRoute: AdminPerformanceRoute,
+  AdminReportsRoute: AdminReportsRoute,
   AdminSchemaFixesRoute: AdminSchemaFixesRoute,
   AdminSeoAuditRoute: AdminSeoAuditRoute,
   AdminSeoDecayRoute: AdminSeoDecayRoute,
   AdminSeoReportsRoute: AdminSeoReportsRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminSpamQueueRoute: AdminSpamQueueRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }

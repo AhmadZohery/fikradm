@@ -175,6 +175,7 @@ function AdminLeadsPage() {
       .from("form_submissions")
       .select("*")
       .order("created_at", { ascending: false })
+      .in("spam_status", ["approved", "auto_approved"])
       .limit(500);
     if (error) toast.error(t("loadFailed") + error.message);
     setItems((data ?? []) as Submission[]);
@@ -192,6 +193,7 @@ function AdminLeadsPage() {
         .from("form_submissions")
         .select("*")
         .order("created_at", { ascending: false })
+        .in("spam_status", ["approved", "auto_approved"])
         .limit(50);
       if (!data) return;
       const fresh = (data as Submission[]).filter((r) => !seen.has(r.id));
