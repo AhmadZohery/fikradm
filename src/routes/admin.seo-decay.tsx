@@ -7,6 +7,12 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import { useState as useStateReact } from "react";
 
 export const Route = createFileRoute("/admin/seo-decay")({
   head: () => ({ meta: [{ name: "robots", content: "noindex" }] }),
@@ -20,8 +26,21 @@ type Alert = {
   severity: "low" | "medium" | "high" | "critical";
   title: string;
   details: any;
-  status: "open" | "acknowledged" | "resolved" | "dismissed";
+  status: "open" | "new" | "in_progress" | "acknowledged" | "resolved" | "dismissed";
   created_at: string;
+  owner_note?: string | null;
+  task_url?: string | null;
+};
+
+type Note = { id: string; alert_id: string; body: string; kind: "note" | "task" | "status_change"; is_done: boolean; created_at: string };
+
+const STATUS_LABEL: Record<string, string> = {
+  open: "جديد",
+  new: "جديد",
+  in_progress: "قيد المعالجة",
+  acknowledged: "تمت المعاينة",
+  resolved: "تم الحل",
+  dismissed: "تجاهل",
 };
 
 const TYPE_META = {
@@ -75,6 +94,16 @@ function SeoDecayPage() {
       .eq("id", id);
     if (error) return toast.error("فشل التحديث");
     toast.success("تم التحديد كمحلول");
+    load();
+  };
+
+  const setStatus = async (id: string, status: Alert["status"]) => {
+    const patch: any = { status };
+    if (status === "in_progress") patch.started_at = new Date().toISOString();
+    if (status === "resolved") patch.resolved_at = new Date().toISOString();
+    const { error } = await supabase.from("seo_alerts").update(patch).eq("id", id);
+    if (error) return toast.error(error.message);
+    await supabase.from("seo_alert_notes").insert({ alert_id: id, body: `الحالة → ${STATUS_LABEL[status]}`, kind: "status_change" } as any);
     load();
   };
 
