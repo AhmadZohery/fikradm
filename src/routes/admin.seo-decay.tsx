@@ -269,27 +269,9 @@ function SeoDecayPage() {
                   <Check className="mx-auto mb-2 h-6 w-6 text-success" /> لا توجد تنبيهات نشطة
                 </Card>
               ) : (
-                list.map((a) => {
-                  const Icon = Meta.icon;
-                  return (
-                    <Card key={a.id} className="p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <Icon className={`h-4 w-4 ${Meta.color}`} />
-                            <Badge className={SEV_COLOR[a.severity]}>{a.severity}</Badge>
-                            <a href={a.url} target="_blank" rel="noreferrer" className="font-mono text-xs text-primary hover:underline">{a.url}</a>
-                          </div>
-                          <h4 className="mt-2 font-semibold">{a.title}</h4>
-                          <p className="mt-1 text-xs text-muted-foreground">{new Date(a.created_at).toLocaleString("ar-SA")}</p>
-                        </div>
-                        <Button size="sm" variant="outline" onClick={() => resolve(a.id)}>
-                          <Check className="me-1 h-4 w-4" /> تم الحل
-                        </Button>
-                      </div>
-                    </Card>
-                  );
-                })
+                list.map((a) => (
+                  <AlertCard key={a.id} alert={a} Meta={Meta} onStatus={setStatus} onResolve={resolve} />
+                ))
               )}
             </TabsContent>
           );
