@@ -17,6 +17,7 @@ import { Progress } from "@/components/ui/progress";
 import { Check, ArrowRight, ArrowLeft, Sparkles, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { captureUtm, getAttribution } from "@/lib/utm";
+import { resolveAttribution } from "@/lib/attribution";
 
 type Props = {
   open: boolean;
@@ -158,16 +159,25 @@ export function QuoteFormDrawer({ open, onOpenChange, defaultService, locale = "
     setSubmitting(true);
     try {
       const attribution = getAttribution();
+      const resolved = resolveAttribution();
       const { error } = await supabase.from("form_submissions").insert({
         form_name: "quote_request_v1",
         locale: isAr ? "ar" : "en",
         source_page: typeof window !== "undefined" ? window.location.pathname : null,
+        attribution: { ...attribution, resolved } as any,
+        attribution_source: resolved.source,
+        attribution_medium: resolved.medium,
+        attribution_campaign: resolved.campaign,
+        click_id: resolved.click_id,
+        first_touch_at: resolved.first_touch_at,
+        last_touch_at: resolved.last_touch_at,
         payload: {
           ...data,
           honeypot: undefined,
           attribution,
+          resolved_attribution: resolved,
         },
-      });
+      } as any);
       if (error) throw error;
       try {
         localStorage.removeItem(DRAFT_KEY);
