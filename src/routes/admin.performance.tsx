@@ -295,6 +295,69 @@ function PerformancePage() {
         </Card>
       </div>
 
+      <Card className="p-4">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h3 className="font-semibold inline-flex items-center gap-2"><GitCompareArrows className="h-4 w-4" /> مقارنة قبل/بعد</h3>
+          <div className="flex flex-wrap items-center gap-2">
+            <Select value={cmpA} onValueChange={setCmpA}>
+              <SelectTrigger className="h-8 w-56"><SelectValue placeholder="اللقطة الأقدم (Before)" /></SelectTrigger>
+              <SelectContent>{snaps.map((s) => <SelectItem key={s.id} value={s.id}>{s.label}</SelectItem>)}</SelectContent>
+            </Select>
+            <Select value={cmpB} onValueChange={setCmpB}>
+              <SelectTrigger className="h-8 w-56"><SelectValue placeholder="اللقطة الأحدث (After)" /></SelectTrigger>
+              <SelectContent>{snaps.map((s) => <SelectItem key={s.id} value={s.id}>{s.label}</SelectItem>)}</SelectContent>
+            </Select>
+            <Button size="sm" variant="outline" onClick={computeAffected}>احسب الصفحات المتأثرة</Button>
+          </div>
+        </div>
+        {!cmpDiff ? (
+          <p className="py-6 text-center text-sm text-muted-foreground">احفظ لقطتين على الأقل ثم اختر اللقطة القديمة والجديدة للمقارنة. (لقطة auto-baseline تنشأ تلقائياً كل 24 ساعة)</p>
+        ) : (
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="text-xs text-muted-foreground"><tr><th className="p-2 text-start">المؤشر</th><th className="p-2 text-start">قبل</th><th className="p-2 text-start">بعد</th><th className="p-2 text-start">الفرق</th></tr></thead>
+                <tbody>
+                  {cmpDiff.map((r) => {
+                    const fmt = (v: number) => r.metric === "CLS" ? v.toFixed(3) : `${Math.round(v)} ${UNIT[r.metric]}`;
+                    const positive = r.delta < 0;
+                    return (
+                      <tr key={r.metric} className="border-t border-border">
+                        <td className="p-2 font-semibold">{r.metric}</td>
+                        <td className="p-2">{fmt(r.before)}</td>
+                        <td className="p-2">{fmt(r.after)}</td>
+                        <td className={`p-2 font-semibold ${positive ? "text-emerald-600" : r.delta > 0 ? "text-red-600" : "text-muted-foreground"}`}>
+                          {positive ? <TrendingDown className="me-1 inline h-3 w-3" /> : r.delta > 0 ? <TrendingUp className="me-1 inline h-3 w-3" /> : null}
+                          {r.delta > 0 ? "+" : ""}{r.delta.toFixed(1)}%
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <h4 className="mb-2 text-sm font-semibold text-muted-foreground">أهم الصفحات المتأثرة (LCP p75)</h4>
+              {affected.length === 0 ? (
+                <p className="rounded-md border border-dashed border-border p-4 text-center text-xs text-muted-foreground">اضغط "احسب الصفحات المتأثرة" لعرض أعلى التغيرات.</p>
+              ) : (
+                <div className="space-y-1 max-h-72 overflow-y-auto">
+                  {affected.map((r) => (
+                    <a key={r.url} href={r.url} target="_blank" rel="noreferrer" className="block rounded-md border border-border p-2 hover:bg-muted/50">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="truncate font-mono text-[11px]">{r.url}</span>
+                        <span className={`text-xs font-semibold ${r.delta < 0 ? "text-emerald-600" : "text-red-600"}`}>{r.delta > 0 ? "+" : ""}{r.delta.toFixed(0)}%</span>
+                      </div>
+                      <div className="mt-0.5 text-[11px] text-muted-foreground">{Math.round(r.before)} → {Math.round(r.after)} ms · {r.n} عينة</div>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </Card>
+
       {loading && <p className="text-center text-xs text-muted-foreground">جاري التحميل…</p>}
     </div>
   );
