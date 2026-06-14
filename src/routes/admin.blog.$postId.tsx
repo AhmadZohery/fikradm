@@ -44,6 +44,7 @@ import { evaluatePublishGuard } from "@/lib/publishGuard";
 import { PublishGuardPanel } from "@/components/admin/PublishGuardPanel";
 import { JsonLdPreview } from "@/components/admin/JsonLdPreview";
 import { invalidateBlogPost } from "@/lib/cacheInvalidation";
+import { newCorrelationId, recordPublishGuard } from "@/lib/cacheMetrics";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertDialog,
@@ -316,7 +317,8 @@ function BlogPostEditorPage() {
         snapshot: post as never,
       } as never);
       // Invalidate caches + React Query keys for live propagation
-      void invalidateBlogPost(post.slug, post.id, queryClient);
+      const cid = newCorrelationId("save");
+      void invalidateBlogPost(post.slug, post.id, queryClient, { correlationId: cid, phase: "save" });
     }
   };
 
@@ -375,6 +377,7 @@ function BlogPostEditorPage() {
   const togglePublish = async () => {
     if (!post) return;
     const next = post.status === "published" ? "draft" : "published";
+    const cid = newCorrelationId(next === "published" ? "publish" : "unpublish");
     if (next === "published") {
       const guard = evaluatePublishGuard({
         slug: post.slug,
@@ -398,9 +401,18 @@ function BlogPostEditorPage() {
         body_html_ar: (post as any).body_html_ar,
         body_html_en: (post as any).body_html_en,
       } as any);
+      recordPublishGuard({
+        correlationId: cid,
+        phase: guard.ok ? (guard.warnings.length > 0 ? "attempted" : "allowed") : "blocked",
+        kind: "blog",
+        slug: post.slug,
+        score: guard.score,
+        blockerReasons: guard.blockers.map((b) => `${b.field}: ${b.message}`),
+        warningReasons: guard.warnings.map((w) => `${w.field}: ${w.message}`),
+      });
       if (!guard.ok) {
         toast.error(`نشر متعذّر: ${guard.blockers[0]?.message ?? "عناصر إلزامية ناقصة"}`, {
-          description: guard.blockers.slice(1, 4).map((b) => `• ${b.message}`).join("\n"),
+          description: `${guard.blockers.slice(1, 4).map((b) => `• ${b.message}`).join("\n")}\ncid: ${cid}`,
         });
         return;
       }
@@ -410,6 +422,15 @@ function BlogPostEditorPage() {
           guard.warnings.slice(0, 5).map((w) => `• ${w.message}`).join("\n"),
         );
         if (!confirmed) return;
+        recordPublishGuard({
+          correlationId: cid,
+          phase: "forced",
+          kind: "blog",
+          slug: post.slug,
+          score: guard.score,
+          blockerReasons: [],
+          warningReasons: guard.warnings.map((w) => `${w.field}: ${w.message}`),
+        });
       }
     }
     const published_at = next === "published" ? new Date().toISOString() : null;
@@ -420,7 +441,7 @@ function BlogPostEditorPage() {
     if (error) return toast.error(error.message);
     setPost({ ...post, status: next, published_at });
     toast.success(next === "published" ? "تم النشر" : "أصبح مسودة");
-    void invalidateBlogPost(post.slug, post.id, queryClient);
+    void invalidateBlogPost(post.slug, post.id, queryClient, { correlationId: cid, phase: "publish" });
   };
 
   const inferKw = () => {
