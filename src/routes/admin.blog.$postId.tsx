@@ -41,6 +41,10 @@ import { LocaleSwitcher } from "@/cms/admin/LocaleSwitcher";
 import { SchedulePublishField } from "@/cms/admin/SchedulePublishField";
 import { BlogRevisionsDialog, type BlogSnapshot } from "@/cms/admin/BlogRevisionsDialog";
 import { evaluatePublishGuard } from "@/lib/publishGuard";
+import { PublishGuardPanel } from "@/components/admin/PublishGuardPanel";
+import { JsonLdPreview } from "@/components/admin/JsonLdPreview";
+import { invalidateBlogPost } from "@/lib/cacheInvalidation";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -129,6 +133,7 @@ function htmlFromBody(body: unknown, lang: Lang): string {
 function BlogPostEditorPage() {
   const { postId } = Route.useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [cats, setCats] = useState<CategoryRow[]>([]);
@@ -310,6 +315,8 @@ function BlogPostEditorPage() {
         post_id: post.id,
         snapshot: post as never,
       } as never);
+      // Invalidate caches + React Query keys for live propagation
+      void invalidateBlogPost(post.slug, post.id, queryClient);
     }
   };
 
@@ -413,6 +420,7 @@ function BlogPostEditorPage() {
     if (error) return toast.error(error.message);
     setPost({ ...post, status: next, published_at });
     toast.success(next === "published" ? "تم النشر" : "أصبح مسودة");
+    void invalidateBlogPost(post.slug, post.id, queryClient);
   };
 
   const inferKw = () => {
@@ -868,6 +876,56 @@ function BlogPostEditorPage() {
               })}
             </div>
           </Card>
+
+          {/* Publish Guard — detailed reasons + suggestions */}
+          <PublishGuardPanel
+            input={{
+              slug: post.slug,
+              title_ar: post.title_ar,
+              title_en: post.title_en,
+              meta_title_ar: post.meta_title_ar,
+              meta_title_en: post.meta_title_en,
+              meta_description_ar: post.meta_description_ar,
+              meta_description_en: post.meta_description_en,
+              cover_image_url: post.cover_image_url,
+              author_ar: post.author_ar,
+              author_en: post.author_en,
+              published_at: post.published_at,
+              last_reviewed: post.last_reviewed,
+              tldr_ar: post.tldr_ar,
+              tldr_en: post.tldr_en,
+              faq: post.faq,
+              author_bio_ar: post.author_bio_ar,
+              author_bio_en: post.author_bio_en,
+              sources: post.sources.map((s) => ({ url: s.url })),
+              body_html_ar: post.body_html_ar,
+              body_html_en: post.body_html_en,
+              internal_links_count: (post.body_html_ar?.match(/<a\s/gi)?.length ?? 0) + (post.body_html_en?.match(/<a\s/gi)?.length ?? 0),
+            }}
+          />
+
+          {/* JSON-LD live preview */}
+          <JsonLdPreview
+            input={{
+              kind: "article",
+              url: `https://fikradm.lovable.app/${lang}/blog/${post.slug}`,
+              title: (lang === "ar" ? post.title_ar : post.title_en) || post.title_ar || post.title_en || "",
+              description: (lang === "ar" ? post.meta_description_ar : post.meta_description_en) || "",
+              image: post.cover_image_url || undefined,
+              author: (lang === "ar" ? post.author_ar : post.author_en) || undefined,
+              authorRole: (lang === "ar" ? post.author_role_ar : post.author_role_en) || undefined,
+              datePublished: post.published_at || undefined,
+              dateModified: post.last_reviewed || post.published_at || undefined,
+              lastReviewed: post.last_reviewed || undefined,
+              keywords: lang === "ar" ? post.keywords_ar : post.keywords_en,
+              faq: post.faq?.map((f) => ({ q: (f as any).q_ar || (f as any).q || "", a: (f as any).a_ar || (f as any).a || "" })) || [],
+              breadcrumbs: [
+                { name: "Home", url: `https://fikradm.lovable.app/${lang}` },
+                { name: "Blog", url: `https://fikradm.lovable.app/${lang}/blog` },
+                { name: (lang === "ar" ? post.title_ar : post.title_en) || post.slug, url: `https://fikradm.lovable.app/${lang}/blog/${post.slug}` },
+              ],
+            }}
+          />
 
           {/* Schema.org validation — Article + FAQ + EEAT */}
           {(() => {
