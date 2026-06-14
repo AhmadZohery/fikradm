@@ -268,6 +268,17 @@ function BlogPostEditorPage() {
       report?.readingMinutes && report.readingMinutes > 0
         ? report.readingMinutes
         : post.reading_minutes;
+    // Translate the scheduled-publish UI into the columns the table actually has.
+    // blog_posts uses status='scheduled' + published_at=<future date>.
+    let nextStatus = post.status;
+    let nextPublishedAt = post.published_at;
+    if (post.scheduled_publish_at) {
+      const when = new Date(post.scheduled_publish_at).getTime();
+      if (!Number.isNaN(when) && when > Date.now() && post.status !== "published") {
+        nextStatus = "scheduled";
+        nextPublishedAt = post.scheduled_publish_at;
+      }
+    }
     const { error } = await supabase
       .from("blog_posts")
       .update({
@@ -275,7 +286,8 @@ function BlogPostEditorPage() {
         category_id: post.category_id,
         cover_image_url: post.cover_image_url,
         reading_minutes: reading,
-        scheduled_publish_at: post.scheduled_publish_at as never,
+        status: nextStatus,
+        published_at: nextPublishedAt,
         scheduled_unpublish_at: post.scheduled_unpublish_at as never,
         title_ar: post.title_ar,
         title_en: post.title_en,
