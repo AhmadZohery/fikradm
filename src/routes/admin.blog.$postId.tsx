@@ -40,6 +40,7 @@ import { StringArrayEditor } from "@/cms/admin/StringArrayEditor";
 import { LocaleSwitcher } from "@/cms/admin/LocaleSwitcher";
 import { SchedulePublishField } from "@/cms/admin/SchedulePublishField";
 import { BlogRevisionsDialog, type BlogSnapshot } from "@/cms/admin/BlogRevisionsDialog";
+import { evaluatePublishGuard } from "@/lib/publishGuard";
 import {
   AlertDialog,
   AlertDialogAction,
