@@ -31,6 +31,7 @@ import { Route as AdminSeoReportsRouteImport } from './routes/admin.seo-reports'
 import { Route as AdminSeoDecayRouteImport } from './routes/admin.seo-decay'
 import { Route as AdminSeoAuditRouteImport } from './routes/admin.seo-audit'
 import { Route as AdminSchemaFixesRouteImport } from './routes/admin.schema-fixes'
+import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminPerformanceRouteImport } from './routes/admin.performance'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
@@ -175,6 +176,11 @@ const AdminSeoAuditRoute = AdminSeoAuditRouteImport.update({
 const AdminSchemaFixesRoute = AdminSchemaFixesRouteImport.update({
   id: '/schema-fixes',
   path: '/schema-fixes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReportsRoute = AdminReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminPerformanceRoute = AdminPerformanceRouteImport.update({
@@ -342,6 +348,7 @@ export interface FileRoutesByFullPath {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/performance': typeof AdminPerformanceRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/seo-decay': typeof AdminSeoDecayRoute
@@ -391,6 +398,7 @@ export interface FileRoutesByTo {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/performance': typeof AdminPerformanceRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/seo-decay': typeof AdminSeoDecayRoute
@@ -443,6 +451,7 @@ export interface FileRoutesById {
   '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRouteWithChildren
   '/admin/performance': typeof AdminPerformanceRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/schema-fixes': typeof AdminSchemaFixesRoute
   '/admin/seo-audit': typeof AdminSeoAuditRoute
   '/admin/seo-decay': typeof AdminSeoDecayRoute
@@ -496,6 +505,7 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/performance'
+    | '/admin/reports'
     | '/admin/schema-fixes'
     | '/admin/seo-audit'
     | '/admin/seo-decay'
@@ -545,6 +555,7 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/performance'
+    | '/admin/reports'
     | '/admin/schema-fixes'
     | '/admin/seo-audit'
     | '/admin/seo-decay'
@@ -596,6 +607,7 @@ export interface FileRouteTypes {
     | '/admin/packages'
     | '/admin/pages'
     | '/admin/performance'
+    | '/admin/reports'
     | '/admin/schema-fixes'
     | '/admin/seo-audit'
     | '/admin/seo-decay'
@@ -796,6 +808,13 @@ declare module '@tanstack/react-router' {
       path: '/schema-fixes'
       fullPath: '/admin/schema-fixes'
       preLoaderRoute: typeof AdminSchemaFixesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reports': {
+      id: '/admin/reports'
+      path: '/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AdminReportsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/performance': {
@@ -1025,6 +1044,7 @@ interface AdminRouteChildren {
   AdminPackagesRoute: typeof AdminPackagesRoute
   AdminPagesRoute: typeof AdminPagesRouteWithChildren
   AdminPerformanceRoute: typeof AdminPerformanceRoute
+  AdminReportsRoute: typeof AdminReportsRoute
   AdminSchemaFixesRoute: typeof AdminSchemaFixesRoute
   AdminSeoAuditRoute: typeof AdminSeoAuditRoute
   AdminSeoDecayRoute: typeof AdminSeoDecayRoute
@@ -1047,6 +1067,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPackagesRoute: AdminPackagesRoute,
   AdminPagesRoute: AdminPagesRouteWithChildren,
   AdminPerformanceRoute: AdminPerformanceRoute,
+  AdminReportsRoute: AdminReportsRoute,
   AdminSchemaFixesRoute: AdminSchemaFixesRoute,
   AdminSeoAuditRoute: AdminSeoAuditRoute,
   AdminSeoDecayRoute: AdminSeoDecayRoute,
