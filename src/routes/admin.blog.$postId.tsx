@@ -315,6 +315,8 @@ function BlogPostEditorPage() {
         post_id: post.id,
         snapshot: post as never,
       } as never);
+      // Invalidate caches + React Query keys for live propagation
+      void invalidateBlogPost(post.slug, post.id, queryClient);
     }
   };
 
