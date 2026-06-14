@@ -36,6 +36,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminLocationsRouteImport } from './routes/admin.locations'
 import { Route as AdminIndustriesRouteImport } from './routes/admin.industries'
 import { Route as AdminFormsRouteImport } from './routes/admin.forms'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as Char123LocaleChar125ServicesIndexRouteImport } from './routes/{-$locale}.services.index'
 import { Route as Char123LocaleChar125LocationsIndexRouteImport } from './routes/{-$locale}.locations.index'
@@ -198,6 +199,11 @@ const AdminFormsRoute = AdminFormsRouteImport.update({
   path: '/forms',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBlogRoute = AdminBlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -309,6 +315,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
   '/admin/blog': typeof AdminBlogRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -354,6 +361,7 @@ export interface FileRoutesByTo {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/blog': typeof AdminBlogRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -402,6 +410,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/{-$locale}': typeof Char123LocaleChar125RouteWithChildren
   '/admin/blog': typeof AdminBlogRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/forms': typeof AdminFormsRoute
   '/admin/industries': typeof AdminIndustriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -451,6 +460,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/{-$locale}'
     | '/admin/blog'
+    | '/admin/dashboard'
     | '/admin/forms'
     | '/admin/industries'
     | '/admin/locations'
@@ -496,6 +506,7 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/admin/blog'
+    | '/admin/dashboard'
     | '/admin/forms'
     | '/admin/industries'
     | '/admin/locations'
@@ -543,6 +554,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/{-$locale}'
     | '/admin/blog'
+    | '/admin/dashboard'
     | '/admin/forms'
     | '/admin/industries'
     | '/admin/locations'
@@ -785,6 +797,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFormsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/blog': {
       id: '/admin/blog'
       path: '/blog'
@@ -940,6 +959,7 @@ const AdminPagesRouteWithChildren = AdminPagesRoute._addFileChildren(
 
 interface AdminRouteChildren {
   AdminBlogRoute: typeof AdminBlogRouteWithChildren
+  AdminDashboardRoute: typeof AdminDashboardRoute
   AdminFormsRoute: typeof AdminFormsRoute
   AdminIndustriesRoute: typeof AdminIndustriesRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
@@ -958,6 +978,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBlogRoute: AdminBlogRouteWithChildren,
+  AdminDashboardRoute: AdminDashboardRoute,
   AdminFormsRoute: AdminFormsRoute,
   AdminIndustriesRoute: AdminIndustriesRoute,
   AdminLocationsRoute: AdminLocationsRoute,
@@ -1063,3 +1084,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
